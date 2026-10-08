@@ -11,9 +11,10 @@
 - Elke echte dag graaft de Supermol een nieuwe kamer. Met 3 energie-batterijen graaft hij er meteen eentje extra.
 - Kamers: Hoofdkwartier, Bowlingbaan, Blokkenkamer (zoals Tetris) en Flipperkastkamer. Daarna volgen Minigolf, Racebaan en Escaperoom.
 - Alle spelletjes kun je alleen of met z'n tweeën op één tablet spelen.
+- 🍽️ **Eet- en drinkmomenten:** af en toe roept papa of mama ("Eten! Er staan boterhammen klaar!"). Ben je binnen 2 minuten aan de keukentafel, dan eten jullie samen en krijg je munten en energie (max. 2 energie per dag). Te laat? Dan is de soep koud. Ouders kunnen dit uitzetten of vaker/minder vaak laten gebeuren.
 
 ## Voor ouders
-Houd op het beginscherm **"Voor ouders"** 2 seconden ingedrukt. Daar kun je alle kamers openen, energie geven, geluid regelen en het spel wissen. De voortgang wordt alleen op dit apparaat bewaard (localStorage), er wordt niets verstuurd.
+Houd op het beginscherm **"Voor ouders"** 2 seconden ingedrukt. Daar kun je alle kamers openen, energie geven, eet- en drinkmomenten instellen, geluid regelen en het spel wissen. De voortgang wordt alleen op dit apparaat bewaard (localStorage), er wordt niets verstuurd.
 
 ## Techniek
 Eén `index.html` (zonder externe scripts) + `manifest.webmanifest` + `sw.js` + `icons/`. Hier staat alleen het gebouwde spel; de bron (losse JS-modules, buildscript en tests) wordt apart bijgehouden.

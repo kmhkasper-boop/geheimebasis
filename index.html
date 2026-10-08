@@ -291,6 +291,33 @@ h1,h2,h3{margin:0}
 .sndmenu button .st{margin-left:auto;font-size:.8em;background:#c9d1df;color:#fff;border-radius:999px;padding:.05em .6em}
 .sndmenu button.on .st{background:var(--green)}
 
+/* ---------- eet- en drinkmomenten (banner als papa of mama roept) ---------- */
+.mealcall{position:absolute;left:50%;top:calc(118px + var(--safe-t));transform:translateX(-50%);z-index:7;display:none;align-items:center;gap:10px;
+  background:#fff;border-radius:22px;border:4px solid #ffd23f;box-shadow:0 7px 0 rgba(31,42,68,.22),0 10px 26px rgba(0,0,0,.22);padding:6px 12px 6px 8px;
+  max-width:min(620px,94vw);cursor:pointer;touch-action:manipulation}
+.mealcall.show{display:flex;animation:mealin .45s ease-out}
+.mealcall.big{padding:10px 14px 10px 10px;width:min(620px,94vw);animation:mealin .45s ease-out,mealwig .5s .45s 2}
+.mealcall .mcport{display:none;width:84px;height:84px;flex:none;border-radius:18px;background:#fff3c4}
+.mealcall.big .mcport{display:block}
+.mealcall .mctext{flex:1;min-width:0;display:flex;flex-direction:column;gap:3px;text-align:left}
+.mealcall .dlgname,.mealcall .mcmsg{display:none}
+.mealcall.big .dlgname{display:inline-block;align-self:flex-start;margin:0}
+.mealcall.big .mcmsg{display:block;font-weight:600;font-size:1.08em;line-height:1.25}
+.mealcall .mchint{font-weight:700;font-size:.9em;display:flex;align-items:center;gap:.35em;white-space:nowrap}
+.mealcall .mctime{background:var(--ink);color:#fff;border-radius:999px;padding:0 .5em;font-size:.9em;font-variant-numeric:tabular-nums}
+.mealcall .mcbar{height:8px;border-radius:99px;background:#eef1f6;overflow:hidden;min-width:150px}
+.mealcall .mcbar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#4cd964,#2e9e5b);border-radius:99px;transition:width .3s linear}
+.mealcall .mcbar i.hurry{background:linear-gradient(90deg,#ff8a1f,#e8403a)}
+.mealcall .mcfood{font-size:30px;line-height:1;flex:none;animation:bob 1.2s ease-in-out infinite}
+.mealcall.big .mcfood{font-size:46px}
+.mealcall.late{border-color:#9fd8ff}
+.mealcall.late .mcmsg{display:block}
+@keyframes mealin{from{transform:translate(-50%,-24px) scale(.85);opacity:0}to{transform:translate(-50%,0) scale(1);opacity:1}}
+@keyframes mealwig{0%,100%{rotate:0deg}25%{rotate:-2deg}75%{rotate:2deg}}
+@media (max-width:600px){.mealcall{top:calc(180px + var(--safe-t))}}   /* staande telefoon: onder de icoontjes-kolom */
+@media (max-height:500px){.mealcall{top:calc(100px + var(--safe-t))}}
+@media (max-width:600px),(max-height:500px){.mealcall.big .mcport{width:60px;height:60px}.mealcall.big .mcmsg{font-size:.95em}.mealcall.big .mcfood{font-size:34px}}
+
 /* ---------- ouders ---------- */
 .ocard{width:min(720px,94vw);text-align:left;align-items:stretch}
 .ocard h3{font-size:1.05em;margin:4px 0}
@@ -423,6 +450,7 @@ h1,h2,h3{margin:0}
   </div>
   <div id="joy" class="idle"><div class="knob"></div></div>
   <button id="btnAct" class="off" aria-label="Actie"><span class="ai">✋</span><span class="al">Pak</span></button>
+  <div id="mealCall" class="mealcall" role="status" aria-live="polite"></div>
 </div>
 
 <!-- ============ DIALOOG ============ -->
@@ -518,6 +546,12 @@ h1,h2,h3{margin:0}
       <div class="orow"><span id="oudStatus" class="small-note"></span></div>
       <div class="orow"><button class="btn green small" id="oudUnlock">🔓 Alle kamers openen</button><button class="btn small" id="oudEnergy">⚡ +3 energie geven</button></div>
     </div>
+    <div><h3>🍽️ Eet- en drinkmomenten</h3>
+      <p>Af en toe roept papa of mama in het spel, bijvoorbeeld <i>"Eten! Er staan boterhammen klaar!"</i> of <i>"Kom even wat drinken!"</i>. Een pijl wijst de weg naar de keukentafel, ook vanuit de tuin of de geheime basis (<i>"Kom even naar boven!"</i>). Zijn de kinderen er binnen <b>2 minuten</b>, dan eten of drinken ze samen iets en krijgen ze <b>5 munten</b> en <b>1 ⚡ energie</b> (hooguit 2 energie per dag van het eten). Te laat is niet erg: dan is de soep gewoon koud. Papa of mama roept nooit midden in een spelletje, maar wacht tot het spel klaar is.</p>
+      <div class="orow"><span class="sk">🍽️ Eetmomenten</span><div class="seg" id="oudMeal"><button data-v="0">Uit</button><button data-v="1">Aan</button></div></div>
+      <div class="orow"><span class="sk">⏱️ Hoe vaak</span><div class="seg" id="oudMealFreq"><button data-v="vaak">Vaak</button><button data-v="normaal">Normaal</button><button data-v="weinig">Weinig</button></div><span class="small-note" id="oudMealFreqNote"></span></div>
+      <div class="orow"><button class="btn small orange" id="oudMealNow">🔔 Roep nu voor eten</button><span class="small-note" id="oudMealMsg"></span></div>
+    </div>
     <div><h3>🔊 Geluid</h3>
       <div class="orow"><span class="sk">🎵 Muziek</span><div class="seg" id="oudMusic"><button data-v="0">Uit</button><button data-v="1">Aan</button></div><input type="range" min="0" max="100" id="volMusic"><span id="volMusicVal"></span></div>
       <div class="orow"><span class="sk">🔔 Geluidseffecten</span><div class="seg" id="oudSfx"><button data-v="0">Uit</button><button data-v="1">Aan</button></div><input type="range" min="0" max="100" id="volSfx"><span id="volSfxVal"></span></div>
@@ -583,7 +617,7 @@ const anyOverlay = () => $$('.overlay.show').length > 0;
    Echte vormverandering? Verhoog SAVE_V en voeg een stap toe in MIGRATIONS.
    ========================================================= */
 const LS_KEY = 'geheimebasis_save';
-const SAVE_V = 1;
+const SAVE_V = 2;
 function defaultSave() {
   return {
     v: SAVE_V, created: 0, started: false, introDone: false,
@@ -600,12 +634,15 @@ function defaultSave() {
     hi: {},                                      // highscores per minigame
     daily: { day: null, bonus: {} },             // 1x per dag energie per spel
     ach: {},                                     // prestaties { id: datum }
-    stats: { games: {}, steps: 0, strikes: 0, spares: 0, tetris: 0, dugByEnergy: 0 },
+    stats: { games: {}, steps: 0, strikes: 0, spares: 0, tetris: 0, dugByEnergy: 0, meals: 0, mealsLate: 0 },
+    meals: defaultMeals(),                       // eet- en drinkmomenten (instellingen van de ouders + teller)
     music: true, sfx: true, musicVol: 40, sfxVol: 80,
   };
 }
+// left: seconden speeltijd tot papa of mama weer roept (null = nog niet gepland). energy: hoeveel ⚡ vandaag al van het eten.
+function defaultMeals() { return { on: true, freq: 'normaal', left: null, day: null, energy: 0, last: null }; }
 const MIGRATIONS = {
-  // 2: o => { ...; return o; },   // voorbeeld voor later
+  2: o => { if (!o.meals || typeof o.meals !== 'object') o.meals = defaultMeals(); return o; },   // v2: eet- en drinkmomenten
 };
 function migrate(o) {
   const d = defaultSave();
@@ -618,6 +655,10 @@ function migrate(o) {
   s.daily = Object.assign(defaultSave().daily, o.daily || {});
   s.stats = Object.assign(defaultSave().stats, o.stats || {});
   s.chars = Object.assign({ p: null, f: null }, o.chars || {});
+  const m = s.meals = Object.assign(defaultMeals(), (o.meals && typeof o.meals === 'object' && !Array.isArray(o.meals)) ? o.meals : {});
+  m.on = m.on !== false; if (!['vaak', 'normaal', 'weinig'].includes(m.freq)) m.freq = 'normaal';
+  if (!(typeof m.left === 'number' && m.left >= 0 && m.left < 7200)) m.left = null;
+  m.energy = clamp(m.energy | 0, 0, 2); if (typeof m.day !== 'string') m.day = null;
   const vol = (x, def) => (typeof x === 'number' && x >= 0 && x <= 100) ? Math.round(x) : def;
   s.musicVol = vol(s.musicVol, 40); s.sfxVol = vol(s.sfxVol, 80);
   s.energie = Math.max(0, s.energie | 0); s.munten = Math.max(0, s.munten | 0);
@@ -634,7 +675,7 @@ function load() {
 let S = load();
 function save() { try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch (e) { } }
 if (load.migrated) save();
-function resetSave() { const keep = { music: S.music, sfx: S.sfx, musicVol: S.musicVol, sfxVol: S.sfxVol }; S = Object.assign(defaultSave(), keep); save(); }
+function resetSave() { const keep = { music: S.music, sfx: S.sfx, musicVol: S.musicVol, sfxVol: S.sfxVol, meals: Object.assign(defaultMeals(), { on: S.meals.on, freq: S.meals.freq }) }; S = Object.assign(defaultSave(), keep); save(); BUS.emit('reset'); }
 
 /* ---- inventaris-hulpjes ---- */
 const has = (id, n) => (S.inv[id] || 0) >= (n || 1);
@@ -879,6 +920,11 @@ const SFX = {
   whoosh() { noise(.35, .08, 0, 400, 1.2, 'bandpass', 3000); },
   fanfare() { duck(2.4); [523, 659, 784, 659, 784, 1047].forEach((f, i) => { tone(f, .24, 'triangle', .11, i * .12); tone(f * 2, .18, 'sine', .02, i * .12); }); },
   aww() { duck(1.2, .4); tone(523, .2, 'triangle', .08); tone(440, .3, 'triangle', .08, .2); tone(392, .35, 'sine', .05, .5); },
+  // eet- en drinkmomenten: etensbel (ting ting ting) + 'joe-hoe'
+  mealCall() { duck(2.4, .3); [0, .2, .4].forEach(w => bellHit(2349, .07, w, .55)); tone(784, .3, 'triangle', .09, .85, 760); tone(659, .45, 'triangle', .09, 1.15, 620); tone(1568, .3, 'sine', .02, .85); },
+  munch() { [0, .11].forEach(w => noise(.07, .08, w, 1600 + Math.random() * 900, 1.3)); },
+  slurp() { noise(.38, .05, 0, 500, 3, 'bandpass', 2600); tone(300, .3, 'sine', .03, 0, 600); },
+  yum() { tone(523, .12, 'triangle', .07); tone(659, .12, 'triangle', .07, .1); tone(784, .2, 'triangle', .07, .2); },
   // bowling
   pin(v) { const k = clamp(v || .5, .1, 1); woodHit(700 + Math.random() * 500, .09 * k); if (k > .5) woodHit(1100 + Math.random() * 400, .05 * k, .02); },
   crash() { noise(.5, .25, 0, 1800, .8, 'bandpass', 600); for (let i = 0; i < 6; i++) woodHit(600 + Math.random() * 900, .07, i * .035 + Math.random() * .02); },
@@ -1308,6 +1354,7 @@ function registerAch(o) { GB.ACHIEVEMENTS[o.id] = o; }
   { id: 'zaklamp', icon: '🔦', name: 'Niet bang in het donker', desc: 'De kelder in met je zaklamp.' },
   { id: 'zolder', icon: '🪜', name: 'Hoog en droog', desc: 'Op de zolder geweest.' },
   { id: 'basis', icon: '🕳️', name: 'Geheime basis!', desc: 'Het Hoofdkwartier is gegraven.' },
+  { id: 'smakelijk', icon: '🍽️', name: 'Eet smakelijk!', desc: 'Op tijd aan tafel toen papa of mama riep.' },
   { id: 'kamer2', icon: '🧱', name: 'Groeiende basis', desc: 'Een tweede spelkamer gegraven.' },
   { id: 'graafnu', icon: '⚡', name: 'Turbo-mol', desc: 'De Supermol extra laten graven met energie.' },
   { id: 'strike', icon: '🎳', name: 'Strike!', desc: 'Alle 10 kegels in één keer om.' },
@@ -1929,7 +1976,7 @@ function worldUpdate(dt) {
   storyTick(dt);
 }
 function followTrail(b, dist, dt) {
-  if (!b) return; const tr = WORLD.trail, p = WORLD.p;
+  if (!b || b.hold) return; const tr = WORLD.trail, p = WORLD.p;
   let acc = 0, tgt = tr[0], px = p.x, py = p.y;
   for (let i = tr.length - 1; i >= 0; i--) { acc += Math.hypot(tr[i].x - px, tr[i].y - py); px = tr[i].x; py = tr[i].y; if (acc >= dist) { tgt = tr[i]; break; } }
   if (acc < dist) tgt = tr[0];
@@ -2058,6 +2105,7 @@ function worldDraw() {
   for (let cy = cy0; cy <= cy1; cy++) for (let cx = cx0; cx <= cx1; cx++) { const cv = chunkCanvas('g', cx, cy); c.drawImage(cv, cx * size, cy * size, size + pad, size + pad); }
   // bewegende dingen op meubels
   for (const o of m.objects) if (o.dyn && FURN[o.dyn] && o.x * T < left + vw + 64 && (o.x + o.w) * T > left - 64 && o.y * T < top + vh + 64 && (o.y + o.h) * T > top - 64) FURN[o.dyn](c, o, o.x * T, o.y * T, o.w * T, o.h * T, W.t);
+  mealDrawFood(c);   // eten op de keukentafel (meals.js)
   // glinsters op dingen waar nog iets te vinden is
   for (const o of m.objects) if (o.use && o.use.loot && !lootTaken(o)) drawSparkle(c, o, W.t);
   // markering van wat dichtbij is
@@ -2082,6 +2130,8 @@ function worldDraw() {
     c.fillStyle = g; c.fillRect(0, 0, cvW.width, cvW.height);
   } else if (m.outdoor) { const tint = skyTint(); if (tint) { c.fillStyle = tint; c.fillRect(0, 0, cvW.width, cvW.height); } }
   else if (m.underground) { const g = c.createRadialGradient(cvW.width / 2, cvW.height / 2, cvW.height * .3, cvW.width / 2, cvW.height / 2, cvW.height * .9); g.addColorStop(0, 'rgba(0,0,0,0)'); g.addColorStop(1, 'rgba(20,10,0,.35)'); c.fillStyle = g; c.fillRect(0, 0, cvW.width, cvW.height); }
+  // pijl naar de keukentafel als papa of mama roept (boven het donker, meals.js)
+  if (MEAL.st === 'pending') { c.setTransform(k, 0, 0, k, ox, oy); mealDrawMarker(c, left, top, vw, vh); c.setTransform(1, 0, 0, 1, 0, 0); }
 }
 function skyTint() { const h = new Date(now()).getHours() + new Date(now()).getMinutes() / 60; if (h >= 7 && h < 18) return null; if (h >= 18 && h < 20) return 'rgba(255,140,60,' + ((h - 18) * .08).toFixed(3) + ')'; if (h >= 20 && h < 21.5) return 'rgba(60,50,140,' + (.16 + (h - 20) * .08).toFixed(3) + ')'; if (h >= 21.5 || h < 6) return 'rgba(30,30,110,.32)'; return 'rgba(255,170,120,.12)'; }
 function drawSparkle(c, o, t) {
@@ -2091,14 +2141,16 @@ function drawSparkle(c, o, t) {
 }
 function wrapText(c, txt, maxW) { const words = txt.split(' '), lines = []; let cur = ''; for (const w of words) { const t2 = cur ? cur + ' ' + w : w; if (c.measureText(t2).width > maxW && cur) { lines.push(cur); cur = w; } else cur = t2; } if (cur) lines.push(cur); return lines; }
 function drawBubble(c, b) {
-  const who = b.who === 'f' ? WORLD.f : WORLD.p; if (!who) return;
+  const npc = b.who !== 'f' && b.who !== 'p' ? WORLD.npcs.find(n => n.id === b.who) : null;
+  const who = b.who === 'f' ? WORLD.f : b.who === 'p' ? WORLD.p : npc; if (!who) return;
   c.font = '600 9px Fredoka, sans-serif'; const lines = wrapText(c, b.text, 110); const w = Math.max(...lines.map(l => c.measureText(l).width)) + 14, h = lines.length * 11 + 9;
-  const x = clamp(who.x - w / 2, WORLD.cam.x - WORLD.W / WORLD.s / 2 + 4, WORLD.cam.x + WORLD.W / WORLD.s / 2 - w - 4), y = who.y - 58 - h;
+  const x = clamp(who.x - w / 2, WORLD.cam.x - WORLD.W / WORLD.s / 2 + 4, WORLD.cam.x + WORLD.W / WORLD.s / 2 - w - 4), y = who.y - (npc ? 68 : 58) - h;
   c.fillStyle = 'rgba(0,0,0,.15)'; rrect(c, x + 1, y + 2, w, h, 7); c.fill(); c.fillStyle = '#fff'; rrect(c, x, y, w, h, 7); c.fill();
   c.beginPath(); c.moveTo(who.x - 4, y + h - 1); c.lineTo(who.x + 4, y + h - 1); c.lineTo(who.x, y + h + 6); c.fill();
   c.fillStyle = '#1f2a44'; c.textAlign = 'left'; c.textBaseline = 'top'; lines.forEach((l, i) => c.fillText(l, x + 7, y + 5 + i * 11)); c.textBaseline = 'alphabetic';
 }
 function friendSays(text, sec) { WORLD.bubble = { who: 'f', text, until: WORLD.t + (sec || 4.5) }; SFX.talk(1.25); }
+function bubbleSays(who, text, sec) { WORLD.bubble = { who, text, until: WORLD.t + (sec || 4.5) }; SFX.talk(who === 'papa' ? .8 : 1.1); }
 function burst(x, y, n, cols, opt) { for (let i = 0; i < n; i++) { const a = Math.random() * Math.PI * 2, sp = rnd(40, 140) * ((opt && opt.sp) || 1); WORLD.parts.push({ x, y, vx: Math.cos(a) * sp, vy: Math.sin(a) * sp - 40, g: (opt && opt.g) || 160, life: rnd(.5, 1.1), r: rnd(1.5, 3.5), col: pick(cols) }); } }
 function currentArea() { const p = WORLD.p, m = WORLD.map; const a = m.areas.find(a => inRect(p.x, p.y - 4, a)); return a ? a.name : m.name; }
 
@@ -2108,6 +2160,7 @@ function frame(t) {
   requestAnimationFrame(frame);
   const dt = Math.min(.05, (t - lastT) / 1000 || 0); lastT = t;
   if (WORLD.active && WORLD.map && !MG.active) { worldUpdate(dt); worldDraw(); const loc = currentArea(); if (loc !== WORLD.lastLoc) { WORLD.lastLoc = loc; $('#hudLoc').textContent = loc; BUS.emit('area', loc); } }
+  if (WORLD.active && WORLD.map) mealTick(dt);   // speeltijd voor de eetmomenten (ook tijdens een minigame)
   if (MG.active && MG.inst) MG.tick(dt);
   if ($('#scrTitle').classList.contains('show')) drawTitle(t / 1000);
 }
@@ -2337,6 +2390,60 @@ function storyTick(dt) {
   if (digCheckT <= 0) { digCheckT = 20; const d = checkDailyDig(); if (d.length) showDigNews(d); }
 }
 
+/* ===== world/meals_logic.js ===== */
+/* =========================================================
+   EET- EN DRINKMOMENTEN – pure logica (zonder DOM, ook gebruikt door de unit tests).
+   - Na een stukje speeltijd roept papa of mama: eten of drinken staat klaar op de keukentafel.
+   - Op tijd aan tafel (binnen MEAL_WINDOW seconden): +munten en +1 ⚡ (max MEAL_MAX_E per dag van het eten).
+   - Te laat: geen straf, alleen een grapje en geen beloning.
+   ========================================================= */
+const MEAL_FREQ = {                     // seconden speeltijd tussen twee keer roepen [min, max]
+  vaak: [240, 360], normaal: [360, 600], weinig: [720, 1080],
+};
+const MEAL_WINDOW = 120, MEAL_MAX_E = 2, MEAL_COINS = 5;
+const MEALS = [
+  { id: 'boterham', emoji: '🥪', kind: 'eat', who: 'mama', call: 'Eten! Er staan boterhammen klaar!', yum: 'Mmm, boterham met hagelslag!', late: 'Te laat! De boterhammen zijn al opgeruimd.' },
+  { id: 'fruit', emoji: '🍎', more: '🍌', kind: 'eat', who: 'mama', call: 'Kom even fruit eten! Ik heb appeltjes en banaan gesneden.', yum: 'Lekker, appel en banaan!', late: 'Oei, te laat! Het fruit is al op.' },
+  { id: 'limonade', emoji: '🧃', kind: 'drink', who: 'papa', call: 'Kom even wat drinken! Er staat limonade klaar.', yum: 'Ahh, lekker koude limonade!', late: 'Te laat! Het ijs in de limonade is gesmolten.' },
+  { id: 'pannenkoek', emoji: '🥞', kind: 'eat', who: 'papa', call: 'Pannenkoeken! Kom snel, ze zijn nog warm!', yum: 'Pannenkoek met stroop. Mjam!', late: 'Te laat, de pannenkoeken zijn koud!' },
+  { id: 'soep', emoji: '🍲', kind: 'eat', who: 'mama', call: 'Aan tafel! Er is lekkere tomatensoep!', yum: 'Mmm, soep met balletjes!', late: 'Te laat, de soep is koud!' },
+  { id: 'chocomelk', emoji: '🥛', kind: 'drink', who: 'mama', call: 'Kom even wat drinken! Er is warme chocomelk.', yum: 'Chocomelk! Ik heb een snor, haha!', late: 'Te laat! De chocomelk is koud geworden.' },
+  { id: 'koekje', emoji: '🍪', more: '💧', kind: 'drink', who: 'papa', call: 'Kom even wat drinken! Een glas water en een koekje.', yum: 'Water en een koekje. Lekker!', late: 'Te laat! Papa heeft de koekjes zelf opgegeten.' },
+  { id: 'pizza', emoji: '🍕', kind: 'eat', who: 'papa', call: 'Eten! Vandaag eten we pizza!', yum: 'Pizza! Het allerlekkerste!', late: 'Te laat! Er is alleen nog een korstje over.' },
+  { id: 'yoghurt', emoji: '🍓', kind: 'eat', who: 'mama', call: 'Kom even wat eten! Yoghurt met aardbeien!', yum: 'Aardbeien! Mijn lievelingsfruit!', late: 'Te laat! De aardbeien zijn al op.' },
+];
+// Hoeveel seconden speeltijd tot de volgende keer roepen. r = willekeurig getal 0..1
+function mealNextDelay(freq, r) { const f = MEAL_FREQ[freq] || MEAL_FREQ.normaal; return Math.round(f[0] + (f[1] - f[0]) * clamp(r, 0, 1)); }
+// Kies een maaltijd, niet twee keer achter elkaar dezelfde.
+function mealPick(lastId, r) { const opts = MEALS.filter(m => m.id !== lastId); return opts[Math.floor(clamp(r, 0, .9999) * opts.length)]; }
+// Wat roept papa/mama? Hangt af van waar je bent (basis = 'naar boven', tuin = 'naar binnen').
+function mealCallText(meal, mapId) {
+  if (mapId === 'basis') return 'Jongens, waar zitten jullie? Kom even naar boven! ' + meal.call;
+  if (mapId === 'tuin' || mapId === 'schuur') return 'Kom even naar binnen! ' + meal.call;
+  if (mapId === 'kelder') return 'Kom even naar boven! ' + meal.call;
+  if (mapId === 'zolder') return 'Kom even naar beneden! ' + meal.call;
+  return meal.call;
+}
+// Beloning voor op tijd aan tafel. m = S.meals (wordt bijgewerkt). Geeft { energy, coins, capped }.
+function mealReward(m, today) {
+  if (m.day !== today) { m.day = today; m.energy = 0; }
+  const energy = m.energy < MEAL_MAX_E ? 1 : 0; m.energy += energy;
+  return { energy, coins: MEAL_COINS, capped: !energy };
+}
+// Welke deur moet je door om van kaart 'from' naar kaart 'to' te komen? (kortste route via de deuren)
+function mealRoute(maps, from, to) {
+  if (from === to) return null;
+  const seen = { [from]: 1 }, q = [[from, null]];
+  while (q.length) {
+    const [id, first] = q.shift(), m = maps[id]; if (!m) continue;
+    for (const d of m.doors || []) {
+      if (seen[d.to] || !maps[d.to]) continue; seen[d.to] = 1;
+      const f = first || d; if (d.to === to) return f; q.push([d.to, f]);
+    }
+  }
+  return null;
+}
+
 /* ===== screens/ui.js ===== */
 /* =========================================================
    Schermen en pop-ups: titel, personages maken, HUD, gevonden!, info, pauze, rugzak, basisboek, voor ouders.
@@ -2538,6 +2645,7 @@ function renderOuders() {
   const g = S.stats.games, mins = Math.round((now() - (S.created || now())) / 60000);
   $('#oudStats').innerHTML = S.started ? `Spelers: <b>${esc(pName())}</b> en <b>${esc(fName())}</b>. Onderdelen: ${partsHave()}/5 · Supermol: ${robotBuilt('supermol') ? 'gebouwd' : 'nog niet'} · Prestaties: ${Object.keys(S.ach).length}/${Object.keys(GB.ACHIEVEMENTS).length}.<br>Gespeeld: ${Object.values(GB.MINIGAMES).map(m => `${m.emoji} ${m.name} ${g[m.id] || 0}× (beste ${fmtNum(S.hi[m.id] || 0)})`).join(' · ')}.<br>Eerste start: ${S.created ? new Date(S.created).toLocaleDateString('nl-NL') : '-'} (${mins > 1440 ? Math.round(mins / 1440) + ' dagen' : mins + ' min'} geleden).` : 'Er is nog geen spel gestart.';
   const rb = $('#oudReset'); rb.dataset.armed = ''; rb.textContent = '🗑️ Spel wissen';
+  mealRenderOuders();
 }
 holdButton($('#btnParent'), 2000, () => { SFX.click(); renderOuders(); const md = $('#mdOuders'); md.classList.add('show'); md.style.pointerEvents = 'none'; const en = () => { clearTimeout(en.t); en.t = setTimeout(() => { md.style.pointerEvents = ''; }, 400); }; window.addEventListener('pointerup', en, { once: true }); en.t = setTimeout(() => { md.style.pointerEvents = ''; }, 5000); });
 $('#oudClose').addEventListener('click', () => { SFX.click(); closeOv('mdOuders'); renderTitle(); });
@@ -2835,6 +2943,219 @@ function mgFinish(res) {
   $('#resAgain').onclick = () => { SFX.click(); closeOv('mdResult'); mgStart(id, MG.n); };
   MG.paused = true; openOv('mdResult'); BUS.emit('res');
 }
+
+/* ===== world/meals.js ===== */
+/* =========================================================
+   EET- EN DRINKMOMENTEN in het spel (logica: meals_logic.js).
+   - Speeltijd telt af (S.meals.left, ook tijdens minigames). Is de tijd om, dan roept papa of mama zodra
+     je weer vrij rondloopt (nooit midden in een minigame, gesprek of tussenfilmpje).
+   - Banner + geluid, een pijl wijst de weg (via deuren) naar de keukentafel.
+   - Binnen MEAL_WINDOW seconden (alleen tijd waarin je kunt lopen) aan tafel: samen eten + beloning.
+   - Voor ouders: aan/uit, hoe vaak, en 'Roep nu voor eten' (test).
+   ========================================================= */
+const MEAL = { st: null, meal: null, who: null, left: 0, text: '', from: null, sessionT: 0, freeT: 0, force: false, big: 0, eatT: 0, lateUntil: 0 };
+const MEAL_TABLE = 'tafel';
+const mealTable = () => WORLD.map && WORLD.map.id === 'huis' ? WORLD.map.objects.find(o => o.id === MEAL_TABLE) : null;
+function mealFree() { return WORLD.active && !!WORLD.map && !MG.active && !WORLD.busy && !DLG.open && !anyOverlay() && !!S.introDone && $('#scrWorld').classList.contains('show'); }
+
+/* ---------- klok (elke frame vanuit world.js, ook tijdens een minigame) ---------- */
+function mealTick(dt) {
+  if (!S.introDone) return;
+  MEAL.sessionT += dt;
+  const m = S.meals;
+  if (MEAL.st === 'pending') {
+    // de 2 minuten lopen alleen als je ook echt kunt lopen (niet tijdens minigame, gesprek of filmpje)
+    if (!MG.active && !WORLD.busy && !DLG.open) MEAL.left -= dt;
+    if (MEAL.left <= 0) { mealLate(); return; }
+    if (mealFree() && MEAL_WINDOW - MEAL.left > 1.5 && mealAtTable()) { mealArrive(); return; }   // eerst even de roep laten zien
+    mealUi(dt); return;
+  }
+  if (MEAL.st) { mealUi(dt); return; }
+  if (MEAL.lateUntil && WORLD.t > MEAL.lateUntil) { MEAL.lateUntil = 0; mealHide(); }
+  if (MEAL.force) { if (mealFree()) { MEAL.freeT += dt; if (MEAL.freeT > .8) mealCall(); } else MEAL.freeT = 0; return; }
+  if (!m.on) return;
+  if (m.left == null) m.left = mealNextDelay(m.freq, Math.random());
+  if (m.left > 0) { m.left = Math.max(0, m.left - dt); return; }
+  if (MEAL.sessionT < 45) return;                       // niet meteen bij het opstarten
+  if (mealFree()) { MEAL.freeT += dt; if (MEAL.freeT > 2.5) mealCall(); } else MEAL.freeT = 0;   // even wachten na een minigame
+}
+function mealAtTable() { const o = mealTable(); return !!o && rectDist(WORLD.p.x, WORLD.p.y - 6, o) < 24; }
+
+/* ---------- roepen ---------- */
+function mealCall(mealId) {
+  if (!WORLD.map) return;
+  MEAL.force = false; MEAL.freeT = 0; MEAL.lateUntil = 0;
+  const mapId = WORLD.map.id, meal = MEALS.find(x => x.id === mealId) || mealPick(S.meals.last, Math.random());
+  const who = (mapId === 'tuin' || mapId === 'schuur') ? 'papa' : meal.who;
+  S.meals.last = meal.id; S.meals.left = mealNextDelay(S.meals.freq, Math.random()); save();
+  Object.assign(MEAL, { st: 'pending', meal, who, left: MEAL_WINDOW, text: mealCallText(meal, mapId), from: mapId, big: 7, eatT: 0 });
+  SFX.mealCall(); mealShow(); mealSyncNpc();
+  const fl = mapId === 'basis' ? 'Snel naar boven, voordat ze onze geheime basis ontdekken!' : meal.kind === 'drink' ? 'Ik heb ook dorst! Kom, naar de keukentafel!' : 'Joepie, ik heb honger! Kom, naar de keukentafel!';
+  setTimeout(() => { if (MEAL.st === 'pending' && !WORLD.busy) friendSays(fl, 4); }, 1600);
+  BUS.emit('meal', 'call');
+}
+function mealCancel() { MEAL.st = null; MEAL.force = false; MEAL.lateUntil = 0; if (WORLD.f) WORLD.f.hold = false; mealHide(); mealSyncNpc(); }
+BUS.on('reset', mealCancel);
+
+/* ---------- te laat ---------- */
+function mealLate() {
+  const meal = MEAL.meal; MEAL.st = null; S.stats.mealsLate = (S.stats.mealsLate || 0) + 1; save();
+  SFX.aww(); MEAL.lateUntil = WORLD.t + 6; mealShow(meal.late + ' Volgende keer beter!');
+  if (!WORLD.busy && !DLG.open) setTimeout(() => friendSays('Oeps… volgende keer zijn we sneller!', 4), 900);
+  mealSyncNpc(); BUS.emit('meal', 'late');
+}
+
+/* ---------- aan tafel: samen eten ---------- */
+async function mealArrive() {
+  const W = WORLD, o = mealTable(), meal = MEAL.meal; if (!o) return;
+  MEAL.st = 'eating'; MEAL.eatT = 0; W.busy++; mealHide();
+  try {
+    const caller = W.npcs.find(n => n.id === MEAL.who) || W.npcs.find(n => n.id === 'mama');
+    if (caller) { caller.talking = true; W.bubble = null; }
+    // allebei naar een plekje aan de onderkant van de tafel
+    const seats = [{ x: (o.x + .95) * T, y: (o.y + o.h + .72) * T }, { x: (o.x + o.w - .95) * T, y: (o.y + o.h + .72) * T }];
+    const ok = s => !boxHits(s.x, s.y); if (!ok(seats[0]) || !ok(seats[1])) { seats[0] = { x: W.p.x, y: W.p.y }; seats[1] = { x: W.p.x + 26, y: W.p.y }; }
+    const f = W.f; if (f) f.hold = true;
+    const a = { px: W.p.x, py: W.p.y, fx: f ? f.x : 0, fy: f ? f.y : 0 }, t0 = performance.now();
+    while (true) {
+      const k = Math.min(1, (performance.now() - t0) / 700), e = k * (2 - k);
+      W.p.x = lerp(a.px, seats[0].x, e); W.p.y = lerp(a.py, seats[0].y, e); W.p.moving = k < 1; W.p.ph += .25;
+      if (f) { f.x = lerp(a.fx, seats[1].x, e); f.y = lerp(a.fy, seats[1].y, e); f.moving = k < 1; f.ph = (f.ph || 0) + .25; }
+      if (k >= 1) break; await wait(16);
+    }
+    W.p.dir = 'up'; W.p.moving = false; if (f) { f.dir = 'up'; f.moving = false; }
+    W.trail = [{ x: W.p.x, y: W.p.y }];
+    if (caller) bubbleSays(caller.id, 'Eet smakelijk, jongens!', 2.2);
+    SFX.yum();
+    // eten of drinken (± 3,5 s)
+    const steps = 8, kids = [W.p, f].filter(Boolean);
+    for (let i = 0; i < steps; i++) {
+      MEAL.eatT = (i + 1) / steps;
+      if (meal.kind === 'drink') { if (i % 2 === 0) SFX.slurp(); } else SFX.munch();
+      const kid = kids[i % kids.length];
+      W.parts.push({ x: kid.x + rnd(-6, 6), y: kid.y - 44, vx: rnd(-12, 12), vy: -38, g: 0, life: 1.1, txt: i === steps - 1 ? '❤️' : i % 3 === 2 ? '😋' : meal.emoji, size: 12 });
+      if (meal.kind === 'eat') for (let j = 0; j < 3; j++) W.parts.push({ x: kid.x + rnd(-5, 5), y: kid.y - 28, vx: rnd(-30, 30), vy: rnd(-40, -10), g: 200, life: rnd(.4, .7), r: 1.4, col: '#e0b47a' });
+      if (i === 2) friendSays(meal.yum, 3);
+      kid.y -= 2; await wait(220); kid.y += 2; await wait(220);
+    }
+    // beloning
+    const r = mealReward(S.meals, dayKey());
+    S.stats.meals = (S.stats.meals || 0) + 1; addMunten(r.coins); if (r.energy) addEnergie(r.energy); save();
+    r.energy ? SFX.energie() : SFX.coin();
+    burst(W.p.x + 13, W.p.y - 40, 22, ['#ffd23f', '#fff', '#ff6fa8', '#4cd964']);
+    toast(`🍽️ <span>Smakelijk gegeten! <b>🪙 +${r.coins}</b>${r.energy ? ' <b>⚡ +1 energie</b>' : ''}${r.capped ? '<br><small>⚡ Vandaag al 2× energie van het eten gehad</small>' : ''}</span>`, 'gold');
+    achieve('smakelijk');
+    await wait(900);
+    if (caller) caller.talking = false;
+  } catch (e) { console.warn(e); }
+  if (W.f) { W.f.hold = false; } W.trail = [{ x: W.p.x, y: W.p.y }];
+  MEAL.st = null; MEAL.eatT = 0; W.busy--; mealSyncNpc(); syncActBtn(); updateHud(); BUS.emit('meal', 'eaten');
+}
+
+/* ---------- papa staat in de keuken als hij geroepen heeft ---------- */
+function mealSyncNpc() {
+  if (!WORLD.map) return;
+  const want = WORLD.map.id === 'huis' && (MEAL.st === 'pending' || MEAL.st === 'eating') && MEAL.who === 'papa';
+  const i = WORLD.npcs.findIndex(n => n.mealGuest);
+  if (want && i < 0) WORLD.npcs.push({ id: 'papa', mealGuest: true, x: 20.5 * T, y: 10.7 * T, dir: 'down', moving: false, ph: 0, tx: null, ty: null, wait: 2, area: { x: 15, y: 10, w: 8, h: 1 } });
+  if (!want && i >= 0 && MEAL.st !== 'eating') WORLD.npcs.splice(i, 1);
+}
+BUS.on('map', mealSyncNpc);
+
+/* ---------- banner (DOM) ---------- */
+function mealShow(lateText) {
+  const el = $('#mealCall'), meal = MEAL.meal; if (!el || !meal) return;
+  const sp = speaker(MEAL.who), late = !!lateText;
+  el.className = 'mealcall show big' + (late ? ' late' : '');
+  el.innerHTML = `<canvas class="mcport" width="120" height="120"></canvas>
+    <div class="mctext"><span class="dlgname" style="background:${sp.col}">${sp.name}</span>
+      <div class="mcmsg">${esc(late ? lateText : MEAL.text)}</div>
+      ${late ? '' : `<div class="mchint">🍽️ <span>Naar de keukentafel!</span> <b class="mctime"></b></div><div class="mcbar"><i></i></div>`}</div>
+    <div class="mcfood">${late ? (meal.id === 'soep' ? '🥶' : '⏰') : meal.emoji + (meal.more || '')}</div>`;
+  drawPortrait(el.querySelector('canvas'), sp.look, { adult: true });
+  el.onclick = () => { if (MEAL.st === 'pending') { MEAL.big = 5; SFX.click(); } else if (!MEAL.st) { MEAL.lateUntil = 0; mealHide(); } };
+  if (!late) mealUi(0);
+}
+function mealHide() { const el = $('#mealCall'); if (el) { el.className = 'mealcall'; el.innerHTML = ''; } }
+function mealUi(dt) {
+  const el = $('#mealCall'); if (!el || MEAL.st !== 'pending' || !el.classList.contains('show')) return;
+  if (MEAL.big > 0) MEAL.big -= dt;
+  el.classList.toggle('big', MEAL.big > 0);           // eerst groot, daarna een klein balkje (tik = weer groot)
+  const s = Math.max(0, Math.ceil(MEAL.left)), tm = el.querySelector('.mctime'), bar = el.querySelector('.mcbar i');
+  if (tm) tm.textContent = Math.floor(s / 60) + ':' + pad2(s % 60);
+  if (bar) { bar.style.width = (100 * MEAL.left / MEAL_WINDOW).toFixed(1) + '%'; bar.classList.toggle('hurry', MEAL.left < 30); }
+}
+
+/* ---------- tekenen in de wereld ---------- */
+// eten op tafel (vóór de figuren, zodat de kinderen ervoor staan)
+function mealDrawFood(c) {
+  const o = (MEAL.st === 'pending' || MEAL.st === 'eating') && mealTable(); if (!o) return;
+  const X = o.x * T, Y = o.y * T, W = o.w * T, sc = MEAL.st === 'eating' ? 1 - MEAL.eatT * .75 : 1;
+  c.save(); c.textAlign = 'center'; c.textBaseline = 'middle';
+  [[X + 26, Y + 33, MEAL.meal.emoji], [X + W - 26, Y + 33, MEAL.meal.more || MEAL.meal.emoji]].forEach(([x, y, em]) => {
+    c.fillStyle = 'rgba(0,0,0,.12)'; c.beginPath(); c.ellipse(x, y + 2, 12, 7, 0, 0, 7); c.fill();
+    c.fillStyle = '#fff'; c.strokeStyle = '#c9d1df'; c.lineWidth = 1.5; c.beginPath(); c.ellipse(x, y, 12, 7.5, 0, 0, 7); c.fill(); c.stroke();
+    if (sc > .3) { c.font = Math.round(15 * sc) + 'px system-ui, "Apple Color Emoji", sans-serif'; c.fillText(em, x, y - 3 * sc); }
+  });
+  if (MEAL.st === 'pending') for (let i = 0; i < 3; i++) { const t = (WORLD.t * .6 + i / 3) % 1; c.globalAlpha = (1 - t) * .55; c.strokeStyle = '#fff'; c.lineWidth = 2; c.beginPath(); c.moveTo(X + W / 2 - 8 + i * 8, Y + 22 - t * 26); c.quadraticCurveTo(X + W / 2 - 3 + i * 8, Y + 14 - t * 26, X + W / 2 - 8 + i * 8, Y + 6 - t * 26); c.stroke(); }
+  c.restore();
+}
+// pijl naar de keukentafel of naar de deur die die kant op gaat (ná het donker, zodat hij ook in de kelder te zien is)
+function mealTarget() {
+  if (MEAL.st !== 'pending' || !WORLD.map) return null;
+  const o = mealTable(); if (o) return { x: (o.x + o.w / 2) * T, y: o.y * T, w: o.w * T, h: o.h * T, table: true };
+  const d = mealRoute(GB.MAPS, WORLD.map.id, 'huis'); if (!d) return null;
+  return { x: (d.x + d.w / 2) * T, y: d.y * T, w: d.w * T, h: d.h * T, door: d };
+}
+function mealDrawMarker(c, left, top, vw, vh) {
+  const tg = mealTarget(); if (!tg) return;
+  const t = WORLD.t, bob = Math.sin(t * 5) * 4;
+  c.save();
+  // stippelring
+  c.strokeStyle = 'rgba(255,210,63,' + (.65 + Math.sin(t * 6) * .3) + ')'; c.lineWidth = 3; c.setLineDash([7, 5]); c.lineDashOffset = -t * 20;
+  rrect(c, tg.x - tg.w / 2 - 5, tg.y - 5, tg.w + 10, tg.h + 10, 10); c.stroke(); c.setLineDash([]);
+  // pijl erboven
+  const ax = tg.x, ay = tg.y - 14 + bob;
+  const inView = ax > left + 10 && ax < left + vw - 10 && ay - 30 > top + 40 && ay < top + vh - 10;
+  if (inView) mealArrow(c, ax, ay, Math.PI / 2, 1);
+  else {
+    // pijl aan de rand van het scherm die de goede kant op wijst
+    const cx = left + vw / 2, cy = top + vh / 2, ang = Math.atan2(ay - cy, ax - cx);
+    const mx = vw / 2 - 34, my = vh / 2 - 46, k = Math.min(Math.abs(mx / (Math.cos(ang) || 1e-6)), Math.abs(my / (Math.sin(ang) || 1e-6)));
+    const ex = cx + Math.cos(ang) * k, ey = cy + Math.sin(ang) * k + 10;
+    c.fillStyle = 'rgba(31,42,68,.18)'; c.beginPath(); c.arc(ex, ey + 2, 17, 0, 7); c.fill();
+    c.fillStyle = '#fff'; c.beginPath(); c.arc(ex, ey, 17, 0, 7); c.fill();
+    c.font = '17px system-ui, "Apple Color Emoji", sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(MEAL.meal.emoji, ex, ey + 1);
+    mealArrow(c, ex + Math.cos(ang) * 24, ey + Math.sin(ang) * 24, ang, .55);
+  }
+  c.restore();
+}
+function mealArrow(c, x, y, ang, s) {
+  c.save(); c.translate(x, y); c.rotate(ang - Math.PI / 2); c.scale(s, s);
+  c.beginPath(); c.moveTo(0, 0); c.lineTo(-13, -15); c.lineTo(-6, -15); c.lineTo(-6, -32); c.lineTo(6, -32); c.lineTo(6, -15); c.lineTo(13, -15); c.closePath();
+  c.fillStyle = '#ffd23f'; c.strokeStyle = '#1f2a44'; c.lineWidth = 3; c.lineJoin = 'round'; c.fill(); c.stroke();
+  c.restore();
+}
+
+/* ---------- voor ouders ---------- */
+const MEAL_FREQ_NOTE = { vaak: 'ongeveer elke 4 à 6 minuten speeltijd', normaal: 'ongeveer elke 6 à 10 minuten speeltijd', weinig: 'ongeveer elke 12 à 18 minuten speeltijd' };
+function mealRenderOuders() {
+  const m = S.meals;
+  $$('#oudMeal button').forEach(b => b.classList.toggle('on', (b.dataset.v === '1') === !!m.on));
+  $$('#oudMealFreq button').forEach(b => b.classList.toggle('on', b.dataset.v === m.freq));
+  $('#oudMealFreqNote').textContent = m.on ? MEAL_FREQ_NOTE[m.freq] : 'staat uit';
+  const today = m.day === dayKey() ? m.energy : 0;
+  $('#oudMealMsg').textContent = S.started ? `Tot nu toe: ${S.stats.meals || 0}× op tijd aan tafel, ${S.stats.mealsLate || 0}× te laat. Vandaag ${today} van ${MEAL_MAX_E} ⚡ van het eten.` : 'Start eerst een spel, dan kun je het uitproberen.';
+}
+$('#oudMeal').addEventListener('click', e => { const b = e.target.closest('button'); if (!b) return; SFX.click(); S.meals.on = b.dataset.v === '1'; S.meals.left = mealNextDelay(S.meals.freq, Math.random()); if (!S.meals.on && MEAL.st === 'pending') mealCancel(); save(); mealRenderOuders(); });
+$('#oudMealFreq').addEventListener('click', e => { const b = e.target.closest('button'); if (!b || !MEAL_FREQ[b.dataset.v]) return; SFX.click(); S.meals.freq = b.dataset.v; S.meals.left = mealNextDelay(S.meals.freq, Math.random()); save(); mealRenderOuders(); });
+$('#oudMealNow').addEventListener('click', () => {
+  SFX.click();
+  if (!S.started || !S.chars.p) { $('#oudMealMsg').textContent = '⚠️ Start eerst een spel (Spelen), dan kun je het uitproberen.'; return; }
+  if (MEAL.st) mealCancel();
+  MEAL.force = true; MEAL.freeT = 0;
+  closeOv('mdOuders'); enterWorld();
+});
 
 /* ===== minigames/bowling_logic.js ===== */
 /* =========================================================
@@ -3766,6 +4087,7 @@ window.__gb = {
   get S() { return S; }, set S(v) { S = v; }, WORLD, GB, MG, AUD, loadMap, goMap, save, load, checkDailyDig, digNow, unlockAllRooms, molStatus, openBase, digRoom, nextRoom,
   setOffsetDays(d) { GB.timeOffset = d * 86400000; }, giveItem, addEnergie, flag, setFlag, isDug, openSetup, mgStart, mgStop, openHQ, openWerkbank, openBag, openBook,
   bowlingScore, bowlingNext, frameMarks, BlokGame, BowlSim, enterWorld, goTitle, DLG, hideDlg, useObject, doAct, robotBuilt,
+  MEAL, MEALS, MEAL_WINDOW, mealCall, mealCancel, mealTarget, mealRoute, renderOuders, addMunten, rectDist,
 };
 
 </script>
