@@ -810,6 +810,9 @@ const TRACKS = {
   blokken: { naam: 'Blokken', bpm: 136, root: 329.63, scale: MINOR, swing: 0, lead: 'chip', lv: .13, bv: .2, pad: 0, stab: 0,
     bass: 'r o r o f o f o', drums: { k: 'x . . . x . . .', h: '. . x . . . x .', c: '. . . . x . . .' }, prog: 'I V vi IV I V IV I',
     mel: ['0 . 2 . 4 . 2 .', '5 . 4 . 2 . 4 .', '7 . 6 . 4 . 2 .', '3 . 2 . 1 . . .', '0 . 2 . 4 . 7 .', '8 . 7 . 5 . 4 .', '3 . 4 . 5 . 6 .', '7 . 4 . 0 . . .'] },
+  minigolf: { naam: 'Minigolf', bpm: 104, root: 392, swing: .18, lead: 'marimba', lv: .19, bv: .18, pad: .01, stab: .025,
+    bass: 'r . f . r . f .', stabs: '. x . . . x . .', drums: { k: 'x . . . x . . .', z: '. . x . . . x .', h: '. x . x . x . x' }, prog: 'I vi ii V I vi IV V',
+    mel: ['4 . 2 . 0 . 2 4', '5 . 4 . 2 - - .', '1 . 3 . 5 . 3 1', '4 - - - . . . .', '4 . 5 . 7 . 5 4', '9 . 7 . 5 - - .', '6 . 5 . 4 . 3 2', '0 - - - . . . .'] },
   flipper: { naam: 'Flipperkast', bpm: 132, root: 349.23, swing: .05, lead: 'chip', lv: .12, bv: .2, pad: 0, stab: 0,
     bass: 'r . o . r . o .', drums: { k: 'x . . . x . . .', h: 'x . x . x . x .', c: '. . . . x . . .' }, prog: 'I IV V I I IV V I',
     mel: ['0 4 7 4 9 7 4 7', '3 5 8 5 10 8 5 8', '4 6 9 6 11 9 6 9', '7 . 4 . 0 . . .', '0 4 7 4 9 7 4 7', '3 5 8 5 10 8 5 8', '6 4 2 4 6 8 9 8', '7 . . . 0 . . .'] },
@@ -942,6 +945,11 @@ const SFX = {
   hold() { tone(520, .06, 'triangle', .05); tone(780, .06, 'triangle', .04, .05); },
   gameover() { duck(2, .3); [523, 466, 415, 392].forEach((f, i) => tone(f, .3, 'triangle', .08, i * .22)); },
   // flipper
+  putt(v) { const k = clamp(v || .5, .15, 1); woodHit(1400 + k * 500, .1 * k + .03); tone(2600, .03, 'sine', .03 * k); },
+  golfWall(v) { const k = clamp(v || .5, .1, 1); woodHit(520 + Math.random() * 200, .07 * k); },
+  splash() { duck(1, .4); noise(.6, .14, 0, 900, .8, 'bandpass', 300); [0, .12, .25].forEach(w => tone(500 + Math.random() * 400, .08, 'sine', .04, w, 1400)); },
+  cup() { duck(1.4, .4); [0, .09, .16].forEach((w, i) => woodHit(900 - i * 120, .08, w)); [784, 988, 1319].forEach((f, i) => tone(f, .16, 'triangle', .08, .3 + i * .08)); },
+  buzz() { noise(1.1, .05, 0, 260, 4, 'bandpass', 340); tone(180, 1.1, 'sawtooth', .015, 0, 230); },
   flip() { tone(140, .05, 'square', .05, 0, 80); noise(.04, .06, 0, 2500, 1.5); },
   bumper() { bellHit(1250 + Math.random() * 200, .06, 0, .25); tone(300, .08, 'square', .04, 0, 600); },
   sling() { tone(420, .1, 'square', .04, 0, 840); },
@@ -1087,6 +1095,7 @@ function drawHair(ctx, style, hc, dir, hy, hr, shirt, L) {
 // Gezichtje in een vierkant (dialoog-portret)
 function drawPortrait(cv, look, opt) {
   const ctx = cv.getContext('2d'), w = cv.width, h = cv.height; ctx.clearRect(0, 0, w, h);
+  if (opt && opt.vlieg) { drawDrone(ctx, w / 2, h * .92, h * .36, 1, null, w / 46); return; }
   if (opt && opt.mol) { const img = molImg(); if (img.complete && img.naturalWidth) ctx.drawImage(img, w * .02, h * .12, w * .96, w * .96 * .8); else img.onload = () => drawPortrait(cv, look, opt); return; }
   const sc = w / 34; drawKid(ctx, look, w / 2, h * .5 + 34 * sc * (opt && opt.adult ? .9 : .78), 'down', 0, false, Object.assign({ scale: sc, noShadow: true, t: 1 }, opt || {}));
 }
@@ -1095,6 +1104,12 @@ function drawPortrait(cv, look, opt) {
 const SV = (inner) => `<svg viewBox="0 0 64 64" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" stroke-linejoin="round" stroke-linecap="round">${inner}</svg>`;
 const K = 'stroke="#1f2a44" stroke-width="3"';
 const ICON_SVG = {
+  vliegtekening: SV(`<rect x="8" y="12" width="44" height="40" rx="3" fill="#2b7a8f" ${K}/><path d="M14 20 h18" stroke="#cfe6ff" stroke-width="2.5"/><rect x="24" y="32" width="16" height="10" rx="4" fill="none" stroke="#fff" stroke-width="2.5"/><path d="M24 34 l-8 -5 M40 34 l8 -5" stroke="#fff" stroke-width="2.5"/><ellipse cx="15" cy="27" rx="7" ry="2" fill="none" stroke="#fff" stroke-width="2"/><ellipse cx="49" cy="27" rx="7" ry="2" fill="none" stroke="#fff" stroke-width="2"/><rect x="50" y="8" width="8" height="48" rx="4" fill="#cfe6ff" ${K}/>`),
+  propellers: SV(`<g transform="rotate(-20 32 32)"><ellipse cx="17" cy="32" rx="15" ry="6.5" fill="#dbeaff" ${K}/><ellipse cx="47" cy="32" rx="15" ry="6.5" fill="#dbeaff" ${K}/></g><g transform="rotate(70 32 32)" opacity=".55"><ellipse cx="17" cy="32" rx="13" ry="5" fill="#dbeaff" ${K}/><ellipse cx="47" cy="32" rx="13" ry="5" fill="#dbeaff" ${K}/></g><circle cx="32" cy="32" r="7" fill="#e8403a" ${K}/>`),
+  afstandsbediening: SV(`<path d="M46 18 L52 5" stroke="#1f2a44" stroke-width="3"/><circle cx="52" cy="5" r="3.5" fill="#e8403a" ${K.replace('3"', '1.5"')}/><rect x="5" y="18" width="54" height="34" rx="11" fill="#3f6fe0" ${K}/><circle cx="19" cy="35" r="7.5" fill="#1f2a44"/><circle cx="19" cy="33" r="3.5" fill="#c9d1df"/><circle cx="45" cy="35" r="7.5" fill="#1f2a44"/><circle cx="45" cy="33" r="3.5" fill="#c9d1df"/><rect x="27" y="24" width="10" height="7" rx="2" fill="#5ef0ff"/><circle cx="32" cy="42" r="2.5" fill="#ffd23f"/>`),
+  camera: SV(`<rect x="20" y="12" width="14" height="10" rx="3" fill="#5d6577" ${K}/><rect x="7" y="19" width="50" height="33" rx="9" fill="#3b3f4a" ${K}/><circle cx="32" cy="36" r="12" fill="#c9d1df" ${K}/><circle cx="32" cy="36" r="6.5" fill="#5ef0ff" ${K}/><circle cx="29" cy="33" r="2" fill="#fff"/><circle cx="49" cy="26" r="2.5" fill="#e8403a"/>`),
+  lichtframe: SV(`<path d="M13 13 L51 51 M51 13 L13 51" stroke="#1f2a44" stroke-width="10"/><path d="M13 13 L51 51 M51 13 L13 51" stroke="#e6ecf5" stroke-width="5"/><circle cx="13" cy="13" r="6" fill="#5d6577" ${K}/><circle cx="51" cy="13" r="6" fill="#5d6577" ${K}/><circle cx="13" cy="51" r="6" fill="#5d6577" ${K}/><circle cx="51" cy="51" r="6" fill="#5d6577" ${K}/><rect x="23" y="23" width="18" height="18" rx="5" fill="#ffd23f" ${K}/>`),
+  tandwiel: SV(`<g transform="translate(32 32)"><path d="${Array.from({ length: 10 }, (_, i) => { const a = i * Math.PI / 5, b = a + Math.PI / 10; const p = (r, q) => `${(Math.cos(q) * r).toFixed(1)} ${(Math.sin(q) * r).toFixed(1)}`; return `${i ? 'L' : 'M'}${p(26, a - .16)} L${p(26, a + .16)} L${p(19, b - .1)} L${p(19, b + .1)}`; }).join(' ')}Z" fill="#ffc83d" ${K}/><circle r="8" fill="#fff3c4" ${K}/><path d="M-3 -2 l3 -3 l3 3 l-3 3z" fill="#9b5de5"/></g>`),
   boorkop: SV(`<rect x="6" y="24" width="18" height="16" rx="4" fill="#7d8799" ${K}/><path d="M24 20 L60 32 L24 44Z" fill="#dfe5ee" ${K}/><path d="M31 23 l-4 18 M40 26 l-3 12 M49 29 l-2 6" stroke="#8a94a6" stroke-width="3.5" fill="none"/><circle cx="14" cy="32" r="3" fill="#ffd23f"/>`),
   wieltjes: SV(`<rect x="4" y="22" width="56" height="26" rx="13" fill="#3b3f4a" ${K}/><circle cx="17" cy="35" r="8" fill="#c9d1df" ${K}/><circle cx="32" cy="35" r="8" fill="#c9d1df" ${K}/><circle cx="47" cy="35" r="8" fill="#c9d1df" ${K}/><circle cx="17" cy="35" r="2.5" fill="#1f2a44"/><circle cx="32" cy="35" r="2.5" fill="#1f2a44"/><circle cx="47" cy="35" r="2.5" fill="#1f2a44"/>`),
   accu: SV(`<rect x="10" y="14" width="44" height="40" rx="7" fill="#ffd23f" ${K}/><rect x="18" y="8" width="9" height="7" rx="2" fill="#e8403a" ${K}/><rect x="37" y="8" width="9" height="7" rx="2" fill="#3b3f4a" ${K}/><path d="M35 20 L24 36 H32 L28 48 L41 31 H33 Z" fill="#fff" ${K}/>`),
@@ -1114,7 +1129,7 @@ const ICON_SVG = {
   discobal: SV(`<path d="M32 2 v8" stroke="#1f2a44" stroke-width="3"/><circle cx="32" cy="34" r="22" fill="#c9d1df" ${K}/><g fill="#fff"><rect x="20" y="20" width="7" height="7"/><rect x="34" y="26" width="7" height="7"/><rect x="24" y="38" width="7" height="7"/><rect x="40" y="40" width="5" height="5"/></g><g fill="#9b5de5"><rect x="28" y="28" width="6" height="6"/><rect x="38" y="16" width="5" height="5"/></g><g fill="#1fa6e0"><rect x="16" y="32" width="6" height="6"/><rect x="34" y="46" width="6" height="5"/></g>`),
   munt: SV(`<circle cx="32" cy="32" r="24" fill="#ffd23f" ${K}/><circle cx="32" cy="32" r="17" fill="none" stroke="#e0a800" stroke-width="3"/><path d="M32 22 v20 M26 28 h12" stroke="#b07800" stroke-width="5"/>`),
 };
-const ICON_EMOJI = { wortel: '🥕', appel: '🍎', voetbal: '⚽', plantje: '🪴', vlag: '🚩', koekje: '🍪' };
+const ICON_EMOJI = { frisbee: '🥏', robotknuffel: '🤖', trofee: '🏆', wortel: '🥕', appel: '🍎', voetbal: '⚽', plantje: '🪴', vlag: '🚩', koekje: '🍪' };
 function iconHTML(id) { if (ICON_SVG[id]) return ICON_SVG[id]; return `<span class="em" style="font-size:1em">${ICON_EMOJI[id] || '❓'}</span>`; }
 const IMG_CACHE = {};
 function svgImage(svg) { const i = new Image(); i.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg); return i; }
@@ -1139,6 +1154,30 @@ function molSVG(parts, cls) {
   return `<svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg" class="${cls || ''}" stroke-linejoin="round" stroke-linecap="round">${order.filter(p => !parts || parts.includes(p)).map(p => MOL_PARTS[p]).join('')}</svg>`;
 }
 const SUPERMOL_SVG = molSVG(null);
+/* ---------- de Vliegbot (robot 2) ---------- */
+const VLIEG_SVG_PARTS = {
+  lichtframe: `<g class="p-lichtframe"><path d="M100 92 L38 60 M100 92 L162 60" stroke="#1f2a44" stroke-width="13"/><path d="M100 92 L38 60 M100 92 L162 60" stroke="#e6ecf5" stroke-width="7"/><path d="M76 118 L66 146 H134 L124 118" fill="none" stroke="#1f2a44" stroke-width="9"/><path d="M76 118 L66 146 H134 L124 118" fill="none" stroke="#e6ecf5" stroke-width="4.5"/><rect x="26" y="52" width="26" height="16" rx="5" fill="#5d6577" stroke="#1f2a44" stroke-width="4"/><rect x="148" y="52" width="26" height="16" rx="5" fill="#5d6577" stroke="#1f2a44" stroke-width="4"/></g>`,
+  body: `<g class="p-body"><rect x="60" y="66" width="80" height="56" rx="24" fill="#1fa6e0" stroke="#1f2a44" stroke-width="4"/><rect x="71" y="76" width="58" height="32" rx="13" fill="#07131f"/><circle cx="88" cy="91" r="7.5" fill="#5ef0ff"/><circle cx="112" cy="91" r="7.5" fill="#5ef0ff"/><circle cx="90" cy="89" r="2.5" fill="#fff"/><circle cx="114" cy="89" r="2.5" fill="#fff"/><path d="M92 101 q8 6 16 0" stroke="#5ef0ff" stroke-width="3" fill="none"/><path d="M66 78 q4 -8 12 -9" stroke="#8fd8ff" stroke-width="4" fill="none"/></g>`,
+  propellers: `<g class="p-propellers"><rect x="36" y="42" width="6" height="12" fill="#1f2a44"/><rect x="158" y="42" width="6" height="12" fill="#1f2a44"/><ellipse cx="39" cy="42" rx="34" ry="7" fill="#dbeaff" stroke="#1f2a44" stroke-width="4"/><ellipse cx="161" cy="42" rx="34" ry="7" fill="#dbeaff" stroke="#1f2a44" stroke-width="4"/><circle cx="39" cy="42" r="5" fill="#e8403a" stroke="#1f2a44" stroke-width="2.5"/><circle cx="161" cy="42" r="5" fill="#e8403a" stroke="#1f2a44" stroke-width="2.5"/></g>`,
+  camera: `<g class="p-camera"><rect x="86" y="116" width="28" height="18" rx="7" fill="#3b3f4a" stroke="#1f2a44" stroke-width="4"/><circle cx="100" cy="125" r="6.5" fill="#5ef0ff" stroke="#1f2a44" stroke-width="3"/></g>`,
+  afstandsbediening: `<g class="p-afstandsbediening"><path d="M100 66 V40" stroke="#1f2a44" stroke-width="4"/><circle cx="100" cy="35" r="8" fill="#e8403a" stroke="#1f2a44" stroke-width="4"/><path d="M86 30 q-6 5 0 11 M114 30 q6 5 0 11" stroke="#ffd23f" stroke-width="3" fill="none"/></g>`,
+};
+function vliegSVG(parts) { return `<svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg" stroke-linejoin="round" stroke-linecap="round">${['lichtframe', 'body', 'propellers', 'camera', 'afstandsbediening'].filter(p => !parts || parts.includes(p)).map(p => VLIEG_SVG_PARTS[p]).join('')}</svg>`; }
+const VLIEGBOT_SVG = vliegSVG(null);
+// Vliegbot in de wereld: (x,y) = plek op de grond (schaduw), alt = hoogte. carry = voorwerp dat hij vasthoudt.
+function drawDrone(c, x, y, alt, t, carry, sc) {
+  const s = sc || 1, bob = Math.sin(t * 3.2) * 2.5, by = y - alt + bob;
+  c.save(); c.fillStyle = `rgba(0,0,0,${clamp(.28 - alt / 500, .08, .28)})`; c.beginPath(); c.ellipse(x, y, 15 * s * clamp(1 - alt / 260, .5, 1), 4.5 * s, 0, 0, 7); c.fill();
+  c.translate(x, by); c.scale(s, s);
+  if (carry) { c.strokeStyle = '#1f2a44'; c.lineWidth = 1.5; c.beginPath(); c.moveTo(0, 8); c.lineTo(0, 15); c.stroke(); drawIcon(c, carry, 0, 22, 16); }
+  c.strokeStyle = LINE; c.lineWidth = 4; c.beginPath(); c.moveTo(-17, -5); c.lineTo(17, -5); c.stroke(); c.strokeStyle = '#e6ecf5'; c.lineWidth = 2; c.stroke();
+  for (const sx of [-17, 17]) { c.fillStyle = '#1f2a44'; c.fillRect(sx - 1, -10, 2, 5); const w = 9 + Math.abs(Math.sin(t * 40 + sx)) * 5; c.fillStyle = 'rgba(219,234,255,.85)'; c.strokeStyle = 'rgba(31,42,68,.6)'; c.lineWidth = 1.2; c.beginPath(); c.ellipse(sx, -10, w, 2.2, 0, 0, 7); c.fill(); c.stroke(); }
+  box(c, -10, -9, 20, 16, 7, '#1fa6e0', 2); c.fillStyle = '#07131f'; rrect(c, -7, -6, 14, 8, 3.5); c.fill();
+  const blink = (t % 3.4) < .12; c.fillStyle = '#5ef0ff'; if (blink) { c.fillRect(-4.5, -2.5, 3, 1); c.fillRect(1.5, -2.5, 3, 1); } else { dot(c, -3, -2, 1.7, '#5ef0ff'); dot(c, 3, -2, 1.7, '#5ef0ff'); }
+  c.strokeStyle = '#1f2a44'; c.lineWidth = 1.5; c.beginPath(); c.moveTo(0, -9); c.lineTo(0, -14); c.stroke(); dot(c, 0, -15, 2, (t * 3 | 0) % 2 ? '#e8403a' : '#ffd23f');
+  box(c, -3.5, 6, 7, 4, 2, '#3b3f4a', 1); c.restore();
+}
+
 function molImg() { return IMG_CACHE._mol || (IMG_CACHE._mol = svgImage(SUPERMOL_SVG)); }
 // Supermol in de wereld: (x,y) = onderkant midden, w = breedte in wereld-eenheden
 function drawMol(ctx, x, y, dir, t, w, digging) {
@@ -1168,6 +1207,7 @@ function speaker(who) {
   if (who === 'mama') return { name: 'Mama', look: NPC_LOOKS.mama, adult: true, col: '#b02a5b', pitch: 1.1 };
   if (who === 'papa') return { name: 'Papa', look: NPC_LOOKS.papa, adult: true, col: '#2f6b4b', pitch: .8 };
   if (who === 'mol') return { name: 'Supermol', mol: true, col: '#7a4a2a', pitch: 1.6 };
+  if (who === 'vlieg') return { name: 'Vliegbot', vlieg: true, col: '#1fa6e0', pitch: 1.9 };
   return { name: '', col: '#6a3bd6', pitch: 1 };
 }
 const fillNames = t => String(t).replace(/\{p\}/g, esc(pName())).replace(/\{f\}/g, esc(fName()));
@@ -1178,7 +1218,7 @@ function showLine(who, text, choices) {
     DLG.open = true; DLG.res = res; DLG.full = fillNames(text); DLG.shown = 0; DLG.typing = true; DLG.choices = choices || null; DLG.t0 = performance.now();
     $('#dlg').classList.add('show');
     const port = $('#dlgPort'); port.style.display = sp.name ? '' : 'none';
-    if (sp.name) { if (sp.mol) drawPortrait(port, null, { mol: true }); else drawPortrait(port, sp.look, { adult: sp.adult }); }
+    if (sp.name) { if (sp.mol) drawPortrait(port, null, { mol: true }); else if (sp.vlieg) drawPortrait(port, null, { vlieg: true }); else drawPortrait(port, sp.look, { adult: sp.adult }); }
     const nm = $('#dlgName'); nm.textContent = sp.name || '📢'; nm.style.background = sp.col;
     $('#dlgMsg').innerHTML = ''; $('#dlgChoices').innerHTML = ''; $('#dlgNext').style.visibility = 'hidden';
     clearInterval(DLG.timer);
@@ -1289,7 +1329,18 @@ function registerItem(o) { GB.ITEMS[o.id] = Object.assign({ cat: 'materiaal' }, 
   { id: 'voetbal', name: 'Voetbal', cat: 'deco', desc: 'Een echte leren bal.' },
   { id: 'plantje', name: 'Plantje', cat: 'deco', desc: 'Een stekje van mama’s plant.' },
   { id: 'vlag', name: 'Vlag', cat: 'deco', desc: 'Een vlag voor op jullie geheime basis.' },
+  // Fase 2: de Vliegbot (robot 2) en nieuwe vondsten
+  { id: 'vliegtekening', name: 'Vliegtekening', cat: 'sleutel', desc: 'Een tekening van een vliegende robot: de Vliegbot!' },
+  { id: 'propellers', name: 'Propellers', cat: 'onderdeel', desc: 'Vier snelle propellers. Zoemmm!' },
+  { id: 'afstandsbediening', name: 'Afstandsbediening', cat: 'onderdeel', desc: 'Hiermee stuur je de Vliegbot.' },
+  { id: 'camera', name: 'Camera', cat: 'onderdeel', desc: 'Een mini-camera, zodat de Vliegbot alles ziet.' },
+  { id: 'lichtframe', name: 'Licht frame', cat: 'onderdeel', desc: 'Een superlicht frame. Zwaar vliegt niet!' },
+  { id: 'frisbee', name: 'Frisbee', cat: 'deco', desc: 'Die lag al maanden op het dak!' },
+  { id: 'robotknuffel', name: 'Robotknuffel', cat: 'deco', desc: 'Een zachte robotknuffel. Lag boven op de kast.' },
+  { id: 'trofee', name: 'Escape-trofee', cat: 'deco', desc: 'Voor de slimste speurders van de escaperoom!' },
+  { id: 'tandwiel', name: 'Geheimzinnig tandwiel', cat: 'sleutel', desc: 'Een gouden tandwiel met een vreemd teken. Is er nóg een robot?' },
 ].forEach(registerItem);
+const VLIEG_PARTS = ['propellers', 'afstandsbediening', 'camera', 'lichtframe'];
 const ROBOT_PARTS = ['boorkop', 'wieltjes', 'accu', 'motor', 'schep'];
 const CAT_NAME = { onderdeel: '🔩 Robotonderdeel', gereedschap: '🧰 Gereedschap', materiaal: '📦 Materiaal', deco: '🎨 Versiering', eten: '🍎 Eten', sleutel: '📜 Belangrijk' };
 
@@ -1302,6 +1353,8 @@ const CAT_NAME = { onderdeel: '🔩 Robotonderdeel', gereedschap: '🧰 Gereedsc
 function registerRecipe(o) { GB.RECIPES[o.id] = o; }
 registerRecipe({ id: 'supermol', name: 'Supermol', icon: 'robot', needs: ['boorkop', 'wieltjes', 'accu', 'motor', 'schep'], gives: { robot: 'supermol' }, blueprint: 'bouwtekening', once: true,
   hint: 'Zoek alle 5 onderdelen in huis en tuin.' });
+registerRecipe({ id: 'vliegbot', name: 'Vliegbot', icon: 'robot', needs: ['propellers', 'afstandsbediening', 'camera', 'lichtframe'], gives: { robot: 'vliegbot' }, blueprint: 'vliegtekening', once: true,
+  hint: 'Zoek de 4 onderdelen: in de nieuwe kamers en ergens in huis.', lockedText: 'Ligt de vliegtekening in een kist in een nieuwe kamer?' });
 registerRecipe({ id: 'zaklamp', name: 'Zaklamp', icon: 'zaklamp', needs: ['lampje', 'batterijtjes'], gives: { item: 'zaklamp' }, once: true,
   hint: 'Lampje + batterijtjes. Handig in het donker!' });
 registerRecipe({ id: 'ladder', name: 'Ladder', icon: 'ladder', needs: ['planken', 'touw'], gives: { item: 'ladder' }, once: true,
@@ -1323,6 +1376,13 @@ registerRobot({
     { part: 'schep', x: 76, y: 76, label: 'Graafschep' },
   ],
 });
+registerRobot({
+  id: 'vliegbot', name: 'Vliegbot', job: 'Vliegt met jullie mee en haalt dingen op waar jullie niet bij kunnen.', svg: () => VLIEGBOT_SVG, partsSvg: p => vliegSVG(p),
+  slots: [
+    { part: 'propellers', x: 80, y: 24, label: 'Propellers' }, { part: 'afstandsbediening', x: 50, y: 17, label: 'Afstandsbediening' },
+    { part: 'lichtframe', x: 20, y: 52, label: 'Licht frame' }, { part: 'camera', x: 50, y: 84, label: 'Camera' },
+  ],
+});
 
 /* ===== data/rooms.js ===== */
 /* =========================================================
@@ -1336,7 +1396,7 @@ registerRoom({ id: 'hq', name: 'Hoofdkwartier', emoji: '🖥️', order: 0, slot
 registerRoom({ id: 'bowling', name: 'Bowlingbaan', emoji: '🎳', order: 1, slot: 'W', floor: 'L', machine: 'bowling', minigame: 'bowling', desc: 'Gooi alle kegels om!' });
 registerRoom({ id: 'blokken', name: 'Blokkenkamer', emoji: '🧱', order: 2, slot: 'E', floor: 'B', machine: 'blokken', minigame: 'blokken', desc: 'Vallende blokken, zoals Tetris. Maak hele rijen!' });
 registerRoom({ id: 'flipper', name: 'Flipperkastkamer', emoji: '🕹️', order: 3, slot: 'N', floor: 'F', machine: 'flipper', minigame: 'flipper', desc: 'Flipper de bal omhoog en scoor punten!' });
-registerRoom({ id: 'minigolf', name: 'Minigolf', emoji: '⛳', order: 4, slot: 'S', floor: 'M', soon: true, desc: 'Binnenkort!' });
+registerRoom({ id: 'minigolf', name: 'Minigolf', emoji: '⛳', order: 4, slot: 'S', floor: 'O', machine: 'minigolf', minigame: 'minigolf', desc: '6 holes met bumpers, een heuvel, een windmolen en water!' });
 registerRoom({ id: 'racebaan', name: 'Racebaan', emoji: '🏎️', order: 5, slot: 'NW', floor: 'M', soon: true, desc: 'Binnenkort!' });
 registerRoom({ id: 'escaperoom', name: 'Escaperoom', emoji: '🔐', order: 6, slot: 'NE', floor: 'M', soon: true, desc: 'Binnenkort!' });
 const roomList = () => Object.values(GB.ROOMS).sort((a, b) => a.order - b.order);
@@ -1363,6 +1423,11 @@ function registerAch(o) { GB.ACHIEVEMENTS[o.id] = o; }
   { id: 'vier', icon: '🧱', name: 'Vier tegelijk', desc: '4 rijen tegelijk weggespeeld in de Blokkenkamer.' },
   { id: 'flip10k', icon: '🕹️', name: 'Flipperkampioen', desc: '10.000 punten bij de flipperkast.' },
   { id: 'energie4', icon: '🔋', name: 'Batterijenjager', desc: 'Alle 4 verstopte energie-batterijen gevonden.' },
+  { id: 'holeinone', icon: '⛳', name: 'Hole-in-one!', desc: 'De bal in één slag in de hole bij minigolf.' },
+  { id: 'golfpar', icon: '🏌️', name: 'Golfprof', desc: 'Een hele minigolfronde op of onder par (18 slagen).' },
+  { id: 'vliegtekening', icon: '🗺️', name: 'Nog een uitvinding!', desc: 'De vliegtekening gevonden.' },
+  { id: 'vliegbot', icon: '🚁', name: 'Piloot', desc: 'De Vliegbot gebouwd!' },
+  { id: 'vlieg5', icon: '🪺', name: 'Hoog in de lucht', desc: 'Alle 5 hoge plekken bezocht met de Vliegbot.' },
   { id: 'deco', icon: '🎨', name: 'Binnenhuisarchitect', desc: 'Iets moois in de basis gezet.' },
   { id: 'samen', icon: '👫', name: 'Samen spelen', desc: 'Een spel met 2 spelers gespeeld.' },
 ].forEach(registerAch);
@@ -1409,6 +1474,7 @@ const TILES = {
   L: { draw(c, x, y, tx, ty) { c.fillStyle = '#e8bf82'; c.fillRect(x, y, T, T); c.strokeStyle = 'rgba(150,90,40,.25)'; c.lineWidth = 1; for (let i = 4; i < T; i += 6) { c.beginPath(); c.moveTo(x + i, y); c.lineTo(x + i, y + T); c.stroke(); } c.fillStyle = 'rgba(255,255,255,.18)'; c.fillRect(x, y + 3, T, 3); } },
   B: { draw(c, x, y, tx, ty) { const cols = ['#ffb3c7', '#b3e5ff', '#c9f7b0', '#ffe8a3', '#d9c2ff']; c.fillStyle = cols[Math.floor(hash2(tx, ty) * 5)]; c.fillRect(x, y, T, T); c.fillStyle = 'rgba(255,255,255,.45)'; c.fillRect(x + 2, y + 2, T - 4, 4); c.fillStyle = 'rgba(0,0,0,.08)'; c.fillRect(x + 2, y + T - 5, T - 4, 3); } },
   F: { draw(c, x, y, tx, ty) { c.fillStyle = '#2a1846'; c.fillRect(x, y, T, T); const h = hash2(tx, ty); if (h > .6) dot(c, x + h * 28, y + (1 - h) * 28, 1.6, ['#ff6fa8', '#5ef0ff', '#ffd23f'][Math.floor(h * 30) % 3]); c.strokeStyle = 'rgba(160,100,255,.25)'; c.lineWidth = 1; c.strokeRect(x + .5, y + .5, T - 1, T - 1); } },
+  O: { draw(c, x, y, tx, ty) { c.fillStyle = tx % 2 ? '#4cb860' : '#45ad58'; c.fillRect(x, y, T, T); const h = hash2(tx, ty); if (h > .7) { dot(c, x + h * 26 + 3, y + (1 - h) * 26 + 3, 1.4, '#fff7'); } } },
   M: { draw(c, x, y, tx, ty) { c.fillStyle = '#a07e5c'; c.fillRect(x, y, T, T); c.strokeStyle = 'rgba(0,0,0,.1)'; c.strokeRect(x + .5, y + .5, T - 1, T - 1); } },
 };
 function planks(c, x, y, tx, ty, a, b, hor) {
@@ -1545,13 +1611,16 @@ const FURN = {
   decoSpotDyn(c, o, X, Y, W, H, t) { const it = S.base.deco[o.id]; if (!it) return; let b = 0; if (it === 'discobal') b = Math.sin(t * 2) * 2; drawIcon(c, it, X + W / 2, Y + H / 2 - 6 + b, 30);
     if (it === 'discobal') { for (let i = 0; i < 5; i++) { const a = t * 1.5 + i * 1.256; dot(c, X + W / 2 + Math.cos(a) * 34, Y + H / 2 + Math.sin(a) * 18, 2, ['#ff6fa8', '#5ef0ff', '#ffd23f', '#fff', '#9b5de5'][i]); } } },
   machine(c, o, X, Y, W, H) { // speelautomaat: kast met scherm
-    const col = { bowling: '#e8403a', blokken: '#3f6fe0', flipper: '#9b5de5' }[o.game] || '#5d6577';
+    const col = { bowling: '#e8403a', blokken: '#3f6fe0', flipper: '#9b5de5', minigolf: '#2e9e5b', racebaan: '#ff8a1f', escaperoom: '#6a3bd6' }[o.game] || '#5d6577';
     box(c, X + 4, Y - 38, W - 8, H + 34, 8, col); box(c, X + 10, Y - 32, W - 20, 30, 4, '#07131f', 2); box(c, X + 6, Y + H - 22, W - 12, 14, 4, shade(col, -.25));
-    c.fillStyle = '#fff'; c.font = 'bold 11px sans-serif'; c.textAlign = 'center'; c.fillText(({ bowling: 'BOWLING', blokken: 'BLOKKEN', flipper: 'FLIPPER' })[o.game] || '', X + W / 2, Y + H - 12); },
+    c.fillStyle = '#fff'; c.font = 'bold 11px sans-serif'; c.textAlign = 'center'; c.fillText(({ bowling: 'BOWLING', blokken: 'BLOKKEN', flipper: 'FLIPPER', minigolf: 'GOLF', racebaan: 'RACE', escaperoom: 'ESCAPE' })[o.game] || '', X + W / 2, Y + H - 12); },
   machineDyn(c, o, X, Y, W, H, t) { const sx = X + 12, sy = Y - 30, sw = W - 24, sh = 26; c.save(); c.beginPath(); c.rect(sx, sy, sw, sh); c.clip();
     if (o.game === 'bowling') { c.fillStyle = '#e8bf82'; c.beginPath(); c.moveTo(sx + sw * .3, sy); c.lineTo(sx + sw * .7, sy); c.lineTo(sx + sw * .9, sy + sh); c.lineTo(sx + sw * .1, sy + sh); c.fill(); for (let i = 0; i < 4; i++) dot(c, sx + sw * (.4 + i * .065), sy + 5, 2, '#fff'); dot(c, sx + sw / 2 + Math.sin(t * 2) * 8, sy + sh - 6 - ((t * 10) % 16), 3.5, '#3f6fe0'); }
     else if (o.game === 'blokken') { const cols = ['#e8403a', '#ffd23f', '#3cc46a', '#1fa6e0', '#9b5de5']; for (let i = 0; i < 5; i++) { c.fillStyle = cols[i]; c.fillRect(sx + 6 + i * 9, sy + sh - 6, 8, 5); } c.fillStyle = cols[(t | 0) % 5]; c.fillRect(sx + sw / 2 - 8, sy + ((t * 14) % (sh - 8)), 16, 5); }
     else if (o.game === 'flipper') { c.fillStyle = '#2a1846'; c.fillRect(sx, sy, sw, sh); [[.3, .4], [.6, .3], [.5, .7]].forEach(([a, b], i) => dot(c, sx + sw * a, sy + sh * b, 3.5, ((t * 3 | 0) + i) % 3 ? '#ff6fa8' : '#5ef0ff')); dot(c, sx + sw / 2 + Math.sin(t * 3) * 14, sy + sh / 2 + Math.cos(t * 2.3) * 8, 2.5, '#fff'); }
+    else if (o.game === 'minigolf') { c.fillStyle = '#3cae5a'; c.fillRect(sx, sy, sw, sh); dot(c, sx + sw * .78, sy + sh * .5, 3.5, '#07131f'); c.fillStyle = '#e8403a'; c.fillRect(sx + sw * .78, sy + 3, 7, 5); c.fillStyle = '#fff'; c.fillRect(sx + sw * .78 - 1, sy + 3, 1.5, 11); const k = (t * .6) % 1; dot(c, sx + 6 + k * (sw * .78 - 6), sy + sh * .5 + Math.sin(k * 9) * 3, 2.5, '#fff'); }
+    else if (o.game === 'racebaan') { c.fillStyle = '#4a4f5c'; c.fillRect(sx, sy, sw, sh); c.strokeStyle = '#fff'; c.setLineDash([4, 4]); c.beginPath(); c.moveTo(sx, sy + sh / 2); c.lineTo(sx + sw, sy + sh / 2); c.stroke(); c.setLineDash([]); const k = (t * .9) % 1; box(c, sx - 10 + k * (sw + 20), sy + 4, 12, 6, 2, '#e8403a', 1); box(c, sx - 10 + ((k + .45) % 1) * (sw + 20), sy + sh - 10, 12, 6, 2, '#3f6fe0', 1); }
+    else if (o.game === 'escaperoom') { c.fillStyle = '#241a3a'; c.fillRect(sx, sy, sw, sh); box(c, sx + sw / 2 - 7, sy + 3, 14, sh - 6, 2, '#8a5a35', 1); dot(c, sx + sw / 2 + 4, sy + sh / 2, 1.6, '#ffd23f'); c.fillStyle = (t * 2 | 0) % 2 ? '#ffd23f' : '#fff'; c.font = 'bold 10px sans-serif'; c.textAlign = 'center'; c.fillText('?', sx + 8, sy + sh / 2 + 4); c.fillText('?', sx + sw - 8, sy + sh / 2 + 4); }
     c.restore(); dot(c, X + 12, Y - 34, 2.5, (t * 4 | 0) % 2 ? '#ffd23f' : '#fff'); dot(c, X + W - 12, Y - 34, 2.5, (t * 4 | 0) % 2 ? '#fff' : '#ffd23f'); },
   window(c, o, X, Y) { box(c, X + 4, Y + 6, 24, 18, 3, '#fff', 1.5); c.fillStyle = '#9fd8ff'; c.fillRect(X + 7, Y + 9, 8, 12); c.fillRect(X + 17, Y + 9, 8, 12); },
   roundwindow(c, o, X, Y) { dot(c, X + 16, Y + 16, 11, '#fff'); dot(c, X + 16, Y + 16, 8, '#9fd8ff'); c.strokeStyle = LINE; c.lineWidth = 1.5; c.beginPath(); c.arc(X + 16, Y + 16, 11, 0, 7); c.stroke(); },
@@ -1611,7 +1680,7 @@ registerMap({
     // gang
     { id: 'zolderluik', kind: 'atticHatch', x: 11, y: 1, w: 2, h: 1, solid: false, layer: 0 },
     { id: 'keldertrap', kind: 'stairsDown', x: 12, y: 11, w: 2, h: 2, solid: false, layer: 0 },
-    { id: 'kapstok', kind: 'coatrack', x: 10, y: 8, use: { label: 'Bekijk', empty: 'Jassen en sjaals. En papa’s gekke hoed.' } },
+    { id: 'kapstok', kind: 'coatrack', x: 10, y: 8, use: { label: 'Bekijk', loot: 'camera', after: 'vliegtekening', unlessRobot: 'vliegbot', text: 'In de zak van papa’s oude jas zit… een mini-camera! Perfect voor de Vliegbot!', empty: 'Jassen en sjaals. En papa’s gekke hoed.' } },
     { id: 'schoenen', kind: 'shoes', x: 10, y: 13, use: { label: 'Bekijk', empty: 'Een stapel schoenen. Pfoe, wat een luchtje!' } },
     { id: 'klok', kind: 'clock', x: 13, y: 5, solid: false, layer: 0 },
     { id: 'voordeur', kind: 'door', x: 11, y: 15, solid: false, layer: 0 },
@@ -1686,7 +1755,7 @@ registerMap({
     { id: 'kelderplank', kind: 'shelf', x: 5, y: 1, w: 3, use: { label: 'Bekijk', loot: 'energie', text: 'Tussen de potten jam op de plank… een energie-batterij!', empty: 'Potten jam, augurken en appelmoes.' } },
     { id: 'wasmachine', kind: 'washer', x: 10, y: 1, use: { label: 'Bekijk', empty: 'Zoemmm… de wasmachine draait rondjes.' } },
     { id: 'ketel', kind: 'boiler', x: 12, y: 1, use: { label: 'Bekijk', empty: 'De verwarming. Hij bromt een beetje.' } },
-    { id: 'kelderkast', kind: 'cupboard', x: 11, y: 6, w: 2, h: 2, use: { label: 'Open', empty: 'Oude verfblikken en een kapotte paraplu.' } },
+    { id: 'kelderkast', kind: 'cupboard', x: 11, y: 6, w: 2, h: 2, use: { label: 'Open', loot: 'lichtframe', after: 'vliegtekening', unlessRobot: 'vliegbot', text: 'Achter de verfblikken staat een superlicht frame van een oude vlieger. Dat is het frame voor de Vliegbot!', empty: 'Oude verfblikken en een kapotte paraplu.' } },
     { id: 'kelderdozen', kind: 'boxes', x: 1, y: 7, w: 2, h: 2, use: { label: 'Bekijk', empty: 'Dozen vol oude kleren.' } },
     { id: 'luik', kind: 'hatch', x: 6, y: 4, w: 2, h: 2, solid: false, layer: 0, use: { label: 'Bekijk', icon: '🕳️', action: 'luik' } },
   ],
@@ -1776,6 +1845,10 @@ const BASE_SLOTS = {
   SW: { room: [2, 22, 10, 6], tunnel: [6, 18, 2, 4], parent: 'W', stub: [6, 18, 2, 1] },
   SE: { room: [30, 22, 10, 6], tunnel: [34, 18, 2, 4], parent: 'E', stub: [34, 18, 2, 1] },
 };
+// Extra spullen per kamer (x/y relatief aan de kamer). De kist in de Minigolf-kamer bevat de vliegtekening.
+const ROOM_PROPS = {
+  minigolf: [{ id: 'vliegkist', kind: 'chest', x: 8, y: 4, use: { label: 'Open', loot: 'vliegtekening', unlessRobot: 'vliegbot', text: 'Een oude kist… met een opgerolde tekening erin. Van een VLIEGENDE robot!', empty: 'De kist is leeg. De vliegtekening zit in mijn rugzak.' } }],
+};
 const roomBySlot = slot => Object.values(GB.ROOMS).find(r => r.slot === slot);
 const isDug = id => S.base.dug.includes(id);
 function buildBaseMap() {
@@ -1790,12 +1863,14 @@ function buildBaseMap() {
       carve(r.floor || 'M', sl.room); if (sl.tunnel) carve('u', sl.tunnel);
       areas.push({ name: r.emoji + ' ' + r.name, x: rx, y: ry, w: rw, h: rh });
       if (sl.tunnel) areas.push({ name: 'Tunnel', x: sl.tunnel[0], y: sl.tunnel[1], w: sl.tunnel[2], h: sl.tunnel[3] });
-      spawns['room_' + r.id] = { x: rx + rw / 2 - .5, y: ry + rh - 2.2, dir: 'up' };
-      for (let i = 0; i < 3; i++) objects.push({ id: 'lamp_' + slot + i, kind: 'lamp', x: rx + 1 + Math.round(i * (rw - 3) / 2), y: ry - 1, solid: false, layer: 0 });
-      if (r.machine) objects.push({ id: 'machine_' + r.id, kind: 'machine', dyn: 'machineDyn', game: r.machine, x: rx + rw / 2 - 1, y: ry, w: 2, h: 1, use: { label: 'Speel', icon: '🎮', action: 'minigame', room: r.id } });
+      const fromTop = slot === 'S'; // deze kamer heeft de tunnel aan de bovenkant: automaat dan onderaan
+      spawns['room_' + r.id] = fromTop ? { x: rx + rw / 2 - .5, y: ry + 1.2, dir: 'down' } : { x: rx + rw / 2 - .5, y: ry + rh - 2.2, dir: 'up' };
+      for (let i = 0; i < 3; i++) { const lx = rx + 1 + Math.round(i * (rw - 3) / 2); if (fromTop && i === 1) continue; objects.push({ id: 'lamp_' + slot + i, kind: 'lamp', x: lx, y: ry - 1, solid: false, layer: 0 }); }
+      if (r.machine) objects.push({ id: 'machine_' + r.id, kind: 'machine', dyn: 'machineDyn', game: r.machine, x: rx + rw / 2 - 1, y: fromTop ? ry + rh - 1 : ry, w: 2, h: 1, use: { label: 'Speel', icon: '🎮', action: 'minigame', room: r.id } });
+      (ROOM_PROPS[r.id] || []).forEach(o => objects.push(Object.assign({}, o, { x: rx + o.x, y: ry + o.y })));
       if (slot !== 'C') {
         for (let i = 0; i < r.decoSpots; i++) objects.push({ id: 'deco_' + r.id + i, kind: 'decoSpot', dyn: 'decoSpotDyn', x: i === 0 ? rx + 1 : rx + rw - 2, y: ry + 1, solid: false, use: { label: 'Versier', icon: '🎨', action: 'deco' } });
-        objects.push({ id: 'rug_' + r.id, kind: 'rug', x: rx + 3, y: ry + 2, w: rw - 6, h: 3, solid: false, layer: 0, color: { bowling: '#c4452c', blokken: '#3f6fe0', flipper: '#9b5de5' }[r.machine] || '#8a6a52' });
+        objects.push({ id: 'rug_' + r.id, kind: 'rug', x: rx + 3, y: ry + 2, w: rw - 6, h: 3, solid: false, layer: 0, color: { bowling: '#c4452c', blokken: '#3f6fe0', flipper: '#9b5de5', minigolf: '#2a7a43', racebaan: '#4a4f5c', escaperoom: '#6a3bd6' }[r.machine] || '#8a6a52' });
       }
     } else if (sl.parent && slotDug(sl.parent)) {
       // tunnel-stompje met afzetting: hier komt een kamer
@@ -1863,6 +1938,7 @@ function unlockAllRooms() {
   if (!has('bouwtekening')) giveItem('bouwtekening');
   if (!flag('baseOpen')) openBase();
   let r; while ((r = nextRoom())) digRoom(r.id, 'ouders');
+  buildVliegbotNow();
   save(); buildBaseMap();
 }
 function molStatus() {
@@ -1916,6 +1992,7 @@ function loadMap(id, spawn) {
   WORLD.f = { x: p.x + sp2[0], y: p.y + sp2[1], dir: p.dir, moving: false, ph: 0 };
   WORLD.mol = flag('molFollow') && !flag('baseOpen') ? { x: WORLD.f.x, y: WORLD.f.y, dir: 'right', moving: false } : null;
   if (id === 'basis' && robotBuilt('supermol')) WORLD.mol = { x: 24 * T, y: 12.6 * T, dir: 'left', moving: false, home: true };
+  droneSpawn();
   WORLD.npcs = (m.npcs || []).map(n => Object.assign({ dir: 'down', moving: false, ph: 0, tx: null, ty: null, wait: 1 + Math.random() * 2 }, n, { x: (n.x + .5) * T, y: (n.y + .7) * T }));
   WORLD.armed = true; WORLD.parts = []; WORLD.bubble = null;
   WORLD.cam.x = p.x; WORLD.cam.y = p.y - T * .5; clampCam(true);
@@ -1962,12 +2039,13 @@ function worldUpdate(dt) {
   }
   followTrail(W.f, 30, dt); if (W.mol && !W.mol.home) followTrail(W.mol, 60, dt);
   if (W.mol && W.mol.home) W.mol.t = (W.mol.t || 0) + dt;
+  droneTick(dt);
   updateNpcs(dt);
   if (free) checkDoors();
   findNear();
   if (INPUT.actQueued) { INPUT.actQueued = false; if (free && W.near) doAct(W.near); }
   // camera
-  const tx = p.x, ty = p.y - T * .5; W.cam.x += (tx - W.cam.x) * Math.min(1, dt * 8); W.cam.y += (ty - W.cam.y) * Math.min(1, dt * 8); clampCam();
+  const tx = W.camTarget ? W.camTarget.x : p.x, ty = W.camTarget ? W.camTarget.y : p.y - T * .5; W.cam.x += (tx - W.cam.x) * Math.min(1, dt * 8); W.cam.y += (ty - W.cam.y) * Math.min(1, dt * 8); clampCam();
   // deeltjes
   W.parts = W.parts.filter(q => (q.life -= dt) > 0); W.parts.forEach(q => { q.x += q.vx * dt; q.y += q.vy * dt; q.vy += (q.g || 0) * dt; });
   if (W.bubble && W.t > W.bubble.until) W.bubble = null;
@@ -2025,6 +2103,9 @@ function checkDoors() {
 
 /* ---------- in de buurt: wat kun je doen? ---------- */
 const lootTaken = o => o.use && o.use.loot && (o.use.daily ? S.found[o.id] === dayKey() : !!S.found[o.id]);
+// use.after: pas te vinden als je dat voorwerp al eens had. use.unlessRobot: niet meer nodig als die robot al gebouwd is.
+const lootLocked = o => !!(o.use && ((o.use.after && !S.seenItems[o.use.after]) || (o.use.unlessRobot && robotBuilt(o.use.unlessRobot))));
+const lootAvail = o => !!(o.use && o.use.loot && !lootTaken(o) && !lootLocked(o));
 const objGone = o => lootTaken(o) && !o.use.empty && !o.use.action;
 function rectDist(px, py, o) { const x0 = o.x * T, y0 = o.y * T, x1 = x0 + o.w * T, y1 = y0 + o.h * T; const dx = Math.max(x0 - px, 0, px - x1), dy = Math.max(y0 - py, 0, py - y1); return Math.hypot(dx, dy); }
 function findNear() {
@@ -2037,21 +2118,26 @@ function findNear() {
   }
   for (const n of W.npcs) { const d = Math.hypot(n.x - fx, n.y - fy); if (d < 30 && d - 4 < bd) { bd = d - 4; best = { type: 'npc', n }; } }
   if (W.mol) { const d = Math.hypot(W.mol.x - fx, W.mol.y - fy); if (d < 30 && d < bd) { bd = d; best = { type: 'mol' }; } }
+  if (W.drone && !W.drone.hold) { const d = Math.hypot(W.drone.x - fx, W.drone.y - fy); if (d < 22 && d < bd) { bd = d; best = { type: 'drone' }; } }
   if (W.f && !best) { const d = Math.hypot(W.f.x - fx, W.f.y - fy); if (d < 24) best = { type: 'friend' }; }
+  // hoge plek voor de Vliegbot: gaat voor gewone 'bekijk'-dingen (zoals de eik of het schuurtje), niet voor vondsten of acties
+  { const sp = nearFlySpot(); if (sp && (!best || best.type === 'friend' || (best.type === 'obj' && !lootAvail(best.o) && !best.o.use.action))) best = { type: 'fly', sp }; }
   const prev = W.near; W.near = best;
-  if (!prev !== !best || (prev && best && (prev.o !== best.o || prev.type !== best.type || prev.n !== best.n))) syncActBtn();
+  if (!prev !== !best || (prev && best && (prev.o !== best.o || prev.type !== best.type || prev.n !== best.n || prev.sp !== best.sp))) syncActBtn();
 }
 function nearLabel(n) {
   if (!n) return { icon: '✋', label: 'Pak' };
   if (n.type === 'npc') return { icon: '💬', label: 'Praat' };
   if (n.type === 'friend') return { icon: '💡', label: 'Tip' };
   if (n.type === 'mol') return { icon: '🦫', label: 'Praat' };
-  const u = n.o.use; const loot = u.loot && !lootTaken(n.o);
+  if (n.type === 'drone') return { icon: '🚁', label: 'Praat' };
+  if (n.type === 'fly') return robotBuilt('vliegbot') ? { icon: '🚁', label: 'Vlieg' } : { icon: '👀', label: 'Bekijk' };
+  const u = n.o.use; const loot = lootAvail(n.o);
   return { icon: u.icon || (loot ? '✨' : u.label === 'Open' ? '📂' : u.label === 'Pak' ? '✋' : '👀'), label: u.label || 'Bekijk' };
 }
 function syncActBtn() {
   const b = $('#btnAct'), n = WORLD.near, l = nearLabel(n);
-  b.classList.toggle('off', !n); b.classList.toggle('pulse', !!(n && n.type === 'obj' && n.o.use.loot && !lootTaken(n.o)));
+  b.classList.toggle('off', !n); b.classList.toggle('pulse', !!(n && ((n.type === 'obj' && lootAvail(n.o)) || (n.type === 'fly' && robotBuilt('vliegbot')))));
   b.querySelector('.ai').textContent = l.icon; b.querySelector('.al').textContent = l.label;
 }
 async function doAct(n) {
@@ -2061,13 +2147,15 @@ async function doAct(n) {
     else if (n.type === 'npc') { n.n.talking = true; await (GB.TALKS[n.n.id] || (() => { }))(n.n); n.n.talking = false; }
     else if (n.type === 'friend') await GB.TALKS.friend();
     else if (n.type === 'mol') await GB.TALKS.mol();
+    else if (n.type === 'drone') await GB.TALKS.vlieg();
+    else if (n.type === 'fly') await flySpotAct(n.sp);
   } catch (e) { console.warn(e); }
   WORLD.busy--; syncActBtn(); updateHud();
 }
 async function useObject(o) {
   const u = o.use;
   if (u.needs && !has(u.needs)) { SFX.nope(); await talk([['p', u.needText]]); return; }
-  if (u.loot && !lootTaken(o)) {
+  if (lootAvail(o)) {
     SFX.open(); if (u.text) await talk([['p', u.text]]);
     S.found[o.id] = u.daily ? dayKey() : 1; save();
     if (u.loot === 'energie') { addEnergie(1); S.flags.energieFound = (S.flags.energieFound || 0) + 1; save(); await foundPopup('energie'); }
@@ -2107,7 +2195,8 @@ function worldDraw() {
   for (const o of m.objects) if (o.dyn && FURN[o.dyn] && o.x * T < left + vw + 64 && (o.x + o.w) * T > left - 64 && o.y * T < top + vh + 64 && (o.y + o.h) * T > top - 64) FURN[o.dyn](c, o, o.x * T, o.y * T, o.w * T, o.h * T, W.t);
   mealDrawFood(c);   // eten op de keukentafel (meals.js)
   // glinsters op dingen waar nog iets te vinden is
-  for (const o of m.objects) if (o.use && o.use.loot && !lootTaken(o)) drawSparkle(c, o, W.t);
+  for (const o of m.objects) if (lootAvail(o)) drawSparkle(c, o, W.t);
+  drawFlyDecor(c, W.t);
   // markering van wat dichtbij is
   if (W.near && W.near.type === 'obj') { const o = W.near.o; c.strokeStyle = 'rgba(255,255,255,' + (.55 + Math.sin(W.t * 6) * .3) + ')'; c.lineWidth = 2.5; c.setLineDash([6, 5]); rrect(c, o.x * T - 2, o.y * T - 2 - (o.h === 1 ? 8 : 0), o.w * T + 4, o.h * T + 4 + (o.h === 1 ? 8 : 0), 8); c.stroke(); c.setLineDash([]); }
   // figuren, gesorteerd op y
@@ -2118,6 +2207,8 @@ function worldDraw() {
   for (const n of W.npcs) ents.push({ y: n.y, d: () => drawKid(c, NPC_LOOKS[n.id], n.x, n.y, n.dir, n.ph, n.moving, { t: W.t + 2, adult: true }) });
   ents.sort((a, b) => a.y - b.y).forEach(e => e.d());
   for (let cy = cy0; cy <= cy1; cy++) for (let cx = cx0; cx <= cx1; cx++) { const cv = chunkCanvas('o', cx, cy); if (cv) c.drawImage(cv, cx * size, cy * size, size + pad, size + pad); }
+  drawFlyTop(c, W.t);
+  if (W.near && W.near.type === 'fly') { const sp = W.near.sp; c.strokeStyle = 'rgba(255,255,255,' + (.55 + Math.sin(W.t * 6) * .3) + ')'; c.lineWidth = 2.5; c.setLineDash([6, 5]); c.beginPath(); c.arc(sp.at[0] * T, sp.at[1] * T - 2, 19, 0, 7); c.stroke(); c.setLineDash([]); }
   for (const q of W.parts) { c.globalAlpha = Math.min(1, q.life * 2); if (q.txt) { c.font = (q.size || 14) + 'px sans-serif'; c.textAlign = 'center'; c.fillText(q.txt, q.x, q.y); } else dot(c, q.x, q.y, q.r || 2.5, q.col || '#fff'); c.globalAlpha = 1; }
   if (m.dusty) for (let i = 0; i < 14; i++) { const x = (hash2(i, 1) * m.w * T + W.t * 6 * (i % 3 + 1)) % (m.w * T), y = (hash2(1, i) * m.h * T + Math.sin(W.t + i) * 10); dot(c, x, y, 1.2, 'rgba(255,240,200,.5)'); }
   if (W.bubble) drawBubble(c, W.bubble);
@@ -2182,6 +2273,10 @@ function goalKey() {
   if (!flag('baseOpen')) return has('zaklamp') ? 'kelder' : 'zaklamp';
   if (!flag('monitorSeen')) return 'monitor';
   if (!(S.stats.games.bowling > 0)) return 'bowling';
+  if (!robotBuilt('vliegbot')) {
+    if (!S.seenItems.vliegtekening) { if (isDug('minigolf')) return 'vliegkist'; }
+    else return vliegHave() < VLIEG_PARTS.length ? 'vliegdelen' : 'vliegbouwen';
+  } else if (flyCount() < allFlySpots().length && !(S.flags.flyGoalSkip > 0)) return 'vliegen';
   return nextRoom() ? 'wachten' : 'klaar';
 }
 function nextGoal() {
@@ -2194,6 +2289,10 @@ function nextGoal() {
     kelder: '🕳️ Ga met de Supermol naar de kelder',
     monitor: '🖥️ Bekijk de monitor in het Hoofdkwartier',
     bowling: '🎳 Speel in de Bowlingbaan (links van het HQ)',
+    vliegkist: '🗺️ Kijk in de kist in de Minigolf-kamer',
+    vliegdelen: `🚁 Zoek de onderdelen van de Vliegbot (${vliegHave()}/${VLIEG_PARTS.length})`,
+    vliegbouwen: '🛠️ Bouw de Vliegbot aan de werkbank in de speelkamer',
+    vliegen: `🚁 Vlieg naar de hoge plekken (${flyCount()}/${allFlySpots().length})`,
     wachten: r ? `⛏️ Morgen graaft de Supermol de ${r.name}! (of verzamel 3 ⚡)` : '',
     klaar: '🎉 Alle kamers zijn gegraven! Binnenkort komen er meer.',
   }[k];
@@ -2224,6 +2323,16 @@ function hint() {
   if (k === 'kelder') return 'De trap naar de kelder is in de gang. Kom op, Supermol!';
   if (k === 'monitor') return 'Kijk op de grote monitor in het Hoofdkwartier! Daar zie je alles.';
   if (k === 'bowling') return 'De Bowlingbaan is klaar! Loop door de tunnel naar links.';
+  if (k === 'vliegkist') return 'In de Minigolf-kamer (onder het Hoofdkwartier) staat een oude kist. Wat zou daarin zitten?';
+  if (k === 'vliegdelen') {
+    const m = VLIEG_PARTS.find(p => !S.seenItems[p]);
+    if (m === 'camera') return 'Een camera… Papa had vroeger een mini-camera. Zit die niet in zijn jas aan de kapstok in de gang?';
+    if (m === 'lichtframe') return 'Een superlicht frame… In de kast in de kelder staat van alles. Kijk daar eens!';
+    if (m === 'propellers') return 'Speel de Minigolf een keer helemaal uit, alle 6 holes. Dan krijgen we vast iets!';
+    if (m === 'afstandsbediening') return GB.MINIGAMES.racebaan && isDug('racebaan') ? 'Rij een keer de hele race uit in de Racebaan. Dan krijgen we de afstandsbediening!' : 'De afstandsbediening krijgen we bij de Racebaan. Die graaft de Supermol binnenkort!';
+  }
+  if (k === 'vliegbouwen') return 'We hebben alle 4 onderdelen! Snel naar de werkbank in de speelkamer!';
+  if (k === 'vliegen') { const l = allFlySpots().filter(sp => !flyDone(sp)); return `Met de Vliegbot kunnen we nog bij ${l.map(s => s.name).join(', ')}. Loop erheen en tik op 🚁 Vlieg!`; }
   const tips = [];
   if (S.flags.energieFound < 4 || !S.flags.energieFound) tips.push(`Er zijn 4 energie-batterijen verstopt. We hebben er ${S.flags.energieFound || 0} gevonden!`);
   if (!has('wortel') || !has('appel')) tips.push('Een wortel uit de moestuin plus een appel uit de boom = mol-brandstof! Dat geeft energie.');
@@ -2257,6 +2366,8 @@ GB.TALKS.papa = async () => {
   if (k === 'onderdelen' && !S.seenItems.boorkop) h.push('Een boorkop? Kijk eens in mijn gereedschapskist in de schuur!');
   if (k === 'onderdelen' && !S.seenItems.motor && !has('ladder')) h.push('Naar de zolder? Mijn ladder is kapot… maar je kunt er zelf een maken. Met planken en touw!');
   if (k === 'onderdelen' && !S.seenItems.schep) h.push('Ik zag laatst iets glimmen in de zandbak…');
+  if (k === 'vliegdelen' && !S.seenItems.camera) h.push('Mijn oude mini-camera? Die zit volgens mij nog in mijn jas aan de kapstok.');
+  if (k === 'vliegen') h.push('Er ligt al maanden een frisbee op ons dak. Kunnen jullie daar niet bij?');
   h.push('Mooi weer om in de tuin te spelen!', 'Straks gaan we barbecueën. Worstjes!', 'Wist je dat mollen wel 20 meter tunnel per dag graven?');
   if (flag('baseOpen')) h.push('Hé, waar is mijn oude bank uit de kelder gebleven? Hmm…');
   await talk([['papa', pick(h)]]);
@@ -2362,6 +2473,9 @@ BUS.on('found', async id => {
   updateHud(); S.flags.bagNew = (S.flags.bagNew || 0) + 1; save(); syncBagDot();
   const it = GB.ITEMS[id];
   if (id === 'bouwtekening') { achieve('tekening'); await talk([['f', 'Wauw! Een SUPERMOL! Een robot die kan graven!'], ['p', 'Daarmee kunnen we een geheime basis ONDER het huis graven!'], ['f', 'We hebben 5 onderdelen nodig: een boorkop, rupswieltjes, een robot-batterij, een motor en een graafschep.']]); updateHud(); return; }
+  if (id === 'vliegtekening') { achieve('vliegtekening'); await talk([['f', 'Kijk! Een VLIEGBOT! Een robot die kan vliegen!'], ['p', 'Dan kunnen we overal bij: op het dak, in de grote boom…'], ['f', 'We hebben 4 onderdelen nodig: propellers, een afstandsbediening, een camera en een licht frame.'], ['p', 'Op zoek!']]); updateHud(); return; }
+  if (VLIEG_PARTS.includes(id)) { const n = vliegHave(); friendSays(n >= VLIEG_PARTS.length ? 'Alle onderdelen van de Vliegbot! Snel naar de werkbank!' : `Een onderdeel van de Vliegbot! Nog ${VLIEG_PARTS.length - n} te gaan!`, 5); return; }
+  if (id === 'tandwiel') { await talk([['p', 'Er staat een vreemd teken op… een robot met een hamer?'], ['f', 'Zou er nóg een robot bestaan? Bewaar dat tandwiel goed!']]); return; }
   if (ROBOT_PARTS.includes(id)) {
     achieve('eerste'); const n = partsHave();
     if (n === 5) { achieve('onderdelen'); friendSays('Alle 5 onderdelen! Snel naar de werkbank in de speelkamer!', 5); }
@@ -2388,6 +2502,113 @@ function storyTick(dt) {
   chatterT -= dt; digCheckT -= dt;
   if (chatterT <= 0 && !WORLD.busy && !DLG.open && !WORLD.bubble) { chatterT = rnd(40, 70); friendSays(Math.random() < .6 ? hint() : pick(CHATTER), 5); }
   if (digCheckT <= 0) { digCheckT = 20; const d = checkDailyDig(); if (d.length) showDigNews(d); }
+}
+
+/* ===== world/vliegbot.js ===== */
+/* =========================================================
+   DE VLIEGBOT (robot 2). Bouwtekening: de kist in de Minigolf-kamer. Onderdelen: propellers (Minigolf 1e keer
+   uitgespeeld), afstandsbediening (Racebaan 1e keer uitgespeeld), camera (kapstok in de gang) en licht frame
+   (kast in de kelder). Gebouwd? Dan vliegt hij mee en haalt dingen van plekken waar je niet bij kunt (FLY_SPOTS).
+   ========================================================= */
+const vliegHave = () => VLIEG_PARTS.filter(p => S.seenItems[p] || robotBuilt('vliegbot')).length;
+const hasVliegTek = () => !!S.seenItems.vliegtekening || robotBuilt('vliegbot');
+// Hoge plekken. at = tegel-plek van het voorwerp (daar vliegt hij heen). Alleen te zien na het vinden van de vliegtekening.
+const FLY_SPOTS = {
+  tuin: [
+    { id: 'dak', name: 'het dak', at: [5.5, .7], loot: 'frisbee', see: 'Daar ligt iets op het dak! Een frisbee?', got: 'De frisbee! Die lag daar al sinds de zomer!' },
+    { id: 'schoorsteen', name: 'de schoorsteen', at: [18.5, .25], loot: 'energie', deco: 'chimney', see: 'Er glimt iets bovenop de schoorsteen…', got: 'Een energie-batterij in de schoorsteen! Hoe komt die daar nou?' },
+    { id: 'nest', name: 'de top van de grote eik', at: [16.7, 10.5], loot: 'tandwiel', deco: 'nest', see: 'Helemaal bovenin de eik zit een vogelnest. Er glinstert iets in!', got: 'Een ekster had iets in haar nest verstopt: een gouden tandwiel!' },
+    { id: 'schuurdak', name: 'het dak van het schuurtje', at: [23.4, 4.3], loot: 'energie', see: 'Op het dak van het schuurtje ligt iets!', got: 'Een energie-batterij op het schuurdak!' },
+  ],
+  huis: [
+    { id: 'kast', name: 'de bovenkant van de kledingkast', at: [8, .35], loot: 'robotknuffel', see: 'Boven op mijn kledingkast ligt iets… maar die is veel te hoog!', got: 'Mijn oude robotknuffel! Die was ik al zo lang kwijt!' },
+  ],
+};
+const allFlySpots = () => Object.values(FLY_SPOTS).flat();
+const flyDone = sp => !!S.found['fly_' + sp.id];
+const flyCount = () => allFlySpots().filter(flyDone).length;
+const FLY_REACH = 4.2 * T;
+function flySpotDist(sp) { const p = WORLD.p; return Math.hypot(p.x - sp.at[0] * T, p.y - (sp.at[1] + 1.2) * T); }
+// voor findNear: dichtstbijzijnde hoge plek die nog iets heeft
+function nearFlySpot() {
+  if (!hasVliegTek() || !WORLD.map) return null; let best = null, bd = FLY_REACH;
+  for (const sp of FLY_SPOTS[WORLD.map.id] || []) { if (flyDone(sp)) continue; const d = flySpotDist(sp); if (d < bd) { bd = d; best = sp; } }
+  return best;
+}
+/* ---------- tekenen: schoorsteen, nest, glinsters en de Vliegbot zelf ---------- */
+function drawFlyDecor(c, t) { // onder de figuren (schoorsteen hoort bij het huis)
+  const m = WORLD.map; if (!m) return;
+  for (const sp of FLY_SPOTS[m.id] || []) if (sp.deco === 'chimney') {
+    const x = (sp.at[0] - .45) * T, y = sp.at[1] * T + 6; box(c, x, y, T * .9, T * .9, 2, '#a3483b', 2); c.fillStyle = '#7a2f25'; c.fillRect(x + 3, y + 10, T * .9 - 6, 3); c.fillRect(x + 3, y + 19, T * .9 - 6, 3); box(c, x - 3, y - 3, T * .9 + 6, 7, 2, '#5d6577', 1.5);
+    for (let i = 0; i < 3; i++) { const k = (t * .35 + i / 3) % 1; c.fillStyle = `rgba(230,230,235,${.45 * (1 - k)})`; c.beginPath(); c.arc(x + T * .45 + Math.sin(k * 6 + i) * 6, y - 6 - k * 40, 5 + k * 9, 0, 7); c.fill(); }
+  }
+}
+function drawFlyTop(c, t) { // boven de bomen: nest en wat er ligt
+  const m = WORLD.map; if (!m) return; const vis = hasVliegTek();
+  for (const sp of FLY_SPOTS[m.id] || []) {
+    const x = sp.at[0] * T, y = sp.at[1] * T;
+    if (sp.deco === 'nest') { c.fillStyle = '#8a5a35'; c.beginPath(); c.ellipse(x, y + 6, 13, 6, 0, 0, 7); c.fill(); c.strokeStyle = '#5e3a1e'; c.lineWidth = 1.5; for (let i = 0; i < 5; i++) { c.beginPath(); c.moveTo(x - 13 + i * 6, y + 2); c.lineTo(x - 9 + i * 6, y + 10); c.stroke(); } }
+    if (!vis || flyDone(sp) || WORLD.flyCarry === sp) continue;
+    drawIcon(c, sp.loot, x, y - 2, sp.loot === 'energie' ? 16 : 18);
+    for (let i = 0; i < 3; i++) { const a = t * 1.8 + i * 2.1 + x, r = 13 + 3 * Math.sin(t * 2 + i), sx = x + Math.cos(a) * r, sy = y - 2 + Math.sin(a) * r * .6, sz = 2 + 1.6 * Math.abs(Math.sin(t * 3 + i * 1.7));
+      c.fillStyle = i === 1 ? '#fff6a0' : '#fff'; c.beginPath(); c.moveTo(sx, sy - sz * 2); c.lineTo(sx + sz * .5, sy - sz * .5); c.lineTo(sx + sz * 2, sy); c.lineTo(sx + sz * .5, sy + sz * .5); c.lineTo(sx, sy + sz * 2); c.lineTo(sx - sz * .5, sy + sz * .5); c.lineTo(sx - sz * 2, sy); c.lineTo(sx - sz * .5, sy - sz * .5); c.fill(); }
+  }
+  const d = WORLD.drone; if (d) drawDrone(c, d.x, d.y, d.alt, WORLD.t, d.carry);
+}
+/* ---------- meevliegen ---------- */
+function droneSpawn() { WORLD.drone = robotBuilt('vliegbot') ? { x: WORLD.p.x - 22, y: WORLD.p.y + 6, alt: 34 } : null; }
+function droneTick(dt) { const d = WORLD.drone; if (!d || d.hold) return; followTrail(d, 44, dt); d.alt += (34 - d.alt) * Math.min(1, dt * 3); }
+async function droneMove(d, tx, ty, talt, dur) {
+  const x0 = d.x, y0 = d.y, a0 = d.alt, n = Math.max(1, Math.round(dur / 16));
+  for (let i = 1; i <= n; i++) { const k = i / n, e = k < .5 ? 2 * k * k : 1 - Math.pow(-2 * k + 2, 2) / 2; d.x = x0 + (tx - x0) * e; d.y = y0 + (ty - y0) * e; d.alt = a0 + (talt - a0) * e; if (WORLD.camTarget) { WORLD.camTarget.x = d.x; WORLD.camTarget.y = d.y - d.alt; } await wait(16); }
+}
+// Het vluchtje: opstijgen, naar de plek vliegen, pakken, terugbrengen.
+async function flyCutscene(sp) {
+  WORLD.busy++;
+  try {
+    if (!WORLD.drone) droneSpawn(); const d = WORLD.drone; d.hold = true;
+    await talk([['p', `Vliegbot, vlieg naar ${sp.name}!`], ['vlieg', 'Bliep-bliep! Propellers aan!']]);
+    SFX.buzz(); const buzz = setInterval(() => SFX.buzz(), 1000);
+    WORLD.camTarget = { x: d.x, y: d.y - d.alt };
+    await droneMove(d, d.x, d.y, 80, 500);
+    const alt = 46, tx = sp.at[0] * T, ty = sp.at[1] * T + alt;
+    await droneMove(d, tx, ty - 10, alt + 10, 1100);
+    await droneMove(d, tx, ty, alt, 350);
+    WORLD.flyCarry = sp; d.carry = sp.loot; SFX.pickup(); burst(tx, ty - alt, 18, ['#ffd23f', '#fff', '#5ef0ff']);
+    for (let i = 0; i < 3; i++) { d.alt += 4; await wait(90); d.alt -= 4; await wait(90); } // vrolijk wiebeltje
+    const p = WORLD.p; await droneMove(d, p.x + 18, p.y + 4, 40, 1100);
+    clearInterval(buzz); WORLD.camTarget = null;
+    S.found['fly_' + sp.id] = 1; d.carry = null; WORLD.flyCarry = null; S.stats.flights = (S.stats.flights || 0) + 1; save();
+    await talk([['f', sp.got]]);
+    if (sp.loot === 'energie') { addEnergie(1); save(); await foundPopup('energie'); } else { giveItem(sp.loot); await foundPopup(sp.loot); }
+    BUS.emit('found', sp.loot);
+    if (flyCount() >= allFlySpots().length) achieve('vlieg5');
+  } catch (e) { console.warn(e); WORLD.camTarget = null; }
+  if (WORLD.drone) WORLD.drone.hold = false; WORLD.busy--; updateHud();
+}
+async function flySpotAct(sp) {
+  if (!robotBuilt('vliegbot')) { await talk([['p', sp.see], ['f', 'Daar kunnen we nooit bij… Maar met de Vliegbot wel! Zoek de onderdelen.']]); return; }
+  await flyCutscene(sp);
+}
+async function vliegbotBuiltScene() {
+  WORLD.busy++;
+  if (WORLD.map) { WORLD.drone = { x: WORLD.p.x + 10, y: WORLD.p.y + 6, alt: 0, hold: true }; const d = WORLD.drone; SFX.buzz(); await droneMove(d, d.x, d.y, 60, 700); await droneMove(d, d.x - 30, d.y, 50, 500); await droneMove(d, d.x + 30, d.y, 34, 500); d.hold = false; }
+  setFlag('vliegFollow');
+  await talk([['vlieg', 'Bliep-bliep! Vliegbot klaar voor de start!'], ['f', 'Hij vliegt! Hij VLIEGT echt!'], ['p', 'Nu kunnen we overal bij: op het dak, in de grote boom, boven op de kast…'],
+    ['f', 'Loop naar een plek waar iets glinstert, hoog boven je. Tik dan op 🚁 Vlieg!']]);
+  WORLD.busy--; updateHud();
+}
+GB.TALKS.vlieg = async () => {
+  const left = allFlySpots().filter(sp => !flyDone(sp));
+  if (!left.length) { await talk([['vlieg', 'Bliep! Ik heb overal gekeken. Ik zoem gewoon lekker met jullie mee!']]); return; }
+  const here = (FLY_SPOTS[WORLD.map.id] || []).filter(sp => !flyDone(sp));
+  await talk([['vlieg', here.length ? `Bliep! Hier in de buurt ligt nog iets hoog: ${here.map(s => s.name).join(', ')}. Loop erheen en tik op 🚁 Vlieg!` : `Bliep! Nog ${left.length} hoge ${left.length === 1 ? 'plek' : 'plekken'}: ${left.map(s => s.name).join(', ')}.`]]);
+};
+// alles klaarzetten (ouders: 'Alle kamers openen')
+function buildVliegbotNow() {
+  if (robotBuilt('vliegbot')) return; VLIEG_PARTS.forEach(p => { S.seenItems[p] = 1; }); S.seenItems.vliegtekening = 1; if (!has('vliegtekening')) giveItem('vliegtekening');
+  S.found.vliegkist = 1; S.robots.vliegbot = { built: dayKey() }; S.crafted.vliegbot = 1; S.flags.vliegFollow = 1; save();
+  if (WORLD.map) droneSpawn();
 }
 
 /* ===== world/meals_logic.js ===== */
@@ -2467,7 +2688,7 @@ function foundPopup(id) {
     const desc = isE ? `Met ${DIG_COST} energie graaft de Supermol meteen een extra kamer! Je hebt er nu <b>${S.energie}</b>.` : it.desc;
     $('#foundCard').innerHTML = `<h2>Gevonden!</h2><div class="rays"><div class="ficon">${iconHTML(id).replace('class="em"', 'class="femoji"')}</div></div>
       <div class="fname">${esc(itemName(id))}</div><div class="fcat">${cat}</div><p style="margin:0">${desc}</p>
-      ${ROBOT_PARTS.includes(id) ? `<p class="small-note" style="margin:0">Onderdelen: <b>${partsHave()}/5</b></p>` : ''}
+      ${ROBOT_PARTS.includes(id) ? `<p class="small-note" style="margin:0">Onderdelen: <b>${partsHave()}/5</b></p>` : ''}${VLIEG_PARTS.includes(id) ? `<p class="small-note" style="margin:0">Onderdelen van de Vliegbot: <b>${vliegHave()}/${VLIEG_PARTS.length}</b></p>` : ''}
       <button class="btn big green" id="foundOk">🎒 In mijn rugzak!</button>`;
     openOv('mdFound'); SFX.found(); if (WORLD.map) burst(WORLD.p.x, WORLD.p.y - 34, 24, ['#ffd23f', '#fff', '#ff6fa8', '#5ef0ff']);
     const ok = $('#foundOk'); let t0 = performance.now();
@@ -2595,9 +2816,11 @@ function openBag() {
   const built = robotBuilt('supermol');
   const parts = built ? `<div class="panel"><h3>🦫 Supermol</h3><div style="display:flex;gap:12px;align-items:center"><div style="width:140px">${SUPERMOL_SVG}</div><div>De Supermol is gebouwd! ${flag('baseOpen') ? 'Hij woont in het Hoofdkwartier.' : 'Hij loopt met jullie mee.'}</div></div></div>`
     : `<div class="panel"><h3>🔩 Onderdelen van de Supermol (${partsHave()}/5)</h3><div class="invgrid">${ROBOT_PARTS.map(p => slotHTML(p, 1, !has(p))).join('')}</div>${hasBlueprint() ? '' : '<p class="small-note">Zoek eerst de bouwtekening in de speelkamer!</p>'}</div>`;
+  const vb = robotBuilt('vliegbot') ? `<div class="panel"><h3>🚁 Vliegbot</h3><div style="display:flex;gap:12px;align-items:center"><div style="width:140px">${VLIEGBOT_SVG}</div><div>De Vliegbot vliegt met jullie mee! Hoge plekken bezocht: <b>${flyCount()}/${allFlySpots().length}</b></div></div></div>`
+    : S.seenItems.vliegtekening ? `<div class="panel"><h3>🚁 Onderdelen van de Vliegbot (${vliegHave()}/${VLIEG_PARTS.length})</h3><div class="invgrid">${VLIEG_PARTS.map(p => slotHTML(p, 1, !has(p))).join('')}</div></div>` : '';
   const groups = [['📦 Spullen', ['sleutel', 'gereedschap', 'materiaal']], ['🍎 Eten', ['eten']], ['🎨 Versiering voor de basis', ['deco']]];
   const rest = groups.map(([t, cats]) => { const ids = Object.keys(S.inv).filter(i => GB.ITEMS[i] && cats.includes(GB.ITEMS[i].cat) && S.inv[i] > 0); return `<div class="panel"><h3>${t}</h3>${ids.length ? `<div class="invgrid">${ids.map(i => slotHTML(i, S.inv[i])).join('')}</div>` : '<p class="small-note">Nog niks. Zoek in huis en tuin! ✨</p>'}</div>`; }).join('');
-  $('#bagBody').innerHTML = parts + rest;
+  $('#bagBody').innerHTML = parts + vb + rest;
   openOv('scrBag');
 }
 $('#btnBag').addEventListener('click', openBag);
@@ -2612,11 +2835,11 @@ function renderBook() {
   if (bookTab === 'items') {
     const ids = Object.keys(GB.ITEMS); const seen = ids.filter(i => S.seenItems[i]).length;
     h = `<div class="panel"><h3>🔎 Vondsten: ${seen} van ${ids.length}</h3><div class="invgrid">${ids.map(i => slotHTML(i, 0, !S.seenItems[i])).join('')}${slotHTML('energie', 0, !(S.flags.energieFound > 0))}</div>
-      <p class="small-note">⚡ Verstopte energie-batterijen gevonden: ${S.flags.energieFound || 0} van 4</p></div>`;
+      <p class="small-note">⚡ Verstopte energie-batterijen gevonden: ${S.flags.energieFound || 0} van 4${hasVliegTek() ? ` · 🚁 Hoge plekken met de Vliegbot: ${flyCount()} van ${allFlySpots().length}` : ''}</p></div>`;
   } else if (bookTab === 'ach') {
     const all = Object.values(GB.ACHIEVEMENTS), got = all.filter(a => S.ach[a.id]).length;
     h = `<div class="panel"><h3>🏆 Prestaties: ${got} van ${all.length}</h3><div class="achgrid">${all.map(a => `<div class="achv ${S.ach[a.id] ? '' : 'off'}"><span class="ai">${a.icon}</span><span><b>${a.name}</b><span class="small-note">${a.desc}</span></span></div>`).join('')}</div></div>
-      <div class="panel"><h3>⭐ Highscores</h3><p>${Object.values(GB.MINIGAMES).map(g => `${g.emoji} ${g.name}: <b>${fmtNum(S.hi[g.id] || 0)}</b>`).join(' · ')}</p></div>`;
+      <div class="panel"><h3>⭐ Highscores</h3><p>${Object.values(GB.MINIGAMES).map(g => `${g.emoji} ${g.name}: <b>${mgRecText(g, g.id)}</b>`).join(' · ')}</p></div>`;
   } else {
     h = `<div class="panel"><h3>🗺️ Kamers van de basis</h3><div class="achgrid">${roomList().map(r => { const d = isDug(r.id); return `<div class="achv ${d ? '' : 'off'}"><span class="ai">${r.emoji}</span><span><b>${r.name}</b><span class="small-note">${d ? '✅ Gegraven' : r.soon ? '🔜 Binnenkort' : '⛏️ Nog niet gegraven'}</span></span></div>`; }).join('')}</div></div>`;
   }
@@ -2640,10 +2863,10 @@ function renderOuders() {
   $('#volMusic').value = S.musicVol; $('#volSfx').value = S.sfxVol; $('#volMusicVal').textContent = S.musicVol + '%'; $('#volSfxVal').textContent = S.sfxVol + '%';
   const st = molStatus();
   $('#oudStatus').innerHTML = `Nu: <b>${S.base.dug.length}</b> kamers gegraven (${S.base.dug.map(id => GB.ROOMS[id] ? GB.ROOMS[id].name : id).join(', ') || 'nog geen'}). ${st.text}${st.ms ? ' – om middernacht (nog ' + fmtDur(st.ms) + ').' : ''} Energie: ${S.energie} ⚡, munten: ${S.munten}.`;
-  $('#oudUnlock').textContent = robotBuilt('supermol') ? '🔓 Alle kamers openen' : '🔓 Supermol bouwen + alle kamers openen (slaat de zoektocht over)';
-  $('#oudUnlock').disabled = robotBuilt('supermol') && flag('baseOpen') && !nextRoom();
+  $('#oudUnlock').textContent = robotBuilt('supermol') ? '🔓 Alle kamers openen + Vliegbot bouwen' : '🔓 Supermol + Vliegbot bouwen en alle kamers openen (slaat de zoektocht over)';
+  $('#oudUnlock').disabled = robotBuilt('supermol') && flag('baseOpen') && !nextRoom() && robotBuilt('vliegbot');
   const g = S.stats.games, mins = Math.round((now() - (S.created || now())) / 60000);
-  $('#oudStats').innerHTML = S.started ? `Spelers: <b>${esc(pName())}</b> en <b>${esc(fName())}</b>. Onderdelen: ${partsHave()}/5 · Supermol: ${robotBuilt('supermol') ? 'gebouwd' : 'nog niet'} · Prestaties: ${Object.keys(S.ach).length}/${Object.keys(GB.ACHIEVEMENTS).length}.<br>Gespeeld: ${Object.values(GB.MINIGAMES).map(m => `${m.emoji} ${m.name} ${g[m.id] || 0}× (beste ${fmtNum(S.hi[m.id] || 0)})`).join(' · ')}.<br>Eerste start: ${S.created ? new Date(S.created).toLocaleDateString('nl-NL') : '-'} (${mins > 1440 ? Math.round(mins / 1440) + ' dagen' : mins + ' min'} geleden).` : 'Er is nog geen spel gestart.';
+  $('#oudStats').innerHTML = S.started ? `Spelers: <b>${esc(pName())}</b> en <b>${esc(fName())}</b>. Onderdelen: ${partsHave()}/5 · Supermol: ${robotBuilt('supermol') ? 'gebouwd' : 'nog niet'} · Vliegbot: ${robotBuilt('vliegbot') ? `gebouwd, ${flyCount()}/${allFlySpots().length} hoge plekken` : S.seenItems.vliegtekening ? `onderdelen ${vliegHave()}/${VLIEG_PARTS.length}` : 'nog niet'} · Prestaties: ${Object.keys(S.ach).length}/${Object.keys(GB.ACHIEVEMENTS).length}.<br>Gespeeld: ${Object.values(GB.MINIGAMES).map(m => `${m.emoji} ${m.name} ${g[m.id] || 0}× (beste ${mgRecText(m, m.id)})`).join(' · ')}.<br>Eerste start: ${S.created ? new Date(S.created).toLocaleDateString('nl-NL') : '-'} (${mins > 1440 ? Math.round(mins / 1440) + ' dagen' : mins + ' min'} geleden).` : 'Er is nog geen spel gestart.';
   const rb = $('#oudReset'); rb.dataset.armed = ''; rb.textContent = '🗑️ Spel wissen';
   mealRenderOuders();
 }
@@ -2656,7 +2879,7 @@ $('#volSfx').addEventListener('input', e => { S.sfxVol = +e.target.value; $('#vo
 $('#volSfx').addEventListener('change', () => SFX.coin());
 $('#oudUnlock').addEventListener('click', () => {
   if (!S.started) { S.chars.p = S.chars.p || Object.assign({}, DEFAULT_P, { name: 'Speler' }); S.chars.f = S.chars.f || Object.assign({}, DEFAULT_F); S.started = true; S.introDone = true; S.created = S.created || now(); }
-  unlockAllRooms(); SFX.build(); renderOuders(); toast('🔓 Alle kamers zijn open!', 'gold');
+  unlockAllRooms(); SFX.build(); renderOuders(); toast('🔓 Alle kamers zijn open en de Vliegbot is gebouwd!', 'gold');
 });
 $('#oudEnergy').addEventListener('click', () => { addEnergie(3); SFX.energie(); renderOuders(); toast('⚡ +3 energie', 'gold'); });
 $('#oudReset').addEventListener('click', e => { const b = e.currentTarget; if (!b.dataset.armed) { b.dataset.armed = '1'; b.textContent = '⚠️ Echt alles wissen? Tik nog een keer'; return; } resetSave(); WORLD.active = false; renderOuders(); renderTitle(); b.textContent = '✅ Gewist'; });
@@ -2671,7 +2894,7 @@ function recipeVisible(r) { return true; }
 function recipeLocked(r) { return r.blueprint && !S.seenItems[r.blueprint] && !S.crafted[r.id]; }
 function recipeDone(r) { return r.once && S.crafted[r.id] > 0; }
 function recipeReady(r) { return !recipeLocked(r) && !recipeDone(r) && r.needs.every(n => has(n)); }
-function recIcon(r) { return r.icon === 'robot' ? `<div style="width:44px">${SUPERMOL_SVG}</div>` : iconHTML(r.icon); }
+function recIcon(r) { return r.icon === 'robot' ? `<div style="width:44px">${GB.ROBOTS[r.gives.robot].svg()}</div>` : iconHTML(r.icon); }
 function openWerkbank(rid) {
   SFX.click(); achieve('werkbank'); WB.placed = new Set(); WB.busy = false;
   const list = Object.values(GB.RECIPES).filter(recipeVisible);
@@ -2683,13 +2906,13 @@ function renderWerkbank() {
   $('#recList').innerHTML = list.map(x => `<button class="rec ${x.id === WB.rid ? 'on' : ''} ${recipeReady(x) ? 'ready' : ''}" data-r="${x.id}"><span class="ri">${recIcon(x)}</span><span>${x.name}<small>${recipeLocked(x) ? '🔒 Bouwtekening nodig' : recipeDone(x) ? '✅ Gemaakt' : x.needs.map(n => (has(n) ? '✔︎ ' : '') + itemName(n)).join(' + ')}</small></span></button>`).join('');
   const bp = $('#bp'), robot = r.gives.robot ? GB.ROBOTS[r.gives.robot] : null;
   if (recipeLocked(r)) {
-    bp.className = 'bp simple'; bp.innerHTML = `<div class="bpt">📜 ${r.name}</div><div style="font-size:4em;opacity:.6">🔒</div><div style="flex-basis:100%;text-align:center;font-weight:600">Je hebt de bouwtekening nog niet.<br><small>Zoek in de boekenkast!</small></div>`;
+    bp.className = 'bp simple'; bp.innerHTML = `<div class="bpt">📜 ${r.name}</div><div style="font-size:4em;opacity:.6">🔒</div><div style="flex-basis:100%;text-align:center;font-weight:600">Je hebt de bouwtekening nog niet.<br><small>${r.lockedText || 'Zoek in de boekenkast!'}</small></div>`;
     $('#wbTray').innerHTML = ''; $('#wbMsg').textContent = r.hint; $('#wbBuild').disabled = true; $('#wbBuild').style.display = 'none'; return;
   }
   $('#wbBuild').style.display = '';
   if (recipeDone(r)) {
-    bp.className = 'bp simple'; bp.innerHTML = `<div class="bpt">✅ ${r.name}</div><div style="width:min(300px,60%)">${robot ? SUPERMOL_SVG : `<div class="ficon" style="width:120px;height:120px;margin:auto">${iconHTML(r.gives.item)}</div>`}</div><div style="flex-basis:100%;text-align:center;font-weight:600">Al gemaakt!</div>`;
-    $('#wbTray').innerHTML = ''; $('#wbMsg').textContent = robot ? 'De Supermol is klaar en aan het werk!' : `Je hebt de ${r.name} al.`; $('#wbBuild').disabled = true; return;
+    bp.className = 'bp simple'; bp.innerHTML = `<div class="bpt">✅ ${r.name}</div><div style="width:min(300px,60%)">${robot ? robot.svg() : `<div class="ficon" style="width:120px;height:120px;margin:auto">${iconHTML(r.gives.item)}</div>`}</div><div style="flex-basis:100%;text-align:center;font-weight:600">Al gemaakt!</div>`;
+    $('#wbTray').innerHTML = ''; $('#wbMsg').textContent = robot ? (robot.id === 'supermol' ? 'De Supermol is klaar en aan het werk!' : `De ${robot.name} is klaar en vliegt met jullie mee!`) : `Je hebt de ${r.name} al.`; $('#wbBuild').disabled = true; return;
   }
   if (robot) {
     bp.className = 'bp'; bp.innerHTML = `<div class="bpt">📜 Bouwtekening: ${robot.name}</div><div class="bpsvg bpline">${robot.svg().replace('<svg', '<svg width="100%" height="100%"')}</div>` +
@@ -2752,7 +2975,7 @@ $('#wbBuild').addEventListener('click', async () => {
   setTimeout(() => SFX.hammer(), 450); await wait(700);
   r.needs.forEach(n => takeItem(n)); S.crafted[r.id] = (S.crafted[r.id] || 0) + 1;
   let label = '';
-  if (r.gives.robot) { S.robots[r.gives.robot] = { built: dayKey() }; label = `${GB.ROBOTS[r.gives.robot].name} is klaar!`; achieve('supermol'); }
+  if (r.gives.robot) { S.robots[r.gives.robot] = { built: dayKey() }; label = `${GB.ROBOTS[r.gives.robot].name} is klaar!`; achieve(r.gives.robot); }
   if (r.gives.item) { giveItem(r.gives.item); label = `${itemName(r.gives.item)} gemaakt!`; }
   if (r.gives.energie) { addEnergie(r.gives.energie); label = `+${r.gives.energie} ⚡ energie voor de Supermol!`; }
   save();
@@ -2763,7 +2986,7 @@ $('#wbBuild').addEventListener('click', async () => {
   if (r.gives.robot) { const mol = res.querySelector('svg'); if (mol) mol.style.animation = 'bob 1s ease-in-out infinite'; }
   $('#wbMsg').textContent = label; await wait(r.gives.robot ? 2600 : 1600);
   WB.busy = false;
-  if (r.gives.robot) { closeOv('scrWerk'); BUS.emit('built', r.gives.robot); supermolBuiltScene(); }
+  if (r.gives.robot) { closeOv('scrWerk'); BUS.emit('built', r.gives.robot); if (r.gives.robot === 'vliegbot') vliegbotBuiltScene(); else supermolBuiltScene(); }
   else { WB.placed = new Set(); renderWerkbank(); updateHud(); if (r.gives.item === 'ladder') friendSays('Een ladder! Nu kunnen we bij het zolderluik in de gang!', 5); if (r.gives.item === 'zaklamp') friendSays('Een zaklamp! Nu durven we de kelder in!', 5); }
 });
 
@@ -2779,7 +3002,9 @@ function renderHQStatus() {
   const st = molStatus(), r = st.next;
   const frac = st.ms ? 1 - st.ms / 86400000 : 1;
   $('#hqMol').innerHTML = `<h3>🦫 Supermol</h3><div style="display:flex;gap:10px;align-items:center"><div style="width:90px;flex:none">${SUPERMOL_SVG}</div><div>${r && flag('baseOpen') ? `<b>Supermol graaft…</b><br>Volgende kamer: <b>${r.emoji} ${r.name}</b><br>Klaar: morgen` : st.text}</div></div>
-    ${st.ms ? `<div class="hqbar"><i style="width:${(frac * 100).toFixed(1)}%"></i></div><div>Nog <span class="cd" id="hqCd">${fmtDur(st.ms)}</span></div>` : ''}`;
+    ${st.ms ? `<div class="hqbar"><i style="width:${(frac * 100).toFixed(1)}%"></i></div><div>Nog <span class="cd" id="hqCd">${fmtDur(st.ms)}</span></div>` : ''}
+    ${robotBuilt('vliegbot') ? `<div style="display:flex;gap:10px;align-items:center;margin-top:6px"><div style="width:60px;flex:none">${VLIEGBOT_SVG}</div><div style="font-size:.9em">🚁 <b>Vliegbot</b>: hoge plekken ${flyCount()}/${allFlySpots().length}</div></div>`
+      : S.seenItems.vliegtekening ? `<div style="font-size:.9em;margin-top:6px">🚁 Vliegbot-onderdelen: <b>${vliegHave()}/${VLIEG_PARTS.length}</b></div>` : ''}`;
   const can = S.energie >= DIG_COST && !!r && flag('baseOpen');
   $('#hqEnergy').innerHTML = `<h3>⚡ Energie</h3><div class="energybar">${Array.from({ length: DIG_COST }, (_, i) => `<span class="eb ${i < S.energie ? 'on' : ''}"></span>`).join('')}<b style="margin-left:6px">${S.energie}</b></div>
     <p style="margin:.4em 0;font-size:.85em">Met ${DIG_COST} energie graaft de Supermol <b>meteen</b> een extra kamer.</p>
@@ -2827,7 +3052,11 @@ function drawHQMap() {
    Nieuw spel? registerMinigame({ id, name, emoji, music, help, coins(score), bonusAt, bonusText, maxPlayers,
    create(api) }) in een eigen module. create() geeft een object terug met tick(dt), resize(W,H) en optioneel
    key(k, down, e), destroy(), onPause(p). api: cv, ctx, ctl, W, H, dpr, players, banner(), button(), place(), end().
+   Extra opties: low: true (lager is beter, bv. slagen of tijd), fmt(v) (hoe een score eruitziet), firstReward: 'item'
+   (krijg je de eerste keer dat je het spel uitspeelt). end(res) mag res.coins en res.bonus zelf invullen.
    ========================================================= */
+const mgFmt = (g, v) => g.fmt ? g.fmt(v) : fmtNum(v);
+const mgRecText = (g, id) => S.hi[id] == null || (!S.hi[id] && g.low) ? '–' : mgFmt(g, S.hi[id] || 0);
 function registerMinigame(o) { GB.MINIGAMES[o.id] = Object.assign({ maxPlayers: 2, music: o.id, coins: s => Math.floor(s / 10), bonusAt: Infinity, twoMode: 'beurten' }, o); }
 const MG = { active: false, inst: null, id: null, n: 1, paused: false, prevMusic: null, t: 0, api: null };
 const mgCv = $('#cvMG'), mgCtx = mgCv.getContext('2d');
@@ -2844,7 +3073,7 @@ function openSetup(id) {
   $('#setupCard').innerHTML = `<h2>${g.emoji} ${g.name}</h2><p style="margin:0">${g.help}</p>
     <div class="plsel"><button data-n="1" class="${setupN === 1 ? 'on' : ''}"><canvas width="90" height="76"></canvas>1 speler<small>${esc(pl[0].name)}</small></button>
     <button data-n="2" class="${setupN === 2 ? 'on' : ''}"><span style="display:flex"><canvas width="90" height="76" style="width:64px"></canvas><canvas width="90" height="76" style="width:64px"></canvas></span>2 spelers<small>${esc(pl[0].name)} &amp; ${esc(pl[1].name)} · ${g.twoMode}</small></button></div>
-    <p style="margin:0;font-size:.9em">🏆 Record: <b>${fmtNum(S.hi[id] || 0)}</b> · ${bonusDone ? '⚡ Energie van vandaag al verdiend' : `⚡ ${g.bonusText}`}</p>
+    <p style="margin:0;font-size:.9em">🏆 Record: <b>${mgRecText(g, id)}</b> · ${bonusDone ? '⚡ Energie van vandaag al verdiend' : `⚡ ${g.bonusText}`}</p>
     <div class="btnrow"><button class="btn white" id="setBack">⬅️ Terug</button><button class="btn big green" id="setGo">▶️ Start!</button></div>`;
   const cvs = $$('#setupCard canvas'); drawPortrait(cvs[0], pl[0].look); drawPortrait(cvs[1], pl[0].look); drawPortrait(cvs[2], pl[1].look);
   $$('#setupCard [data-n]').forEach(b => b.onclick = () => { SFX.click(); setupN = +b.dataset.n; $$('#setupCard [data-n]').forEach(x => x.classList.toggle('on', x === b)); });
@@ -2923,24 +3152,26 @@ document.addEventListener('visibilitychange', () => { if (document.hidden && MG.
 // res: { scores: [{name, score}], best, winner (index of null), lines: [extra regels] }
 function mgFinish(res) {
   const id = MG.id, g = GB.MINIGAMES[id], today = dayKey();
-  const best = res.best != null ? res.best : Math.max(...res.scores.map(s => s.score));
-  const rec = best > (S.hi[id] || 0); if (rec) S.hi[id] = best;
-  const coins = Math.max(1, g.coins(best)); addMunten(coins);
+  const best = res.best != null ? res.best : (g.low ? Math.min : Math.max)(...res.scores.map(s => s.score));
+  const old = S.hi[id], rec = g.low ? (!old || best < old) : best > (old || 0); if (rec) S.hi[id] = best;
+  const coins = res.coins != null ? Math.max(1, res.coins) : Math.max(1, g.coins(best)); addMunten(coins);
   if (S.daily.day !== today) { S.daily.day = today; S.daily.bonus = {}; }
-  let bonus = false; if (best >= g.bonusAt && !S.daily.bonus[id]) { S.daily.bonus[id] = 1; addEnergie(1); bonus = true; }
+  let bonus = false; if ((res.bonus != null ? res.bonus : best >= g.bonusAt) && !S.daily.bonus[id]) { S.daily.bonus[id] = 1; addEnergie(1); bonus = true; }
   S.stats.games[id] = (S.stats.games[id] || 0) + 1; if (MG.n > 1) achieve('samen');
+  let first = null; if (g.firstReward && !flag('first_' + id) && !(VLIEG_PARTS.includes(g.firstReward) && (robotBuilt('vliegbot') || S.seenItems[g.firstReward]))) { S.flags['first_' + id] = 1; first = g.firstReward; giveItem(first); }
   save();
   const many = res.scores.length > 1;
   $('#resultCard').innerHTML = `<h2>${many ? (res.winner == null ? '🤝 Gelijkspel!' : `🏆 ${esc(res.scores[res.winner].name)} wint!`) : rec ? '🎉 Nieuw record!' : '👏 Goed gespeeld!'}</h2>
-    <table class="scoretab">${res.scores.map((s, i) => `<tr><td>${many && i === res.winner ? '👑 ' : ''}${esc(s.name)}</td><td style="text-align:right"><b>${fmtNum(s.score)}</b></td></tr>`).join('')}</table>
+    <table class="scoretab">${res.scores.map((s, i) => `<tr><td>${many && i === res.winner ? '👑 ' : ''}${esc(s.name)}</td><td style="text-align:right"><b>${s.text || mgFmt(g, s.score)}</b></td></tr>`).join('')}</table>
     ${(res.lines || []).map(l => `<p style="margin:0">${l}</p>`).join('')}
-    ${many && rec ? '<p style="margin:0">🎉 Nieuw record!</p>' : ''}<p style="margin:0">🏆 Record: <b>${fmtNum(S.hi[id])}</b></p>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center"><span class="pill">🪙 +${coins} munten</span>${bonus ? '<span class="pill" style="background:#fff3b0">⚡ +1 energie (bonus van vandaag!)</span>' : ''}</div>
-    ${!bonus && !S.daily.bonus[id] && isFinite(g.bonusAt) ? `<p style="margin:0;font-size:.85em">⚡ ${g.bonusText}</p>` : ''}
+    ${many && rec ? '<p style="margin:0">🎉 Nieuw record!</p>' : ''}<p style="margin:0">🏆 Record: <b>${mgRecText(g, id)}</b></p>
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center"><span class="pill">🪙 +${coins} munten</span>${bonus ? '<span class="pill" style="background:#fff3b0">⚡ +1 energie (bonus van vandaag!)</span>' : ''}${first ? `<span class="pill" style="background:#d9f5ff">🎁 Eerste keer uitgespeeld: <b>${esc(itemName(first))}!</b></span>` : ''}</div>
+    ${!bonus && !S.daily.bonus[id] && g.bonusText ? `<p style="margin:0;font-size:.85em">⚡ ${g.bonusText}</p>` : ''}
     <div class="btnrow"><button class="btn white" id="resBack">⬅️ Terug</button><button class="btn big green" id="resAgain">🔁 Nog een keer</button></div>`;
   setTimeout(() => { (rec || bonus) ? SFX.fanfare() : SFX.coin(); }, 200);
-  $('#resBack').onclick = () => { SFX.click(); closeOv('mdResult'); mgStop(); };
-  $('#resAgain').onclick = () => { SFX.click(); closeOv('mdResult'); mgStart(id, MG.n); };
+  const gift = async () => { if (!first) return; const f = first; first = null; await foundPopup(f); BUS.emit('found', f); };
+  $('#resBack').onclick = async () => { SFX.click(); closeOv('mdResult'); mgStop(); await gift(); };
+  $('#resAgain').onclick = async () => { SFX.click(); closeOv('mdResult'); await gift(); mgStart(id, MG.n); };
   MG.paused = true; openOv('mdResult'); BUS.emit('res');
 }
 
@@ -4069,6 +4300,325 @@ class FlipperGame {
   }
 }
 
+/* ===== minigames/golf_logic.js ===== */
+/* =========================================================
+   MINIGOLF – pure logica (geen DOM): banen (holes), balnatuurkunde en botsingen.
+   Eenheden: een hole is 16 x 10 eenheden. Bal-straal GOLF.R. Alles deterministisch (goed voor tests).
+   Hole: { name, par, tee, cup, walls:[polygoon], blocks:[polygonen], bumpers:[{x,y,r}], water:[rect], sand:[rect],
+           ramps:[{x,y,w,h,ax,ay}], mill:{x,y,len,hub,w}, sliders:[{x,y,w,h,dx,dy,sp}] }
+   ========================================================= */
+const GOLF = { R: .2, CUP: .36, WALL: .12, MAXV: 12, CAPTURE: 6.5, STOP: .05 };
+const GOLF_HOLES = [
+  { name: 'Opwarmertje', par: 2, tee: [2.5, 5], cup: [13.5, 5],
+    walls: [[[1, 3], [15, 3], [15, 7], [1, 7]]], bumpers: [{ x: 8, y: 6.1, r: .45 }], tip: 'Trek je vinger naar achteren en laat los!' },
+  { name: 'Bumperbos', par: 3, tee: [3, 2.2], cup: [13.5, 7.5],
+    walls: [[[1, 1], [5, 1], [5, 6], [15, 6], [15, 9], [1, 9]]], bumpers: [{ x: 8.2, y: 7.5, r: .5 }, { x: 10.6, y: 6.75, r: .4 }, { x: 10.6, y: 8.25, r: .4 }, { x: 3, y: 5.4, r: .35 }], tip: 'Stuiter via de muur om de hoek!' },
+  { name: 'Heuveltje', par: 3, tee: [2.5, 7], cup: [13, 3],
+    walls: [[[1, 1], [15, 1], [15, 9], [1, 9]]], ramps: [{ x: 6, y: 1, w: 4, h: 8, ax: -2.6, ay: 0 }], sand: [{ x: 11.6, y: 5.6, w: 3, h: 2.8 }], tip: 'Sla hard genoeg om de heuvel op te komen. Pas op voor het zand!' },
+  { name: 'Windmolen', par: 3, tee: [2.5, 5], cup: [13.5, 5],
+    walls: [[[1, 2], [15, 2], [15, 8], [1, 8]]], mill: { x: 8, y: 5, len: 2.78, hub: .7, w: 1.1 }, tip: 'Wacht tot er een gat tussen de wieken is!' },
+  { name: 'Vijver', par: 3, tee: [2.5, 4], cup: [13.5, 4],
+    walls: [[[1, 1], [15, 1], [15, 9], [1, 9]]], water: [{ x: 5, y: 1, w: 6, h: 2.6 }, { x: 5, y: 4.4, w: 6, h: 3 }], tip: 'Over het smalle bruggetje, of veilig om het water heen.' },
+  { name: 'Schuifdeur', par: 4, tee: [2.5, 8], cup: [13.5, 2],
+    walls: [[[1, 1], [15, 1], [15, 9], [1, 9]]], blocks: [[[5, 1], [5.6, 1], [5.6, 6.4], [5, 6.4]], [[10.4, 3.6], [11, 3.6], [11, 9], [10.4, 9]]],
+    sliders: [{ x: 7.7, y: 5, w: .6, h: 2.4, dx: 0, dy: 2.6, sp: .9 }], bumpers: [{ x: 13, y: 7, r: .4 }], tip: 'Pas op de schuivende deur in het midden!' },
+];
+const golfPar = () => GOLF_HOLES.reduce((a, h) => a + h.par, 0);
+// --- meetkunde ---
+function golfClosest(px, py, ax, ay, bx, by) { const dx = bx - ax, dy = by - ay, L = dx * dx + dy * dy; let t = L ? ((px - ax) * dx + (py - ay) * dy) / L : 0; t = t < 0 ? 0 : t > 1 ? 1 : t; return [ax + dx * t, ay + dy * t]; }
+const golfInRect = (x, y, r) => x >= r.x && x <= r.x + r.w && y >= r.y && y <= r.y + r.h;
+function golfPolySegs(poly) { const s = []; for (let i = 0; i < poly.length; i++) { const a = poly[i], b = poly[(i + 1) % poly.length]; s.push([a[0], a[1], b[0], b[1]]); } return s; }
+function golfInPoly(x, y, poly) { let c = false; for (let i = 0, j = poly.length - 1; i < poly.length; j = i++) { const [xi, yi] = poly[i], [xj, yj] = poly[j]; if ((yi > y) !== (yj > y) && x < (xj - xi) * (y - yi) / (yj - yi) + xi) c = !c; } return c; }
+function golfStatic(h) { if (h._segs) return h._segs; const s = []; (h.walls || []).forEach(p => s.push(...golfPolySegs(p))); (h.blocks || []).forEach(p => s.push(...golfPolySegs(p))); return (h._segs = s); }
+// bewegende delen op tijd t: lijnstukjes met de snelheid van elk punt
+function golfMillArms(m, t) { const out = []; for (let i = 0; i < 4; i++) { const a = m.w * t + i * Math.PI / 2; out.push([m.x + Math.cos(a) * m.hub * .9, m.y + Math.sin(a) * m.hub * .9, m.x + Math.cos(a) * m.len, m.y + Math.sin(a) * m.len]); } return out; }
+function golfSliderPos(s, t) { const k = Math.sin(t * s.sp * 2); return { x: s.x + s.dx * k, y: s.y + s.dy * k, vx: s.dx * Math.cos(t * s.sp * 2) * s.sp * 2, vy: s.dy * Math.cos(t * s.sp * 2) * s.sp * 2 }; }
+function golfSliderRect(s, t) { const p = golfSliderPos(s, t); return { x: p.x - s.w / 2, y: p.y - s.h / 2, w: s.w, h: s.h, vx: p.vx, vy: p.vy }; }
+// bal tegen lijnstuk (vs = snelheid van het lijnstuk in het contactpunt)
+function golfHitSeg(b, s, rad, e, vsF) {
+  const [qx, qy] = golfClosest(b.x, b.y, s[0], s[1], s[2], s[3]); let dx = b.x - qx, dy = b.y - qy, d = Math.hypot(dx, dy);
+  if (d >= rad) return 0; if (d < 1e-6) { dx = 0; dy = -1; d = 1; }
+  const nx = dx / d, ny = dy / d; b.x = qx + nx * rad; b.y = qy + ny * rad;
+  const vs = vsF ? vsF(qx, qy) : [0, 0], rvx = b.vx - vs[0], rvy = b.vy - vs[1], vn = rvx * nx + rvy * ny;
+  if (vn < 0) { b.vx = vs[0] + rvx - (1 + e) * vn * nx; b.vy = vs[1] + rvy - (1 + e) * vn * ny; return -vn; }
+  return 0;
+}
+// Eén natuurkunde-stapje. Geeft gebeurtenissen terug: wall, bumper, water, sunk, lip.
+function golfStep(h, b, dt, t) {
+  const ev = []; if (b.sunk) return ev;
+  // helling
+  for (const r of h.ramps || []) if (golfInRect(b.x, b.y, r)) { b.vx += r.ax * dt; b.vy += r.ay * dt; }
+  // wrijving (zand remt veel meer)
+  const sand = (h.sand || []).some(r => golfInRect(b.x, b.y, r)), sp = Math.hypot(b.vx, b.vy);
+  if (sp > 0) { const dec = (sand ? 4.5 + 3 * sp : .9 + .45 * sp) * dt, ns = Math.max(0, sp - dec); b.vx *= ns / sp; b.vy *= ns / sp; }
+  b.x += b.vx * dt; b.y += b.vy * dt;
+  const rad = GOLF.R + GOLF.WALL;
+  for (const s of golfStatic(h)) { const v = golfHitSeg(b, s, rad, .72); if (v > .6) ev.push({ type: 'wall', v }); }
+  for (const u of h.bumpers || []) {
+    const dx = b.x - u.x, dy = b.y - u.y, d = Math.hypot(dx, dy), min = u.r + GOLF.R;
+    if (d < min && d > 1e-6) { const nx = dx / d, ny = dy / d; b.x = u.x + nx * min; b.y = u.y + ny * min; const vn = b.vx * nx + b.vy * ny; if (vn < 0) { b.vx -= 2.15 * vn * nx; b.vy -= 2.15 * vn * ny; const s2 = Math.hypot(b.vx, b.vy); if (s2 < 2.5) { b.vx += nx * (2.5 - s2); b.vy += ny * (2.5 - s2); } ev.push({ type: 'bumper', v: -vn }); } }
+  }
+  if (h.mill) {
+    const m = h.mill, dx = b.x - m.x, dy = b.y - m.y, d = Math.hypot(dx, dy), min = m.hub + GOLF.R;
+    if (d < min && d > 1e-6) { const nx = dx / d, ny = dy / d; b.x = m.x + nx * min; b.y = m.y + ny * min; const vn = b.vx * nx + b.vy * ny; if (vn < 0) { b.vx -= 1.7 * vn * nx; b.vy -= 1.7 * vn * ny; } }
+    const vsF = (qx, qy) => [-m.w * (qy - m.y), m.w * (qx - m.x)];
+    for (const s of golfMillArms(m, t)) { const v = golfHitSeg(b, s, GOLF.R + .1, .6, vsF); if (v > .3) ev.push({ type: 'mill', v }); }
+  }
+  for (const sl of h.sliders || []) {
+    const r = golfSliderRect(sl, t), vsF = () => [r.vx, r.vy];
+    for (const s of golfPolySegs([[r.x, r.y], [r.x + r.w, r.y], [r.x + r.w, r.y + r.h], [r.x, r.y + r.h]])) { const v = golfHitSeg(b, s, GOLF.R + .05, .6, vsF); if (v > .3) ev.push({ type: 'slider', v }); }
+  }
+  // hole
+  const cd = Math.hypot(b.x - h.cup[0], b.y - h.cup[1]), sp2 = Math.hypot(b.vx, b.vy);
+  if (cd < GOLF.CUP) {
+    if (sp2 < GOLF.CAPTURE && !b.lipped) { b.sunk = true; b.vx = b.vy = 0; ev.push({ type: 'sunk' }); return ev; }
+    if (cd < GOLF.CUP * .75 && !b.lipped) { b.lipped = true; b.vx *= .55; b.vy *= .55; ev.push({ type: 'lip' }); } // te hard: rammelt eroverheen
+  } else b.lipped = false;
+  if ((h.water || []).some(r => golfInRect(b.x, b.y, r))) { b.inWater = true; b.vx = b.vy = 0; ev.push({ type: 'water' }); }
+  // stilliggen
+  const sp3 = Math.hypot(b.vx, b.vy); b.slow = sp3 < GOLF.STOP ? (b.slow || 0) + dt : 0;
+  const onRamp = (h.ramps || []).some(r => golfInRect(b.x, b.y, r));
+  if (b.slow > (onRamp ? .3 : 0)) { b.vx = b.vy = 0; b.rest = true; } else if (sp3 >= GOLF.STOP) b.rest = false; // een wiek kan een stilliggende bal weer wegduwen
+  return ev;
+}
+function golfBall(x, y) { return { x, y, vx: 0, vy: 0, sunk: false, rest: true, slow: 0, lipped: false, inWater: false }; }
+// sterkte 0..1 → snelheid (fijn regelbaar voor korte puts)
+const golfSpeed = p => .8 + (GOLF.MAXV - .8) * Math.pow(clamp(p, 0, 1), 1.4);
+function golfShoot(b, ang, p) { const v = golfSpeed(p); b.vx = Math.cos(ang) * v; b.vy = Math.sin(ang) * v; b.rest = false; b.slow = 0; b.inWater = false; }
+// Simuleer een slag tot de bal stilligt (voor tests/ontwerp). t0 = starttijd van bewegende delen.
+function golfSim(h, x, y, ang, p, t0, maxT) {
+  const b = golfBall(x, y); golfShoot(b, ang, p); let t = t0 || 0; const dt = 1 / 240, evs = [];
+  for (let i = 0; i < (maxT || 20) * 240; i++) { t += dt; const e = golfStep(h, b, dt, t); evs.push(...e); if (b.sunk || b.inWater) break; if (b.rest) break; }
+  return { b, t, evs };
+}
+// Score per hole in woorden
+function golfWord(strokes, par) { if (strokes === 1) return 'Hole-in-one!'; const d = strokes - par; return d <= -2 ? 'Eagle!' : d === -1 ? 'Birdie!' : d === 0 ? 'Par!' : d === 1 ? 'Bogey' : 'Uitgeholed!'; }
+const GOLF_MAX = 7; // meer slagen telt niet: dan gaat de bal er vanzelf in (niet zuur voor kleine spelers)
+
+/* ===== minigames/golf.js ===== */
+/* =========================================================
+   MINIGOLF – 6 holes van boven gezien (logica in golf_logic.js). Trek je vinger ergens op het scherm naar
+   achteren (zoals een katapult) en laat los: hoe verder je trekt, hoe harder de slag. 2 spelers: per hole
+   speelt eerst de één, dan de ander. Minder slagen = beter. Op een staand scherm draait de baan een kwartslag.
+   ========================================================= */
+registerMinigame({
+  id: 'minigolf', name: 'Minigolf', emoji: '⛳', music: 'minigolf', twoMode: 'om de beurt', low: true, firstReward: 'propellers',
+  fmt: v => `${v} slagen`,
+  help: 'Zet je vinger op het scherm en <b>trek naar achteren</b>, net als een katapult. Laat los om te slaan. Ver trekken = hard, een klein stukje = zacht. Zo min mogelijk slagen!',
+  coins: s => clamp(30 - 2 * (s - golfPar()), 4, 30), bonusText: `Speel de 6 holes in ${golfPar() + 3} slagen of minder voor 1 energie (1x per dag)`,
+  create: api => new GolfGame(api),
+});
+const GOLF_DT = 1 / 240;
+class GolfGame {
+  constructor(api) {
+    this.api = api; this.ctx = api.ctx; this.players = api.players.map(p => Object.assign({}, p, { holes: [] }));
+    this.hi = 0; this.cp = 0; this.state = 'intro'; this.t = 0; this.acc = 0; this.drag = null; this.aimA = 0; this.aimP = .4; this.keyAim = false;
+    this.parts = []; this.pop = null; this.flash = {}; this.lastSnd = 0; this.holeInOnes = 0; this.W = api.W; this.H = api.H;
+    this.onDown = e => this.pDown(e); this.onMove = e => this.pMove(e); this.onUp = e => this.pUp(e);
+    api.cv.addEventListener('pointerdown', this.onDown); addEventListener('pointermove', this.onMove); addEventListener('pointerup', this.onUp); addEventListener('pointercancel', this.onUp);
+    this.startHole(0);
+  }
+  destroy() { const c = this.api.cv; c.removeEventListener('pointerdown', this.onDown); removeEventListener('pointermove', this.onMove); removeEventListener('pointerup', this.onUp); removeEventListener('pointercancel', this.onUp); }
+  resize(W, H) { this.W = W; this.H = H; this.layout(); }
+  get hole() { return GOLF_HOLES[this.hi]; }
+  get pl() { return this.players[this.cp]; }
+  /* ---------- verloop ---------- */
+  startHole(hi) {
+    this.hi = hi; this.cp = hi % this.players.length; this.layout();
+    const h = this.hole, many = this.players.length > 1;
+    $('#mgTitle').textContent = `⛳ Hole ${hi + 1}/${GOLF_HOLES.length} · Par ${h.par}`;
+    this.state = 'intro';
+    this.api.banner(`<h2>⛳ Hole ${hi + 1}: ${h.name}</h2><p>Par ${h.par} · ${h.tip}</p>${many ? `<p><b style="color:${this.pl.col}">${esc(this.pl.name)}</b> begint!</p>` : ''}`, { ms: 2400 }).then(() => this.startTurn());
+  }
+  startTurn() { const h = this.hole; this.ball = golfBall(h.tee[0], h.tee[1]); this.last = { x: h.tee[0], y: h.tee[1] }; this.strokes = 0; this.state = 'aim'; this.aimA = Math.atan2(h.cup[1] - h.tee[1], h.cup[0] - h.tee[0]); }
+  shoot(a, p) {
+    if (this.state !== 'aim' || !this.ball.rest) return;
+    this.last = { x: this.ball.x, y: this.ball.y }; golfShoot(this.ball, a, p); this.strokes++; this.state = 'roll'; this.rollT = 0; SFX.putt(p);
+  }
+  holeDone(auto) {
+    const h = this.hole, n = this.strokes, word = auto ? 'Gelukt!' : golfWord(n, h.par);
+    this.pl.holes[this.hi] = n; this.state = 'sunk';
+    if (n === 1) { this.holeInOnes++; achieve('holeinone'); this.confetti(70); SFX.fanfare(); } else { SFX.cup(); if (n <= h.par) this.confetti(n < h.par ? 40 : 18); }
+    this.pop = { txt: word, sub: `${n} ${n === 1 ? 'slag' : 'slagen'}`, t: 0, col: n === 1 ? '#ffd23f' : n < h.par ? '#5ef0ff' : n === h.par ? '#4cd964' : '#fff' };
+    setTimeout(() => this.next(), 1700);
+  }
+  async next() {
+    if (!MG.inst || MG.inst !== this) return;
+    this.pop = null; const many = this.players.length > 1, nxt = (this.cp + 1) % this.players.length, first = this.hi % this.players.length;
+    if (many && nxt !== first) { this.cp = nxt; this.state = 'wait'; await this.api.banner(`<h2>Nu <span style="color:${this.pl.col}">${esc(this.pl.name)}</span>!</h2><p>Hole ${this.hi + 1} · Par ${this.hole.par}</p>`, { ms: 1500 }); if (MG.inst === this) this.startTurn(); return; }
+    this.state = 'wait';
+    await this.api.banner(this.cardHTML(), { button: this.hi + 1 < GOLF_HOLES.length ? '⛳ Volgende hole' : '🏁 Uitslag' });
+    if (MG.inst !== this) return;
+    if (this.hi + 1 < GOLF_HOLES.length) this.startHole(this.hi + 1); else this.finish();
+  }
+  cardHTML() {
+    const hs = GOLF_HOLES, tot = p => p.holes.reduce((a, b) => a + (b || 0), 0);
+    const cell = (p, i) => { const v = p.holes[i]; if (v == null) return '<td>·</td>'; const d = v - hs[i].par; return `<td style="font-weight:700;color:${v === 1 ? '#c08a00' : d < 0 ? '#1d8fd1' : d === 0 ? '#2e9e5b' : '#555'}">${v}</td>`; };
+    return `<h2>📋 Scorekaart</h2><table class="scoretab" style="font-size:.85em;text-align:center"><tr><td></td>${hs.map((_, i) => `<td>${i + 1}</td>`).join('')}<td>Tot</td></tr>
+      <tr style="opacity:.7"><td style="text-align:left">Par</td>${hs.map(h => `<td>${h.par}</td>`).join('')}<td>${golfPar()}</td></tr>
+      ${this.players.map(p => `<tr><td style="text-align:left;color:${p.col}">${esc(p.name)}</td>${hs.map((_, i) => cell(p, i)).join('')}<td><b>${tot(p)}</b></td></tr>`).join('')}</table>`;
+  }
+  finish() {
+    this.state = 'done';
+    const scores = this.players.map(p => ({ name: p.name, score: p.holes.reduce((a, b) => a + b, 0) })), best = Math.min(...scores.map(s => s.score)), par = golfPar();
+    if (best <= par) achieve('golfpar');
+    let winner = null; if (scores.length > 1 && scores[0].score !== scores[1].score) winner = scores[0].score < scores[1].score ? 0 : 1;
+    const d = best - par, lines = [`Par is ${par}. ${d < 0 ? `Dat is ${-d} onder par: geweldig!` : d === 0 ? 'Precies par: top!' : `${d} boven par. Goed gedaan!`}`];
+    if (this.holeInOnes) lines.push(`⛳ ${this.holeInOnes}× hole-in-one!`);
+    S.stats.holeInOnes = (S.stats.holeInOnes || 0) + this.holeInOnes;
+    this.api.end({ scores, winner, best, lines, bonus: best <= par + 3 });
+  }
+  /* ---------- schermindeling (staand scherm: baan draait een kwartslag) ---------- */
+  layout() {
+    const h = this.hole, W = this.W, H = this.H, xs = h.walls[0].map(p => p[0]), ys = h.walls[0].map(p => p[1]);
+    const bx0 = Math.min(...xs) - .5, bx1 = Math.max(...xs) + .5, by0 = Math.min(...ys) - .5, by1 = Math.max(...ys) + .5, bw = bx1 - bx0, bh = by1 - by0;
+    const top = 66, bot = 44, aw = W - 16, ah = H - top - bot;
+    const rot = H > W * 1.05; let k, ox, oy;
+    if (!rot) { k = Math.min(aw / bw, ah / bh); ox = (W - bw * k) / 2 - bx0 * k; oy = top + (ah - bh * k) / 2 - by0 * k; this.M = [k, 0, 0, k, ox, oy]; }
+    else { k = Math.min(aw / bh, ah / bw); const ex = (W - bh * k) / 2, ey = top + (ah - bw * k) / 2; this.M = [0, -k, k, 0, ex - by0 * k, ey + bx1 * k]; }
+    this.k = k; this.rot = rot;
+  }
+  S(x, y) { const m = this.M; return [m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5]]; }
+  toWorldDir(dx, dy) { return this.rot ? [-dy / this.k, dx / this.k] : [dx / this.k, dy / this.k]; }
+  /* ---------- invoer: katapult ---------- */
+  pDown(e) {
+    audioUnlock(); if (MG.paused || this.state !== 'aim' || !this.ball.rest || this.drag) return;
+    e.preventDefault(); this.drag = { id: e.pointerId, sx: e.clientX, sy: e.clientY, x: e.clientX, y: e.clientY }; this.keyAim = false;
+  }
+  pMove(e) { if (!this.drag || e.pointerId !== this.drag.id) return; this.drag.x = e.clientX; this.drag.y = e.clientY; }
+  pUp(e) {
+    if (!this.drag || e.pointerId !== this.drag.id) return; const d = this.drag; this.drag = null; const a = this.dragAim(d);
+    if (!a || MG.paused) return; this.shoot(a.a, a.p);
+  }
+  dragAim(d) { const dx = d.sx - d.x, dy = d.sy - d.y, L = Math.hypot(dx, dy); if (L < 14) return null; const [wx, wy] = this.toWorldDir(dx, dy); return { a: Math.atan2(wy, wx), p: clamp((L - 10) / (Math.min(this.W, this.H) * .36), .02, 1) }; }
+  key(k, down) {
+    if (!down || this.state !== 'aim') return k === ' ' || k.startsWith('arrow') ? undefined : false;
+    if (k === 'arrowleft') { this.aimA -= .06; this.keyAim = true; } else if (k === 'arrowright') { this.aimA += .06; this.keyAim = true; }
+    else if (k === 'arrowup') { this.aimP = clamp(this.aimP + .05, .02, 1); this.keyAim = true; } else if (k === 'arrowdown') { this.aimP = clamp(this.aimP - .05, .02, 1); this.keyAim = true; }
+    else if (k === ' ' || k === 'enter') this.shoot(this.aimA, this.aimP); else return false;
+  }
+  /* ---------- update ---------- */
+  tick(dt) {
+    this.t += dt; this.acc += dt; const h = this.hole, b = this.ball;
+    while (this.acc >= GOLF_DT) {
+      this.acc -= GOLF_DT; this.simT = (this.simT || 0) + GOLF_DT;
+      if (!b || this.state === 'auto' || this.state === 'sunk' && b.sunk) continue;
+      const evs = golfStep(h, b, GOLF_DT, this.simT);
+      for (const e of evs) this.onEvent(e);
+      if (this.state !== 'roll') continue;
+      if (b.inWater) { this.water(); break; }
+      if (b.sunk) { this.holeDone(); break; }
+    }
+    if (this.state === 'roll') {
+      this.rollT += dt;
+      if (b.rest || this.rollT > 25) {
+        if (this.strokes >= GOLF_MAX - 1) this.autoSink(); // na 6 slagen helpt de Supermol een handje
+        else this.state = 'aim';
+      }
+    }
+    if (this.state === 'auto') { const c = this.hole.cup, dx = c[0] - b.x, dy = c[1] - b.y, m = Math.hypot(dx, dy); if (m < .08) { b.x = c[0]; b.y = c[1]; b.sunk = true; this.strokes = GOLF_MAX; this.holeDone(true); } else { const sp = Math.min(m, dt * 5); b.x += dx / m * sp; b.y += dy / m * sp; } }
+    this.parts = this.parts.filter(q => (q.t -= dt) > 0); this.parts.forEach(q => { q.x += q.vx * dt; q.y += q.vy * dt; q.vy += 900 * dt; });
+    if (this.pop) this.pop.t += dt;
+    for (const k in this.flash) this.flash[k] = Math.max(0, this.flash[k] - dt * 3);
+    this.draw();
+  }
+  onEvent(e) {
+    const now = this.t;
+    if (e.type === 'bumper') { SFX.bumper(); this.flash['b' + Math.round(this.ball.x * 10)] = 1; this.bumpFlash = 1; return; }
+    if ((e.type === 'wall' || e.type === 'mill' || e.type === 'slider') && now - this.lastSnd > .07) { this.lastSnd = now; SFX.golfWall(e.v / 8); }
+    if (e.type === 'lip') SFX.rollover();
+  }
+  water() {
+    const b = this.ball; SFX.splash(); this.state = 'wait'; this.strokes++;
+    const [sx, sy] = this.S(b.x, b.y); for (let i = 0; i < 16; i++) this.parts.push({ x: sx, y: sy, vx: rnd(-120, 120), vy: rnd(-320, -120), t: rnd(.4, .8), c: pick(['#bfe8ff', '#fff', '#5ec8ff']), r: rnd(2, 4) });
+    this.pop = { txt: 'Plons!', sub: '+1 strafslag, probeer opnieuw', t: 0, col: '#5ec8ff' };
+    setTimeout(() => { if (MG.inst !== this) return; this.pop = null; this.ball = golfBall(this.last.x, this.last.y); if (this.strokes >= GOLF_MAX - 1) this.autoSink(); else this.state = 'aim'; }, 1300);
+  }
+  autoSink() { this.state = 'auto'; this.ball.rest = false; this.pop = { txt: 'Bijna!', sub: 'Deze tikken we er samen in', t: 0, col: '#fff' }; }
+  confetti(n) { const [x, y] = this.S(this.hole.cup[0], this.hole.cup[1]); for (let i = 0; i < n; i++) this.parts.push({ x, y, vx: rnd(-300, 300), vy: rnd(-650, -200), t: rnd(.9, 1.6), c: pick(['#ffd23f', '#ff6fa8', '#5ef0ff', '#4cd964', '#9b5de5']), r: rnd(3, 6) }); }
+  /* ---------- tekenen ---------- */
+  draw() {
+    const c = this.ctx, dpr = this.api.dpr, W = this.W, H = this.H, h = this.hole, t = this.simT || 0, m = this.M;
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const bg = c.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#1d3b2a'); bg.addColorStop(1, '#14291e'); c.fillStyle = bg; c.fillRect(0, 0, W, H);
+    for (let i = 0; i < 40; i++) dot(c, hash2(i, 7) * W, hash2(7, i) * H, 1.5 + hash2(i, i) * 2, 'rgba(255,255,255,.05)');
+    c.setTransform(dpr * m[0], dpr * m[1], dpr * m[2], dpr * m[3], dpr * m[4], dpr * m[5]);
+    const poly = (pts) => { c.beginPath(); pts.forEach((p, i) => i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1])); c.closePath(); };
+    const out = h.walls[0];
+    // schaduw + vilt
+    c.save(); c.translate(.12, .16); poly(out); c.fillStyle = 'rgba(0,0,0,.35)'; c.fill(); c.restore();
+    poly(out); c.fillStyle = '#46b35a'; c.fill();
+    c.save(); poly(out); c.clip(); c.fillStyle = 'rgba(255,255,255,.06)'; for (let x = 0; x < 17; x += 1.6) c.fillRect(x, 0, .8, 11);
+    // zand
+    for (const r of h.sand || []) { c.fillStyle = '#f0d58c'; rrect(c, r.x, r.y, r.w, r.h, .6); c.fill(); for (let i = 0; i < 18; i++) dot(c, r.x + .2 + hash2(i, 2) * (r.w - .4), r.y + .2 + hash2(2, i) * (r.h - .4), .05, '#cfae5e'); }
+    // helling: pijltjes wijzen naar beneden (daar rolt de bal heen)
+    for (const r of h.ramps || []) {
+      const g = c.createLinearGradient(r.x, 0, r.x + r.w, 0); g.addColorStop(0, 'rgba(255,255,255,.0)'); g.addColorStop(.5, 'rgba(255,255,255,.16)'); g.addColorStop(1, 'rgba(0,0,0,.1)'); c.fillStyle = g; c.fillRect(r.x, r.y, r.w, r.h);
+      const L = Math.hypot(r.ax, r.ay), ux = r.ax / L, uy = r.ay / L; c.strokeStyle = 'rgba(255,255,255,.45)'; c.lineWidth = .1;
+      for (let j = 0; j < 3; j++) for (let i = 0; i < 2; i++) { const cx = r.x + r.w * (.3 + i * .4) + ux * ((t * .8 + j * .5) % 1.5 - .75), cy = r.y + r.h * (.25 + j * .25); c.beginPath(); c.moveTo(cx - ux * .2 - uy * .3, cy - uy * .2 + ux * .3); c.lineTo(cx + ux * .2, cy + uy * .2); c.lineTo(cx - ux * .2 + uy * .3, cy - uy * .2 - ux * .3); c.stroke(); }
+    }
+    // water
+    for (const r of h.water || []) { c.fillStyle = '#3aa0dc'; rrect(c, r.x, r.y, r.w, r.h, .35); c.fill(); c.strokeStyle = 'rgba(255,255,255,.5)'; c.lineWidth = .07; for (let i = 0; i < 5; i++) { const wx = r.x + .5 + hash2(i, 9) * (r.w - 1.4), wy = r.y + .4 + hash2(9, i) * (r.h - .8) + Math.sin(t * 2 + i) * .08; c.beginPath(); c.moveTo(wx, wy); c.quadraticCurveTo(wx + .3, wy - .18, wx + .6, wy); c.stroke(); } }
+    c.restore();
+    // tee-matje + hole met vlag
+    const [tx, ty] = h.tee; c.fillStyle = 'rgba(255,255,255,.22)'; rrect(c, tx - .45, ty - .45, .9, .9, .2); c.fill();
+    c.fillStyle = '#123'; c.beginPath(); c.arc(h.cup[0], h.cup[1], GOLF.CUP, 0, 7); c.fill(); c.strokeStyle = 'rgba(255,255,255,.75)'; c.lineWidth = .06; c.stroke();
+    // blokken + muren
+    for (const b of h.blocks || []) { poly(b); c.fillStyle = '#b97d48'; c.fill(); c.strokeStyle = '#5e3a1e'; c.lineWidth = .08; c.stroke(); }
+    poly(out); c.strokeStyle = '#5e3a1e'; c.lineWidth = .34; c.lineJoin = 'round'; c.stroke(); c.strokeStyle = '#d4975c'; c.lineWidth = .2; c.stroke();
+    for (const b of h.blocks || []) { poly(b); c.strokeStyle = '#d4975c'; c.lineWidth = .1; c.stroke(); }
+    // bumpers
+    for (const u of h.bumpers || []) { const f = this.flash['b' + Math.round(u.x * 10)] || 0, near = this.ball && Math.hypot(this.ball.x - u.x, this.ball.y - u.y) < u.r + .45 ? this.bumpFlash || 0 : 0;
+      dot(c, u.x + .06, u.y + .08, u.r, 'rgba(0,0,0,.3)'); dot(c, u.x, u.y, u.r, near > .3 ? '#fff3a0' : '#e8403a'); dot(c, u.x, u.y, u.r * .66, '#fff'); dot(c, u.x, u.y, u.r * .38, near > .3 ? '#ffd23f' : '#e8403a'); void f; }
+    if (this.bumpFlash) this.bumpFlash = Math.max(0, this.bumpFlash - .05);
+    // schuifdeur
+    for (const sl of h.sliders || []) { const r = golfSliderRect(sl, t); c.fillStyle = '#ffd23f'; rrect(c, r.x, r.y, r.w, r.h, .12); c.fill(); c.save(); rrect(c, r.x, r.y, r.w, r.h, .12); c.clip(); c.fillStyle = '#1f2a44'; for (let y = r.y - 1; y < r.y + r.h + 1; y += .5) { c.beginPath(); c.moveTo(r.x, y); c.lineTo(r.x + r.w, y + .3); c.lineTo(r.x + r.w, y + .55); c.lineTo(r.x, y + .25); c.fill(); } c.restore(); c.strokeStyle = '#1f2a44'; c.lineWidth = .07; rrect(c, r.x, r.y, r.w, r.h, .12); c.stroke(); }
+    // bal (onder de molen, die is hoog)
+    const b = this.ball;
+    if (b && !b.sunk) { const br = GOLF.R; dot(c, b.x + .05, b.y + .07, br, 'rgba(0,0,0,.35)'); dot(c, b.x, b.y, br, '#fff'); c.strokeStyle = this.players.length > 1 ? this.pl.col : '#9aa5b5'; c.lineWidth = .07; c.beginPath(); c.arc(b.x, b.y, br - .035, 0, 7); c.stroke(); dot(c, b.x - .06, b.y - .06, .05, '#fff'); }
+    // windmolen
+    if (h.mill) { const ml = h.mill; c.fillStyle = 'rgba(0,0,0,.3)'; c.beginPath(); c.arc(ml.x + .1, ml.y + .14, ml.hub, 0, 7); c.fill(); dot(c, ml.x, ml.y, ml.hub, '#e8e0d0'); c.strokeStyle = '#5e3a1e'; c.lineWidth = .08; c.beginPath(); c.arc(ml.x, ml.y, ml.hub, 0, 7); c.stroke();
+      dot(c, ml.x, ml.y, ml.hub * .62, '#c4452c');
+      for (const a of golfMillArms(ml, t)) { const ang = Math.atan2(a[3] - a[1], a[2] - a[0]), L = Math.hypot(a[2] - a[0], a[3] - a[1]); c.save(); c.translate(a[0], a[1]); c.rotate(ang); c.fillStyle = 'rgba(0,0,0,.25)'; c.fillRect(.12, -.08, L, .36); c.fillStyle = '#f4ead8'; c.fillRect(L * .28, -.2, L * .7, .4); c.strokeStyle = '#8a5a35'; c.lineWidth = .05; c.strokeRect(L * .28, -.2, L * .7, .4); for (let i = 1; i < 4; i++) { c.beginPath(); c.moveTo(L * .28 + i * L * .175, -.2); c.lineTo(L * .28 + i * L * .175, .2); c.stroke(); } c.fillStyle = '#8a5a35'; c.fillRect(0, -.07, L, .14); c.restore(); }
+      dot(c, ml.x, ml.y, .2, '#ffd23f'); }
+    // mikken
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    if (this.state === 'aim' && b && b.rest) {
+      const [bx, by] = this.S(b.x, b.y); let aim = null;
+      if (this.drag) aim = this.dragAim(this.drag); else if (this.keyAim) aim = { a: this.aimA, p: this.aimP };
+      if (aim) {
+        const len = (.8 + aim.p * 5.2) * this.k, ux = Math.cos(aim.a), uy = Math.sin(aim.a), [sdx, sdy] = this.rot ? [uy, -ux] : [ux, uy];
+        const col = aim.p < .35 ? '#4cd964' : aim.p < .7 ? '#ffd23f' : '#ff5a4f';
+        c.strokeStyle = 'rgba(0,0,0,.35)'; c.lineWidth = 7; c.setLineDash([]); c.beginPath(); c.moveTo(bx, by); c.lineTo(bx + sdx * len, by + sdy * len); c.stroke();
+        c.strokeStyle = col; c.lineWidth = 4; c.setLineDash([9, 7]); c.beginPath(); c.moveTo(bx, by); c.lineTo(bx + sdx * len, by + sdy * len); c.stroke(); c.setLineDash([]);
+        const ex = bx + sdx * len, ey = by + sdy * len; c.fillStyle = col; c.beginPath(); c.moveTo(ex + sdx * 12, ey + sdy * 12); c.lineTo(ex - sdy * 8, ey + sdx * 8); c.lineTo(ex + sdy * 8, ey - sdx * 8); c.fill();
+        if (this.drag) { c.strokeStyle = 'rgba(255,255,255,.6)'; c.lineWidth = 2; c.beginPath(); c.moveTo(this.drag.sx, this.drag.sy); c.lineTo(this.drag.x, this.drag.y); c.stroke(); dot(c, this.drag.x, this.drag.y, 9, 'rgba(255,255,255,.5)'); }
+        // krachtmeter
+        const mw = 90, mx = clamp(bx - mw / 2, 8, W - mw - 8), my = clamp(by + 22, 70, H - 60); c.fillStyle = 'rgba(0,0,0,.5)'; rrect(c, mx - 3, my - 3, mw + 6, 14, 7); c.fill(); c.fillStyle = col; rrect(c, mx, my, Math.max(8, mw * aim.p), 8, 4); c.fill();
+      } else { const p = .5 + .5 * Math.sin(this.t * 5); c.strokeStyle = `rgba(255,255,255,${.4 + p * .4})`; c.lineWidth = 2.5; c.beginPath(); c.arc(bx, by, GOLF.R * this.k + 6 + p * 4, 0, 7); c.stroke(); }
+    }
+    // vlag (staat altijd rechtop op het scherm)
+    { const [fx, fy] = this.S(h.cup[0], h.cup[1]), ph = Math.max(26, this.k * 1.3), wv = Math.sin(this.t * 4) * 3; c.strokeStyle = '#eee'; c.lineWidth = 2.5; c.beginPath(); c.moveTo(fx, fy); c.lineTo(fx, fy - ph); c.stroke(); c.fillStyle = '#e8403a'; c.beginPath(); c.moveTo(fx, fy - ph); c.quadraticCurveTo(fx + 10, fy - ph + 2 + wv, fx + 20, fy - ph + 6 + wv); c.lineTo(fx, fy - ph + 13); c.fill(); c.fillStyle = '#fff'; c.font = 'bold 9px sans-serif'; c.textAlign = 'center'; c.fillText(this.hi + 1, fx + 7, fy - ph + 9); }
+    // deeltjes
+    for (const q of this.parts) dot(c, q.x, q.y, q.r, q.c);
+    // spelers onderin
+    this.drawChips(c);
+    // grote tekst (Birdie!, Plons!)
+    if (this.pop) { const p = this.pop, s = Math.min(1, p.t * 5), y = H * .42; c.save(); c.translate(W / 2, y); c.scale(.6 + .4 * s, .6 + .4 * s); c.textAlign = 'center'; c.font = `900 ${Math.min(64, W / 9)}px system-ui, sans-serif`; c.lineWidth = 8; c.strokeStyle = 'rgba(0,0,0,.6)'; c.strokeText(p.txt, 0, 0); c.fillStyle = p.col; c.fillText(p.txt, 0, 0); c.font = `700 ${Math.min(22, W / 22)}px system-ui, sans-serif`; c.lineWidth = 5; c.strokeText(p.sub, 0, 34); c.fillStyle = '#fff'; c.fillText(p.sub, 0, 34); c.restore(); }
+  }
+  drawChips(c) {
+    const W = this.W, H = this.H, ps = this.players, cw = Math.min(220, (W - 24) / ps.length - 8), y = H - 38;
+    ps.forEach((p, i) => {
+      const x = W / 2 - (ps.length * (cw + 8) - 8) / 2 + i * (cw + 8), act = i === this.cp && this.state !== 'done';
+      const tot = p.holes.reduce((a, b) => a + (b || 0), 0), cur = act && this.state !== 'wait' && this.state !== 'intro' && p.holes[this.hi] == null ? this.strokes : null;
+      c.fillStyle = act ? 'rgba(255,255,255,.95)' : 'rgba(255,255,255,.55)'; rrect(c, x, y, cw, 30, 15); c.fill(); if (act) { c.strokeStyle = p.col; c.lineWidth = 3; c.stroke(); }
+      dot(c, x + 15, y + 15, 8, p.col); c.fillStyle = '#1f2a44'; c.textAlign = 'left'; c.font = '700 13px system-ui, sans-serif';
+      c.fillText(`${p.name.slice(0, 10)}`, x + 28, y + 19); c.textAlign = 'right'; c.font = '600 12px system-ui, sans-serif';
+      c.fillText(cur != null ? `slag ${cur} · tot ${tot}` : `totaal ${tot}`, x + cw - 10, y + 19);
+    });
+  }
+}
+
 /* ===== main.js ===== */
 /* =========================================================
    OPSTARTEN + test-haakjes (window.__gb, alleen gebruikt door de automatische tests).
@@ -4088,6 +4638,7 @@ window.__gb = {
   setOffsetDays(d) { GB.timeOffset = d * 86400000; }, giveItem, addEnergie, flag, setFlag, isDug, openSetup, mgStart, mgStop, openHQ, openWerkbank, openBag, openBook,
   bowlingScore, bowlingNext, frameMarks, BlokGame, BowlSim, enterWorld, goTitle, DLG, hideDlg, useObject, doAct, robotBuilt,
   MEAL, MEALS, MEAL_WINDOW, mealCall, mealCancel, mealTarget, mealRoute, renderOuders, addMunten, rectDist,
+  GOLF_HOLES, GOLF, golfPar, FLY_SPOTS, allFlySpots, flyCount, flyDone, nearFlySpot, flyCutscene, buildVliegbotNow, vliegHave, VLIEG_PARTS, findNear, nearLabel, lootAvail, takeItem, goalKey, nextGoal, hint,
 };
 
 </script>
