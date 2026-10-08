@@ -6121,8 +6121,8 @@ function buurSay(c, txt, x, y, W, mood, t) {
 }
 /* Joystick per speler (multi-touch). zones(): [{x,y,w,h}] per speler; geeft per speler {x,y} in -1..1. Toetsen: WASD (speler 1) en pijltjes (speler 2; solo: ook speler 1). */
 class BuurJoy {
-  constructor(cv, n, zones) {
-    this.cv = cv; this.n = n; this.zones = zones; this.st = Array.from({ length: n }, () => ({ id: null, ox: 0, oy: 0, x: 0, y: 0, kx: 0, ky: 0 })); this.keys = {};
+  constructor(cv, n, zones, home) {
+    this.cv = cv; this.n = n; this.zones = zones; this.home = home; this.st = Array.from({ length: n }, () => ({ id: null, ox: 0, oy: 0, x: 0, y: 0, kx: 0, ky: 0 })); this.keys = {};
     this.down = e => { const r = this.cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top; const zs = this.zones();
       for (let i = 0; i < this.n; i++) { const z = zs[i], s = this.st[i]; if (s.id === null && x >= z.x && x <= z.x + z.w && y >= z.y && y <= z.y + z.h) { e.preventDefault(); audioUnlock(); s.id = e.pointerId; s.ox = x; s.oy = y; s.x = 0; s.y = 0; s.cx = x; s.cy = y; try { this.cv.setPointerCapture(e.pointerId); } catch (_) { } return; } } };
     this.move = e => { const s = this.st.find(s => s.id === e.pointerId); if (!s) return; const r = this.cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top, R = 46; let dx = x - s.ox, dy = y - s.oy; const m = Math.hypot(dx, dy); if (m > R) { s.ox += dx / m * (m - R); s.oy += dy / m * (m - R); dx = x - s.ox; dy = y - s.oy; } s.x = dx / R; s.y = dy / R; s.cx = x; s.cy = y; };
@@ -6137,9 +6137,10 @@ class BuurJoy {
   reset() { this.st.forEach(s => { s.id = null; s.x = 0; s.y = 0; }); this.keys = {}; }
   draw(c) { // zones + knopje
     const zs = this.zones();
-    this.st.forEach((s, i) => { const z = zs[i], cx = s.id !== null ? s.ox : z.x + z.w / 2, cy = s.id !== null ? s.oy : z.y + z.h / 2;
+    this.st.forEach((s, i) => { const z = zs[i], hm = this.home ? this.home(i) : [z.x + z.w / 2, z.y + z.h / 2], cx = s.id !== null ? s.ox : hm[0], cy = s.id !== null ? s.oy : hm[1];
+      c.globalAlpha = s.id !== null ? 1 : .75;
       c.fillStyle = 'rgba(255,255,255,.18)'; c.beginPath(); c.arc(cx, cy, 52, 0, 7); c.fill(); c.strokeStyle = 'rgba(255,255,255,.55)'; c.lineWidth = 3; c.stroke();
-      c.fillStyle = i ? 'rgba(255,138,31,.9)' : 'rgba(63,140,255,.9)'; c.beginPath(); c.arc(cx + s.x * 40, cy + s.y * 40, 24, 0, 7); c.fill(); c.strokeStyle = '#fff'; c.lineWidth = 3; c.stroke(); });
+      c.fillStyle = i ? 'rgba(255,138,31,.9)' : 'rgba(63,140,255,.9)'; c.beginPath(); c.arc(cx + s.x * 40, cy + s.y * 40, 24, 0, 7); c.fill(); c.strokeStyle = '#fff'; c.lineWidth = 3; c.stroke(); c.globalAlpha = 1; });
   }
   destroy() { this.cv.removeEventListener('pointerdown', this.down); removeEventListener('pointermove', this.move); removeEventListener('pointerup', this.up); removeEventListener('pointercancel', this.up); }
 }
@@ -6399,6 +6400,252 @@ class MolRace {
   }
 }
 
+/* ===== minigames/tuinkabouters_logic.js ===== */
+/* =========================================================
+   TUINKABOUTERS – logica (zonder tekenen, getest in tests/unit.js). Streek 2 tegen buurman Brom.
+   Stoplicht-spel in de voortuin van Brom (TK.W x TK.H tegels, huis bovenaan, hek onderaan):
+   - sluip naar de kabouters; sta er even naast (TK.TURN_T sec) en hij is omgedraaid (of krijgt een gekke muts);
+   - het raam: dicht → WAARSCHUWING (gordijn wiebelt + geluid) → KIJKEN. Beweeg je terwijl hij kijkt (en sta je niet in een struik
+     of achter het hek)? Betrapt: terug naar het hek en een leven minder. Op ⭐⭐⭐ zijn er 2 ramen en wiebelt het gordijn soms voor niks.
+   - alle kabouters om = gewonnen; geen levens meer of de tijd op = betrapt.
+   ========================================================= */
+const TK = { W: 16, H: 11, HOUSE_H: 2.3, FENCE_Y: 9.7, SPEED: 2.3, R: .32, GR: .34, TURN_T: 1.1, NEAR: 1.0, GRACE: .15, MOVE_EPS: .15, CAUGHT_T: 1.1 };
+const TK_LEVELS = [
+  { gnomes: 4, windows: [8], closed: [3.4, 5.6], warn: 1.6, look: [2.0, 2.6], fake: 0, lives: 4, time: 120, bushes: 3 },
+  { gnomes: 5, windows: [8], closed: [2.8, 4.8], warn: 1.2, look: [2.3, 3.0], fake: .2, lives: 3, time: 110, bushes: 3 },
+  { gnomes: 6, windows: [4.6, 11.4], closed: [2.6, 4.6], warn: .9, look: [2.4, 3.1], fake: .3, lives: 3, time: 100, bushes: 2 },
+];
+const TK_HATS = ['#ff6fa8', '#9b5de5', '#ffd23f', '#4cd964', '#1fa6e0', '#ff8a1f'];
+function tkBuild(level, seed, n) {
+  const L = TK_LEVELS[level - 1], R = mulberry32(seed || 1), gnomes = [], bushes = [];
+  const free = (x, y, d) => gnomes.every(g => Math.hypot(g.x - x, g.y - y) > d) && bushes.every(b => Math.hypot(b.x - x, b.y - y) > b.r + d * .7);
+  const bx = L.bushes === 3 ? [3.2, 8, 12.8] : [5, 11];
+  for (const x of bx) bushes.push({ x: x + (R() - .5) * 1.4, y: 6.2 + (R() - .5) * 1.6, r: .95 });
+  for (let tries = 0; gnomes.length < L.gnomes && tries < 4000; tries++) {
+    const x = 1.2 + R() * (TK.W - 2.4), y = TK.HOUSE_H + 1.0 + R() * 4.2;
+    if (free(x, y, 2.3)) gnomes.push({ x, y, turned: false, prog: 0, task: gnomes.length % 2 ? 'hoed' : 'draai', hat: '#e8403a', newHat: TK_HATS[gnomes.length % TK_HATS.length], spin: null });
+  }
+  const players = Array.from({ length: n || 1 }, (_, i) => { const x = n > 1 ? (i ? 9.6 : 6.4) : 8; return { x, y: 10.3, sx: x, sy: 10.3, dir: 'up', moving: false, caught: 0, hidden: false, ph: 0, turned: 0 }; });
+  const windows = L.windows.map((x, i) => ({ x, st: 'closed', t: 0, dur: (L.closed[0] + R() * (L.closed[1] - L.closed[0])) * (i ? 1.5 : .5) + 1.0, fake: false }));
+  return { level, L, R, gnomes, bushes, players, windows, lives: L.lives, time: 0, caught: 0, done: null };
+}
+const tkWatching = st => st.windows.some(w => w.st === 'look' && w.t > TK.GRACE);
+// toestand van het raam (voor tekenen en tests): 'closed' | 'warn' | 'look'
+function tkWindowState(st) { return st.windows.some(w => w.st === 'look') ? 'look' : st.windows.some(w => w.st === 'warn') ? 'warn' : 'closed'; }
+function tkInBush(st, p) { return st.bushes.some(b => Math.hypot(b.x - p.x, b.y - p.y) < b.r * .78); }
+// één stapje. inp[i] = {x, y} (-1..1). Geeft gebeurtenissen terug.
+function tkStep(st, inp, dt) {
+  const ev = []; if (st.done) return ev; const L = st.L, R = st.R;
+  st.time += dt;
+  for (const w of st.windows) {
+    w.t += dt; if (w.t < w.dur) continue;
+    w.t = 0;
+    if (w.st === 'closed') { w.st = 'warn'; w.dur = L.warn; w.fake = R() < L.fake; ev.push({ e: 'warn', w }); }
+    else if (w.st === 'warn') { if (w.fake) { w.st = 'closed'; w.dur = L.closed[0] + R() * (L.closed[1] - L.closed[0]); ev.push({ e: 'fake', w }); } else { w.st = 'look'; w.dur = L.look[0] + R() * (L.look[1] - L.look[0]); ev.push({ e: 'look', w }); } }
+    else { w.st = 'closed'; w.dur = L.closed[0] + R() * (L.closed[1] - L.closed[0]); ev.push({ e: 'closed', w }); }
+  }
+  const watching = tkWatching(st);
+  st.players.forEach((p, i) => {
+    if (p.caught > 0) { p.caught -= dt; p.moving = false; if (p.caught <= 0) { p.x = p.sx; p.y = p.sy; p.dir = 'up'; } return; }
+    const v = inp[i] || { x: 0, y: 0 }, m = Math.min(1, Math.hypot(v.x, v.y));
+    p.moving = m > TK.MOVE_EPS;
+    if (p.moving) {
+      const k = TK.SPEED * dt / Math.max(m, 1e-6) * m; p.x += v.x * k; p.y += v.y * k; p.ph += dt * 12;
+      p.dir = Math.abs(v.x) > Math.abs(v.y) ? (v.x < 0 ? 'left' : 'right') : (v.y < 0 ? 'up' : 'down');
+    }
+    p.x = clamp(p.x, .45, TK.W - .45); p.y = clamp(p.y, TK.HOUSE_H + .55, TK.H - .35);
+    for (const g of st.gnomes) { const dx = p.x - g.x, dy = p.y - g.y, d = Math.hypot(dx, dy), md = TK.R + TK.GR; if (d < md && d > 1e-6) { p.x = g.x + dx / d * md; p.y = g.y + dy / d * md; } }
+    p.hidden = tkInBush(st, p); const safe = p.y > TK.FENCE_Y;
+    if (watching && p.moving && !p.hidden && !safe) { p.caught = TK.CAUGHT_T; st.lives--; st.caught++; ev.push({ e: 'caught', i }); }
+  });
+  for (const g of st.gnomes) {
+    if (g.turned) { if (g.spin != null) { g.spin += dt * 2.5; if (g.spin >= 1) g.spin = null; } continue; }
+    const near = st.players.find(p => p.caught <= 0 && Math.hypot(p.x - g.x, p.y - g.y) < TK.NEAR);
+    if (near) { g.prog += dt / TK.TURN_T; if (g.prog >= 1) { g.turned = true; g.prog = 1; g.spin = 0; if (g.task === 'hoed') g.hat = g.newHat; near.turned++; ev.push({ e: 'turn', g }); } }
+    else g.prog = Math.max(0, g.prog - dt * .6);
+  }
+  if (st.gnomes.every(g => g.turned)) { st.done = 'win'; ev.push({ e: 'win' }); }
+  else if (st.lives <= 0) { st.done = 'lose'; ev.push({ e: 'lose', why: 'levens' }); }
+  else if (st.time >= L.time) { st.done = 'lose'; ev.push({ e: 'lose', why: 'tijd' }); }
+  return ev;
+}
+// Hulpje voor tests: slimme sluiper. Loopt (om struiken heen is niet nodig: door struiken lopen mag) naar de dichtstbijzijnde kabouter
+// en staat stil zodra het gordijn wiebelt of hij kijkt (behalve in een struik). careless = let niet op het raam.
+function tkBot(st, i, careless) {
+  const p = st.players[i]; if (p.caught > 0) return { x: 0, y: 0 };
+  if (!careless && tkWindowState(st) !== 'closed' && !p.hidden && p.y <= TK.FENCE_Y) return { x: 0, y: 0 };
+  const todo = st.gnomes.filter(g => !g.turned); if (!todo.length) return { x: 0, y: 0 };
+  // in 2 spelers: speler 2 neemt de kabouter het verst van speler 1 (eerlijk verdelen)
+  todo.sort((a, b) => Math.hypot(a.x - p.x, a.y - p.y) - Math.hypot(b.x - p.x, b.y - p.y));
+  const g = (i && todo.length > 1) ? todo[1] : todo[0], dx = g.x - p.x, dy = g.y - p.y, d = Math.hypot(dx, dy);
+  if (d < TK.NEAR * .7) return { x: 0, y: 0 };
+  return { x: dx / d, y: dy / d };
+}
+
+/* ===== minigames/tuinkabouters.js ===== */
+/* =========================================================
+   TUINKABOUTERS – streek 2 tegen buurman Brom (logica in tuinkabouters_logic.js).
+   Sluip de voortuin in en draai zijn kabouters om (of geef ze een gekke muts): ga er even naast staan.
+   Wiebelt het gordijn (en hoor je het)? STILSTAAN, want zo kijkt hij naar buiten. Bewegen terwijl hij kijkt = "HÉ!" en terug naar het hek.
+   In een struik of achter het hek zie hij je niet. 1 speler: joystick (of WASD/pijltjes).
+   2 spelers: ieder een eigen kind met een eigen joystick (links / rechts op het scherm; WASD en pijltjes). Samen alle kabouters om = gewonnen.
+   ========================================================= */
+registerMinigame({
+  id: 'kabouters', name: 'Tuinkabouters', emoji: '🍄', music: 'buurman', twoMode: 'samen, ieder een eigen kind', prank: true,
+  help: 'Sluip de tuin van <b>buurman Brom</b> in en draai zijn kabouters om: ga er even naast staan. Beweegt het <b>gordijn</b>? <b>Stilstaan!</b> Als hij kijkt en je beweegt, moet je terug naar het hek. In een struik ziet hij je niet.',
+  bonusText: 'Win van de buurman voor 1 energie (1x per dag)', fmt: v => v ? buurStars(v) : '–',
+  create: api => new Kabouters(api),
+});
+const TK_DT = 1 / 120;
+class Kabouters {
+  constructor(api) {
+    this.api = api; this.c = api.ctx; this.players = api.players; this.n = this.players.length; this.state = 'choose'; this.t = 0; this.acc = 0;
+    this.bctx = buurCtx(); this.pops = []; this.say = null; this.flash = 0; this.stepT = 0; this.W = api.W; this.H = api.H;
+    this.st = tkBuild(1, 1, this.n); this.layout();
+    this.joy = new BuurJoy(api.cv, this.n, () => this.zones(), i => this.home(i));
+    buurChoose('kabouters', { title: '🍄 Tuinkabouters', text: 'Buurman Brom is gek op zijn tuinkabouters. Sluip zijn tuin in en draai ze allemaal om! Maar let op het <b>gordijn</b>: wiebelt het, dan <b>stilstaan</b>!' })
+      .then(l => { if (MG.inst === this) this.start(l); });
+  }
+  start(level) { this.level = level; this.st = tkBuild(level, (Date.now() / 1000 | 0) % 100000 + 7, this.n); this.state = 'count'; this.cd = 3.2; this.joy.reset(); SFX.tick(); this.say = { txt: 'Niemand komt aan mijn kabouters!', t: 0, life: 3, mood: 'boos' }; }
+  destroy() { this.joy.destroy(); $('#mgBanner').classList.remove('show'); }
+  resize(W, H) { this.W = W; this.H = H; this.layout(); }
+  layout() {
+    const W = this.W, H = this.H, port = H > W * 1.05, top = 92, below = port ? Math.min(220, H * .26) : 8;
+    const k = Math.max(14, Math.min((W - 16) / TK.W, (H - top - below) / TK.H)); this.k = k; this.port = port;
+    this.ox = (W - k * TK.W) / 2; this.oy = top + (port ? 6 : Math.max(0, (H - top - below - k * TK.H) / 2));
+  }
+  zones() { const W = this.W, H = this.H, y = this.port ? this.oy + this.k * TK.H * .5 : H * .3; return this.n > 1 ? [{ x: 0, y, w: W / 2, h: H - y }, { x: W / 2, y, w: W / 2, h: H - y }] : [{ x: 0, y, w: W, h: H - y }]; }
+  home(i) { const W = this.W, H = this.H, m = 76; return this.n > 1 ? [i ? W - m : m, H - m] : [this.port ? W / 2 : m, H - m]; }
+  key(k, down) { return this.joy.key(k, down); }
+  X(x) { return this.ox + x * this.k; } Y(y) { return this.oy + y * this.k; }
+  pop(txt, x, y, col, size) { this.pops.push({ txt, x, y, col, size, t: 0, life: 1.2 }); }
+  tick(dt) {
+    this.t += dt; buurPopTick(this.pops, dt); if (this.say && (this.say.t += dt) > this.say.life) this.say = null; this.flash = Math.max(0, this.flash - dt);
+    if (this.state === 'count') { const o = Math.ceil(this.cd); this.cd -= dt; if (Math.ceil(this.cd) !== o && this.cd > 0) SFX.tick(); if (this.cd <= 0) { this.state = 'play'; SFX.sneak(); } }
+    else if (this.state === 'play' || this.state === 'end') {
+      this.acc += dt;
+      while (this.acc >= TK_DT) { this.acc -= TK_DT; this.step(TK_DT); }
+      if (this.state === 'end' && (this.endT += dt) > 1.6 && !this.done) { this.done = true; this.finish(); }
+    }
+    this.draw();
+  }
+  step(dt) {
+    const st = this.st, play = this.state === 'play';
+    const ev = tkStep(st, play ? this.players.map((_, i) => this.joy.get(i)) : this.players.map(() => ({ x: 0, y: 0 })), play ? dt : 0);
+    if (play && st.players.some(p => p.moving) && (this.stepT += dt) > .42) { this.stepT = 0; SFX.sneak(); }
+    for (const e of ev) {
+      const wx = e.w ? this.X(e.w.x) : 0;
+      if (e.e === 'warn') { SFX.curtain(); this.pop('😳 Het gordijn!', wx, this.Y(TK.HOUSE_H + .9), '#ffb347', 22); }
+      if (e.e === 'look') { SFX.grumble(); }
+      if (e.e === 'fake') this.pop('…Hmpf.', wx, this.Y(TK.HOUSE_H + .6), '#ffffff', 18);
+      if (e.e === 'caught') { const p = st.players[e.i]; SFX.caught(); SFX.shout(); this.flash = .5; this.say = { txt: pick(['HÉ! Ik zie je wel!', 'Ho! Wegwezen uit mijn tuin!', 'Betrapt, kwajongen!', 'Blijf van mijn kabouters af!']), t: 0, life: 2.2, mood: 'roep' }; this.pop('❗', this.X(p.x), this.Y(p.y) - this.k * 1.4, '#ff6b6b', 30); if (navigator.vibrate) try { navigator.vibrate(120); } catch (_) { } }
+      if (e.e === 'turn') { SFX.gnome(); this.pop(e.g.task === 'hoed' ? 'Gekke muts!' : 'Omgedraaid!', this.X(e.g.x), this.Y(e.g.y) - this.k * 1.2, '#c8f08f', 20); }
+      if (e.e === 'win') { this.state = 'end'; this.endT = 0; SFX.fanfare(); this.pop('🍄 Alle kabouters om!', this.W / 2, this.H / 2, '#ffd23f', 30); }
+      if (e.e === 'lose') { this.state = 'end'; this.endT = 0; SFX.aww(); this.pop(e.why === 'tijd' ? '⏰ De tijd is op!' : '😬 Te vaak betrapt!', this.W / 2, this.H / 2, '#ff6b6b', 28); }
+    }
+  }
+  finish() {
+    const st = this.st, won = st.done === 'win', n = st.gnomes.length, king = won && !st.caught;
+    if (king) achieve('kabouter');
+    const lines = won ? [`🍄 Alle ${n} kabouters omgedraaid! Buurman Brom snapt er niks van.`, king ? '👑 Niet één keer betrapt: <b>Kabouterkoning!</b>' : `👀 ${st.caught}× betrapt. Lukt het ook zonder betrapt te worden? Dan word je Kabouterkoning!`]
+      : [st.lives <= 0 ? '👀 Buurman Brom heeft jullie te vaak gezien… Sta stil als het gordijn wiebelt!' : `⏰ De tijd was op (nog ${st.gnomes.filter(g => !g.turned).length} kabouters te gaan).`];
+    const sc = this.players.map((p, i) => ({ name: p.name, text: `${st.players[i].turned} ${st.players[i].turned === 1 ? 'kabouter' : 'kabouters'}` }));
+    buurFinish(this.api, 'kabouters', { won, level: this.level, lines, scores: sc });
+  }
+  /* ---------- tekenen ---------- */
+  draw() {
+    const c = this.c, W = this.W, H = this.H, k = this.k, st = this.st, t = this.t, ws = tkWindowState(st);
+    c.setTransform(this.api.dpr, 0, 0, this.api.dpr, 0, 0);
+    c.fillStyle = '#3f7d34'; c.fillRect(0, 0, W, H); for (let i = 0; i < 60; i++) dot(c, hash2(i, 5) * W, hash2(i, 6) * H, 10 + hash2(i, 7) * 16, 'rgba(30,70,25,.35)'); // haag
+    const X = x => this.X(x), Y = y => this.Y(y);
+    c.save(); rrect(c, X(0), Y(0), k * TK.W, k * TK.H, 12); c.clip();
+    // gazon met maaistrepen
+    for (let i = 0; i < TK.W; i++) { c.fillStyle = i % 2 ? '#7cc95a' : '#86d463'; c.fillRect(X(i), Y(TK.HOUSE_H), k + 1, k * (TK.FENCE_Y - TK.HOUSE_H)); }
+    // stoep achter het hek
+    c.fillStyle = '#c9c4b8'; c.fillRect(X(0), Y(TK.FENCE_Y), k * TK.W, k * (TK.H - TK.FENCE_Y)); c.strokeStyle = 'rgba(0,0,0,.12)'; c.lineWidth = 1.5; for (let x = 0; x < TK.W; x += 1.5) { c.beginPath(); c.moveTo(X(x), Y(TK.FENCE_Y)); c.lineTo(X(x), Y(TK.H)); c.stroke(); }
+    // bloemenperk langs het huis
+    c.fillStyle = '#7a4f2e'; c.fillRect(X(0), Y(TK.HOUSE_H), k * TK.W, k * .55);
+    for (let i = 0; i < TK.W * 2; i++) dot(c, X(i * .5 + .25), Y(TK.HOUSE_H + .25 + hash2(i, 1) * .12), k * .11, ['#ff6fa8', '#ffd23f', '#fff', '#e8403a'][i % 4]);
+    this.drawHouse(c, ws);
+    // kijk-straal
+    for (const w of st.windows) if (w.st === 'look') { const a = Math.min(1, w.t * 4) * .22; c.fillStyle = `rgba(255,240,140,${a})`; c.beginPath(); c.moveTo(X(w.x - .7), Y(1.9)); c.lineTo(X(w.x + .7), Y(1.9)); c.lineTo(X(w.x + 7), Y(TK.FENCE_Y)); c.lineTo(X(w.x - 7), Y(TK.FENCE_Y)); c.closePath(); c.fill(); }
+    // figuren op volgorde van y
+    const items = [];
+    for (const g of st.gnomes) items.push({ y: g.y, f: () => this.drawGnomeAt(c, g) });
+    st.players.forEach((p, i) => { if (p.y <= TK.FENCE_Y - .2) items.push({ y: p.y, f: () => this.drawPlayer(c, p, i) }); });
+    for (const b of st.bushes) items.push({ y: b.y + .45, f: () => this.drawBush(c, b) });
+    items.sort((a, b) => a.y - b.y).forEach(o => o.f());
+    // hek
+    for (let x = .15; x < TK.W; x += .42) { box(c, X(x), Y(TK.FENCE_Y - .55), k * .2, k * .62, 2, '#fff8e8', 1.2); }
+    c.fillStyle = '#fff8e8'; c.fillRect(X(0), Y(TK.FENCE_Y - .38), k * TK.W, k * .1); c.fillRect(X(0), Y(TK.FENCE_Y - .1), k * TK.W, k * .1);
+    st.players.forEach((p, i) => { if (p.y > TK.FENCE_Y - .2) this.drawPlayer(c, p, i); });
+    c.restore();
+    // rand-signaal
+    if (this.state === 'play' && ws !== 'closed') { const pulse = .5 + Math.sin(t * (ws === 'look' ? 14 : 9)) * .5; c.strokeStyle = ws === 'look' ? `rgba(232,64,58,${.55 + pulse * .4})` : `rgba(255,170,40,${.35 + pulse * .5})`; c.lineWidth = 10; c.strokeRect(5, 5, W - 10, H - 10); }
+    if (this.flash) { c.fillStyle = `rgba(232,64,58,${this.flash * .5})`; c.fillRect(0, 0, W, H); }
+    this.drawHud(c, ws);
+    buurPopDraw(c, this.pops, W, H);
+    if (this.say) { c.save(); c.globalAlpha = Math.min(1, (this.say.life - this.say.t) * 3); buurSay(c, this.say.txt, W / 2, this.port ? Y(TK.H) + 14 : Y(TK.FENCE_Y) - 62, W, this.say.mood, t); c.restore(); }
+    if (this.state === 'play' || this.state === 'count') this.joy.draw(c);
+    if (this.state === 'count') { const n = Math.ceil(this.cd); c.save(); c.font = '900 64px Fredoka, system-ui'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineWidth = 10; c.strokeStyle = '#1f2a44'; const s = n > 0 ? String(n) : 'Sluipen!'; c.strokeText(s, W / 2, H / 2); c.fillStyle = '#ffd23f'; c.fillText(s, W / 2, H / 2); c.restore(); }
+    if (this.state === 'choose') { c.fillStyle = 'rgba(0,0,0,.25)'; c.fillRect(0, 0, W, H); }
+  }
+  drawHouse(c, ws) {
+    const k = this.k, X = x => this.X(x), Y = y => this.Y(y), t = this.t;
+    c.fillStyle = '#e9d9b8'; c.fillRect(X(0), Y(0), k * TK.W, k * TK.HOUSE_H);
+    c.strokeStyle = 'rgba(150,110,70,.25)'; c.lineWidth = 1; for (let y = .6; y < TK.HOUSE_H; y += .3) { c.beginPath(); c.moveTo(X(0), Y(y)); c.lineTo(X(TK.W), Y(y)); c.stroke(); }
+    c.fillStyle = '#a8432f'; c.fillRect(X(0), Y(0), k * TK.W, k * .5); for (let x = 0; x < TK.W; x += .5) { c.fillStyle = 'rgba(0,0,0,.12)'; c.fillRect(X(x), Y(0), 2, k * .5); }
+    // voordeur + bordje
+    box(c, X(14.1), Y(.85), k * 1.1, k * 1.45, 4, '#6b8f3a', 2); dot(c, X(14.95), Y(1.6), k * .07, '#ffd23f');
+    box(c, X(13.95), Y(.62), k * 1.4, k * .26, 3, '#fff', 1); c.fillStyle = '#7a5a2a'; c.font = `700 ${Math.round(k * .18)}px Fredoka, system-ui`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('BROM', X(14.65), Y(.76));
+    for (const w of this.st.windows) {
+      const x0 = X(w.x - 1), y0 = Y(.7), ww = k * 2, wh = k * 1.3;
+      box(c, x0 - 3, y0 - 3, ww + 6, wh + 6, 4, '#fff', 2); c.fillStyle = '#26324d'; c.fillRect(x0, y0, ww, wh);
+      const look = w.st === 'look', warn = w.st === 'warn', open = look ? Math.min(1, w.t * 5) : 0;
+      if (look) { c.save(); c.beginPath(); c.rect(x0, y0, ww, wh); c.clip(); drawBrom(c, x0 + ww / 2, y0 + wh + k * .75, 'down', 0, false, { scale: k / 32 * 1.1, noShadow: true, mood: 'zoek', t }); c.restore(); }
+      const wob = warn ? Math.sin(t * 30) * k * .12 + k * .1 : 0, cw = ww / 2 * (1 - open * .75);
+      c.fillStyle = '#d9a43a'; c.fillRect(x0, y0, cw, wh); c.fillRect(x0 + ww - cw + wob, y0, cw - wob, wh);
+      c.strokeStyle = 'rgba(120,80,20,.5)'; c.lineWidth = 1.5; for (let i = 1; i < 4; i++) { c.beginPath(); c.moveTo(x0 + cw * i / 4, y0); c.lineTo(x0 + cw * i / 4, y0 + wh); c.stroke(); c.beginPath(); c.moveTo(x0 + ww - cw * i / 4 + wob, y0); c.lineTo(x0 + ww - cw * i / 4 + wob, y0 + wh); c.stroke(); }
+      c.fillStyle = '#fff'; c.fillRect(x0 - 4, y0 + wh, ww + 8, k * .12);
+      if (warn) { const p = 1 + Math.sin(t * 16) * .12; c.save(); c.translate(x0 + ww / 2, y0 - k * .35); c.scale(p, p); dot(c, 0, 0, k * .32, '#ff8a1f'); c.fillStyle = '#fff'; c.font = `900 ${Math.round(k * .45)}px Fredoka, system-ui`; c.fillText('!', 0, 1); c.restore(); }
+      if (look) { c.save(); c.translate(x0 + ww / 2, y0 - k * .35); dot(c, 0, 0, k * .32, '#e8403a'); c.font = `${Math.round(k * .36)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.fillStyle = '#fff'; c.fillText('👀', 0, 1); c.restore(); }
+    }
+  }
+  drawGnomeAt(c, g) {
+    const k = this.k, x = this.X(g.x), y = this.Y(g.y), s = k / 32 * 1.35;
+    const turned = g.task === 'draai' && g.turned, spin = g.task === 'draai' && g.spin != null ? g.spin : null;
+    drawGnome(c, x, y, s, turned && spin == null, g.hat, this.t, spin);
+    if (!g.turned && g.prog > 0) { c.strokeStyle = 'rgba(255,255,255,.6)'; c.lineWidth = 5; c.beginPath(); c.arc(x, y - k * 1.55, k * .28, 0, 7); c.stroke(); c.strokeStyle = '#4cd964'; c.beginPath(); c.arc(x, y - k * 1.55, k * .28, -Math.PI / 2, -Math.PI / 2 + g.prog * Math.PI * 2); c.stroke(); }
+    if (g.turned) { c.font = `${Math.round(k * .32)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.textAlign = 'center'; c.fillStyle = '#1f2a44'; c.fillText('✅', x + k * .38, y - k * .2); }
+  }
+  drawPlayer(c, p, i) {
+    const k = this.k, x = this.X(p.x) + (p.caught > 0 ? Math.sin(this.t * 50) * 2 : 0), y = this.Y(p.y);
+    if (p.caught > 0 && p.caught < .35) c.globalAlpha = p.caught / .35;
+    drawKid(c, this.players[i].look, x, y, p.dir, p.ph, p.moving, { scale: k / 32 * 1.15, t: this.t });
+    c.globalAlpha = 1;
+    if (this.n > 1) { dot(c, x, y - k * 1.55, k * .13, this.players[i].col); }
+  }
+  drawBush(c, b) {
+    const k = this.k, x = this.X(b.x), y = this.Y(b.y), r = b.r * k, hid = this.st.players.some(p => p.hidden && Math.hypot(p.x - b.x, p.y - b.y) < b.r);
+    c.save(); if (hid) c.globalAlpha = .88;
+    c.fillStyle = 'rgba(0,0,0,.18)'; c.beginPath(); c.ellipse(x, y + r * .45, r * 1.05, r * .35, 0, 0, 7); c.fill();
+    for (const [dx, dy, rr, col] of [[-.45, .05, .62, '#2f7a34'], [.45, .05, .62, '#2f7a34'], [0, -.3, .7, '#3a8f3c'], [-.2, .2, .6, '#358537'], [.25, .25, .55, '#358537']]) { dot(c, x + dx * r, y + dy * r, rr * r, col); }
+    dot(c, x - r * .2, y - r * .5, r * .22, 'rgba(255,255,255,.18)'); dot(c, x + r * .35, y - r * .1, r * .08, '#e8403a'); dot(c, x - r * .45, y + r * .1, r * .08, '#e8403a');
+    c.restore();
+    if (hid) { c.font = `${Math.round(k * .45)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = '#1f2a44'; c.fillText('🤫', x, y - r * 1.05); }
+  }
+  drawHud(c, ws) {
+    const st = this.st, W = this.W, done = st.gnomes.filter(g => g.turned).length, left = Math.max(0, st.L.time - st.time);
+    const txt = `🍄 ${done}/${st.gnomes.length}   ${'❤️'.repeat(Math.max(0, st.lives))}${'🤍'.repeat(Math.max(0, st.L.lives - st.lives))}   ⏱️ ${Math.floor(left / 60)}:${String(Math.floor(left % 60)).padStart(2, '0')}`;
+    c.font = '700 16px Fredoka, system-ui, "Apple Color Emoji", "Segoe UI Emoji"'; const tw = c.measureText(txt).width + 26;
+    box(c, W / 2 - tw / 2, 58, tw, 28, 14, 'rgba(255,255,255,.92)', 0); c.fillStyle = '#1f2a44'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(txt, W / 2, 73);
+    if (this.state === 'play' && ws !== 'closed') {
+      const look = ws === 'look', s = look ? '👀 STILSTAAN!' : '😳 Het gordijn beweegt…'; c.font = `900 ${look ? 30 : 22}px Fredoka, system-ui, "Apple Color Emoji", "Segoe UI Emoji"`;
+      const y = this.Y(TK.HOUSE_H) + this.k * 1.3; c.lineWidth = 7; c.strokeStyle = '#1f2a44'; c.strokeText(s, W / 2, y); c.fillStyle = look ? '#ff6b6b' : '#ffb347'; c.fillText(s, W / 2, y);
+    }
+  }
+}
+
 /* ===== minigames/klusje.js ===== */
 /* =========================================================
    KLUSJE VOOR MAMA – de 'tenzij' als de pogingen van vandaag op zijn (1x per dag: +1 poging).
@@ -6496,7 +6743,7 @@ document.addEventListener('visibilitychange', () => { if (document.hidden) saveP
 ['gesturestart', 'gesturechange'].forEach(ev => document.addEventListener(ev, e => e.preventDefault(), { passive: false }));
 document.addEventListener('dblclick', e => e.preventDefault(), { passive: false });
 document.addEventListener('contextmenu', e => { if (!e.target.closest('input')) e.preventDefault(); });
-let lastTouchEnd = 0; document.addEventListener('touchend', e => { const t = Date.now(); if (t - lastTouchEnd < 300 && !e.target.closest('input,button,.btn')) e.preventDefault(); lastTouchEnd = t; }, { passive: false });
+let lastTouchEnd = 0; document.addEventListener('touchend', e => { const t = Date.now(); if (t - lastTouchEnd < 300 && e.cancelable && !e.target.closest('input,button,.btn')) e.preventDefault(); lastTouchEnd = t; }, { passive: false });
 window.__gb = {
   get S() { return S; }, set S(v) { S = v; }, WORLD, GB, MG, AUD, loadMap, goMap, save, load, checkDailyDig, digNow, unlockAllRooms, molStatus, openBase, digRoom, nextRoom,
   setOffsetDays(d) { GB.timeOffset = d * 86400000; }, giveItem, addEnergie, flag, setFlag, isDug, openSetup, mgStart, mgStop, openHQ, openWerkbank, openBag, openBook,
