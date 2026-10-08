@@ -9,7 +9,7 @@
 - Loop door het huis en de tuin, zoek robotonderdelen en knutsel aan de werkbank.
 - Bouw de **Supermol**: een graafrobot die onder het huis een geheime basis graaft.
 - Elke echte dag graaft de Supermol een nieuwe kamer. Met 3 energie-batterijen graaft hij er meteen eentje extra.
-- Kamers: Hoofdkwartier, Bowlingbaan, Blokkenkamer (zoals Tetris), Flipperkastkamer en ⛳ **Minigolf** (6 holes met bumpers, een heuvel met zandbak, een windmolen, een vijver en een schuifdeur; trek je vinger naar achteren om te slaan). Daarna volgen Racebaan en Escaperoom.
+- Kamers: Hoofdkwartier, Bowlingbaan, Blokkenkamer (zoals Tetris), Flipperkastkamer en ⛳ **Minigolf** (6 holes met bumpers, een heuvel met zandbak, een windmolen, een vijver en een schuifdeur; trek je vinger naar achteren om te slaan) en 🏎️ **Racebaan** (radiografische autootjes van boven gezien: 3 banen, 3 rondes, turbo-pijlen en ⚡-batterijen; solo tegen 1 of 2 computerauto's of met z'n tweeën tegelijk op één scherm, ieder met eigen ◀ ▶-knoppen). Daarna volgt de Escaperoom.
 - 🚁 **De Vliegbot** (robot 2): de bouwtekening ligt in een kist in de Minigolf-kamer. Zoek de 4 onderdelen, bouw hem aan de werkbank en hij vliegt met je mee naar plekken waar je zelf niet bij kunt (het dak, de schoorsteen, de top van de eik, het schuurdak en boven op de kledingkast).
 - Alle spelletjes kun je alleen of met z'n tweeën op één tablet spelen.
 - 🍽️ **Eet- en drinkmomenten:** af en toe roept papa of mama ("Eten! Er staan boterhammen klaar!"). Ben je binnen 2 minuten aan de keukentafel, dan eten jullie samen en krijg je munten en energie (max. 2 energie per dag). Te laat? Dan is de soep koud. Ouders kunnen dit uitzetten of vaker/minder vaak laten gebeuren.

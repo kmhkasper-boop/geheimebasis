@@ -813,6 +813,9 @@ const TRACKS = {
   minigolf: { naam: 'Minigolf', bpm: 104, root: 392, swing: .18, lead: 'marimba', lv: .19, bv: .18, pad: .01, stab: .025,
     bass: 'r . f . r . f .', stabs: '. x . . . x . .', drums: { k: 'x . . . x . . .', z: '. . x . . . x .', h: '. x . x . x . x' }, prog: 'I vi ii V I vi IV V',
     mel: ['4 . 2 . 0 . 2 4', '5 . 4 . 2 - - .', '1 . 3 . 5 . 3 1', '4 - - - . . . .', '4 . 5 . 7 . 5 4', '9 . 7 . 5 - - .', '6 . 5 . 4 . 3 2', '0 - - - . . . .'] },
+  racebaan: { naam: 'Racebaan', bpm: 144, root: 392, swing: 0, lead: 'chip', lv: .12, bv: .22, pad: 0, stab: .025,
+    bass: 'r r o r r r o r', stabs: '. x . x . x . x', drums: { k: 'x . . . x . . .', z: '. . x . . . x .', h: 'x x x x x x x x' }, prog: 'I I IV V I I IV V',
+    mel: ['0 . 2 4 . 4 7 .', '7 . 5 4 . 2 4 .', '3 . 5 7 . 7 9 .', '8 . 7 . 4 . . .', '0 . 2 4 . 4 7 .', '9 . 7 4 . 2 4 .', '5 . 4 . 2 . 1 .', '0 - - - 4 . 7 .'] },
   flipper: { naam: 'Flipperkast', bpm: 132, root: 349.23, swing: .05, lead: 'chip', lv: .12, bv: .2, pad: 0, stab: 0,
     bass: 'r . o . r . o .', drums: { k: 'x . . . x . . .', h: 'x . x . x . x .', c: '. . . . x . . .' }, prog: 'I IV V I I IV V I',
     mel: ['0 4 7 4 9 7 4 7', '3 5 8 5 10 8 5 8', '4 6 9 6 11 9 6 9', '7 . 4 . 0 . . .', '0 4 7 4 9 7 4 7', '3 5 8 5 10 8 5 8', '6 4 2 4 6 8 9 8', '7 . . . 0 . . .'] },
@@ -945,6 +948,11 @@ const SFX = {
   hold() { tone(520, .06, 'triangle', .05); tone(780, .06, 'triangle', .04, .05); },
   gameover() { duck(2, .3); [523, 466, 415, 392].forEach((f, i) => tone(f, .3, 'triangle', .08, i * .22)); },
   // flipper
+  beep(hi) { tone(hi ? 1320 : 660, hi ? .45 : .2, 'square', .06); tone(hi ? 1980 : 990, hi ? .3 : .12, 'sine', .03); },
+  vroom() { tone(90, .7, 'sawtooth', .05, 0, 260); noise(.6, .05, 0, 300, 1, 'lowpass', 900); },
+  boost() { tone(300, .4, 'sawtooth', .035, 0, 900); noise(.35, .07, 0, 800, 1.2, 'bandpass', 4000); },
+  zap() { tone(880, .12, 'square', .04, 0, 1760); tone(1320, .18, 'triangle', .05, .08, 2640); },
+  carbump() { woodHit(260 + Math.random() * 80, .06); },
   putt(v) { const k = clamp(v || .5, .15, 1); woodHit(1400 + k * 500, .1 * k + .03); tone(2600, .03, 'sine', .03 * k); },
   golfWall(v) { const k = clamp(v || .5, .1, 1); woodHit(520 + Math.random() * 200, .07 * k); },
   splash() { duck(1, .4); noise(.6, .14, 0, 900, .8, 'bandpass', 300); [0, .12, .25].forEach(w => tone(500 + Math.random() * 400, .08, 'sine', .04, w, 1400)); },
@@ -1397,7 +1405,7 @@ registerRoom({ id: 'bowling', name: 'Bowlingbaan', emoji: '🎳', order: 1, slot
 registerRoom({ id: 'blokken', name: 'Blokkenkamer', emoji: '🧱', order: 2, slot: 'E', floor: 'B', machine: 'blokken', minigame: 'blokken', desc: 'Vallende blokken, zoals Tetris. Maak hele rijen!' });
 registerRoom({ id: 'flipper', name: 'Flipperkastkamer', emoji: '🕹️', order: 3, slot: 'N', floor: 'F', machine: 'flipper', minigame: 'flipper', desc: 'Flipper de bal omhoog en scoor punten!' });
 registerRoom({ id: 'minigolf', name: 'Minigolf', emoji: '⛳', order: 4, slot: 'S', floor: 'O', machine: 'minigolf', minigame: 'minigolf', desc: '6 holes met bumpers, een heuvel, een windmolen en water!' });
-registerRoom({ id: 'racebaan', name: 'Racebaan', emoji: '🏎️', order: 5, slot: 'NW', floor: 'M', soon: true, desc: 'Binnenkort!' });
+registerRoom({ id: 'racebaan', name: 'Racebaan', emoji: '🏎️', order: 5, slot: 'NW', floor: 'A', machine: 'racebaan', minigame: 'racebaan', desc: 'Race met radiografische autootjes: 3 banen, 3 rondes!' });
 registerRoom({ id: 'escaperoom', name: 'Escaperoom', emoji: '🔐', order: 6, slot: 'NE', floor: 'M', soon: true, desc: 'Binnenkort!' });
 const roomList = () => Object.values(GB.ROOMS).sort((a, b) => a.order - b.order);
 
@@ -1425,6 +1433,8 @@ function registerAch(o) { GB.ACHIEVEMENTS[o.id] = o; }
   { id: 'energie4', icon: '🔋', name: 'Batterijenjager', desc: 'Alle 4 verstopte energie-batterijen gevonden.' },
   { id: 'holeinone', icon: '⛳', name: 'Hole-in-one!', desc: 'De bal in één slag in de hole bij minigolf.' },
   { id: 'golfpar', icon: '🏌️', name: 'Golfprof', desc: 'Een hele minigolfronde op of onder par (18 slagen).' },
+  { id: 'race1', icon: '🏎️', name: 'Racekampioen', desc: 'Als eerste over de finish in de Racebaan.' },
+  { id: 'race3', icon: '🏁', name: 'Alle banen', desc: 'Op alle 3 de racebanen gereden.' },
   { id: 'vliegtekening', icon: '🗺️', name: 'Nog een uitvinding!', desc: 'De vliegtekening gevonden.' },
   { id: 'vliegbot', icon: '🚁', name: 'Piloot', desc: 'De Vliegbot gebouwd!' },
   { id: 'vlieg5', icon: '🪺', name: 'Hoog in de lucht', desc: 'Alle 5 hoge plekken bezocht met de Vliegbot.' },
@@ -1475,6 +1485,7 @@ const TILES = {
   B: { draw(c, x, y, tx, ty) { const cols = ['#ffb3c7', '#b3e5ff', '#c9f7b0', '#ffe8a3', '#d9c2ff']; c.fillStyle = cols[Math.floor(hash2(tx, ty) * 5)]; c.fillRect(x, y, T, T); c.fillStyle = 'rgba(255,255,255,.45)'; c.fillRect(x + 2, y + 2, T - 4, 4); c.fillStyle = 'rgba(0,0,0,.08)'; c.fillRect(x + 2, y + T - 5, T - 4, 3); } },
   F: { draw(c, x, y, tx, ty) { c.fillStyle = '#2a1846'; c.fillRect(x, y, T, T); const h = hash2(tx, ty); if (h > .6) dot(c, x + h * 28, y + (1 - h) * 28, 1.6, ['#ff6fa8', '#5ef0ff', '#ffd23f'][Math.floor(h * 30) % 3]); c.strokeStyle = 'rgba(160,100,255,.25)'; c.lineWidth = 1; c.strokeRect(x + .5, y + .5, T - 1, T - 1); } },
   O: { draw(c, x, y, tx, ty) { c.fillStyle = tx % 2 ? '#4cb860' : '#45ad58'; c.fillRect(x, y, T, T); const h = hash2(tx, ty); if (h > .7) { dot(c, x + h * 26 + 3, y + (1 - h) * 26 + 3, 1.4, '#fff7'); } } },
+  A: { draw(c, x, y, tx, ty) { c.fillStyle = '#5a5f6c'; c.fillRect(x, y, T, T); const h = hash2(tx, ty); for (let i = 0; i < 3; i++) dot(c, x + hash2(tx + i, ty) * T, y + hash2(ty, tx + i) * T, 1, 'rgba(255,255,255,.12)'); if (ty % 3 === 0 && tx % 2 === 0) { c.fillStyle = 'rgba(255,255,255,.35)'; c.fillRect(x + 6, y + 14, 20, 3); } void h; } },
   M: { draw(c, x, y, tx, ty) { c.fillStyle = '#a07e5c'; c.fillRect(x, y, T, T); c.strokeStyle = 'rgba(0,0,0,.1)'; c.strokeRect(x + .5, y + .5, T - 1, T - 1); } },
 };
 function planks(c, x, y, tx, ty, a, b, hor) {
@@ -3053,10 +3064,11 @@ function drawHQMap() {
    create(api) }) in een eigen module. create() geeft een object terug met tick(dt), resize(W,H) en optioneel
    key(k, down, e), destroy(), onPause(p). api: cv, ctx, ctl, W, H, dpr, players, banner(), button(), place(), end().
    Extra opties: low: true (lager is beter, bv. slagen of tijd), fmt(v) (hoe een score eruitziet), firstReward: 'item'
-   (krijg je de eerste keer dat je het spel uitspeelt). end(res) mag res.coins en res.bonus zelf invullen.
+   (krijg je de eerste keer dat je het spel uitspeelt), recText() (eigen record-tekst). end(res) mag res.coins, res.bonus
+   en res.hiKey (record per baan) zelf invullen.
    ========================================================= */
 const mgFmt = (g, v) => g.fmt ? g.fmt(v) : fmtNum(v);
-const mgRecText = (g, id) => S.hi[id] == null || (!S.hi[id] && g.low) ? '–' : mgFmt(g, S.hi[id] || 0);
+const mgRecText = (g, id) => g.recText ? g.recText() : S.hi[id] == null || (!S.hi[id] && g.low) ? '–' : mgFmt(g, S.hi[id] || 0);
 function registerMinigame(o) { GB.MINIGAMES[o.id] = Object.assign({ maxPlayers: 2, music: o.id, coins: s => Math.floor(s / 10), bonusAt: Infinity, twoMode: 'beurten' }, o); }
 const MG = { active: false, inst: null, id: null, n: 1, paused: false, prevMusic: null, t: 0, api: null };
 const mgCv = $('#cvMG'), mgCtx = mgCv.getContext('2d');
@@ -3153,7 +3165,7 @@ document.addEventListener('visibilitychange', () => { if (document.hidden && MG.
 function mgFinish(res) {
   const id = MG.id, g = GB.MINIGAMES[id], today = dayKey();
   const best = res.best != null ? res.best : (g.low ? Math.min : Math.max)(...res.scores.map(s => s.score));
-  const old = S.hi[id], rec = g.low ? (!old || best < old) : best > (old || 0); if (rec) S.hi[id] = best;
+  const hk = res.hiKey || id, old = S.hi[hk], rec = g.low ? (!old || best < old) : best > (old || 0); if (rec) S.hi[hk] = best;
   const coins = res.coins != null ? Math.max(1, res.coins) : Math.max(1, g.coins(best)); addMunten(coins);
   if (S.daily.day !== today) { S.daily.day = today; S.daily.bonus = {}; }
   let bonus = false; if ((res.bonus != null ? res.bonus : best >= g.bonusAt) && !S.daily.bonus[id]) { S.daily.bonus[id] = 1; addEnergie(1); bonus = true; }
@@ -3164,7 +3176,7 @@ function mgFinish(res) {
   $('#resultCard').innerHTML = `<h2>${many ? (res.winner == null ? '🤝 Gelijkspel!' : `🏆 ${esc(res.scores[res.winner].name)} wint!`) : rec ? '🎉 Nieuw record!' : '👏 Goed gespeeld!'}</h2>
     <table class="scoretab">${res.scores.map((s, i) => `<tr><td>${many && i === res.winner ? '👑 ' : ''}${esc(s.name)}</td><td style="text-align:right"><b>${s.text || mgFmt(g, s.score)}</b></td></tr>`).join('')}</table>
     ${(res.lines || []).map(l => `<p style="margin:0">${l}</p>`).join('')}
-    ${many && rec ? '<p style="margin:0">🎉 Nieuw record!</p>' : ''}<p style="margin:0">🏆 Record: <b>${mgRecText(g, id)}</b></p>
+    ${many && rec ? '<p style="margin:0">🎉 Nieuw record!</p>' : ''}<p style="margin:0">🏆 Record${res.hiKey && res.recName ? ` ${esc(res.recName)}` : ''}: <b>${res.hiKey ? mgFmt(g, S.hi[hk]) : mgRecText(g, id)}</b></p>
     <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center"><span class="pill">🪙 +${coins} munten</span>${bonus ? '<span class="pill" style="background:#fff3b0">⚡ +1 energie (bonus van vandaag!)</span>' : ''}${first ? `<span class="pill" style="background:#d9f5ff">🎁 Eerste keer uitgespeeld: <b>${esc(itemName(first))}!</b></span>` : ''}</div>
     ${!bonus && !S.daily.bonus[id] && g.bonusText ? `<p style="margin:0;font-size:.85em">⚡ ${g.bonusText}</p>` : ''}
     <div class="btnrow"><button class="btn white" id="resBack">⬅️ Terug</button><button class="btn big green" id="resAgain">🔁 Nog een keer</button></div>`;
@@ -4618,6 +4630,341 @@ class GolfGame {
     });
   }
 }
+
+/* ===== minigames/race_logic.js ===== */
+/* =========================================================
+   RACEBAAN – pure logica (geen DOM): banen, auto-natuurkunde, rondes tellen en computerauto's.
+   Een baan = gesloten middellijn (punten in een vlak van 16 x 10), glad gemaakt met Catmull-Rom.
+   Auto's geven zelf gas; je stuurt alleen links/rechts. Naast de weg (gras) ga je langzamer, er zijn geen muren.
+   ========================================================= */
+const RACE = { HW: .92, VMAX: 4.1, TURN: 2.9, LAPS: 3, CAR_R: .3, GRASS: .5, BOOST: 1.55 };
+const RACE_TRACKS = [
+  { id: 'ovaal', name: 'Rondje Ovaal', emoji: '🟢', desc: 'Lekker rond. Goed om te oefenen!',
+    pts: [[8, 2], [12.6, 2.1], [14.3, 5], [12.6, 7.9], [8, 8], [3.4, 7.9], [1.7, 5], [3.4, 2.1]],
+    pads: [.14, .58], zaps: [[.3, .45], [.8, -.45]], deco: 'bloemen' },
+  { id: 'bos', name: 'Bochtenbos', emoji: '🌲', desc: 'Een haarspeldbocht tussen de bomen.',
+    pts: [[7, 1.6], [12.8, 1.6], [14.4, 2.8], [13.4, 4.0], [10, 4.0], [8.6, 5.2], [10, 6.4], [13.2, 6.4], [14.4, 7.5], [13.2, 8.6], [4, 8.6], [1.8, 7.4], [1.6, 4.6], [2.4, 2.4], [4.4, 1.6]],
+    pads: [.06, .7], zaps: [[.42, 0], [.86, .4]], deco: 'bos' },
+  { id: 'slinger', name: 'Slingerweg', emoji: '🐍', desc: 'Slinger als een slang door de bochten!',
+    pts: [[12, 1.6], [13.3, 1.8], [14.4, 3.2], [14.2, 6.6], [13, 8.6], [11.4, 8.6], [10, 6.6], [8, 5.8], [6, 6.6], [4.6, 8.6], [3, 8.6], [1.6, 7.2], [1.6, 3], [3, 1.6], [5, 1.7], [7.5, 2.7], [10, 1.7]],
+    pads: [.03, .62], zaps: [[.27, -.4], [.75, .4]], deco: 'woestijn' },
+];
+// --- middellijn bemonsteren (gelijke stapjes) ---
+function raceBuild(tr) {
+  if (tr._s) return tr; const P = tr.pts, n = P.length, raw = [];
+  const cr = (p0, p1, p2, p3, t) => { const t2 = t * t, t3 = t2 * t; return .5 * (2 * p1 + (-p0 + p2) * t + (2 * p0 - 5 * p1 + 4 * p2 - p3) * t2 + (-p0 + 3 * p1 - 3 * p2 + p3) * t3); };
+  for (let i = 0; i < n; i++) { const a = P[(i - 1 + n) % n], b = P[i], c = P[(i + 1) % n], d = P[(i + 2) % n]; for (let k = 0; k < 24; k++) { const t = k / 24; raw.push([cr(a[0], b[0], c[0], d[0], t), cr(a[1], b[1], c[1], d[1], t)]); } }
+  // herbemonsteren op stapjes van 0.1
+  const out = [raw[0]]; let carry = 0; const step = .1;
+  for (let i = 1; i <= raw.length; i++) { const a = raw[i - 1], b = raw[i % raw.length]; let L = Math.hypot(b[0] - a[0], b[1] - a[1]), t = 0;
+    while (carry + L - t * L >= step && L > 0) { const need = step - carry; t += need / L; if (t > 1) break; out.push([a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t]); carry = 0; }
+    carry += L * (1 - t); }
+  if (Math.hypot(out[out.length - 1][0] - out[0][0], out[out.length - 1][1] - out[0][1]) < step * .5) out.pop();
+  tr._s = out; tr.L = out.length * step; tr.step = step;
+  tr._dir = out.map((p, i) => { const q = out[(i + 1) % out.length], r = out[(i - 1 + out.length) % out.length]; return Math.atan2(q[1] - r[1], q[0] - r[0]); });
+  return tr;
+}
+const raceAt = (tr, s) => { const n = tr._s.length, f = (((s / tr.step) % n) + n) % n, i = Math.floor(f), j = (i + 1) % n, k = f - i; return [tr._s[i][0] + (tr._s[j][0] - tr._s[i][0]) * k, tr._s[i][1] + (tr._s[j][1] - tr._s[i][1]) * k]; };
+const raceDirAt = (tr, s) => { const n = tr._s.length; return tr._dir[(Math.round(s / tr.step) % n + n) % n]; };
+// dichtstbijzijnde punt: {s, d (zijdelings, + = links), dist}. near = vorige s (zoekt eerst dichtbij, voorkomt springen naar een ander stuk baan)
+function raceProject(tr, x, y, near) {
+  const S = tr._s, n = S.length; let best = null;
+  const test = i => { const p = S[i], d = Math.hypot(x - p[0], y - p[1]); if (!best || d < best.dist) best = { i, dist: d }; };
+  if (near != null) { const c = Math.round(near / tr.step); for (let k = -40; k <= 40; k++) test(((c + k) % n + n) % n); const loc = best; best = null; for (let i = 0; i < n; i += 2) test(i); if (loc.dist <= best.dist + .8) best = loc; }
+  else for (let i = 0; i < n; i++) test(i);
+  const a = tr._dir[best.i], p = S[best.i], side = -Math.sin(a) * (x - p[0]) + Math.cos(a) * (y - p[1]);
+  return { s: best.i * tr.step, d: side, dist: best.dist };
+}
+// kromming vooruit: kleinste bochtstraal in de komende 'ahead' eenheden
+function raceRadiusAhead(tr, s, ahead) {
+  let minR = 99; for (let k = 0; k < ahead; k += .3) { const a1 = raceDirAt(tr, s + k), a2 = raceDirAt(tr, s + k + .6); let da = Math.abs(a2 - a1); if (da > Math.PI) da = 2 * Math.PI - da; const r = da > 1e-4 ? .6 / da : 99; if (r < minR) minR = r; }
+  return minR;
+}
+function raceCar(tr, slot, n) { // startopstelling achter de streep, 2 naast elkaar
+  raceBuild(tr); const row = Math.floor(slot / 2), s = tr.L - .9 - row * .95, lat = (slot % 2 ? -1 : 1) * .38 * (n > 1 ? 1 : 0);
+  const p = raceAt(tr, s), a = raceDirAt(tr, s);
+  return { x: p[0] - Math.sin(a) * lat, y: p[1] + Math.cos(a) * lat, a, v: 0, steer: 0, s, d: lat, dist: 0, lap: 0, next: 4, boost: 0, off: 0, done: false, time: 0, prog: s - tr.L, spin: 0 };
+}
+// Eén stap. input: -1 links, 0, 1 rechts. opt: { vmax, assist }
+function raceStep(tr, c, input, dt, opt) {
+  opt = opt || {}; const pr0 = raceProject(tr, c.x, c.y, c.s), offroad = Math.abs(pr0.d) > RACE.HW;
+  let st = input;
+  if (opt.assist && !input && Math.abs(pr0.d) > RACE.HW + .35) { const ta = raceDirAt(tr, pr0.s + 1) - (pr0.d > 0 ? .9 : -.9); let da = ta - c.a; while (da > Math.PI) da -= 2 * Math.PI; while (da < -Math.PI) da += 2 * Math.PI; st = clamp(da * 2, -1, 1) * .7; }
+  c.steer += (st - c.steer) * Math.min(1, dt * 12);
+  let vmax = (opt.vmax || RACE.VMAX) * (offroad ? (opt.assist ? RACE.GRASS + .12 : RACE.GRASS) : 1); if (c.boost > 0) { vmax *= RACE.BOOST; c.boost -= dt; }
+  const acc = c.v < vmax ? 3.2 : -5; c.v = c.v < vmax ? Math.min(vmax, c.v + acc * dt) : Math.max(vmax, c.v + acc * dt);
+  c.a += c.steer * RACE.TURN * dt * clamp(c.v / 2, .25, 1);
+  c.x += Math.cos(c.a) * c.v * dt; c.y += Math.sin(c.a) * c.v * dt;
+  // zachte rand: ver van de weg wordt je teruggeduwd (niemand raakt kwijt)
+  const pr = raceProject(tr, c.x, c.y, c.s);
+  if (Math.abs(pr.d) > RACE.HW + 1.6) { const p = raceAt(tr, pr.s), k = (Math.abs(pr.d) - RACE.HW - 1.6) * Math.min(1, dt * 6); c.x += (p[0] - c.x) / pr.dist * k; c.y += (p[1] - c.y) / pr.dist * k; }
+  c.x = clamp(c.x, .3, 15.7); c.y = clamp(c.y, .3, 9.7);
+  // afsnijden over het gras (een groot stuk baan overslaan) mag niet: terug naar waar je was
+  let ds = pr.s - c.s; if (ds > tr.L / 2) ds -= tr.L; if (ds < -tr.L / 2) ds += tr.L;
+  if (ds > 5) { const p = raceAt(tr, c.s), a = raceDirAt(tr, c.s); c.x = p[0]; c.y = p[1]; c.a = a; c.v *= .4; c.steer = 0; c.off = 0; return { offroad: false, shortcut: true }; }
+  c.off = Math.abs(pr.d) > RACE.HW ? c.off + dt : 0;
+  // rondes: kwarten in volgorde 0→1→2→3→0
+  const q = Math.floor(pr.s / (tr.L / 4)) % 4;
+  if (q === (c.next % 4)) { if (c.next === 4) { c.lap++; c.next = 1; if (c.lap > RACE.LAPS && !c.done) { c.done = true; c.time = opt.t || 0; } } else c.next++; }
+  c.s = pr.s; c.d = pr.d; c.prog = (c.lap - 1) * tr.L + pr.s + (c.next === 1 && pr.s > tr.L * .75 ? -tr.L : 0);
+  return { offroad: Math.abs(pr.d) > RACE.HW };
+}
+// computerauto: kijk vooruit en stuur naar de lijn (met eigen rijstrook)
+function raceAI(tr, c, lane) {
+  const look = 1.1 + c.v * .18, tp = raceAt(tr, c.s + look), a = raceDirAt(tr, c.s + look), tx = tp[0] - Math.sin(a) * lane, ty = tp[1] + Math.cos(a) * lane;
+  let da = Math.atan2(ty - c.y, tx - c.x) - c.a; while (da > Math.PI) da -= 2 * Math.PI; while (da < -Math.PI) da += 2 * Math.PI;
+  return clamp(da * 2.6, -1, 1);
+}
+// snelheid van een computerauto: rustig in scherpe bochten, en 'elastiek' zodat het spannend blijft
+// inhaal-hulp: wie achter een computerauto zit rijdt een tikje harder (slipstream)
+function raceHelp(cars, c) { return cars.some(o => o.human < 0 && !o.done && o.prog > c.prog + 2.5) ? RACE.VMAX * 1.08 : RACE.VMAX; }
+function raceAISpeed(tr, c, lead, skill) {
+  const r = raceRadiusAhead(tr, c.s, 1.8), corner = clamp(r * RACE.TURN * .88, 2.1, RACE.VMAX);
+  let k = skill; const gap = c.prog - lead;
+  if (gap > 8) k *= .55; else if (gap > 4) k *= .72; else if (gap > 1.5) k *= .84; else if (gap < -6) k *= 1.04;
+  return Math.min(corner, RACE.VMAX * k);
+}
+// auto's tegen elkaar: zachtjes uit elkaar duwen (een computerauto geeft het meeste mee)
+function raceBump(cars) {
+  let hit = false;
+  for (let i = 0; i < cars.length; i++) for (let j = i + 1; j < cars.length; j++) { const a = cars[i], b = cars[j], dx = b.x - a.x, dy = b.y - a.y, d = Math.hypot(dx, dy), m = RACE.CAR_R * 2;
+    if (d < m && d > 1e-6) { const o = m - d, nx = dx / d, ny = dy / d, ha = a.human >= 0, hb = b.human >= 0, ka = ha === hb ? .5 : ha ? .2 : .8, ka2 = o * ka, kb = o - ka2; a.x -= nx * ka2; a.y -= ny * ka2; b.x += nx * kb; b.y += ny * kb; hit = true; } }
+  return hit;
+}
+const raceFmt = t => { if (!t && t !== 0) return '–'; const d = Math.round(t * 10), m = Math.floor(d / 600), s = (d - m * 600) / 10; return `${m}:${s < 10 ? '0' : ''}${s.toFixed(1)}`; };
+// plaats per auto (1 = eerst): klaar = op tijd, anders op afstand
+function racePlaces(cars) { const o = cars.map((c, i) => i).sort((i, j) => { const a = cars[i], b = cars[j]; if (a.done && b.done) return a.time - b.time; if (a.done !== b.done) return a.done ? -1 : 1; return b.prog - a.prog; }); const pl = []; o.forEach((ci, k) => pl[ci] = k + 1); return pl; }
+
+/* ===== minigames/race.js ===== */
+/* =========================================================
+   RACEBAAN – radiografisch bestuurde autootjes van boven gezien (logica in race_logic.js).
+   De auto geeft zelf gas, jij stuurt met ◀ ▶. 3 banen, 3 rondes, gele pijlen en ⚡ geven turbo.
+   1 speler: tegen 1 of 2 computerauto's. 2 spelers: tegelijk, ieder met eigen knoppen aan zijn kant van het scherm
+   (liggend: links en rechts, staand: onder en boven). Iedereen rijdt de race uit: niemand 'verliest' hard.
+   ========================================================= */
+registerMinigame({
+  id: 'racebaan', name: 'Racebaan', emoji: '🏎️', music: 'racebaan', twoMode: 'tegelijk', low: true, firstReward: 'afstandsbediening', fmt: raceFmt,
+  help: 'Je auto geeft zelf gas. Jij stuurt met <b>◀ en ▶</b> (of de pijltjes / A en D). Op het gras ga je langzamer. Rij over de gele pijlen en pak de ⚡ voor turbo! 3 rondes.',
+  coins: () => 10, bonusText: 'Word 1e in een race voor 1 energie (1x per dag)',
+  recText: () => RACE_TRACKS.map(t => `${t.emoji} ${raceFmt(S.hi['racebaan_' + t.id])}`).join(' · '),
+  create: api => new RaceGame(api),
+});
+const RACE_AI = [{ name: 'Rode Raket', col: '#e8403a' }, { name: 'Groene Flits', col: '#2fb35a' }, { name: 'Paarse Pijl', col: '#9b5de5' }];
+const RACE_DT = 1 / 120;
+class RaceGame {
+  constructor(api) {
+    this.api = api; this.ctx = api.ctx; this.players = api.players; this.state = 'choose'; this.t = 0; this.acc = 0; this.W = api.W; this.H = api.H;
+    this.nAI = this.players.length > 1 ? 1 : 2; this.keys = {}; this.hold = this.players.map(() => ({ l: 0, r: 0 })); this.parts = []; this.pops = []; this.btns = [];
+    this.tr = raceBuild(RACE_TRACKS[0]); this.layout();
+    this.choose().then(i => { if (MG.inst === this) this.start(i); });
+  }
+  destroy() { const el = $('#mgBanner'); el.classList.remove('show'); }
+  resize(W, H) { this.W = W; this.H = H; this.layout(); this.placeButtons(); }
+  /* ---------- baan kiezen ---------- */
+  choose() {
+    const el = $('#mgBanner'), many = this.players.length > 1;
+    const aiOpts = many ? [0, 1] : [1, 2];
+    const render = () => {
+      el.innerHTML = `<h2 style="margin:0 0 6px">🏎️ Kies een baan</h2><div style="display:flex;gap:8px;justify-content:center;flex-wrap:nowrap">${RACE_TRACKS.map((t, i) => `<button class="btn white" data-t="${i}" style="display:flex;flex-direction:column;align-items:center;padding:6px 8px;gap:2px;min-width:0"><canvas width="132" height="82" style="width:min(110px,24vw);aspect-ratio:132/82;height:auto;border-radius:10px"></canvas><b style="font-size:.85em">${t.emoji} ${t.name}</b><small style="font-size:.7em;font-weight:600">🏆 ${raceFmt(S.hi['racebaan_' + t.id])}</small></button>`).join('')}</div>
+        <div style="margin-top:8px;font-size:.85em;font-weight:700">Computerauto's: ${aiOpts.map(n => `<button class="btn ${n === this.nAI ? 'green' : 'white'}" data-ai="${n}" style="padding:4px 14px;min-width:0;font-size:1em">${n}</button>`).join(' ')}</div>`;
+      el.querySelectorAll('canvas').forEach((cv, i) => this.thumb(cv, RACE_TRACKS[i]));
+    };
+    render(); el.classList.add('show'); el.onclick = null;
+    return new Promise(res => {
+      el.onclick = e => {
+        const a = e.target.closest('[data-ai]'), b = e.target.closest('[data-t]');
+        if (a) { SFX.click(); this.nAI = +a.dataset.ai; render(); return; }
+        if (b) { SFX.click(); el.classList.remove('show'); el.onclick = null; res(+b.dataset.t); }
+      };
+    });
+  }
+  thumb(cv, tr) {
+    raceBuild(tr); const c = cv.getContext('2d'), k = cv.width / 16; c.setTransform(k, 0, 0, k, 0, 0);
+    c.fillStyle = tr.deco === 'woestijn' ? '#e9c98a' : tr.deco === 'bos' ? '#3f9a4a' : '#5fb048'; c.fillRect(0, 0, 16, 10);
+    c.strokeStyle = '#4a4f5c'; c.lineWidth = RACE.HW * 2; c.lineJoin = 'round'; c.beginPath(); tr._s.forEach((p, i) => i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1])); c.closePath(); c.stroke();
+    const p = raceAt(tr, 0); c.fillStyle = '#fff'; c.fillRect(p[0] - .12, p[1] - RACE.HW, .24, RACE.HW * 2);
+  }
+  /* ---------- start ---------- */
+  start(ti) {
+    this.tr = raceBuild(RACE_TRACKS[ti]); this.ti = ti; const many = this.players.length > 1;
+    const list = this.players.map((p, i) => ({ human: i, name: p.name, col: p.col })).concat(RACE_AI.slice(0, this.nAI).map((a, i) => ({ human: -1, name: a.name, col: a.col, lane: [.3, -.3, 0][i], skill: .8 - i * .04 })));
+    this.cars = list.map((o, slot) => Object.assign(raceCar(this.tr, slot, list.length), o));
+    this.zaps = (this.tr.zaps || []).map(([f, lat]) => { const s = f * this.tr.L, p = raceAt(this.tr, s), a = raceDirAt(this.tr, s); return { x: p[0] - Math.sin(a) * lat, y: p[1] + Math.cos(a) * lat, on: true, t: 0 }; });
+    this.deco = this.makeDeco(); this.raceT = 0; this.firstDone = null; this.state = 'count'; this.count = 3.2; this.lastBeep = 4; this.layout(); this.makeButtons();
+    $('#mgTitle').textContent = `🏎️ ${this.tr.name}`; void many;
+  }
+  makeDeco() {
+    const tr = this.tr, out = []; let i = 0;
+    while (out.length < 34 && i < 400) { i++; const x = .4 + hash2(i, 31 + this.ti) * 15.2, y = .4 + hash2(17 + this.ti, i) * 9.2; if (raceProject(tr, x, y).dist < RACE.HW + .55) continue; if (out.some(o => Math.hypot(o.x - x, o.y - y) < .8)) continue; out.push({ x, y, k: hash2(i, i + 3), r: .25 + hash2(i + 5, 2) * .3 }); }
+    return out;
+  }
+  /* ---------- knoppen ---------- */
+  makeButtons() {
+    $('#mgCtl').innerHTML = ''; this.btns = [];
+    this.players.forEach((p, i) => {
+      const h = this.hold[i], sub = this.players.length > 1 ? esc(p.name.slice(0, 9)) : '';
+      const L = this.api.button('◀', sub, () => { h.l = 1; }, () => { h.l = 0; }, { color: hexA(p.col, .85) });
+      const R = this.api.button('▶', sub, () => { h.r = 1; }, () => { h.r = 0; }, { color: hexA(p.col, .85) });
+      [L, R].forEach(b => { b.style.color = '#fff'; b.style.textShadow = '0 2px 0 rgba(0,0,0,.3)'; });
+      this.btns.push([L, R]);
+    });
+    this.placeButtons();
+  }
+  placeButtons() {
+    if (!this.btns.length) return; const W = this.W, H = this.H, rot = this.rot, many = this.players.length > 1, bw = this.bw, g = 12;
+    const P = (b, x, y, flip) => { this.api.place(b, x, y, bw, bw, bw * .45); b.style.transform = flip ? 'rotate(180deg)' : ''; };
+    const [L1, R1] = this.btns[0];
+    if (!many) { P(L1, g, H - bw - g); P(R1, W - bw - g, H - bw - g); return; }
+    const [L2, R2] = this.btns[1];
+    if (!rot) { P(L1, g, H - bw - g); P(R1, g * 2 + bw, H - bw - g); P(L2, W - 2 * bw - g * 2, H - bw - g); P(R2, W - bw - g, H - bw - g); }
+    else { P(L1, g, H - bw - g); P(R1, W - bw - g, H - bw - g); const ty = 66; P(L2, W - bw - g, ty, true); P(R2, g, ty, true); } // speler 2 zit tegenover: zijn links = scherm-rechts
+  }
+  /* ---------- schermindeling ---------- */
+  layout() {
+    const W = this.W, H = this.H, many = this.players.length > 1, rot = H > W * 1.05;
+    this.bw = Math.round(clamp(Math.min(W, H) * .2, 64, 104));
+    let top = 60, bot = 8, side = 8;
+    if (rot) { bot = this.bw + 20; if (many) top = 66 + this.bw + 10; }
+    else side = many ? this.bw * 2 + 30 : this.bw + 20;
+    const aw = W - side * 2, ah = H - top - bot; let k;
+    if (!rot) { k = Math.min(aw / 16, ah / 10); const ox = (W - 16 * k) / 2, oy = top + (ah - 10 * k) / 2; this.M = [k, 0, 0, k, ox, oy]; }
+    else { k = Math.min(aw / 10, ah / 16); const ex = (W - 10 * k) / 2, ey = top + (ah - 16 * k) / 2; this.M = [0, -k, k, 0, ex, ey + 16 * k]; }
+    this.k = k; this.rot = rot;
+  }
+  S(x, y) { const m = this.M; return [m[0] * x + m[2] * y + m[4], m[1] * x + m[3] * y + m[5]]; }
+  key(k, down) {
+    const many = this.players.length > 1, v = down ? 1 : 0;
+    const map = many ? { a: [0, 'l'], d: [0, 'r'], q: [0, 'l'], e: [0, 'r'], arrowleft: [1, 'l'], arrowright: [1, 'r'] } : { a: [0, 'l'], d: [0, 'r'], arrowleft: [0, 'l'], arrowright: [0, 'r'] };
+    const m = map[k]; if (!m) return false; this.hold[m[0]]['k' + m[1]] = v;
+  }
+  input(i) { const h = this.hold[i]; return ((h.r || h.kr) ? 1 : 0) - ((h.l || h.kl) ? 1 : 0); }
+  /* ---------- update ---------- */
+  tick(dt) {
+    this.t += dt;
+    if (this.state === 'count') {
+      this.count -= dt; const n = Math.ceil(this.count);
+      if (n < this.lastBeep && n >= 1 && n <= 3) { this.lastBeep = n; SFX.beep(false); }
+      if (this.count <= 0) { this.state = 'race'; SFX.beep(true); SFX.vroom(); }
+    }
+    if (this.state === 'race' || this.state === 'end') {
+      this.acc += dt;
+      while (this.acc >= RACE_DT) { this.acc -= RACE_DT; this.step(RACE_DT); }
+      if (((this.t * 5) | 0) !== this.lastTitle) { this.lastTitle = (this.t * 5) | 0; $('#mgTitle').textContent = `🏎️ ${this.tr.name} · ${raceFmt(this.raceT)}`; }
+    }
+    this.parts = this.parts.filter(q => (q.t -= dt) > 0); this.parts.forEach(q => { q.x += q.vx * dt; q.y += q.vy * dt; });
+    this.pops = this.pops.filter(p => (p.t += dt) < 2.2);
+    if (this.cars) this.draw(); else this.drawBg();
+  }
+  step(dt) {
+    const tr = this.tr, humans = this.cars.filter(c => c.human >= 0); this.raceT += dt;
+    const lead = Math.max(...humans.map(c => c.prog));
+    for (const c of this.cars) {
+      if (c.human >= 0) { if (c.done) { raceStep(tr, c, raceAI(tr, c, 0), dt, { vmax: RACE.VMAX * .55, t: this.raceT }); continue; } const r = raceStep(tr, c, this.input(c.human), dt, { assist: true, t: this.raceT, vmax: raceHelp(this.cars, c) }); if (r.shortcut) { SFX.nope(); this.pops.push({ txt: 'Hup, terug op de baan! 😉', who: c, t: 0, small: true }); this.sparkAt(c.x, c.y); } }
+      else raceStep(tr, c, raceAI(tr, c, c.lane), dt, { vmax: c.done ? RACE.VMAX * .55 : raceAISpeed(tr, c, lead, c.skill), t: this.raceT });
+      // turbo-pijlen
+      for (const f of tr.pads || []) { const ps = f * tr.L; let ds = c.s - ps; if (ds > tr.L / 2) ds -= tr.L; if (ds < -tr.L / 2) ds += tr.L; if (Math.abs(ds) < .35 && Math.abs(c.d) < RACE.HW && c.boost < .7) { c.boost = 1; if (c.human >= 0) SFX.boost(); this.flame(c); } }
+      for (const z of this.zaps) if (z.on && Math.hypot(c.x - z.x, c.y - z.y) < .5) { z.on = false; z.t = 1.5; c.boost = 1.6; if (c.human >= 0) SFX.zap(); this.sparkAt(z.x, z.y); }
+      if (c.done && !c.doneSeen) { c.doneSeen = true; this.onFinish(c); }
+    }
+    for (const z of this.zaps) if (!z.on && (z.t -= dt) <= 0) z.on = true;
+    if (raceBump(this.cars) && this.t - (this.lastBump || 0) > .25) { this.lastBump = this.t; SFX.carbump(); }
+    // einde: als alle spelers binnen zijn (of 25 tellen na de eerste speler)
+    if (this.state === 'race' && humans.every(c => c.done)) { this.state = 'end'; setTimeout(() => this.finish(), 1600); }
+    if (this.state === 'race' && this.firstDone != null && this.raceT - this.firstDone > 25) { humans.filter(c => !c.done).forEach(c => { c.done = true; c.time = this.raceT + Math.max(0, (RACE.LAPS * tr.L - c.prog) / 3); c.doneSeen = true; }); this.state = 'end'; setTimeout(() => this.finish(), 800); }
+  }
+  onFinish(c) {
+    if (c.human < 0) return; if (this.firstDone == null) this.firstDone = this.raceT;
+    const pl = racePlaces(this.cars)[this.cars.indexOf(c)];
+    this.pops.push({ txt: pl === 1 ? '🏆 1e plek!' : `🏁 ${pl}e plek!`, who: c, t: 0 }); pl === 1 ? SFX.fanfare() : SFX.spare();
+  }
+  finish() {
+    if (MG.inst !== this || this.state === 'done') return; this.state = 'done';
+    const places = racePlaces(this.cars), humans = this.cars.filter(c => c.human >= 0), tr = this.tr;
+    const scores = humans.map(c => { const pl = places[this.cars.indexOf(c)]; return { name: c.name, score: Math.round(c.time * 10) / 10, text: `${pl}e · ${raceFmt(c.time)}`, pl }; });
+    const bestPl = Math.min(...scores.map(s => s.pl)), best = Math.min(...scores.map(s => s.score));
+    let winner = null; if (scores.length > 1) winner = scores[0].pl < scores[1].pl ? 0 : 1;
+    const others = this.cars.length > 1;
+    if (others && bestPl === 1) achieve('race1');
+    S.stats.raceTracks = S.stats.raceTracks || {}; S.stats.raceTracks[tr.id] = 1; if (RACE_TRACKS.every(t => S.stats.raceTracks[t.id])) achieve('race3');
+    const lines = [`🏁 ${tr.name} · ${RACE.LAPS} rondes`].concat(scores.map(s => `${esc(s.name)}: <b>${s.pl}e plek</b>${s.pl === 1 && others ? ' 🏆' : ''}`));
+    lines.push(bestPl === 1 ? 'Kampioen! Wat kun jij goed sturen!' : 'Goed gereden! Volgende keer win jij misschien!');
+    this.api.end({ scores: scores.map(({ name, score, text }) => ({ name, score, text })), winner, best, lines, coins: [25, 18, 13, 10][bestPl - 1] || 10, bonus: others && bestPl === 1, hiKey: 'racebaan_' + tr.id, recName: tr.name });
+  }
+  flame(c) { for (let i = 0; i < 6; i++) this.parts.push({ wx: true, x: c.x - Math.cos(c.a) * .35, y: c.y - Math.sin(c.a) * .35, vx: -Math.cos(c.a) * rnd(.5, 1.5) + rnd(-.3, .3), vy: -Math.sin(c.a) * rnd(.5, 1.5) + rnd(-.3, .3), t: rnd(.2, .45), c: pick(['#ffd23f', '#ff8a1f', '#fff']), r: rnd(.05, .1) }); }
+  sparkAt(x, y) { for (let i = 0; i < 12; i++) { const a = i / 12 * 6.28; this.parts.push({ wx: true, x, y, vx: Math.cos(a) * 2, vy: Math.sin(a) * 2, t: .4, c: pick(['#ffd23f', '#fff', '#5ef0ff']), r: .07 }); } }
+  /* ---------- tekenen ---------- */
+  drawBg() { const c = this.ctx, d = this.api.dpr; c.setTransform(d, 0, 0, d, 0, 0); c.fillStyle = '#2c6b3a'; c.fillRect(0, 0, this.W, this.H); }
+  draw() {
+    const c = this.ctx, dpr = this.api.dpr, W = this.W, H = this.H, tr = this.tr, m = this.M, t = this.t;
+    const theme = tr.deco, grass = theme === 'woestijn' ? '#e9c98a' : theme === 'bos' ? '#3f9a4a' : '#5fb048';
+    c.setTransform(dpr, 0, 0, dpr, 0, 0); c.fillStyle = theme === 'woestijn' ? '#c9a464' : '#2c6b3a'; c.fillRect(0, 0, W, H);
+    c.setTransform(dpr * m[0], dpr * m[1], dpr * m[2], dpr * m[3], dpr * m[4], dpr * m[5]);
+    c.fillStyle = grass; rrect(c, 0, 0, 16, 10, .5); c.fill();
+    for (let i = 0; i < 60; i++) dot(c, hash2(i, 3) * 16, hash2(3, i) * 10, .05, theme === 'woestijn' ? '#d4b06e' : 'rgba(255,255,255,.12)');
+    // weg
+    const path = () => { c.beginPath(); tr._s.forEach((p, i) => i ? c.lineTo(p[0], p[1]) : c.moveTo(p[0], p[1])); c.closePath(); };
+    c.lineJoin = 'round'; c.lineCap = 'round';
+    path(); c.strokeStyle = 'rgba(0,0,0,.18)'; c.lineWidth = RACE.HW * 2 + .5; c.stroke();
+    path(); c.strokeStyle = '#fff'; c.lineWidth = RACE.HW * 2 + .26; c.stroke(); c.setLineDash([.45, .45]); c.strokeStyle = '#e8403a'; c.stroke(); c.setLineDash([]);
+    path(); c.strokeStyle = '#4a4f5c'; c.lineWidth = RACE.HW * 2; c.stroke();
+    path(); c.strokeStyle = 'rgba(255,255,255,.55)'; c.lineWidth = .06; c.setLineDash([.4, .5]); c.stroke(); c.setLineDash([]);
+    // start/finish (geblokt)
+    { const p = raceAt(tr, 0), a = raceDirAt(tr, 0); c.save(); c.translate(p[0], p[1]); c.rotate(a); for (let i = 0; i < 8; i++) for (let j = 0; j < 2; j++) { c.fillStyle = (i + j) % 2 ? '#1f2a44' : '#fff'; c.fillRect(-.2 + j * .2, -RACE.HW + i * RACE.HW / 4, .2, RACE.HW / 4); } c.restore(); }
+    // turbo-pijlen
+    for (const f of tr.pads || []) { const s = f * tr.L, p = raceAt(tr, s), a = raceDirAt(tr, s); c.save(); c.translate(p[0], p[1]); c.rotate(a); c.fillStyle = 'rgba(255,210,63,.9)'; rrect(c, -.36, -.62, .72, 1.24, .12); c.fill(); c.fillStyle = '#ff8a1f';
+      for (let k = 0; k < 2; k++) { const off = ((t * 2 + k * .5) % 1) * .3 - .2; c.beginPath(); c.moveTo(-.12 + off, -.42); c.lineTo(.12 + off, 0); c.lineTo(-.12 + off, .42); c.lineTo(-.24 + off, .42); c.lineTo(0 + off, 0); c.lineTo(-.24 + off, -.42); c.fill(); } c.restore(); }
+    // versiering naast de weg
+    for (const d of this.deco) this.drawDeco(c, d, theme);
+    // ⚡
+    for (const z of this.zaps) if (z.on) { const b = Math.sin(t * 4 + z.x) * .05; dot(c, z.x, z.y, .32 + b, 'rgba(255,240,150,.55)'); drawIcon(c, 'energie', z.x, z.y, .55); }
+    // auto's
+    const ord = this.cars.slice().sort((a, b) => a.y - b.y);
+    for (const car of ord) this.drawCar(c, car);
+    for (const q of this.parts) if (q.wx) dot(c, q.x, q.y, q.r, q.c);
+    // schermlaag: namen, HUD, aftellen
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    for (const car of this.cars) if (car.human >= 0 && this.players.length > 1) { const [sx, sy] = this.S(car.x, car.y); c.fillStyle = car.col; c.beginPath(); c.moveTo(sx, sy - 14); c.lineTo(sx - 6, sy - 24); c.lineTo(sx + 6, sy - 24); c.fill(); }
+    this.drawHud(c);
+    if (this.state === 'count') this.drawLights(c);
+    for (const p of this.pops) { const car = p.who, k = Math.min(1, p.t * 4), [sx, sy] = this.S(car.x, car.y); c.save(); c.globalAlpha = Math.min(1, (2.2 - p.t) * 2); c.font = `900 ${p.small ? 18 : 26}px system-ui, sans-serif`; const tw = c.measureText(p.txt).width / 2 + 10; c.translate(clamp(sx, tw, W - tw), clamp(sy - 40 - p.t * 10, 90, H - 40)); c.scale(k, k); c.textAlign = 'center'; c.lineWidth = 6; c.strokeStyle = 'rgba(0,0,0,.55)'; c.strokeText(p.txt, 0, 0); c.fillStyle = '#ffd23f'; c.fillText(p.txt, 0, 0); c.restore(); }
+  }
+  drawDeco(c, d, theme) {
+    if (theme === 'woestijn') { if (d.k < .45) { c.fillStyle = '#3c9a4a'; rrect(c, d.x - .08, d.y - .35, .16, .5, .08); c.fill(); rrect(c, d.x - .25, d.y - .2, .1, .22, .05); c.fill(); rrect(c, d.x + .15, d.y - .28, .1, .2, .05); c.fill(); } else dot(c, d.x, d.y, d.r * .6, '#b9925a'); return; }
+    if (theme === 'bos' || d.k < .3) { dot(c, d.x + .08, d.y + .1, d.r + .1, 'rgba(0,0,0,.18)'); dot(c, d.x, d.y, d.r + .1, d.k < .5 ? '#2a7a3a' : '#21703a'); dot(c, d.x - .08, d.y - .08, d.r * .6, '#3cae5a'); return; }
+    const cols = ['#ff6fa8', '#ffd23f', '#fff', '#9b5de5']; for (let i = 0; i < 3; i++) dot(c, d.x + Math.cos(i * 2.1 + d.k * 6) * .16, d.y + Math.sin(i * 2.1 + d.k * 6) * .16, .07, cols[(i + Math.floor(d.k * 4)) % 4]);
+  }
+  drawCar(c, car) {
+    c.save(); c.translate(car.x, car.y); c.rotate(car.a); c.scale(1.2, 1.2);
+    c.fillStyle = 'rgba(0,0,0,.25)'; rrect(c, -.3, -.17, .66, .42, .12); c.fill();
+    if (car.boost > 0) { c.fillStyle = (this.t * 20 | 0) % 2 ? '#ffd23f' : '#ff8a1f'; c.beginPath(); c.moveTo(-.33, -.09); c.lineTo(-.55 - Math.random() * .15, 0); c.lineTo(-.33, .09); c.fill(); }
+    c.fillStyle = '#1f2a44'; for (const [wx, wy] of [[-.2, -.21], [.17, -.21], [-.2, .21], [.17, .21]]) { c.save(); c.translate(wx, wy); if (wx > 0) c.rotate(car.steer * .4); rrect(c, -.08, -.045, .16, .09, .03); c.fill(); c.restore(); }
+    c.fillStyle = car.col; rrect(c, -.32, -.19, .64, .38, .13); c.fill(); c.strokeStyle = '#1f2a44'; c.lineWidth = .035; c.stroke();
+    c.fillStyle = 'rgba(255,255,255,.85)'; rrect(c, .02, -.13, .14, .26, .05); c.fill();
+    c.fillStyle = 'rgba(255,255,255,.35)'; c.fillRect(-.26, -.03, .26, .06);
+    c.strokeStyle = '#1f2a44'; c.lineWidth = .025; c.beginPath(); c.moveTo(-.22, .1); c.lineTo(-.38, .26); c.stroke(); dot(c, -.38, .26, .04, (this.t * 3 | 0) % 2 ? '#e8403a' : '#ffd23f');
+    c.restore();
+  }
+  drawHud(c) {
+    const W = this.W, H = this.H, many = this.players.length > 1, places = racePlaces(this.cars);
+    this.cars.filter(car => car.human >= 0).forEach(car => {
+      const i = car.human, lap = clamp(car.lap, 1, RACE.LAPS), pl = places[this.cars.indexOf(car)];
+      const txt = car.done ? `🏁 ${pl}e` : `Ronde ${lap}/${RACE.LAPS} · ${pl}e`, w = 150, h = 30;
+      let x, y, flip = false;
+      if (!this.rot) { x = many ? (i === 0 ? 12 : W - w - 12) : 12; y = 66; }
+      else { x = W / 2 - w / 2; y = i === 0 ? H - this.bw - 12 - h - 4 : 66 + this.bw + 8; flip = i === 1; if (!many) y = H - this.bw - h - 16; }
+      c.save(); c.translate(x + w / 2, y + h / 2); if (flip) c.rotate(Math.PI);
+      c.fillStyle = 'rgba(255,255,255,.93)'; rrect(c, -w / 2, -h / 2, w, h, 15); c.fill(); c.strokeStyle = car.col; c.lineWidth = 3; c.stroke();
+      c.fillStyle = '#1f2a44'; c.font = '800 14px system-ui, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(txt, 0, 1); c.restore();
+    });
+  }
+  drawLights(c) {
+    const W = this.W, H = this.H, n = Math.ceil(this.count), cx = W / 2, cy = H * .45, r = Math.min(26, W / 16);
+    c.fillStyle = 'rgba(31,42,68,.9)'; rrect(c, cx - r * 4, cy - r * 1.4, r * 8, r * 2.8, r); c.fill();
+    for (let i = 0; i < 3; i++) dot(c, cx + (i - 1) * r * 2.5, cy, r * .85, n <= 3 && i < 4 - n ? '#e8403a' : '#3b3f4a');
+    c.fillStyle = '#fff'; c.font = `900 ${r}px system-ui, sans-serif`; c.textAlign = 'center'; c.textBaseline = 'alphabetic'; c.fillText('Klaar voor de start…', cx, cy + r * 2.6);
+  }
+}
+function hexA(hex, a) { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`; }
 
 /* ===== main.js ===== */
 /* =========================================================
