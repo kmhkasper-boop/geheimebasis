@@ -273,6 +273,76 @@ h1,h2,h3{margin:0}
 #mgCtl .tb small{font-size:12px;position:absolute;bottom:3px;left:0;right:0;text-align:center;font-weight:600}
 .mgbanner{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:6;background:#fff;border-radius:28px;padding:18px 26px;box-shadow:0 8px 0 rgba(0,0,0,.3);text-align:center;display:none;max-width:90vw;pointer-events:auto}
 .mgbanner.show{display:block;animation:popin .3s}
+/* ---------- escaperoom ---------- */
+#er{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;pointer-events:none;padding:calc(66px + var(--safe-t)) 12px calc(14px + var(--safe-b))}
+.erpanel{pointer-events:auto;background:rgba(255,255,255,.96);border-radius:26px;box-shadow:0 8px 0 rgba(0,0,0,.3);padding:12px 14px;width:min(640px,96vw);max-height:100%;overflow:auto;text-align:center;display:flex;flex-direction:column;gap:6px}
+.erhead{display:flex;align-items:center;gap:8px;justify-content:space-between;font-weight:700}
+.erhead b{flex:1;text-align:center}
+.ergrid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.erst{background:#f4f6fb;border:3px solid #d5dced;border-radius:18px;padding:8px 6px;display:flex;flex-direction:column;align-items:center;gap:1px;font-weight:700;color:var(--ink);min-height:92px}
+.erst.done{background:#e7f8ec;border-color:#8dcea0}
+.erst small{font-weight:600;color:var(--ink2);font-size:.78em}
+.erbig{font-size:2em;line-height:1.1}
+.erdoor{margin-top:2px;background:#3a2a5e;color:#fff;border-radius:16px;padding:10px;font-weight:700;font-size:1.05em}
+.erdoor.ready{background:var(--green);animation:pulse 1.4s infinite}
+.erdoor:disabled{opacity:.55;animation:none}
+.ercodeline{display:block;letter-spacing:.3em;font-size:1.15em}
+.erq{margin:2px 0;font-weight:700}
+.ersums{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.ersum{display:flex;gap:6px;align-items:center;font-weight:700;font-size:1.15em}
+.erfield{display:inline-flex;align-items:center;justify-content:center;min-width:46px;height:46px;border-radius:12px;border:3px solid #c9d1df;background:#fff;font-weight:700}
+.erfield.on{border-color:var(--blue)} .erfield.ok{background:#e7f8ec;border-color:#8dcea0}
+.erkeys{display:grid;grid-template-columns:repeat(3,64px);gap:6px;justify-content:center}
+.erkeys button{height:52px;border-radius:14px;background:#fff;box-shadow:0 4px 0 #c9d1df;font-weight:700;font-size:1.25em;color:var(--ink)}
+.erkeys button:active{transform:translateY(3px);box-shadow:0 1px 0 #c9d1df}
+.erkeys button.ok{background:var(--green);color:#fff;box-shadow:0 4px 0 #0e5a2a}
+.erkeys button.ok::before,.erkeys button.ok::after{content:none}
+.erslots{display:flex;gap:5px;justify-content:center}
+.erslot{width:38px;height:46px;border-bottom:4px solid var(--ink);font-size:1.5em;font-weight:700;display:flex;align-items:center;justify-content:center}
+.erslot.fix{color:var(--blue)}
+.erletters{display:flex;gap:5px;justify-content:center;flex-wrap:wrap}
+.erlet{min-width:42px;height:46px;border-radius:12px;background:#fff;box-shadow:0 3px 0 #c9d1df;font-weight:700;font-size:1.2em;color:var(--ink);padding:0 6px}
+.erlet:disabled{opacity:.3} .erlet.del{background:#ffe8a3}
+.erword{font-size:2em;font-weight:700;letter-spacing:.12em}
+.ergap{display:inline-block;min-width:.9em;border-bottom:4px solid var(--ink);color:var(--blue)}
+.erchoices{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.erchoices.col{flex-direction:column;align-items:center}
+.erch{background:#fff;border:3px solid #d5dced;border-radius:16px;padding:6px 10px;font-weight:700;color:var(--ink);min-width:64px}
+.erch.txt{font-size:1.25em;min-width:90px} .erch.pic{display:flex;flex-direction:column;align-items:center;min-width:84px}
+.erch.out{opacity:.25;text-decoration:line-through}
+.erch:active{transform:translateY(2px)}
+.ertok{display:inline-flex;width:34px;height:34px;align-items:center;justify-content:center;vertical-align:middle}
+.ertok svg{width:34px;height:34px}
+.ertok.num{width:auto;min-width:34px;font-weight:700;font-size:1.3em;padding:0 4px}
+.ertok.op{width:auto;font-weight:700;font-size:1.4em}
+.ertok.q{font-size:1.6em;font-weight:700;color:var(--blue)}
+.erseq{display:flex;gap:3px;justify-content:center;align-items:center;flex-wrap:wrap}
+.erunit{background:#fff3c4;border-radius:10px;padding:2px}
+.erroom{position:relative;height:min(250px,34vh);background:linear-gradient(#4a3870 62%,#6b4e34 62%);border-radius:16px;border:3px solid #2a1d44;overflow:hidden}
+.erobj{position:absolute;transform:translate(-50%,-50%);font-size:clamp(30px,5.2vmin,46px);background:rgba(255,255,255,.14);border-radius:50%;padding:6px;line-height:1}
+.erobj:active{transform:translate(-50%,-50%) scale(.92)}
+.erobj.looked{filter:grayscale(.7);opacity:.6}
+.erobj.found{filter:none;opacity:1}
+.erobj.spark{animation:pulse .8s infinite}
+.erpiece{position:absolute;right:-8px;top:-10px;font-size:16px}
+.erpieces{font-size:1.4em;letter-spacing:.2em}
+.erempty{opacity:.25}
+.erriddle{font-size:1.15em;font-style:italic;margin:2px 0}
+.erbig2{font-size:1.8em;line-height:1}
+.ermsg{margin:2px 0;min-height:1.3em;font-weight:700;font-size:.92em}
+.ermsg.good{color:var(--green)} .ermsg.bad{color:var(--red)} .ermsg.tip{color:#8a5a00}
+.erfoot{display:flex;justify-content:flex-end}
+.erturn{color:#fff;border-radius:999px;padding:.1em .7em;font-size:.8em;font-weight:700}
+.ernote{background:#fff7d6;border:2px dashed #e2b93b;border-radius:12px;padding:.25em .6em;font-weight:700}
+.ernotes{display:flex;gap:6px;justify-content:center;flex-wrap:wrap}
+.erkey{min-width:130px;min-height:110px;border-radius:24px;color:#fff;font-weight:700;font-size:2em;box-shadow:0 6px 0 rgba(0,0,0,.3);display:inline-flex;flex-direction:column;align-items:center;justify-content:center;touch-action:none}
+.erkey small{font-size:.4em} .erkey.down{transform:translateY(5px);box-shadow:0 1px 0 rgba(0,0,0,.3);filter:brightness(1.15)}
+.erkeys2{display:flex;gap:16px;justify-content:center}
+.erbar{height:16px;border-radius:999px;background:#e6e9f2;overflow:hidden;margin-top:8px}
+.erbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffd23f,#2fb35a)}
+@media (max-height:500px){ #er{padding-top:calc(58px + var(--safe-t));padding-bottom:6px} .erpanel{padding:8px 12px;gap:3px;width:min(780px,96vw)} .erbig{font-size:1.45em} .erkeys{grid-template-columns:repeat(6,50px)} .erkeys button{height:40px}
+  .erword{font-size:1.5em} .erchoices.col{flex-direction:row} .erst{min-height:68px;padding:4px} .erroom{height:42vh} .erkey{min-height:78px} .erslot{height:36px} .erlet{height:40px} .erfield{height:40px;min-width:42px} .erq{font-size:.95em} }
+@media (max-width:460px){ .erkeys{grid-template-columns:repeat(3,56px)} .erkeys button{height:46px} .erroom{height:30vh} .erlet{min-width:36px;height:42px} .erslot{width:30px;height:40px} }
 .mgbanner h2{font-size:1.6em}
 .plsel{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
 .plsel button{background:#f3f6fb;border-radius:22px;padding:12px 16px;display:flex;flex-direction:column;align-items:center;gap:4px;min-width:150px;font-weight:700;border:4px solid transparent;box-shadow:var(--shadow)}
@@ -787,7 +857,7 @@ function drum(ctx, out, kind, t, vel) {
 const MAJOR = [0, 2, 4, 5, 7, 9, 11], MINOR = [0, 2, 3, 5, 7, 8, 10];
 const semiIn = (sc, d) => sc[((d % 7) + 7) % 7] + 12 * Math.floor(d / 7);
 const hzOf = (root, d, sc) => root * Math.pow(2, semiIn(sc || MAJOR, d) / 12);
-const CHORD = { I: [0, 2, 4], ii: [1, 3, 5], iii: [2, 4, 6], IV: [3, 5, 7], V: [4, 6, 8], vi: [5, 7, 9] };
+const CHORD = { I: [0, 2, 4], ii: [1, 3, 5], iii: [2, 4, 6], IV: [3, 5, 7], iv: [3, 5, 7], V: [4, 6, 8], v: [4, 6, 8], vi: [5, 7, 9] };
 const TRACKS = {
   titel: { naam: 'Titel', bpm: 112, root: 392, swing: .1, lead: 'bell', lv: .18, bv: .2, pad: .014, stab: 0,
     bass: 'r - - - f - o -', drums: { k: 'x . . . x . . .', z: '. . x . . . x .' }, prog: 'I V vi IV I V IV I',
@@ -813,6 +883,9 @@ const TRACKS = {
   minigolf: { naam: 'Minigolf', bpm: 104, root: 392, swing: .18, lead: 'marimba', lv: .19, bv: .18, pad: .01, stab: .025,
     bass: 'r . f . r . f .', stabs: '. x . . . x . .', drums: { k: 'x . . . x . . .', z: '. . x . . . x .', h: '. x . x . x . x' }, prog: 'I vi ii V I vi IV V',
     mel: ['4 . 2 . 0 . 2 4', '5 . 4 . 2 - - .', '1 . 3 . 5 . 3 1', '4 - - - . . . .', '4 . 5 . 7 . 5 4', '9 . 7 . 5 - - .', '6 . 5 . 4 . 3 2', '0 - - - . . . .'] },
+  escaperoom: { naam: 'Escaperoom', bpm: 88, root: 293.66, scale: MINOR, swing: .1, lead: 'marimba', lv: .15, bv: .16, pad: .02, stab: 0,
+    bass: 'r . . o r . f .', drums: { k: 'x . . . . . x .', h: '. . x . . . x .' }, prog: 'I vi iv v I vi iv v',
+    mel: ['0 . 2 . 3 . 2 .', '4 - . 3 2 . . .', '0 . 2 . 3 . 5 .', '4 - - - . . . .', '7 . 5 . 4 . 3 .', '2 . 3 . 4 - . .', '3 . 2 . 1 . 2 .', '0 - - - . . . .'] },
   racebaan: { naam: 'Racebaan', bpm: 144, root: 392, swing: 0, lead: 'chip', lv: .12, bv: .22, pad: 0, stab: .025,
     bass: 'r r o r r r o r', stabs: '. x . x . x . x', drums: { k: 'x . . . x . . .', z: '. . x . . . x .', h: 'x x x x x x x x' }, prog: 'I I IV V I I IV V',
     mel: ['0 . 2 4 . 4 7 .', '7 . 5 4 . 2 4 .', '3 . 5 7 . 7 9 .', '8 . 7 . 4 . . .', '0 . 2 4 . 4 7 .', '9 . 7 4 . 2 4 .', '5 . 4 . 2 . 1 .', '0 - - - 4 . 7 .'] },
@@ -915,6 +988,7 @@ const SFX = {
   found() { duck(1.6, .3); [523, 659, 784, 1047].forEach((f, i) => { tone(f, .2, 'triangle', .09, i * .09); tone(f * 2, .14, 'sine', .02, i * .09); }); [1047, 1319, 1568].forEach(f => tone(f, .9, 'sine', .04, .4)); },
   open() { noise(.22, .06, 0, 420, .7, 'lowpass', 900); tone(130, .08, 'sine', .1, .18, 70); },
   door() { noise(.35, .06, 0, 500, 1, 'bandpass', 1600); tone(220, .25, 'triangle', .05, 0, 160); tone(110, .12, 'sine', .1, .28, 60); },
+  correct() { duck(.7, .45); tone(659, .1, 'triangle', .08); tone(988, .16, 'triangle', .08, .08); bellHit(1976, .03, .14, .3); },
   nope() { duck(.6, .5); tone(392, .18, 'sine', .1, 0, 262); tone(294, .22, 'triangle', .05, .12, 220); },
   hammer() { [0, .16, .32].forEach(w => { bellHit(1900 + Math.random() * 300, .05, w, .2); noise(.04, .08, w, 3000, 2); }); },
   build() { duck(3, .25); [523, 659, 784, 1047].forEach((f, i) => { tone(f, .22, 'triangle', .1, i * .1); tone(f / 2, .22, 'sine', .06, i * .1); });
@@ -1406,7 +1480,7 @@ registerRoom({ id: 'blokken', name: 'Blokkenkamer', emoji: '🧱', order: 2, slo
 registerRoom({ id: 'flipper', name: 'Flipperkastkamer', emoji: '🕹️', order: 3, slot: 'N', floor: 'F', machine: 'flipper', minigame: 'flipper', desc: 'Flipper de bal omhoog en scoor punten!' });
 registerRoom({ id: 'minigolf', name: 'Minigolf', emoji: '⛳', order: 4, slot: 'S', floor: 'O', machine: 'minigolf', minigame: 'minigolf', desc: '6 holes met bumpers, een heuvel, een windmolen en water!' });
 registerRoom({ id: 'racebaan', name: 'Racebaan', emoji: '🏎️', order: 5, slot: 'NW', floor: 'A', machine: 'racebaan', minigame: 'racebaan', desc: 'Race met radiografische autootjes: 3 banen, 3 rondes!' });
-registerRoom({ id: 'escaperoom', name: 'Escaperoom', emoji: '🔐', order: 6, slot: 'NE', floor: 'M', soon: true, desc: 'Binnenkort!' });
+registerRoom({ id: 'escaperoom', name: 'Escaperoom', emoji: '🔐', order: 6, slot: 'NE', floor: 'M', machine: 'escaperoom', minigame: 'escaperoom', desc: 'Puzzels, raadsels en een deur op slot. Kunnen jullie ontsnappen?' });
 const roomList = () => Object.values(GB.ROOMS).sort((a, b) => a.order - b.order);
 
 /* ===== data/achievements.js ===== */
@@ -1435,6 +1509,10 @@ function registerAch(o) { GB.ACHIEVEMENTS[o.id] = o; }
   { id: 'golfpar', icon: '🏌️', name: 'Golfprof', desc: 'Een hele minigolfronde op of onder par (18 slagen).' },
   { id: 'race1', icon: '🏎️', name: 'Racekampioen', desc: 'Als eerste over de finish in de Racebaan.' },
   { id: 'race3', icon: '🏁', name: 'Alle banen', desc: 'Op alle 3 de racebanen gereden.' },
+  { id: 'escape1', icon: '🔓', name: 'Ontsnapt!', desc: 'Voor het eerst uit de escaperoom ontsnapt.' },
+  { id: 'escapehint', icon: '🧠', name: 'Slimme speurder', desc: 'Uit de escaperoom ontsnapt zonder één tip.' },
+  { id: 'escape5', icon: '🗝️', name: 'Escape-meester', desc: '5 keer uit de escaperoom ontsnapt.' },
+  { id: 'escapesnel', icon: '⏱️', name: 'Snelle speurder', desc: 'Met tijd binnen 6 minuten ontsnapt.' },
   { id: 'vliegtekening', icon: '🗺️', name: 'Nog een uitvinding!', desc: 'De vliegtekening gevonden.' },
   { id: 'vliegbot', icon: '🚁', name: 'Piloot', desc: 'De Vliegbot gebouwd!' },
   { id: 'vlieg5', icon: '🪺', name: 'Hoog in de lucht', desc: 'Alle 5 hoge plekken bezocht met de Vliegbot.' },
@@ -1956,7 +2034,7 @@ function molStatus() {
   const r = nextRoom();
   if (!robotBuilt('supermol')) return { text: 'De Supermol is nog niet gebouwd.', next: null };
   if (!flag('baseOpen')) return { text: 'De Supermol wacht in de kelder op een plek om te graven.', next: r };
-  if (!r) return { text: 'Alle kamers zijn gegraven! Nieuwe kamers komen binnenkort.', next: null };
+  if (!r) return { text: 'Alle kamers zijn gegraven! Wat een geheime basis!', next: null };
   return { text: `Volgende kamer: ${r.emoji} ${r.name}`, next: r, ms: msToMidnight() };
 }
 
@@ -2288,6 +2366,7 @@ function goalKey() {
     if (!S.seenItems.vliegtekening) { if (isDug('minigolf')) return 'vliegkist'; }
     else return vliegHave() < VLIEG_PARTS.length ? 'vliegdelen' : 'vliegbouwen';
   } else if (flyCount() < allFlySpots().length && !(S.flags.flyGoalSkip > 0)) return 'vliegen';
+  if (isDug('escaperoom') && !flag('first_escaperoom')) return 'escape';
   return nextRoom() ? 'wachten' : 'klaar';
 }
 function nextGoal() {
@@ -2305,7 +2384,8 @@ function nextGoal() {
     vliegbouwen: '🛠️ Bouw de Vliegbot aan de werkbank in de speelkamer',
     vliegen: `🚁 Vlieg naar de hoge plekken (${flyCount()}/${allFlySpots().length})`,
     wachten: r ? `⛏️ Morgen graaft de Supermol de ${r.name}! (of verzamel 3 ⚡)` : '',
-    klaar: '🎉 Alle kamers zijn gegraven! Binnenkort komen er meer.',
+    escape: '🔐 Ontsnap uit de Escaperoom (rechtsboven in de basis)',
+    klaar: '🎉 Alle kamers zijn klaar! Speel, verzamel en haal alle prestaties.',
   }[k];
 }
 function hint() {
@@ -2343,6 +2423,7 @@ function hint() {
     if (m === 'afstandsbediening') return GB.MINIGAMES.racebaan && isDug('racebaan') ? 'Rij een keer de hele race uit in de Racebaan. Dan krijgen we de afstandsbediening!' : 'De afstandsbediening krijgen we bij de Racebaan. Die graaft de Supermol binnenkort!';
   }
   if (k === 'vliegbouwen') return 'We hebben alle 4 onderdelen! Snel naar de werkbank in de speelkamer!';
+  if (k === 'escape') return 'In de Escaperoom (rechtsboven in de basis) zitten puzzels en raadsels. Elke puzzel geeft een cijfer voor de deur. Lukt het ons om te ontsnappen?';
   if (k === 'vliegen') { const l = allFlySpots().filter(sp => !flyDone(sp)); return `Met de Vliegbot kunnen we nog bij ${l.map(s => s.name).join(', ')}. Loop erheen en tik op 🚁 Vlieg!`; }
   const tips = [];
   if (S.flags.energieFound < 4 || !S.flags.energieFound) tips.push(`Er zijn 4 energie-batterijen verstopt. We hebben er ${S.flags.energieFound || 0} gevonden!`);
@@ -2486,6 +2567,7 @@ BUS.on('found', async id => {
   if (id === 'bouwtekening') { achieve('tekening'); await talk([['f', 'Wauw! Een SUPERMOL! Een robot die kan graven!'], ['p', 'Daarmee kunnen we een geheime basis ONDER het huis graven!'], ['f', 'We hebben 5 onderdelen nodig: een boorkop, rupswieltjes, een robot-batterij, een motor en een graafschep.']]); updateHud(); return; }
   if (id === 'vliegtekening') { achieve('vliegtekening'); await talk([['f', 'Kijk! Een VLIEGBOT! Een robot die kan vliegen!'], ['p', 'Dan kunnen we overal bij: op het dak, in de grote boom…'], ['f', 'We hebben 4 onderdelen nodig: propellers, een afstandsbediening, een camera en een licht frame.'], ['p', 'Op zoek!']]); updateHud(); return; }
   if (VLIEG_PARTS.includes(id)) { const n = vliegHave(); friendSays(n >= VLIEG_PARTS.length ? 'Alle onderdelen van de Vliegbot! Snel naar de werkbank!' : `Een onderdeel van de Vliegbot! Nog ${VLIEG_PARTS.length - n} te gaan!`, 5); return; }
+  if (id === 'trofee') { friendSays('Een echte Escape-trofee! Wij zijn de slimste speurders van de hele basis!', 5); return; }
   if (id === 'tandwiel') { await talk([['p', 'Er staat een vreemd teken op… een robot met een hamer?'], ['f', 'Zou er nóg een robot bestaan? Bewaar dat tandwiel goed!']]); return; }
   if (ROBOT_PARTS.includes(id)) {
     achieve('eerste'); const n = partsHave();
@@ -3065,7 +3147,7 @@ function drawHQMap() {
    key(k, down, e), destroy(), onPause(p). api: cv, ctx, ctl, W, H, dpr, players, banner(), button(), place(), end().
    Extra opties: low: true (lager is beter, bv. slagen of tijd), fmt(v) (hoe een score eruitziet), firstReward: 'item'
    (krijg je de eerste keer dat je het spel uitspeelt), recText() (eigen record-tekst). end(res) mag res.coins, res.bonus
-   en res.hiKey (record per baan) zelf invullen.
+   en res.hiKey (record per baan) zelf invullen; res.title (eigen kop) en res.noRecord (telt niet als record).
    ========================================================= */
 const mgFmt = (g, v) => g.fmt ? g.fmt(v) : fmtNum(v);
 const mgRecText = (g, id) => g.recText ? g.recText() : S.hi[id] == null || (!S.hi[id] && g.low) ? '–' : mgFmt(g, S.hi[id] || 0);
@@ -3165,7 +3247,7 @@ document.addEventListener('visibilitychange', () => { if (document.hidden && MG.
 function mgFinish(res) {
   const id = MG.id, g = GB.MINIGAMES[id], today = dayKey();
   const best = res.best != null ? res.best : (g.low ? Math.min : Math.max)(...res.scores.map(s => s.score));
-  const hk = res.hiKey || id, old = S.hi[hk], rec = g.low ? (!old || best < old) : best > (old || 0); if (rec) S.hi[hk] = best;
+  const hk = res.hiKey || id, old = S.hi[hk], rec = !res.noRecord && (g.low ? (!old || best < old) : best > (old || 0)); if (rec) S.hi[hk] = best;
   const coins = res.coins != null ? Math.max(1, res.coins) : Math.max(1, g.coins(best)); addMunten(coins);
   if (S.daily.day !== today) { S.daily.day = today; S.daily.bonus = {}; }
   let bonus = false; if ((res.bonus != null ? res.bonus : best >= g.bonusAt) && !S.daily.bonus[id]) { S.daily.bonus[id] = 1; addEnergie(1); bonus = true; }
@@ -3173,7 +3255,7 @@ function mgFinish(res) {
   let first = null; if (g.firstReward && !flag('first_' + id) && !(VLIEG_PARTS.includes(g.firstReward) && (robotBuilt('vliegbot') || S.seenItems[g.firstReward]))) { S.flags['first_' + id] = 1; first = g.firstReward; giveItem(first); }
   save();
   const many = res.scores.length > 1;
-  $('#resultCard').innerHTML = `<h2>${many ? (res.winner == null ? '🤝 Gelijkspel!' : `🏆 ${esc(res.scores[res.winner].name)} wint!`) : rec ? '🎉 Nieuw record!' : '👏 Goed gespeeld!'}</h2>
+  $('#resultCard').innerHTML = `<h2>${res.title && !rec ? res.title : res.title && rec ? res.title + ' Nieuw record!' : many ? (res.winner == null ? '🤝 Gelijkspel!' : `🏆 ${esc(res.scores[res.winner].name)} wint!`) : rec ? '🎉 Nieuw record!' : '👏 Goed gespeeld!'}</h2>
     <table class="scoretab">${res.scores.map((s, i) => `<tr><td>${many && i === res.winner ? '👑 ' : ''}${esc(s.name)}</td><td style="text-align:right"><b>${s.text || mgFmt(g, s.score)}</b></td></tr>`).join('')}</table>
     ${(res.lines || []).map(l => `<p style="margin:0">${l}</p>`).join('')}
     ${many && rec ? '<p style="margin:0">🎉 Nieuw record!</p>' : ''}<p style="margin:0">🏆 Record${res.hiKey && res.recName ? ` ${esc(res.recName)}` : ''}: <b>${res.hiKey ? mgFmt(g, S.hi[hk]) : mgRecText(g, id)}</b></p>
@@ -4644,7 +4726,7 @@ const RACE_TRACKS = [
     pads: [.14, .58], zaps: [[.3, .45], [.8, -.45]], deco: 'bloemen' },
   { id: 'bos', name: 'Bochtenbos', emoji: '🌲', desc: 'Een haarspeldbocht tussen de bomen.',
     pts: [[7, 1.6], [12.8, 1.6], [14.4, 2.8], [13.4, 4.0], [10, 4.0], [8.6, 5.2], [10, 6.4], [13.2, 6.4], [14.4, 7.5], [13.2, 8.6], [4, 8.6], [1.8, 7.4], [1.6, 4.6], [2.4, 2.4], [4.4, 1.6]],
-    pads: [.06, .7], zaps: [[.42, 0], [.86, .4]], deco: 'bos' },
+    pads: [.06, .7], zaps: [[.42, 0], [.86, .4]], aiK: .93, deco: 'bos' },
   { id: 'slinger', name: 'Slingerweg', emoji: '🐍', desc: 'Slinger als een slang door de bochten!',
     pts: [[12, 1.6], [13.3, 1.8], [14.4, 3.2], [14.2, 6.6], [13, 8.6], [11.4, 8.6], [10, 6.6], [8, 5.8], [6, 6.6], [4.6, 8.6], [3, 8.6], [1.6, 7.2], [1.6, 3], [3, 1.6], [5, 1.7], [7.5, 2.7], [10, 1.7]],
     pads: [.03, .62], zaps: [[.27, -.4], [.75, .4]], deco: 'woestijn' },
@@ -4720,7 +4802,7 @@ function raceAI(tr, c, lane) {
 function raceHelp(cars, c) { return cars.some(o => o.human < 0 && !o.done && o.prog > c.prog + 2.5) ? RACE.VMAX * 1.08 : RACE.VMAX; }
 function raceAISpeed(tr, c, lead, skill) {
   const r = raceRadiusAhead(tr, c.s, 1.8), corner = clamp(r * RACE.TURN * .88, 2.1, RACE.VMAX);
-  let k = skill; const gap = c.prog - lead;
+  let k = skill * (tr.aiK || 1); const gap = c.prog - lead;
   if (gap > 8) k *= .55; else if (gap > 4) k *= .72; else if (gap > 1.5) k *= .84; else if (gap < -6) k *= 1.04;
   return Math.min(corner, RACE.VMAX * k);
 }
@@ -4965,6 +5047,450 @@ class RaceGame {
   }
 }
 function hexA(hex, a) { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16},${(n >> 8) & 255},${n & 255},${a})`; }
+
+/* ===== minigames/escape_logic.js ===== */
+/* =========================================================
+   ESCAPEROOM: puzzels (pure logica, geen tekenen; getest in tests/unit.js)
+   Een kamer = 4 stations + de deur. Elk station geeft 1 cijfer van de deurcode.
+     1. kluis   (rekenen)  : 3 sommen = de code van de kist. Makkelijk → tafel van 6/7/8 klein → 6/7/8 groot of delen.
+     2. woord   (taal)     : husselwoord, ontbrekende klank (ei/ij, au/ou, d/t) of 'welk woord is goed geschreven?'
+     3. zoek    (speuren)  : doorzoek de kamer, vind 3 verstopte puzzelstukjes (tips zijn kleine raadsels)
+     4. denk    (logica)   : patronen (kleur, vorm, getallen/kleuren mengen) of raadsels
+   Alles komt uit mulberry32(seed): dezelfde seed = dezelfde kamer. Niveau: groep 5.
+   Hints: elk stapje heeft oplopende hints; de laatste hint lost het stapje (bijna) op, zodat niemand vast blijft zitten.
+   ========================================================= */
+const ESC_STATIONS = [
+  { id: 'kluis', name: 'De kist', emoji: '🧰', what: 'Rekenen' },
+  { id: 'woord', name: 'De boekenkast', emoji: '📚', what: 'Woorden' },
+  { id: 'zoek', name: 'Doorzoek de kamer', emoji: '🔍', what: 'Speuren' },
+  { id: 'denk', name: 'De puzzeltafel', emoji: '🧩', what: 'Slim denken' },
+];
+const ESC_WORD_KINDS = ['hussel', 'klank', 'spelling'];
+const ESC_DENK_KINDS = ['patroon', 'raadsel'];
+const ESC_COLORS = { rood: '#e8403a', blauw: '#3f6fe0', geel: '#ffd23f', groen: '#2fb35a', paars: '#9b5de5', oranje: '#ff8a1f', roze: '#ff8fc8', grijs: '#9aa3b5', wit: '#ffffff', zwart: '#2a2a33' };
+const ESC_SHAPES = ['rond', 'vierkant', 'driehoek', 'ster'];
+const eInt = (R, a, b) => a + Math.floor(R() * (b - a + 1));
+const ePick = (a, R) => a[Math.floor(R() * a.length)];
+const eShuffle = (a, R) => { a = a.slice(); for (let i = a.length - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)); [a[i], a[j]] = [a[j], a[i]]; } return a; };
+const escFmt = t => { if (t == null || !isFinite(t)) return '–'; const s = Math.round(t); return `${Math.floor(s / 60)}:${s % 60 < 10 ? '0' : ''}${s % 60}`; };
+
+/* ---------- 1. kluis: drie sommen ---------- */
+function escSum(R, level) {
+  let a, b, op, ans;
+  if (level === 0) { // makkelijk: plus/min zonder over het tiental, of de tafel van 2, 5 of 10
+    const k = ePick(['plus', 'min', 'tafel'], R);
+    if (k === 'plus') { const ta = eInt(R, 1, 5), tb = eInt(R, 1, 3), oa = eInt(R, 0, 6), ob = eInt(R, 1, 9 - oa); a = ta * 10 + oa; b = tb * 10 + ob; op = '+'; ans = a + b; }
+    else if (k === 'min') { const ta = eInt(R, 4, 9), tb = eInt(R, 1, ta - 1), oa = eInt(R, 3, 9), ob = eInt(R, 1, oa); a = ta * 10 + oa; b = tb * 10 + ob; op = '−'; ans = a - b; }
+    else { a = ePick([2, 5, 10], R); b = eInt(R, 2, 9); op = '×'; ans = a * b; if (R() < .5) [a, b] = [b, a]; }
+  } else if (level === 1) { a = ePick([6, 7, 8], R); b = eInt(R, 2, 5); op = '×'; ans = a * b; if (R() < .4) [a, b] = [b, a]; }
+  else if (R() < .55) { a = ePick([6, 7, 8], R); b = eInt(R, 3, 10); op = '×'; ans = a * b; }
+  else { b = ePick([6, 7, 8], R); ans = eInt(R, 2, 9); a = b * ans; op = ':'; }
+  return { a, b, op, ans, txt: `${a} ${op} ${b}`, tip: escSumTip(a, op, b, ans) };
+}
+function escSumTip(a, op, b, ans) {
+  if (op === '×') { const [n, k] = [6, 7, 8, 2, 5, 10].includes(a) ? [a, b] : [b, a];
+    return k <= 5 ? `${k} × ${n} is ${k} keer ${n}: ${Array(k).fill(n).join(' + ')}` : `5 × ${n} = ${5 * n}. Daar komen nog ${k - 5} × ${n} bij.`; }
+  if (op === ':') return `Hoe vaak past ${b} in ${a}? Tel in sprongen van ${b}: ${b}, ${2 * b}, ${3 * b}, …`;
+  const ta = a - a % 10, tb = b - b % 10;
+  return op === '+' ? `Eerst de tientallen: ${ta} + ${tb} = ${ta + tb}. Dan de rest: ${a % 10} + ${b % 10} = ${a % 10 + b % 10}.`
+    : `Eerst de tientallen: ${ta} − ${tb} = ${ta - tb}. Dan de rest: ${a % 10} − ${b % 10} = ${a % 10 - b % 10}.`;
+}
+function escKluis(R) { return { kind: 'kluis', steps: [0, 1, 2].map(l => escSum(R, l)) }; }
+
+/* ---------- 2. woorden ---------- */
+const ESC_HUSSEL = [['robot', '🤖'], ['raket', '🚀'], ['zebra', '🦓'], ['appel', '🍎'], ['ballon', '🎈'], ['wortel', '🥕'], ['kikker', '🐸'], ['vlinder', '🦋'],
+  ['pizza', '🍕'], ['trein', '🚂'], ['konijn', '🐰'], ['tomaat', '🍅'], ['giraf', '🦒'], ['schaap', '🐑'], ['fiets', '🚲'], ['slang', '🐍'], ['boek', '📕'], ['taart', '🎂'],
+  ['sleutel', '🔑'], ['kasteel', '🏰'], ['banaan', '🍌'], ['tijger', '🐅'], ['spin', '🕷️'], ['egel', '🦔'], ['maan', '🌙'], ['wolk', '☁️']];
+function escHussel(R) {
+  const [word, emoji] = ePick(ESC_HUSSEL, R); let letters;
+  do { letters = eShuffle([...word], R); } while (letters.join('') === word);
+  return { kind: 'hussel', word, emoji, letters, steps: [{ ans: word }] };
+}
+// _ = de plek van de klank. pair = de twee keuzes, long = het woord langer gemaakt (voor d/t)
+const ESC_KLANK = [
+  ['tr_n', '🚂', 'ei', 'ei/ij'], ['g_t', '🐐', 'ei', 'ei/ij'], ['pl_ster', '🩹', 'ei', 'ei/ij'], ['_', '🥚', 'ei', 'ei/ij'],
+  ['t_ger', '🐅', 'ij', 'ei/ij'], ['_s', '🍦', 'ij', 'ei/ij'], ['p_l', '🏹', 'ij', 'ei/ij'], ['r_st', '🍚', 'ij', 'ei/ij'], ['pr_s', '🏆', 'ij', 'ei/ij'],
+  ['_to', '🚗', 'au', 'au/ou'], ['p_w', '🦚', 'au', 'au/ou'], ['bl_w', '🔵', 'au', 'au/ou'],
+  ['h_t', '🪵', 'ou', 'au/ou'], ['g_d', '🥇', 'ou', 'au/ou'], ['z_t', '🧂', 'ou', 'au/ou'], ['vr_w', '👩', 'ou', 'au/ou'], ['k_d', '🥶', 'ou', 'au/ou'],
+  ['hon_', '🐕', 'd', 'd/t', 'honden'], ['paar_', '🐴', 'd', 'd/t', 'paarden'], ['hoe_', '🎩', 'd', 'd/t', 'hoeden'], ['han_', '✋', 'd', 'd/t', 'handen'], ['tan_', '🦷', 'd', 'd/t', 'tanden'],
+  ['har_', '❤️', 't', 'd/t', 'harten'], ['boo_', '⛵', 't', 'd/t', 'boten'], ['voe_', '🦶', 't', 'd/t', 'voeten'], ['taar_', '🎂', 't', 'd/t', 'taarten'], ['plan_', '🪴', 't', 'd/t', 'planten'],
+];
+function escKlankTip(s) {
+  if (s.pair === 'd/t') return `Maak het woord langer: één ${s.word}, twee ${s.long}. Hoor je een d of een t?`;
+  if (s.pair === 'ei/ij') return 'De ei en de ij klinken hetzelfde. Die moet je onthouden: zie je het woord voor je?';
+  return 'De au en de ou klinken hetzelfde. Die moet je onthouden: zie je het woord voor je?';
+}
+function escKlank(R) {
+  const list = eShuffle(ESC_KLANK, R).slice(0, 3);
+  return { kind: 'klank', steps: list.map(([gap, emoji, ans, pair, long]) => { const s = { gap, emoji, ans, pair, word: gap.replace('_', ans), long, choices: pair.split('/') }; s.tip = escKlankTip(s); return s; }) };
+}
+const ESC_SPELLING = [['olifant', 'olivant', 'ollifant', '🐘'], ['giraf', 'gieraf', 'girraf', '🦒'], ['banaan', 'bannaan', 'banan', '🍌'], ['kikker', 'kiker', 'kikkur', '🐸'],
+  ['vlinder', 'flinder', 'vlindur', '🦋'], ['schaap', 'sgaap', 'schaab', '🐑'], ['kasteel', 'kastiel', 'kastel', '🏰'], ['aardbei', 'aardbij', 'aartbei', '🍓'],
+  ['regenboog', 'reegenboog', 'regenbooch', '🌈'], ['taart', 'taard', 'tart', '🎂'], ['brood', 'broot', 'brod', '🍞'], ['muis', 'mijs', 'muys', '🐭'],
+  ['konijn', 'konein', 'konijnn', '🐰'], ['paraplu', 'parraplu', 'paraploe', '☂️'], ['tomaat', 'tommaat', 'tomat', '🍅'], ['wortel', 'worttel', 'wortul', '🥕'],
+  ['schildpad', 'schiltpad', 'sgildpad', '🐢'], ['zebra', 'zeebra', 'sebra', '🦓'], ['egel', 'eegel', 'egul', '🦔'], ['leeuw', 'leew', 'leeuwe', '🦁']];
+function escSpelling(R) {
+  const list = eShuffle(ESC_SPELLING, R).slice(0, 3);
+  return { kind: 'spelling', steps: list.map(([ok, w1, w2, emoji]) => ({ emoji, ans: ok, choices: eShuffle([ok, w1, w2], R), tip: 'Spreek het woord langzaam uit en kijk goed naar elke letter.' })) };
+}
+
+/* ---------- 3. zoek: de kamer doorzoeken ---------- */
+const ESC_OBJECTS = [
+  ['klok', '🕰️', 'de klok', 'Kijk eens bij iets dat tik-tak zegt.', 'Tik-tak… alleen een klok.'],
+  ['plant', '🪴', 'de plant', 'Kijk bij iets groens dat water drinkt.', 'Alleen aarde en blaadjes.'],
+  ['boeken', '📚', 'de boeken', 'Kijk bij iets met heel veel bladzijden.', 'Boeken over dino’s. Geen stukje.'],
+  ['schilderij', '🖼️', 'het schilderij', 'Kijk achter iets moois aan de muur.', 'Een mooi schilderij, verder niks.'],
+  ['lamp', '💡', 'de lamp', 'Kijk bij iets dat licht geeft.', 'Een lamp. Hier ligt niks.'],
+  ['knuffel', '🧸', 'de knuffel', 'Kijk bij iets zachts om mee te knuffelen.', 'Een lieve beer. Niks onder hem.'],
+  ['prullenbak', '🗑️', 'de prullenbak', 'Kijk in iets waar je afval in gooit.', 'Bah! Alleen bananenschillen.'],
+  ['doos', '📦', 'de doos', 'Kijk in iets van karton.', 'Een lege doos.'],
+  ['stoel', '🪑', 'de stoel', 'Kijk onder iets waar je op zit.', 'Er zit alleen oude kauwgom onder. Bah!'],
+  ['hoed', '🎩', 'de hoed', 'Kijk onder iets dat je op je hoofd zet.', 'Geen konijn en geen stukje.'],
+  ['paraplu', '☂️', 'de paraplu', 'Kijk bij iets dat je gebruikt als het regent.', 'Droog en leeg.'],
+  ['mand', '🧺', 'de mand', 'Kijk in iets van gevlochten riet.', 'Alleen sokken. Vieze sokken!'],
+  ['wereldbol', '🌍', 'de wereldbol', 'Kijk bij de hele wereld… in het klein!', 'Een wereldbol. Draai, draai!'],
+  ['gitaar', '🎸', 'de gitaar', 'Kijk bij iets waar je muziek mee maakt.', 'Tingeling! Geen stukje.'],
+];
+// vaste plekken in de kamer (procent van breedte/hoogte): muur boven, vloer onder
+const ESC_SLOTS = [[12, 22], [37, 18], [63, 20], [88, 24], [10, 70], [30, 82], [52, 66], [72, 84], [90, 68]];
+function escZoek(R) {
+  const objs = eShuffle(ESC_OBJECTS, R).slice(0, ESC_SLOTS.length);
+  const hide = eShuffle(objs.map((_, i) => i), R).slice(0, 3);
+  return { kind: 'zoek', objs: objs.map(([id, emoji, name, tip, empty], i) => ({ id, emoji, name, tip, empty, x: ESC_SLOTS[i][0] + eInt(R, -3, 3), y: ESC_SLOTS[i][1] + eInt(R, -3, 3), hide: hide.includes(i) })),
+    steps: hide.map(i => ({ ans: i })) };
+}
+
+/* ---------- 4. denken: patronen of raadsels ---------- */
+function escRowKleur(R) {
+  const units = [[0, 1], [0, 0, 1], [0, 1, 2], [0, 1, 1]];
+  const unit = ePick(units, R), cols = eShuffle(['rood', 'blauw', 'geel', 'groen', 'paars', 'oranje'], R).slice(0, 3);
+  const n = unit.length === 2 ? 6 : 6, seq = [];
+  for (let i = 0; i < n; i++) seq.push('c:' + cols[unit[i % unit.length]]);
+  const ans = 'c:' + cols[unit[n % unit.length]];
+  const choices = eShuffle([ans, ...eShuffle(cols.map(c => 'c:' + c).concat(['c:roze']).filter(c => c !== ans), R).slice(0, 2)], R);
+  return { row: 'kleur', seq, ans, choices, unit: unit.length, tip: `Kijk goed: na ${unit.length} kleuren begint het weer opnieuw.` };
+}
+function escRowVorm(R) {
+  const shapes = eShuffle(ESC_SHAPES, R).slice(0, 3), cols = eShuffle(['rood', 'blauw', 'geel', 'groen', 'paars'], R).slice(0, 3);
+  const L = R() < .5 ? 2 : 3, unit = [...Array(L)].map((_, i) => `s:${shapes[i]}:${cols[i]}`), seq = [];
+  for (let i = 0; i < 6; i++) seq.push(unit[i % L]);
+  const ans = unit[6 % L];
+  const fakes = [`s:${shapes[0]}:${cols[1]}`, `s:${shapes[1]}:${cols[0]}`, `s:${shapes[2]}:${cols[0]}`, `s:${ESC_SHAPES.find(s => !shapes.includes(s))}:${cols[0]}`].filter(t => t !== ans && !unit.slice(0, L).includes(t) || false);
+  const choices = eShuffle([ans, ...eShuffle(fakes, R).slice(0, 2)], R);
+  return { row: 'vorm', seq, ans, choices, unit: L, tip: 'Let op de vorm én de kleur. Wat komt er steeds terug?' };
+}
+function escRowGetal(R) {
+  const step = ePick([2, 5, 10, 3, 6, 7, 8], R), start = [6, 7, 8].includes(step) ? step : eInt(R, 1, 20);
+  const seq = [0, 1, 2, 3].map(i => 'n:' + (start + i * step)), v = start + 4 * step;
+  const wrong = new Set([v + 1, v - 1, v + step, v - 2].filter(x => x > 0 && x !== v));
+  return { row: 'getal', seq, ans: 'n:' + v, choices: eShuffle(['n:' + v, ...eShuffle([...wrong], R).slice(0, 2).map(x => 'n:' + x)], R), unit: 1,
+    tip: [6, 7, 8].includes(step) && start === step ? `Dit is de tafel van ${step}! Wat is 5 × ${step}?` : `Er komt steeds ${step} bij.` };
+}
+const ESC_MIX = [['rood', 'geel', 'oranje'], ['blauw', 'geel', 'groen'], ['rood', 'blauw', 'paars'], ['rood', 'wit', 'roze'], ['zwart', 'wit', 'grijs']];
+function escRowMix(R) {
+  const [a, b, c] = ePick(ESC_MIX, R);
+  const others = ['oranje', 'groen', 'paars', 'roze', 'grijs'].filter(x => x !== c);
+  return { row: 'mix', seq: ['c:' + a, 'op:+', 'c:' + b, 'op:='], ans: 'c:' + c, choices: eShuffle(['c:' + c, ...eShuffle(others, R).slice(0, 2).map(x => 'c:' + x)], R), unit: 0,
+    tip: `Als je ${a} en ${b} verf door elkaar roert… welke kleur krijg je dan?` };
+}
+function escPatroon(R) { return { kind: 'patroon', steps: [escRowKleur(R), escRowVorm(R), R() < .6 ? escRowGetal(R) : escRowMix(R)] }; }
+const ESC_ANSWERS = { klok: ['🕰️', 'klok'], munt: ['🪙', 'munt'], spons: ['🧽', 'spons'], zeep: ['🧼', 'zeep'], boek: ['📖', 'boek'], fles: ['🍾', 'fles'], piano: ['🎹', 'piano'],
+  neus: ['👃', 'neus'], ei: ['🥚', 'ei'], sleutel: ['🔑', 'sleutel'], paraplu: ['☂️', 'paraplu'], kaars: ['🕯️', 'kaars'], potlood: ['✏️', 'potlood'], schaar: ['✂️', 'schaar'],
+  spiegel: ['🪞', 'spiegel'], sneeuwpop: ['⛄', 'sneeuwpop'], stoel: ['🪑', 'stoel'], regenboog: ['🌈', 'regenboog'] };
+const ESC_RIDDLES = [
+  ['Ik heb wijzers, maar geen handen.', 'Ik zeg de hele dag tik-tak.', 'klok'],
+  ['Ik heb een kop, maar geen nek.', 'Je kunt met mij kop of munt spelen.', 'munt'],
+  ['Ik zit vol gaatjes, maar toch hou ik water vast.', 'Je doet de afwas met mij.', 'spons'],
+  ['Hoe meer je mij gebruikt, hoe kleiner ik word.', 'Je wast je handen met mij.', 'zeep'],
+  ['Ik heb blaadjes, maar ik ben geen boom.', 'Je kunt in mij lezen.', 'boek'],
+  ['Ik heb een hals, maar geen hoofd.', 'Er zit vaak sap of water in mij.', 'fles'],
+  ['Ik heb toetsen, maar ik ben geen computer.', 'Als je op mij speelt, hoor je muziek.', 'piano'],
+  ['Ik loop, maar ik heb geen benen.', 'Ik zit midden in je gezicht. Als je verkouden bent, loop ik extra hard!', 'neus'],
+  ['Ik moet eerst breken voordat je mij kunt gebruiken.', 'Een kip legt mij.', 'ei'],
+  ['Ik heb een baard, maar ik ben geen opa.', 'Je maakt een deur open met mij.', 'sleutel'],
+  ['Ik ga open als het regent.', 'Je houdt mij boven je hoofd.', 'paraplu'],
+  ['Ik word korter als ik brand.', 'Je zet mij op een verjaardagstaart.', 'kaars'],
+  ['Ik ben scherp, maar ik ben geen mes. Als ik bot ben, slijp je mij.', 'Je tekent en schrijft met mij.', 'potlood'],
+  ['Ik heb twee ogen, maar ik kan niet zien.', 'Ik knip papier.', 'schaar'],
+  ['Als je naar mij kijkt, kijk jij terug.', 'Ik hang vaak in de badkamer.', 'spiegel'],
+  ['Ik heb een wortel als neus en ik smelt in de zon.', 'Je maakt mij in de winter.', 'sneeuwpop'],
+  ['Ik heb vier poten, maar ik kan niet lopen.', 'Je gaat op mij zitten.', 'stoel'],
+  ['Ik kom als het regent én de zon schijnt.', 'Ik heb heel veel kleuren.', 'regenboog'],
+];
+function escRaadsel(R) {
+  const list = eShuffle(ESC_RIDDLES, R).slice(0, 2), keys = Object.keys(ESC_ANSWERS);
+  return { kind: 'raadsel', steps: list.map(([q, extra, ans]) => ({ q, extra, ans, choices: eShuffle([ans, ...eShuffle(keys.filter(k => k !== ans && !list.some(l => l[2] === k)), R).slice(0, 2)], R), tip: extra })) };
+}
+
+/* ---------- de hele kamer ---------- */
+const ESC_MAKE = { kluis: escKluis, hussel: escHussel, klank: escKlank, spelling: escSpelling, zoek: escZoek, patroon: escPatroon, raadsel: escRaadsel };
+function escBuild(seed, opt) {
+  opt = opt || {}; const R = mulberry32(seed >>> 0);
+  const wk = opt.woord || ePick(ESC_WORD_KINDS, R), dk = opt.denk || ePick(ESC_DENK_KINDS, R);
+  const puzzles = [escKluis(R), ESC_MAKE[wk](R), escZoek(R), ESC_MAKE[dk](R)];
+  const code = eShuffle([1, 2, 3, 4, 5, 6, 7, 8, 9], R).slice(0, 4);
+  return { seed, puzzles, code };
+}
+// een stapje controleren (val = wat het kind koos/typte)
+function escCheck(p, step, val) {
+  const s = p.steps[step]; if (!s) return false;
+  if (p.kind === 'kluis') return +val === s.ans;
+  if (p.kind === 'hussel') return String(val).toLowerCase() === s.ans;
+  if (p.kind === 'zoek') return p.objs[+val] && p.objs[+val].hide;
+  return String(val) === String(s.ans);
+}
+// hoeveel hints heeft een stapje (de laatste lost het op of laat alleen het goede antwoord over)
+function escHintMax(p) { return { kluis: 3, hussel: p.word ? p.word.length : 3, klank: 2, spelling: 2, zoek: 2, patroon: 3, raadsel: 3 }[p.kind] || 2; }
+// welke keuzes vallen af bij hintniveau lv (voor keuze-puzzels): de foute, in vaste volgorde
+function escFaded(p, step, lv) {
+  const s = p.steps[step]; if (!s || !s.choices) return [];
+  const wrong = s.choices.filter(c => String(c) !== String(s.ans));
+  const n = p.kind === 'spelling' ? lv : p.kind === 'klank' ? (lv >= 2 ? 1 : 0) : Math.max(0, lv - 1);
+  return wrong.slice(0, n);
+}
+
+/* ===== minigames/escape.js ===== */
+/* =========================================================
+   DE ESCAPEROOM (spel). Puzzels: minigames/escape_logic.js. Alles is HTML in #er (boven het canvas), het canvas
+   tekent alleen de kamer erachter. Solo of samen (2 spelers): wie aan de beurt is wisselt na elk stapje, de ander denkt
+   mee; de deur gaat samen open (allebei tegelijk een sleutel vasthouden). Geen tijdsdruk; tijd alleen als je wilt (record).
+   ========================================================= */
+registerMinigame({
+  id: 'escaperoom', name: 'Escaperoom', emoji: '🔐', music: 'escaperoom', twoMode: 'samen', low: true, firstReward: 'trofee', fmt: escFmt,
+  help: 'Jullie zitten opgesloten! Los 4 puzzels op: de kist (sommen), de boekenkast (woorden), doorzoek de kamer en de puzzeltafel. Elke puzzel geeft een cijfer voor de deur. Geen haast! Vast? Tik op 💡 Tip.',
+  coins: () => 20, bonusText: 'Ontsnap uit de escaperoom voor 1 energie (1x per dag)',
+  recText: () => S.hi.escaperoom ? `${escFmt(S.hi.escaperoom)} (met tijd)` : '–',
+  create: api => new EscapeGame(api),
+});
+const ESC_OOPS = ['Bijna! Probeer het nog eens.', 'Hmm, dat is het niet. Nog een keer!', 'Net niet! Denk nog even na.'];
+const ESC_FOUND = ['De kist gaat open! Er ligt een briefje in…', 'Er valt een briefje uit een boek…', 'De 3 stukjes passen precies in elkaar. Er staat een cijfer op!', 'Onder de puzzel ligt een briefje…'];
+function escTok(t) {
+  const [k, a, b] = String(t).split(':'), sv = inner => `<svg viewBox="0 0 40 40" aria-hidden="true">${inner}</svg>`, st = 'stroke="rgba(0,0,0,.28)" stroke-width="2.5"';
+  if (k === 'c') return `<span class="ertok">${sv(`<circle cx="20" cy="20" r="15" fill="${ESC_COLORS[a]}" ${st}/>`)}</span>`;
+  if (k === 's') { const f = ESC_COLORS[b];
+    const shp = a === 'rond' ? `<circle cx="20" cy="20" r="14" fill="${f}" ${st}/>` : a === 'vierkant' ? `<rect x="7" y="7" width="26" height="26" rx="3" fill="${f}" ${st}/>`
+      : a === 'driehoek' ? `<polygon points="20,5 35,33 5,33" fill="${f}" ${st} stroke-linejoin="round"/>` : `<polygon points="20,3 24.7,14.6 37,15.5 27.5,23.5 30.6,35.5 20,29 9.4,35.5 12.5,23.5 3,15.5 15.3,14.6" fill="${f}" ${st} stroke-linejoin="round"/>`;
+    return `<span class="ertok">${sv(shp)}</span>`; }
+  if (k === 'n') return `<span class="ertok num">${esc(a)}</span>`;
+  if (k === 'op') return `<span class="ertok op">${esc(a)}</span>`;
+  return `<span class="ertok q">?</span>`;
+}
+class EscapeGame {
+  constructor(api) {
+    this.api = api; this.ctx = api.ctx; this.players = api.players; this.W = api.W; this.H = api.H; this.coop = this.players.length > 1;
+    this.run = escBuild((Math.random() * 2 ** 31) | 0); this.st = this.run.puzzles.map(() => ({ done: false, step: 0, lv: 0, val: '', picked: [], looked: {}, found: [] }));
+    this.view = 'intro'; this.cur = -1; this.hints = 0; this.turns = 0; this.time = 0; this.timer = !!S.flags.erTimer; this.running = false; this.t = 0;
+    this.msg = ''; this.msgKind = ''; this.code = ''; this.doorLv = 0; this.keys = [false, false]; this.keyT = 0; this.opening = 0; this.lastTitle = -1;
+    this.root = document.createElement('div'); this.root.id = 'er'; $('#mgCtl').appendChild(this.root);
+    this.root.addEventListener('click', e => this.onClick(e));
+    const keyEv = (e, v) => { const b = e.target.closest('[data-key]'); if (!b) return; e.preventDefault(); if (v) try { b.setPointerCapture(e.pointerId); } catch (_) { } this.setKey(+b.dataset.key, v); };
+    this.root.addEventListener('pointerdown', e => keyEv(e, true)); ['pointerup', 'pointercancel', 'lostpointercapture'].forEach(n => this.root.addEventListener(n, e => keyEv(e, false), true));
+    this.intro();
+  }
+  destroy() { $('#mgBanner').classList.remove('show'); if (this.root) this.root.remove(); }
+  resize(W, H) { this.W = W; this.H = H; }
+  onPause(p) { if (p) this.keys = [false, false]; }
+  who() { return this.players[this.turns % this.players.length]; }
+  /* ---------- begin: met of zonder tijd ---------- */
+  intro() {
+    const el = $('#mgBanner');
+    el.innerHTML = `<h2>🔐 Opgesloten!</h2><p style="margin:6px 0 4px">${this.coop ? 'Jullie zitten' : 'Je zit'} opgesloten in de geheime kamer van de uitvinder.<br>Los <b>4 puzzels</b> op: elke puzzel geeft een cijfer voor de deur.</p>
+      <p style="margin:0 0 8px;font-size:.9em">Er is <b>geen haast</b>. Wil je een record? Kies dan ‘met tijd’.</p>
+      <div class="btnrow"><button class="btn ${this.timer ? 'white' : 'green'}" data-tm="0">🐢 Zonder tijd</button><button class="btn ${this.timer ? 'green' : 'white'}" data-tm="1">⏱️ Met tijd</button></div>`;
+    el.classList.add('show');
+    el.onclick = e => { const b = e.target.closest('[data-tm]'); if (!b) return; SFX.click(); this.timer = b.dataset.tm === '1'; S.flags.erTimer = this.timer ? 1 : 0; el.classList.remove('show'); el.onclick = null; this.running = true; this.view = 'kamer'; SFX.door(); this.render(); };
+  }
+  /* ---------- tekenen (HTML) ---------- */
+  render() {
+    const v = this.view; let h = '';
+    if (v === 'kamer') h = this.vKamer();
+    else if (v === 'st') h = this.vStation();
+    else if (v === 'gelukt') h = this.vGelukt();
+    else if (v === 'deur') h = this.vDeur();
+    else if (v === 'sleutel') h = this.vSleutel();
+    else if (v === 'open') h = `<div class="erpanel"><div class="erbig">🚪✨</div><h2>De deur gaat open!</h2><p>${this.coop ? 'Jullie zijn' : 'Je bent'} ontsnapt!</p></div>`;
+    this.root.innerHTML = h;
+  }
+  turnBadge() { if (!this.coop) return ''; const w = this.who(); return `<span class="erturn" style="background:${w.col}">${esc(w.name)} is aan de beurt</span>`; }
+  msgHtml() { return `<p class="ermsg ${this.msgKind}">${this.msg || '&nbsp;'}</p>`; }
+  vKamer() {
+    const P = this.run.puzzles, n = this.st.filter(s => s.done).length, all = n === P.length;
+    return `<div class="erpanel"><div class="erhead"><b>🔐 Ontsnap uit de kamer!</b><span class="small-note">${n}/4 opgelost${this.hints ? ` · 💡 ${this.hints}` : ''}</span></div>
+      <div class="ergrid">${ESC_STATIONS.map((s, i) => { const d = this.st[i].done; return `<button class="erst ${d ? 'done' : ''}" data-a="open" data-i="${i}"><span class="erbig">${d ? '✅' : s.emoji}</span><b>${s.name}</b><small>${d ? `📝 cijfer ${i + 1}: <b>${this.run.code[i]}</b>` : s.what}</small></button>`; }).join('')}</div>
+      <button class="erdoor ${all ? 'ready' : ''}" data-a="deur" ${all ? '' : 'disabled'}>🚪 ${all ? 'Naar de deur: typ de code!' : 'De deur zit op slot'} <span class="ercodeline">${this.run.code.map((c, i) => this.st[i].done ? c : '?').join(' ')}</span></button></div>`;
+  }
+  keypad(ok) { return `<div class="erkeys">${[1, 2, 3, 4, 5, 6, 7, 8, 9, 'del', 0, ok ? 'ok' : ''].map(k => k === '' ? '<span></span>' : `<button data-a="key" data-k="${k === 'del' ? '⌫' : k === 'ok' ? '✓' : k}" class="${k === 'ok' ? 'ok' : ''}">${k === 'del' ? '⌫' : k === 'ok' ? '✓' : k}</button>`).join('')}</div>`; }
+  vStation() {
+    const i = this.cur, S0 = ESC_STATIONS[i], p = this.run.puzzles[i], s = this.st[i], step = p.steps[s.step] || {};
+    const multi = p.steps.length > 1 && p.kind !== 'zoek' ? `<span class="small-note">stap ${Math.min(s.step + 1, p.steps.length)}/${p.steps.length}</span>` : '';
+    let q = '', body = '';
+    const faded = escFaded(p, s.step, s.lv), choice = (v, inner, extra) => `<button class="erch ${faded.includes(v) ? 'out' : ''} ${extra || ''}" data-a="ch" data-v="${esc(v)}" aria-label="${esc(v)}">${inner}</button>`;
+    if (p.kind === 'kluis') {
+      q = 'De kist zit op slot. De code is de uitkomst van deze 3 sommen!';
+      body = `<div class="ersums">${p.steps.map((x, k) => `<div class="ersum"><span>${esc(x.txt)} =</span><span class="erfield ${k < s.step ? 'ok' : k === s.step ? 'on' : ''}">${k < s.step ? x.ans : k === s.step ? (s.val || '&nbsp;') : '&nbsp;'}</span></div>`).join('')}</div>${this.keypad(true)}`;
+    } else if (p.kind === 'hussel') {
+      q = 'De letters zijn door elkaar gehusseld! Welk woord hoort bij het plaatje?';
+      body = `<div class="erbig">${p.emoji}</div><div class="erslots">${[...p.word].map((_, k) => `<span class="erslot ${k < s.lv ? 'fix' : ''}">${s.picked[k] != null ? esc(p.letters[s.picked[k]]) : ''}</span>`).join('')}</div>
+        <div class="erletters">${p.letters.map((c, k) => `<button class="erlet" data-a="let" data-i="${k}" ${s.picked.includes(k) ? 'disabled' : ''}>${esc(c)}</button>`).join('')}<button class="erlet del" data-a="unlet">⌫</button></div>`;
+    } else if (p.kind === 'klank') {
+      q = 'Welke klank hoort op de lege plek?';
+      body = `<div class="erbig">${step.emoji}</div><div class="erword">${esc(step.gap).replace('_', '<span class="ergap">?</span>')}</div><div class="erchoices">${step.choices.map(c => choice(c, esc(c), 'txt')).join('')}</div>`;
+    } else if (p.kind === 'spelling') {
+      q = 'Welk woord is goed geschreven?';
+      body = `<div class="erbig">${step.emoji}</div><div class="erchoices col">${step.choices.map(c => choice(c, esc(c), 'txt')).join('')}</div>`;
+    } else if (p.kind === 'zoek') {
+      const target = p.objs.findIndex((o, k) => o.hide && !s.found.includes(k));
+      q = `Er zijn 3 puzzelstukjes verstopt in deze kamer. Tik op dingen om te zoeken!`;
+      body = `<div class="erpieces">${[0, 1, 2].map(k => k < s.found.length ? '🧩' : '<span class="erempty">🧩</span>').join(' ')}</div>
+        <div class="erroom">${p.objs.map((o, k) => `<button class="erobj ${s.looked[k] ? 'looked' : ''} ${s.found.includes(k) ? 'found' : ''} ${k === target && s.lv >= 2 ? 'spark' : ''}" data-a="obj" data-i="${k}" style="left:${o.x}%;top:${o.y}%" aria-label="${esc(o.name)}">${o.emoji}${s.found.includes(k) ? '<span class="erpiece">🧩</span>' : ''}</button>`).join('')}</div>`;
+    } else if (p.kind === 'patroon') {
+      q = step.row === 'mix' ? 'Welke kleur krijg je als je deze verf mengt?' : 'Wat komt er op de plek van het vraagteken?';
+      body = `<div class="erseq">${step.seq.map((t, k) => `<span class="${s.lv >= 1 && step.unit > 1 && k < step.unit ? 'erunit' : ''}">${escTok(t)}</span>`).join('')}${escTok('?')}</div><div class="erchoices">${step.choices.map(c => choice(c, escTok(c))).join('')}</div>`;
+    } else if (p.kind === 'raadsel') {
+      q = 'Raadsel! Wat ben ik?';
+      body = `<p class="erriddle">“${esc(step.q)}”</p><div class="erchoices">${step.choices.map(c => choice(c, `<span class="erbig2">${ESC_ANSWERS[c][0]}</span><small>${ESC_ANSWERS[c][1]}</small>`, 'pic')).join('')}</div>`;
+    }
+    return `<div class="erpanel"><div class="erhead"><button class="btn small white" data-a="back">⬅️ Kamer</button><b>${S0.emoji} ${S0.name}</b>${multi}${this.turnBadge()}</div>
+      <p class="erq">${q}</p>${body}${this.msgHtml()}<div class="erfoot"><button class="btn small yellow" data-a="hint">💡 Tip</button></div></div>`;
+  }
+  vGelukt() {
+    const i = this.cur;
+    return `<div class="erpanel"><div class="erbig">🎉</div><h2 style="margin:0">Gelukt!</h2><p>${ESC_FOUND[i]}</p><div class="ernote">📝 cijfer ${i + 1}: <b>${this.run.code[i]}</b></div>
+      <div class="btnrow"><button class="btn big green" data-a="back">⬅️ Terug naar de kamer</button></div></div>`;
+  }
+  vDeur() {
+    return `<div class="erpanel"><div class="erhead"><button class="btn small white" data-a="back">⬅️ Kamer</button><b>🚪 De deur</b>${this.turnBadge()}</div>
+      <p class="erq">Typ de 4 cijfers van de briefjes, in de goede volgorde.</p>
+      <div class="ernotes">${ESC_STATIONS.map((s, i) => `<span class="ernote">${s.emoji} ${i + 1}: <b>${this.run.code[i]}</b></span>`).join('')}</div>
+      <div class="ersums"><div class="ersum">${[0, 1, 2, 3].map(k => `<span class="erfield ${k === this.code.length ? 'on' : k < this.code.length ? 'ok' : ''}">${this.code[k] || '&nbsp;'}</span>`).join('')}</div></div>
+      ${this.keypad(false)}${this.msgHtml()}<div class="erfoot"><button class="btn small yellow" data-a="hint">💡 Tip</button></div></div>`;
+  }
+  vSleutel() {
+    if (!this.coop) return `<div class="erpanel"><p class="erq">Klik! De code klopt. Nu alleen nog de sleutel omdraaien…</p><button class="erkey" data-a="turn" style="background:${this.players[0].col}">🔑 Draai de sleutel om!</button></div>`;
+    return `<div class="erpanel"><p class="erq">Klik! De code klopt. De deur heeft <b>twee sloten</b>: houd allebei <b>tegelijk</b> je sleutel vast!</p>
+      <div class="erkeys2">${this.players.map((p, i) => `<button class="erkey ${this.keys[i] ? 'down' : ''}" data-key="${i}" style="background:${p.col}">🔑<small>${esc(p.name)}</small></button>`).join('')}</div>
+      <div class="erbar"><i style="width:${Math.round(this.keyT / .8 * 100)}%"></i></div><p class="small-note" style="margin:4px 0 0">Toetsenbord: A en L tegelijk ingedrukt houden</p></div>`;
+  }
+  say(t, kind) { this.msg = t; this.msgKind = kind || ''; }
+  /* ---------- klikken ---------- */
+  onClick(e) {
+    if (MG.paused) return; const b = e.target.closest('[data-a]'); if (!b) return; const a = b.dataset.a;
+    if (a !== 'key' && a !== 'let') SFX.click();
+    if (a === 'open') { this.cur = +b.dataset.i; this.say(''); this.view = this.st[this.cur].done ? 'gelukt' : 'st'; this.render(); return; }
+    if (a === 'back') { this.view = 'kamer'; this.say(''); this.render(); return; }
+    if (a === 'deur') { this.view = 'deur'; this.code = ''; this.say(''); this.render(); return; }
+    if (a === 'hint') { this.hint(); this.render(); return; }
+    if (a === 'turn') { this.openDoor(); return; }
+    if (this.view === 'deur' && a === 'key') { this.doorKey(b.dataset.k); this.render(); return; }
+    if (this.view !== 'st') return;
+    const i = this.cur, p = this.run.puzzles[i], s = this.st[i];
+    if (a === 'key') { this.kluisKey(b.dataset.k); }
+    else if (a === 'let') { SFX.click(); if (s.picked.length < p.word.length && !s.picked.includes(+b.dataset.i)) s.picked.push(+b.dataset.i); if (s.picked.length === p.word.length) this.answer(s.picked.map(k => p.letters[k]).join('')); }
+    else if (a === 'unlet') { if (s.picked.length > s.lv) s.picked.pop(); }
+    else if (a === 'ch') this.answer(b.dataset.v);
+    else if (a === 'obj') this.look(+b.dataset.i);
+    this.render();
+  }
+  kluisKey(k) {
+    const s = this.st[this.cur]; SFX.click();
+    if (k === '⌫') s.val = s.val.slice(0, -1);
+    else if (k === '✓') { if (s.val) this.answer(s.val); }
+    else if (s.val.length < 2) s.val += k;
+  }
+  doorKey(k) {
+    SFX.click(); if (k === '⌫') { this.code = this.code.slice(0, -1); return; }
+    if (this.code.length >= 4) return; this.code += k;
+    if (this.code.length === 4) { if (this.code === this.run.code.join('')) { SFX.correct(); this.view = 'sleutel'; this.say(''); } else { SFX.nope(); this.say('Hmm, de deur blijft dicht. Kijk nog eens naar de briefjes!', 'bad'); this.code = ''; } }
+  }
+  // een antwoord voor het huidige stapje
+  answer(v) {
+    const i = this.cur, p = this.run.puzzles[i], s = this.st[i];
+    if (escCheck(p, s.step, v)) { SFX.correct(); const last = s.step + 1 >= p.steps.length; s.step++; s.lv = 0; s.val = ''; if (!last) this.turns++; this.say(pick(['Goed zo!', 'Super!', 'Ja, dat klopt!', 'Knap gedaan!']), 'good'); if (s.step >= p.steps.length) this.solved(i); }
+    else { SFX.nope(); this.say(pick(ESC_OOPS) + (this.coop ? ' Overleg maar even samen.' : ''), 'bad'); s.val = ''; if (p.kind === 'hussel') s.picked = s.picked.slice(0, s.lv); }
+  }
+  look(k) {
+    const p = this.run.puzzles[this.cur], s = this.st[this.cur], o = p.objs[k];
+    if (s.found.includes(k) || s.looked[k]) { this.say(`Bij ${o.name} heb je al gekeken.`); return; }
+    if (o.hide) { SFX.pickup(); s.found.push(k); s.step = s.found.length; s.lv = 0; this.turns++; this.say(`Gevonden! Een puzzelstukje bij ${o.name}!`, 'good'); if (s.found.length >= 3) this.solved(this.cur); }
+    else { SFX.open(); s.looked[k] = 1; this.say(o.empty); }
+  }
+  solved(i) { this.st[i].done = true; SFX.found(); this.view = 'gelukt'; this.say(''); }
+  hint() {
+    this.hints++;
+    if (this.view === 'deur') { this.doorLv++; if (this.doorLv === 1) this.say('💡 Op elk briefje staat een nummer: eerst briefje 1 van de kist, dan 2, 3 en 4.', 'tip'); else { this.code = this.run.code.join('').slice(0, 3); this.say('💡 De eerste 3 cijfers staan er al. Typ nu het laatste cijfer!', 'tip'); } return; }
+    if (this.view !== 'st') return;
+    const i = this.cur, p = this.run.puzzles[i], s = this.st[i], step = p.steps[s.step]; if (!step) return;
+    s.lv = Math.min(s.lv + 1, escHintMax(p));
+    if (p.kind === 'kluis') {
+      if (s.lv === 1) this.say('💡 ' + step.tip, 'tip');
+      else if (s.lv === 2) this.say(`💡 ${step.tip} Het antwoord begint met een ${String(step.ans)[0]}.`, 'tip');
+      else { s.val = String(step.ans); this.say(`💡 ${step.txt} = ${step.ans}. Tik op ✓!`, 'tip'); }
+    } else if (p.kind === 'hussel') {
+      const used = []; s.picked = [...p.word.slice(0, s.lv)].map(ch => { const k = p.letters.findIndex((c, j) => c === ch && !used.includes(j)); used.push(k); return k; });
+      this.say(s.lv >= p.word.length ? '💡 Zo! Het hele woord staat er.' : `💡 Het woord begint met ‘${p.word.slice(0, s.lv)}’.`, 'tip');
+      if (s.picked.length === p.word.length) this.answer(p.word);
+    } else if (p.kind === 'zoek') {
+      const t = p.objs.findIndex((o, k) => o.hide && !s.found.includes(k));
+      this.say(s.lv === 1 ? '💡 ' + p.objs[t].tip : `💡 ${p.objs[t].tip} Kijk: het glinstert!`, 'tip');
+    } else if (p.kind === 'klank') this.say(s.lv === 1 ? '💡 ' + step.tip : '💡 Er blijft er nog maar één over!', 'tip');
+    else if (p.kind === 'spelling') this.say(s.lv === 1 ? '💡 Eén fout woord is weg.' : '💡 Nu is alleen het goede woord over!', 'tip');
+    else if (p.kind === 'patroon') this.say(s.lv === 1 ? '💡 ' + step.tip : s.lv === 2 ? '💡 Eén keuze is weg.' : '💡 Alleen het goede antwoord is over!', 'tip');
+    else if (p.kind === 'raadsel') this.say(s.lv === 1 ? '💡 Nog een aanwijzing: ' + step.extra : s.lv === 2 ? '💡 Eén keuze is weg.' : '💡 Alleen het goede antwoord is over!', 'tip');
+  }
+  /* ---------- de deur ---------- */
+  setKey(i, v) { if (this.view !== 'sleutel' || !this.coop || this.keys[i] === v) return; this.keys[i] = v; if (v) SFX.click(); const el = this.root.querySelectorAll('.erkey')[i]; if (el) el.classList.toggle('down', v); }
+  openDoor() { if (this.view === 'open') return; this.view = 'open'; this.opening = 0; this.keys = [false, false]; SFX.door(); setTimeout(() => SFX.fanfare(), 350); this.render(); setTimeout(() => this.finish(), 1700); }
+  finish() {
+    if (MG.inst !== this || this.finished) return; this.finished = true;
+    const sec = Math.round(this.time), names = this.players.map(p => p.name).join(' & ');
+    S.stats.escapes = (S.stats.escapes || 0) + 1;
+    achieve('escape1'); if (!this.hints) achieve('escapehint'); if (S.stats.escapes >= 5) achieve('escape5'); if (this.timer && sec <= 360) achieve('escapesnel');
+    const lines = [`🔐 4 puzzels opgelost en de deur open!`, this.hints ? `💡 ${this.hints} ${this.hints === 1 ? 'tip' : 'tips'} gebruikt` : '🧠 Helemaal zonder tips!', this.coop ? 'Wat een team! Samen zijn jullie superslim.' : 'Wat een slimme speurder!'];
+    if (!this.timer) lines.push('🐢 Gespeeld zonder tijd (telt niet als record)');
+    this.api.end({ title: '🎉 Ontsnapt!', scores: [{ name: names, score: sec, text: this.timer ? escFmt(sec) : 'Ontsnapt! 🔓' }], winner: null, best: sec, noRecord: !this.timer, lines, coins: clamp(30 - 2 * this.hints, 12, 30), bonus: true });
+  }
+  key(k, down) {
+    if (this.view === 'sleutel' && this.coop && (k === 'a' || k === 'l')) { this.setKey(k === 'a' ? 0 : 1, down); return; }
+    if (!down) return false;
+    if (this.view === 'sleutel' && !this.coop && (k === 'enter' || k === ' ')) { this.openDoor(); return; }
+    const kl = this.view === 'st' && this.run.puzzles[this.cur].kind === 'kluis';
+    if (this.view === 'deur' || kl) {
+      const m = /^[0-9]$/.test(k) ? k : k === 'backspace' ? '⌫' : k === 'enter' && kl ? '✓' : null; if (m == null) return false;
+      if (kl) this.kluisKey(m); else this.doorKey(m); this.render(); return;
+    }
+    if (this.view === 'st' && this.run.puzzles[this.cur].kind === 'hussel') {
+      const p = this.run.puzzles[this.cur], s = this.st[this.cur];
+      if (k === 'backspace') { if (s.picked.length > s.lv) s.picked.pop(); this.render(); return; }
+      const j = p.letters.findIndex((c, x) => c === k && !s.picked.includes(x)); if (j < 0) return false;
+      s.picked.push(j); if (s.picked.length === p.word.length) this.answer(s.picked.map(x => p.letters[x]).join('')); this.render(); return;
+    }
+    return false;
+  }
+  /* ---------- per frame ---------- */
+  tick(dt) {
+    this.t += dt;
+    if (this.running && this.view !== 'open') this.time += dt;
+    if (this.timer && this.running && (this.time | 0) !== this.lastTitle) { this.lastTitle = this.time | 0; $('#mgTitle').textContent = `🔐 Escaperoom · ${escFmt(this.time)}`; }
+    if (this.view === 'sleutel' && this.coop) {
+      const both = this.keys[0] && this.keys[1]; this.keyT = both ? this.keyT + dt : Math.max(0, this.keyT - dt * 2);
+      const bar = this.root.querySelector('.erbar i'); if (bar) bar.style.width = Math.min(100, Math.round(this.keyT / .8 * 100)) + '%';
+      if (this.keyT >= .8) this.openDoor();
+    }
+    if (this.view === 'open') this.opening = Math.min(1, this.opening + dt / 1.4);
+    this.draw();
+  }
+  draw() {
+    const c = this.ctx, d = this.api.dpr, W = this.W, H = this.H; c.setTransform(d, 0, 0, d, 0, 0);
+    const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#2b1f47'); g.addColorStop(.7, '#3a2a5e'); g.addColorStop(.7, '#5a3f2a'); g.addColorStop(1, '#3f2b1c');
+    c.fillStyle = g; c.fillRect(0, 0, W, H);
+    c.fillStyle = 'rgba(255,255,255,.045)'; const s = 46;
+    for (let y = 0; y < H * .7; y += s) for (let x = ((y / s) % 2) * s / 2; x < W; x += s) { c.beginPath(); c.moveTo(x, y + s * .3); c.lineTo(x + s * .2, y + s * .5); c.lineTo(x, y + s * .7); c.lineTo(x - s * .2, y + s * .5); c.closePath(); c.fill(); }
+    c.strokeStyle = 'rgba(0,0,0,.18)'; c.lineWidth = 2; for (let y = H * .7 + 22; y < H; y += 22) { c.beginPath(); c.moveTo(0, y); c.lineTo(W, y); c.stroke(); }
+    // lamp
+    const lg = c.createRadialGradient(W / 2, 60, 5, W / 2, 60, Math.max(W, H) * .6); lg.addColorStop(0, 'rgba(255,220,140,.28)'); lg.addColorStop(1, 'rgba(255,220,140,0)'); c.fillStyle = lg; c.fillRect(0, 0, W, H);
+    if (this.opening > 0) { c.fillStyle = `rgba(255,248,220,${this.opening * .85})`; c.fillRect(0, 0, W, H); }
+  }
+}
 
 /* ===== main.js ===== */
 /* =========================================================
