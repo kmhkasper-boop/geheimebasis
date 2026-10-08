@@ -230,6 +230,37 @@ h1,h2,h3{margin:0}
 .spark{position:absolute;pointer-events:none;font-size:26px;animation:sparkfly .9s ease-out forwards}
 @keyframes sparkfly{from{transform:translate(0,0) scale(1);opacity:1}to{transform:translate(var(--dx),var(--dy)) scale(.3);opacity:0}}
 
+/* ---------- Buurman-plan (fase 3) ---------- */
+#scrBuur{background:radial-gradient(circle at 50% 20%,#8a6a3e,#3d2a16)}
+#scrBuur .wrap{color:#1f2a44}
+#scrBuur .topbar .title{background:#f6e7c8;color:#5a3d1a;box-shadow:0 0 0 3px #7a5a2a,var(--shadow)}
+#scrBuur .hqcard{background:#f6e7c8;box-shadow:0 0 0 3px #7a5a2a,0 6px 0 rgba(0,0,0,.25);color:#1f2a44}
+#scrBuur .hqcard h3{color:#7a3d14}
+.buurtop{display:grid;grid-template-columns:minmax(200px,1fr) 1.6fr;gap:12px;width:100%}
+@media (orientation:portrait),(max-width:700px){.buurtop{grid-template-columns:1fr}}
+.buurwho{display:flex;flex-direction:column;align-items:center;gap:4px;text-align:center;position:relative}
+.buurwho canvas{width:120px;height:120px}
+.buurwho small{opacity:.8}
+.bubble{background:#fff;border-radius:16px;padding:.4em .8em;font-weight:700;box-shadow:0 0 0 3px #7a5a2a;position:relative;font-size:.92em}
+.bubble::after{content:"";position:absolute;left:50%;bottom:-10px;margin-left:-8px;border:8px solid transparent;border-top-color:#7a5a2a;border-bottom:0}
+.buurst{display:flex;flex-direction:column;gap:6px}
+.tries{display:inline-flex;gap:4px;vertical-align:middle}
+.tries span{width:18px;height:18px;border-radius:50%;background:#4cd964;box-shadow:0 0 0 2px #1f2a44;display:inline-block}
+.tries span.used{background:#e9d6bf;display:inline-flex;align-items:center;justify-content:center;font-size:11px;color:#b5452b}
+.tries span.used::after{content:"✖"}
+.tenzij{background:#fff3b0!important;box-shadow:0 0 0 3px #e0a400,0 6px 0 rgba(0,0,0,.25)!important}
+.tzrow{display:flex;gap:8px;flex-wrap:wrap;margin-top:6px}
+.pranks{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;width:100%}
+.prank{background:#f6e7c8;border-radius:18px;padding:10px 12px;box-shadow:0 0 0 3px #7a5a2a,0 5px 0 rgba(0,0,0,.25);display:flex;gap:10px;align-items:center;text-align:left}
+.prank .pe{font-size:34px}
+.prank .pt{flex:1;display:flex;flex-direction:column}
+.prank.soon{opacity:.6;filter:grayscale(.6)}
+.ps .off{opacity:.25}
+.lvlrow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px}
+.lvlrow .lvl{display:flex;flex-direction:column;align-items:center;gap:2px;min-width:104px;padding:8px 10px}
+.lvlrow .lvl small{font-size:.7em;font-weight:600}
+.coinleft{font-size:.85em;font-weight:600}
+
 /* ---------- HQ monitor ---------- */
 #scrHQ{background:radial-gradient(circle at 50% 30%,#1d3b5e,#0d1626)}
 #scrHQ .wrap{color:#dff6ff}
@@ -586,9 +617,17 @@ h1,h2,h3{margin:0}
       <div class="hqside">
         <div class="hqcard" id="hqMol"></div>
         <div class="hqcard" id="hqEnergy"></div>
+        <div class="hqcard" id="hqBuur" style="display:none"></div>
       </div>
     </div>
     <div class="rooms" id="hqRooms"></div>
+  </div>
+</div>
+
+<div id="scrBuur" class="overlay">
+  <div class="wrap">
+    <div class="topbar"><button class="iconbtn" data-close="scrBuur" aria-label="Terug">⬅️</button><div class="title">🤫 Buurman-plan</div></div>
+    <div id="buurBody" style="width:100%;display:flex;flex-direction:column;gap:12px"></div>
   </div>
 </div>
 
@@ -614,9 +653,19 @@ h1,h2,h3{margin:0}
       <p>Als de Supermol gebouwd is, graaft hij meteen het <b>Hoofdkwartier</b> en de <b>Bowlingbaan</b>. Daarna graaft hij <b>elke echte kalenderdag één nieuwe kamer</b> (om middernacht, op de klok van dit apparaat). Was je kind een paar dagen weg, dan staan die kamers er bij terugkomst allemaal. Volgorde: Blokkenkamer, Flipperkastkamer, daarna komen nieuwe kamers in latere versies (Binnenkort: Minigolf, Racebaan, Escaperoom).</p>
       <p>Sneller graven kan met <b>⚡ energie-batterijen</b>: met 3 stuks graaft de Supermol meteen een extra kamer (knop <b>Graaf nu</b> op de monitor). Energie vind je verstopt in huis en tuin, krijg je van mol-brandstof (wortel + appel, die groeien elke dag opnieuw), één keer per dag per spel bij een goede score, en in de energie-automaat (50 munten). Munten verdien je met de spelletjes.</p>
       <div class="orow"><span id="oudStatus" class="small-note"></span></div>
+      <p id="oudEcon" class="small-note"></p>
       <div class="orow"><button class="btn green small" id="oudUnlock">🔓 Alle kamers openen</button><button class="btn small" id="oudEnergy">⚡ +3 energie geven</button></div>
     </div>
-    <div><h3>🍽️ Eet- en drinkmomenten</h3>
+    <div><h3>🤫 Buurman Brom</h3>
+      <p>Na de eerste kamers belt <b>buurman Brom</b> (de mopperende buurman) aan en klaagt bij mama over het lawaai. Daarna moeten de kinderen hem <b>eerst te slim af zijn</b> voordat de Supermol een nieuwe kamer graaft: een onschuldige kwajongensstreek als spelletje (Mollenrace, Tuinkabouters, Belletje lellen). Lukt het? Dan graaft de mol meteen. Gegraven kamers en alle spellen blijven altijd open.</p>
+      <p>Per dag zijn er een paar <b>pogingen</b>. Op? Dan roept mama "Genoeg gespeeld voor vandaag, morgen weer verder!". <b>Tenzij</b> ze 1x per dag een <b>klusje voor mama</b> doen (+1 poging) of de buurman <b>appelkoekjes</b> geven (koekje van mama + appel, aan de werkbank): dan graaft de mol toch. De streken kunnen ook altijd voor de lol via het <b>Buurman-plan</b> in het Hoofdkwartier (munten, 1x per dag energie, prestaties).</p>
+      <div class="orow"><span class="sk">🚪 Buurman-poort</span><div class="seg" id="oudBuur"><button data-v="0">Uit</button><button data-v="1">Aan</button></div><span class="small-note">Uit = de mol graaft zonder streek</span></div>
+      <div class="orow"><span class="sk">🎯 Pogingen per dag</span><div class="seg" id="oudBuurTries"><button data-v="2">2</button><button data-v="3">3</button><button data-v="5">5</button><button data-v="0">Onbeperkt</button></div></div>
+      <div class="orow"><span id="oudBuurStatus" class="small-note"></span></div>
+      <div class="orow"><button class="btn small" id="oudBuurCut">🎬 Filmpje opnieuw</button><button class="btn small" id="oudBuurReset">🔄 Pogingen van vandaag terug</button></div>
+      <div class="orow" id="oudBuurPlay"><span class="sk">▶️ Uitproberen</span></div>
+    </div>
+        <div><h3>🍽️ Eet- en drinkmomenten</h3>
       <p>Af en toe roept papa of mama in het spel, bijvoorbeeld <i>"Eten! Er staan boterhammen klaar!"</i> of <i>"Kom even wat drinken!"</i>. Een pijl wijst de weg naar de keukentafel, ook vanuit de tuin of de geheime basis (<i>"Kom even naar boven!"</i>). Zijn de kinderen er binnen <b>2 minuten</b>, dan eten of drinken ze samen iets en krijgen ze <b>5 munten</b> en <b>1 ⚡ energie</b> (hooguit 2 energie per dag van het eten). Te laat is niet erg: dan is de soep gewoon koud. Papa of mama roept nooit midden in een spelletje, maar wacht tot het spel klaar is.</p>
       <div class="orow"><span class="sk">🍽️ Eetmomenten</span><div class="seg" id="oudMeal"><button data-v="0">Uit</button><button data-v="1">Aan</button></div></div>
       <div class="orow"><span class="sk">⏱️ Hoe vaak</span><div class="seg" id="oudMealFreq"><button data-v="vaak">Vaak</button><button data-v="normaal">Normaal</button><button data-v="weinig">Weinig</button></div><span class="small-note" id="oudMealFreqNote"></span></div>
@@ -687,7 +736,7 @@ const anyOverlay = () => $$('.overlay.show').length > 0;
    Echte vormverandering? Verhoog SAVE_V en voeg een stap toe in MIGRATIONS.
    ========================================================= */
 const LS_KEY = 'geheimebasis_save';
-const SAVE_V = 2;
+const SAVE_V = 3;
 function defaultSave() {
   return {
     v: SAVE_V, created: 0, started: false, introDone: false,
@@ -706,13 +755,21 @@ function defaultSave() {
     ach: {},                                     // prestaties { id: datum }
     stats: { games: {}, steps: 0, strikes: 0, spares: 0, tetris: 0, dugByEnergy: 0, meals: 0, mealsLate: 0 },
     meals: defaultMeals(),                       // eet- en drinkmomenten (instellingen van de ouders + teller)
+    econ: defaultEcon(),                         // daglimieten: munten per spel, energie per dag, automaat, graaf nu (economy.js)
+    buur: defaultBuur(),                         // buurman Brom: filmpje gezien, graaf-poort, pogingen per dag, streken
     music: true, sfx: true, musicVol: 40, sfxVol: 80,
   };
 }
 // left: seconden speeltijd tot papa of mama weer roept (null = nog niet gepland). energy: hoeveel ⚡ vandaag al van het eten.
 function defaultMeals() { return { on: true, freq: 'normaal', left: null, day: null, energy: 0, last: null }; }
+// Buurman Brom. on: graaf-poort aan (ouders). tries: pogingen per dag (0 = onbeperkt). met: filmpje gezien.
+// due: aantal dag-kamers dat wacht op een gelukte streek. nowReq: 'Graaf nu' aangevraagd (3 ⚡ gaan pas weg als het lukt).
+// day/lost/extra: vandaag verloren pogingen en extra pogingen (klusje). klus: dag van het klusje. wins/plays per streek.
+function defaultEcon() { return { day: null, plays: {}, e: 0, buy: 0, digs: 0 }; }
+function defaultBuur() { return { on: true, tries: 3, met: false, metDay: null, due: 0, nowReq: 0, day: null, lost: 0, extra: 0, klus: null, koek: null, bijna: null, wins: {}, plays: {}, total: 0, lvl: {}, fresh: 0 }; }
 const MIGRATIONS = {
   2: o => { if (!o.meals || typeof o.meals !== 'object') o.meals = defaultMeals(); return o; },   // v2: eet- en drinkmomenten
+  3: o => { if (!o.buur || typeof o.buur !== 'object') o.buur = defaultBuur(); if (!o.econ || typeof o.econ !== 'object') o.econ = defaultEcon(); return o; },        // v3: buurman Brom (filmpje speelt de volgende keer in huis)
 };
 function migrate(o) {
   const d = defaultSave();
@@ -729,6 +786,15 @@ function migrate(o) {
   m.on = m.on !== false; if (!['vaak', 'normaal', 'weinig'].includes(m.freq)) m.freq = 'normaal';
   if (!(typeof m.left === 'number' && m.left >= 0 && m.left < 7200)) m.left = null;
   m.energy = clamp(m.energy | 0, 0, 2); if (typeof m.day !== 'string') m.day = null;
+  { const e = s.econ = Object.assign(defaultEcon(), (o.econ && typeof o.econ === 'object' && !Array.isArray(o.econ)) ? o.econ : {}), I = (v, m) => Math.max(0, Math.min(m, Math.floor(+v) || 0));
+    if (typeof e.day !== 'string') e.day = null; const pl = {}; if (e.plays && typeof e.plays === 'object' && !Array.isArray(e.plays)) for (const k in e.plays) pl[k] = I(e.plays[k], 999); e.plays = pl;
+    e.e = I(e.e, 99); e.buy = I(e.buy, 99); e.digs = I(e.digs, 99); }
+  const b = s.buur = Object.assign(defaultBuur(), (o.buur && typeof o.buur === 'object' && !Array.isArray(o.buur)) ? o.buur : {});
+  b.on = b.on !== false; b.met = !!b.met; if (![0, 2, 3, 5].includes(b.tries)) b.tries = 3;
+  for (const k of ['due', 'nowReq', 'lost', 'extra', 'total', 'fresh']) b[k] = Math.max(0, b[k] | 0);
+  b.due = Math.min(b.due, 9); b.nowReq = b.nowReq ? 1 : 0;
+  for (const k of ['wins', 'plays', 'lvl']) if (!b[k] || typeof b[k] !== 'object' || Array.isArray(b[k])) b[k] = {};
+  for (const k of ['day', 'klus', 'koek', 'bijna', 'metDay']) if (typeof b[k] !== 'string') b[k] = null;
   const vol = (x, def) => (typeof x === 'number' && x >= 0 && x <= 100) ? Math.round(x) : def;
   s.musicVol = vol(s.musicVol, 40); s.sfxVol = vol(s.sfxVol, 80);
   s.energie = Math.max(0, s.energie | 0); s.munten = Math.max(0, s.munten | 0);
@@ -745,7 +811,7 @@ function load() {
 let S = load();
 function save() { try { localStorage.setItem(LS_KEY, JSON.stringify(S)); } catch (e) { } }
 if (load.migrated) save();
-function resetSave() { const keep = { music: S.music, sfx: S.sfx, musicVol: S.musicVol, sfxVol: S.sfxVol, meals: Object.assign(defaultMeals(), { on: S.meals.on, freq: S.meals.freq }) }; S = Object.assign(defaultSave(), keep); save(); BUS.emit('reset'); }
+function resetSave() { const keep = { music: S.music, sfx: S.sfx, musicVol: S.musicVol, sfxVol: S.sfxVol, meals: Object.assign(defaultMeals(), { on: S.meals.on, freq: S.meals.freq }), buur: Object.assign(defaultBuur(), { on: S.buur.on, tries: S.buur.tries }), econ: S.econ }; S = Object.assign(defaultSave(), keep); save(); BUS.emit('reset'); }
 
 /* ---- inventaris-hulpjes ---- */
 const has = (id, n) => (S.inv[id] || 0) >= (n || 1);
@@ -756,6 +822,54 @@ function addMunten(n) { S.munten = Math.max(0, S.munten + n); save(); BUS.emit('
 const flag = k => !!S.flags[k];
 function setFlag(k, v) { S.flags[k] = v === undefined ? 1 : v; save(); }
 const robotBuilt = id => !!(S.robots[id] && S.robots[id].built);
+
+/* ===== core/economy.js ===== */
+/* =========================================================
+   ECONOMIE – daglimieten zodat munten en energie niet eindeloos te verdienen zijn (wens van Lucas, fase 3).
+   - Munten per spel per dag: de eerste ECON.FULL_PLAYS potjes geven volle munten, daarna ECON.TRICKLE_PLAYS potjes
+     1 muntje, daarna niks meer (tot morgen). Het eten telt als 'spel' met id 'eten'.
+   - Energie: alles bij elkaar (spelbonus, eten, automaat, mol-brandstof, dagelijkse vondsten) max ECON.E_DAY per dag.
+     De energie-automaat verkoopt max ECON.BUY_MAX per dag. 'Graaf nu' kan max ECON.DIG_NOW_MAX keer per dag.
+   - Niet onder de limiet: eenmalige vondsten (vliegbot, eerste vondsten) en de knop van papa/mama.
+   Pure functies (e = S.econ) worden getest in tests/unit.js.
+   ========================================================= */
+const ECON = { FULL_PLAYS: 3, TRICKLE_PLAYS: 5, TRICKLE: 1, E_DAY: 5, BUY_MAX: 2, BUY_PRICE: 50, DIG_NOW_MAX: 2 };
+const ECON_VERB = { bowling: 'bowlen', blokken: 'de blokkenkamer', flipper: 'flipperen', minigolf: 'minigolf', racebaan: 'racen', escaperoom: 'de escaperoom', mollenrace: 'de mollenrace', kabouters: 'tuinkabouters', belletje: 'belletje lellen', klusje: 'klusjes', eten: 'eten' };
+function econDay(e, today) { if (e.day !== today) { e.day = today; e.plays = {}; e.e = 0; e.buy = 0; e.digs = 0; } return e; }
+// hoeveel munten levert dit potje op? (telt het potje mee)
+function econCoins(e, today, id, full) {
+  econDay(e, today); const n = (e.plays[id] = (e.plays[id] || 0) + 1);
+  if (n <= ECON.FULL_PLAYS) return { coins: Math.max(1, Math.round(full)), kind: 'full', n };
+  if (n <= ECON.FULL_PLAYS + ECON.TRICKLE_PLAYS) return { coins: Math.min(ECON.TRICKLE, Math.max(0, Math.round(full))), kind: 'trickle', n };
+  return { coins: 0, kind: 'none', n };
+}
+function econCoinsLeft(e, today, id) { const n = e.day === today ? (e.plays[id] || 0) : 0; return { full: Math.max(0, ECON.FULL_PLAYS - n), trickle: Math.max(0, ECON.FULL_PLAYS + ECON.TRICKLE_PLAYS - Math.max(n, ECON.FULL_PLAYS)) }; }
+function econEnergyLeft(e, today) { return e.day === today ? Math.max(0, ECON.E_DAY - e.e) : ECON.E_DAY; }
+function econEnergy(e, today, n) { econDay(e, today); const g = Math.max(0, Math.min(n, ECON.E_DAY - e.e)); e.e += g; return g; }
+function econCanBuy(e, today) { return (e.day === today ? e.buy : 0) < ECON.BUY_MAX && econEnergyLeft(e, today) > 0; }
+function econBuy(e, today) { if (!econCanBuy(e, today)) return false; econDay(e, today); e.buy++; e.e++; return true; }
+function econDigsLeft(e, today) { return Math.max(0, ECON.DIG_NOW_MAX - (e.day === today ? e.digs : 0)); }
+function econDig(e, today) { econDay(e, today); e.digs++; }
+// ---- met het echte spel (S)
+function econName(id) { return ECON_VERB[id] || (GB.MINIGAMES[id] ? GB.MINIGAMES[id].name.toLowerCase() : id); }
+function earnCoins(id, full) {
+  const r = econCoins(S.econ, dayKey(), id, full); if (r.coins) addMunten(r.coins); else save();
+  r.note = r.kind === 'full' ? (r.n === ECON.FULL_PLAYS ? `🪙 Dit was het laatste potje met volle munten voor vandaag.` : '')
+    : r.kind === 'trickle' ? `🪙 Vandaag genoeg muntjes verdiend met ${econName(id)}, morgen weer! (nu nog ${ECON.TRICKLE} muntje per potje)`
+    : `🪙 Vandaag genoeg muntjes verdiend met ${econName(id)}, morgen weer!`;
+  return r;
+}
+function earnEnergie(n) { const g = econEnergy(S.econ, dayKey(), n); if (g) addEnergie(g); else save(); return g; }
+function econEnergyFull() { return econEnergyLeft(S.econ, dayKey()) <= 0; }
+const ECON_FULL_TXT = `⚡ Vandaag al genoeg energie verdiend (${ECON.E_DAY} ⚡ per dag). Morgen weer!`;
+// regel voor de startkaart van een spel
+function econCardLine(id) {
+  const L = econCoinsLeft(S.econ, dayKey(), id);
+  return L.full ? `🪙 Vandaag nog <b>${L.full}</b> ${L.full === 1 ? 'potje' : 'potjes'} met volle munten` : L.trickle ? `🪙 Vandaag genoeg muntjes verdiend met ${econName(id)}, morgen weer! (nog ${L.trickle}× ${ECON.TRICKLE} muntje)` : `🪙 Vandaag genoeg muntjes verdiend met ${econName(id)}, morgen weer!`;
+}
+// mag 'Graaf nu' (genoeg energie én nog niet te vaak vandaag)?
+function canDigNow() { return S.energie >= DIG_COST && econDigsLeft(S.econ, dayKey()) > 0; }
+const ECON_DIG_TXT = `Vandaag al ${ECON.DIG_NOW_MAX}× extra gegraven met energie. De Supermol moet uitrusten, morgen weer!`;
 
 /* ===== core/audio.js ===== */
 /* =========================================================
@@ -889,6 +1003,9 @@ const TRACKS = {
   racebaan: { naam: 'Racebaan', bpm: 144, root: 392, swing: 0, lead: 'chip', lv: .12, bv: .22, pad: 0, stab: .025,
     bass: 'r r o r r r o r', stabs: '. x . x . x . x', drums: { k: 'x . . . x . . .', z: '. . x . . . x .', h: 'x x x x x x x x' }, prog: 'I I IV V I I IV V',
     mel: ['0 . 2 4 . 4 7 .', '7 . 5 4 . 2 4 .', '3 . 5 7 . 7 9 .', '8 . 7 . 4 . . .', '0 . 2 4 . 4 7 .', '9 . 7 4 . 2 4 .', '5 . 4 . 2 . 1 .', '0 - - - 4 . 7 .'] },
+  buurman: { naam: 'Buurman Brom', bpm: 120, root: 293.66, scale: MINOR, swing: .16, lead: 'pluck', lv: .2, bv: .2, pad: 0, stab: .02,
+    bass: 'r . o . f . o .', stabs: '. . x . . . x .', drums: { t: 'x . . x . . x .', z: '. . x . . . x .' }, prog: 'I iv I v I iv v I',
+    mel: ['0 . . 2 . 3 . .', '4 . 3 . 2 . . .', '0 . . 2 . 3 . 5', '4 - - - . . . .', '7 . . 6 . 5 . .', '4 . 3 . 2 . . .', '3 . 2 . 1 . 2 .', '0 - - - . . . .'] },
   flipper: { naam: 'Flipperkast', bpm: 132, root: 349.23, swing: .05, lead: 'chip', lv: .12, bv: .2, pad: 0, stab: 0,
     bass: 'r . o . r . o .', drums: { k: 'x . . . x . . .', h: 'x . x . x . x .', c: '. . . . x . . .' }, prog: 'I IV V I I IV V I',
     mel: ['0 4 7 4 9 7 4 7', '3 5 8 5 10 8 5 8', '4 6 9 6 11 9 6 9', '7 . 4 . 0 . . .', '0 4 7 4 9 7 4 7', '3 5 8 5 10 8 5 8', '6 4 2 4 6 8 9 8', '7 . . . 0 . . .'] },
@@ -1039,6 +1156,16 @@ const SFX = {
   launch() { noise(.25, .1, 0, 800, 1, 'bandpass', 3000); tone(200, .2, 'sine', .08, 0, 600); },
   drain() { duck(1.4, .4); tone(600, .7, 'triangle', .08, 0, 120); },
   rollover() { tone(1318, .06, 'sine', .06); tone(1760, .06, 'sine', .05, .05); },
+  // buurman Brom
+  doorbell() { duck(2, .3); bellHit(784, .12, 0, 1.1); bellHit(622, .12, .45, 1.4); },
+  grumble() { duck(.8, .5); [0, .12, .26].forEach((w, i) => { tone(110 + i * 8, .14, 'sawtooth', .035, w, 90); noise(.12, .03, w, 400, 2); }); },
+  shout() { duck(1.5, .3); tone(330, .28, 'sawtooth', .06, 0, 520); tone(500, .3, 'square', .03, .05, 300); noise(.3, .08, 0, 1200, 1, 'bandpass', 600); },
+  curtain() { noise(.4, .05, 0, 2400, 1.5, 'bandpass', 900); },
+  tick() { woodHit(1600, .05); },
+  gnome() { woodHit(900, .07); tone(1047, .1, 'triangle', .06, .05); tone(1319, .12, 'triangle', .05, .11); },
+  sneak() { tone(196, .08, 'triangle', .04); tone(233, .08, 'triangle', .04, .18); },
+  caught() { duck(1.6, .4); tone(440, .15, 'square', .05); tone(330, .15, 'square', .05, .15); tone(220, .4, 'square', .05, .3, 160); },
+  bonk() { tone(150, .18, 'sine', .14, 0, 70); noise(.15, .1, 0, 700, 1, 'lowpass', 300); bellHit(1300, .03, .05, .2); },
   hole() { duck(1.4, .4); tone(300, .35, 'sine', .1, 0, 90); [0, .45, .55, .65].forEach((w, i) => i && tone(800 + i * 200, .08, 'triangle', .06, w)); },
 };
 Object.keys(SFX).forEach(k => { const f = SFX[k]; SFX[k] = function () { if (S.sfx && AUD.ac) { AUD.log.push(k); if (AUD.log.length > 80) AUD.log.shift(); } return f.apply(this, arguments); }; });
@@ -1178,6 +1305,7 @@ function drawHair(ctx, style, hc, dir, hy, hr, shirt, L) {
 function drawPortrait(cv, look, opt) {
   const ctx = cv.getContext('2d'), w = cv.width, h = cv.height; ctx.clearRect(0, 0, w, h);
   if (opt && opt.vlieg) { drawDrone(ctx, w / 2, h * .92, h * .36, 1, null, w / 46); return; }
+  if (opt && opt.brom) { const sc = w / 34; drawBrom(ctx, w / 2, h * .5 + 34 * sc * .92, 'down', 0, false, { scale: sc, noShadow: true, t: 1, mood: opt.mood || 'boos' }); return; }
   if (opt && opt.mol) { const img = molImg(); if (img.complete && img.naturalWidth) ctx.drawImage(img, w * .02, h * .12, w * .96, w * .96 * .8); else img.onload = () => drawPortrait(cv, look, opt); return; }
   const sc = w / 34; drawKid(ctx, look, w / 2, h * .5 + 34 * sc * (opt && opt.adult ? .9 : .78), 'down', 0, false, Object.assign({ scale: sc, noShadow: true, t: 1 }, opt || {}));
 }
@@ -1211,7 +1339,7 @@ const ICON_SVG = {
   discobal: SV(`<path d="M32 2 v8" stroke="#1f2a44" stroke-width="3"/><circle cx="32" cy="34" r="22" fill="#c9d1df" ${K}/><g fill="#fff"><rect x="20" y="20" width="7" height="7"/><rect x="34" y="26" width="7" height="7"/><rect x="24" y="38" width="7" height="7"/><rect x="40" y="40" width="5" height="5"/></g><g fill="#9b5de5"><rect x="28" y="28" width="6" height="6"/><rect x="38" y="16" width="5" height="5"/></g><g fill="#1fa6e0"><rect x="16" y="32" width="6" height="6"/><rect x="34" y="46" width="6" height="5"/></g>`),
   munt: SV(`<circle cx="32" cy="32" r="24" fill="#ffd23f" ${K}/><circle cx="32" cy="32" r="17" fill="none" stroke="#e0a800" stroke-width="3"/><path d="M32 22 v20 M26 28 h12" stroke="#b07800" stroke-width="5"/>`),
 };
-const ICON_EMOJI = { frisbee: '🥏', robotknuffel: '🤖', trofee: '🏆', wortel: '🥕', appel: '🍎', voetbal: '⚽', plantje: '🪴', vlag: '🚩', koekje: '🍪' };
+const ICON_EMOJI = { frisbee: '🥏', robotknuffel: '🤖', trofee: '🏆', wortel: '🥕', appel: '🍎', voetbal: '⚽', plantje: '🪴', vlag: '🚩', koekje: '🍪', koekjestrommel: '🥮' };
 function iconHTML(id) { if (ICON_SVG[id]) return ICON_SVG[id]; return `<span class="em" style="font-size:1em">${ICON_EMOJI[id] || '❓'}</span>`; }
 const IMG_CACHE = {};
 function svgImage(svg) { const i = new Image(); i.src = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(svg); return i; }
@@ -1272,10 +1400,121 @@ function drawMol(ctx, x, y, dir, t, w, digging) {
   ctx.restore();
 }
 
+/* ===== core/art_buur.js ===== */
+/* =========================================================
+   Tekenwerk voor buurman Brom (fase 3): Brom zelf (canvas, zelfde stijl als drawKid), zijn Graafmol (SVG),
+   tuinkabouters en zijn huis. Alles in code getekend, geen plaatjes.
+   ========================================================= */
+const BROM = { skin: '#f2c3a0', fringe: '#d8d8d8', must: '#c9c9c9', vest: '#9a6a34', shirt: '#f4ecd8', pants: '#525a6b', slip: '#c4452c', glove: '#3cae5a' };
+/* Brom tekenen. (x,y) = voeten. dir: down|up|left|right. opt: scale, t, mood ('boos'|'roep'|'blij'|'zoek'), noShadow, gloves (tuinhandschoenen) */
+function drawBrom(ctx, x, y, dir, ph, moving, opt) {
+  opt = opt || {}; const B = BROM, mood = opt.mood || 'boos';
+  const legH = 12, bodyH = 17, headR = 10.8;
+  ctx.save(); ctx.translate(x, y); if (opt.scale) ctx.scale(opt.scale, opt.scale);
+  if (dir === 'left') ctx.scale(-1, 1);
+  const side = dir === 'left' || dir === 'right', sw = moving ? Math.sin(ph) : 0;
+  const bob = moving ? -Math.abs(Math.sin(ph)) * 1.2 : Math.sin((opt.t || 0) * 2) * .3;
+  if (!opt.noShadow) { ctx.fillStyle = 'rgba(0,0,0,.2)'; ctx.beginPath(); ctx.ellipse(0, 0, 13, 4, 0, 0, Math.PI * 2); ctx.fill(); }
+  const bodyBot = -legH, bodyTop = bodyBot - bodyH + bob, headY = bodyTop - headR + 3;
+  // benen + sloffen (geruit)
+  const slipper = (lx, lift) => {
+    ctx.save(); ctx.translate(lx, -1.6 - lift); rrect(ctx, -5, -2.6, 10, 5.4, 2.7); fillStroke(ctx, B.slip, 1);
+    ctx.strokeStyle = 'rgba(255,255,255,.55)'; ctx.lineWidth = .8; ctx.beginPath(); ctx.moveTo(-2, -2.4); ctx.lineTo(-2, 2.6); ctx.moveTo(1.5, -2.4); ctx.lineTo(1.5, 2.6); ctx.moveTo(-4.6, 0); ctx.lineTo(4.6, 0); ctx.stroke();
+    ctx.fillStyle = '#ffd23f'; circle(ctx, side ? 3.4 : 0, -1.5, 1.3); ctx.fill(); ctx.restore();
+  };
+  const leg = (lx, lift) => { rrect(ctx, lx - 3.4, bodyBot - 1 - lift, 6.8, legH - 1, 2.8); fillStroke(ctx, B.pants, 1); slipper(lx + (side ? 1.5 : 0), lift); };
+  if (side) { leg(-sw * 3.5, Math.max(0, -sw) * 1.5); leg(sw * 3.5, Math.max(0, sw) * 1.5); } else { leg(-4.6, Math.max(0, sw) * 2.2); leg(4.6, Math.max(0, -sw) * 2.2); }
+  // armen met tuinhandschoenen
+  const hand = opt.gloves === false ? B.skin : B.glove;
+  const arm = (ax, ay, up) => { ctx.save(); ctx.translate(ax, ay); if (up) ctx.rotate(up); rrect(ctx, -3, 0, 6, bodyH * .7, 3); fillStroke(ctx, B.vest, 1); circle(ctx, 0, bodyH * .7 + .5, 3.3); fillStroke(ctx, hand, 1); ctx.restore(); };
+  const shake = mood === 'roep' ? Math.sin((opt.t || 0) * 18) * .25 : 0;
+  if (side) arm(sw * -3, bodyTop + 2.5, 0);
+  // lijf: buik + vest met knopen
+  ctx.beginPath(); ctx.ellipse(0, bodyTop + bodyH * .55, 11.5, bodyH * .62, 0, 0, Math.PI * 2); fillStroke(ctx, B.vest);
+  if (dir !== 'up') {
+    if (!side) { ctx.fillStyle = B.shirt; ctx.beginPath(); ctx.moveTo(-4, bodyTop + 1); ctx.lineTo(0, bodyTop + 8); ctx.lineTo(4, bodyTop + 1); ctx.closePath(); ctx.fill(); ctx.fillStyle = '#e8403a'; ctx.beginPath(); ctx.moveTo(-1.4, bodyTop + 3); ctx.lineTo(1.4, bodyTop + 3); ctx.lineTo(.9, bodyTop + 9); ctx.lineTo(0, bodyTop + 10.5); ctx.lineTo(-.9, bodyTop + 9); ctx.closePath(); ctx.fill();
+      ctx.fillStyle = '#5e3d24'; for (let i = 0; i < 3; i++) { circle(ctx, 0, bodyTop + 11 + i * 3.4, 1.1); ctx.fill(); } }
+    else { ctx.fillStyle = '#5e3d24'; circle(ctx, 8, bodyTop + 10, 1.1); ctx.fill(); circle(ctx, 8.6, bodyTop + 13.5, 1.1); ctx.fill(); }
+  }
+  if (!side) { arm(-12, bodyTop + 2, mood === 'roep' ? .5 + shake : 0); arm(12, bodyTop + 2, mood === 'roep' ? -2.4 - shake : 0); }
+  else arm(sw * 3, bodyTop + 3, mood === 'roep' ? -2.2 + shake : 0);
+  // hoofd (kaal, grijze krans, borstelige snor, boze wenkbrauwen)
+  if (dir !== 'up' && !side) { circle(ctx, -headR + .4, headY + 1.5, 3); fillStroke(ctx, B.skin, 1); circle(ctx, headR - .4, headY + 1.5, 3); fillStroke(ctx, B.skin, 1); }
+  circle(ctx, 0, headY, headR); fillStroke(ctx, B.skin);
+  ctx.fillStyle = 'rgba(255,255,255,.55)'; ctx.beginPath(); ctx.ellipse(side ? 1 : -3, headY - headR * .62, 3.2, 1.6, -.3, 0, Math.PI * 2); ctx.fill();
+  const tuft = (tx, ty, r) => { circle(ctx, tx, ty, r); ctx.fillStyle = B.fringe; ctx.fill(); ctx.strokeStyle = OUT; ctx.lineWidth = .8; ctx.stroke(); };
+  if (dir === 'up') { for (let i = -3; i <= 3; i++) tuft(i * 2.9, headY + 3.5 + Math.abs(i) * -.5, 2.6); }
+  else if (side) { tuft(-6.5, headY + .5, 3.3); tuft(-8.4, headY + 3.6, 2.8); tuft(-4.5, headY + 4, 2.4); }
+  else { tuft(-9.6, headY - .8, 3); tuft(-10, headY + 2.6, 2.5); tuft(9.6, headY - .8, 3); tuft(10, headY + 2.6, 2.5); }
+  if (dir !== 'up') {
+    const blink = ((opt.t || 0) % 4.1) < .12 && mood !== 'roep';
+    const ex = side ? [5.4] : [-4, 4], ey = headY - .2;
+    for (const e of ex) {
+      if (blink) { ctx.strokeStyle = '#1f2a44'; ctx.lineWidth = 1.4; ctx.beginPath(); ctx.moveTo(e - 2, ey + 1); ctx.lineTo(e + 2, ey + 1); ctx.stroke(); }
+      else { ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.ellipse(e, ey + .8, 2.4, mood === 'roep' ? 2.8 : 2.2, 0, 0, Math.PI * 2); ctx.fill(); ctx.fillStyle = '#1f2a44'; circle(ctx, e + (side ? .7 : 0), ey + 1, 1.3); ctx.fill(); }
+      // wenkbrauw: boos = binnenkant (bij de neus) omlaag
+      const inS = side ? 1 : (e < 0 ? 1 : -1), tilt = mood === 'blij' ? -1.4 : mood === 'zoek' ? .3 : 2.2;
+      ctx.strokeStyle = '#8f8f8f'; ctx.lineWidth = 2.6; ctx.lineCap = 'round'; ctx.beginPath(); ctx.moveTo(e - 3 * inS, ey - 4.6); ctx.lineTo(e + 2.6 * inS, ey - 4.6 + tilt); ctx.stroke();
+    }
+    // neus (rood, komisch)
+    ctx.fillStyle = '#e88a78'; circle(ctx, side ? 9.6 : 0, headY + 3.4, side ? 2.6 : 2.4); ctx.fill(); ctx.fillStyle = 'rgba(255,255,255,.6)'; circle(ctx, side ? 9.9 : .6, headY + 2.7, .7); ctx.fill();
+    // mond
+    if (mood === 'roep') { ctx.fillStyle = '#7a2a2a'; ctx.beginPath(); ctx.ellipse(side ? 7.6 : 0, headY + 8.4, side ? 1.8 : 2.8, 2.2, 0, 0, Math.PI * 2); ctx.fill(); }
+    else if (mood === 'blij') { ctx.strokeStyle = '#7a3b2a'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(side ? 7.4 : 0, headY + 6.8, 2.3, .15 * Math.PI, .85 * Math.PI); ctx.stroke(); }
+    else { ctx.strokeStyle = '#7a3b2a'; ctx.lineWidth = 1.2; ctx.beginPath(); ctx.arc(side ? 7.4 : 0, headY + 9.6, 2.2, 1.15 * Math.PI, 1.85 * Math.PI); ctx.stroke(); }
+    // borstelige snor
+    ctx.fillStyle = B.must; ctx.strokeStyle = OUT; ctx.lineWidth = .9;
+    ctx.beginPath();
+    if (side) { ctx.moveTo(5, headY + 5.2); ctx.quadraticCurveTo(9, headY + 3.6, 11.8, headY + 5.6); ctx.quadraticCurveTo(10.6, headY + 8.4, 7.2, headY + 7.3); ctx.quadraticCurveTo(5.4, headY + 7.8, 4.2, headY + 6.6); }
+    else { ctx.moveTo(-1, headY + 5.2); ctx.quadraticCurveTo(-6, headY + 3.6, -9.6, headY + 7.4); ctx.quadraticCurveTo(-5.8, headY + 8.6, -2.6, headY + 7.2); ctx.quadraticCurveTo(0, headY + 8, 2.6, headY + 7.2); ctx.quadraticCurveTo(5.8, headY + 8.6, 9.6, headY + 7.4); ctx.quadraticCurveTo(6, headY + 3.6, 1, headY + 5.2); }
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = 'rgba(255,255,255,.6)'; ctx.lineWidth = .7; ctx.beginPath(); if (side) { ctx.moveTo(6.5, headY + 5.6); ctx.lineTo(9.6, headY + 5.2); } else { ctx.moveTo(-6.6, headY + 6.1); ctx.lineTo(-2.4, headY + 5.6); ctx.moveTo(6.6, headY + 6.1); ctx.lineTo(2.4, headY + 5.6); } ctx.stroke();
+  }
+  ctx.restore();
+}
+/* Zijn eigen graafmachine: de Graafmol 3000 (zijaanzicht, kijkt naar rechts, viewBox 200x160 zoals de Supermol). */
+const GRAAFMOL_SVG = `<svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg" stroke-linejoin="round" stroke-linecap="round">
+<rect x="22" y="114" width="132" height="36" rx="18" fill="#3b3f4a" stroke="#1f2a44" stroke-width="4"/>
+<g fill="#c46a2a" stroke="#1f2a44" stroke-width="3"><circle cx="42" cy="132" r="11"/><circle cx="74" cy="132" r="11"/><circle cx="106" cy="132" r="11"/><circle cx="136" cy="132" r="11"/></g>
+<g fill="#1f2a44"><circle cx="42" cy="132" r="3.5"/><circle cx="74" cy="132" r="3.5"/><circle cx="106" cy="132" r="3.5"/><circle cx="136" cy="132" r="3.5"/></g>
+<path d="M40 30 h14 v26 h-14z" fill="#5d6577" stroke="#1f2a44" stroke-width="4"/><rect x="36" y="22" width="22" height="10" rx="3" fill="#3b3f4a" stroke="#1f2a44" stroke-width="4"/>
+<path d="M18 62 q0 -12 12 -12 h96 q16 0 22 14 l8 22 v18 q0 12 -12 12 h-114 q-12 0 -12 -12z" fill="#6f7d55" stroke="#1f2a44" stroke-width="4"/>
+<path d="M26 98 h120" stroke="#56633f" stroke-width="5"/>
+<g fill="#b5652b" opacity=".85"><ellipse cx="44" cy="78" rx="9" ry="6"/><ellipse cx="98" cy="64" rx="6" ry="4"/><ellipse cx="66" cy="102" rx="7" ry="3.5"/></g>
+<g fill="#3b4430"><circle cx="30" cy="62" r="2.6"/><circle cx="30" cy="100" r="2.6"/><circle cx="62" cy="58" r="2.6"/><circle cx="96" cy="58" r="2.6"/><circle cx="126" cy="58" r="2.6"/><circle cx="140" cy="104" r="2.6"/></g>
+<rect x="60" y="66" width="34" height="22" rx="5" fill="#2a3242" stroke="#1f2a44" stroke-width="3"/><path d="M66 72 h22 M66 78 h22 M66 84 h22" stroke="#4a5568" stroke-width="2.5"/>
+<path d="M118 62 h28 q6 0 8 6 l4 12 h-40z" fill="#2a3242" stroke="#1f2a44" stroke-width="3"/>
+<g><ellipse cx="130" cy="73" rx="6" ry="5" fill="#ff5a3a"/><ellipse cx="148" cy="73" rx="6" ry="5" fill="#ff5a3a"/><circle cx="131" cy="72" r="2" fill="#fff3c4"/><circle cx="149" cy="72" r="2" fill="#fff3c4"/></g>
+<path d="M120 62 L140 70 M158 62 L140 70" stroke="#1f2a44" stroke-width="5"/>
+<path d="M126 92 q8 -7 14 -1 q6 -6 14 1 q-6 6 -14 2 q-8 5 -14 -2z" fill="#c9c9c9" stroke="#1f2a44" stroke-width="2.5"/>
+<path d="M162 70 L199 86 L162 102 Z" fill="#7d8799" stroke="#1f2a44" stroke-width="4"/><path d="M170 74 l-3 24 M180 79 l-2 14 M189 83 l-1 6" stroke="#4a5263" stroke-width="3.5"/>
+<rect x="152" y="68" width="12" height="36" rx="4" fill="#5d6577" stroke="#1f2a44" stroke-width="4"/>
+<text x="84" y="47" font-family="Fredoka,system-ui,sans-serif" font-weight="700" font-size="13" fill="#ffd23f" stroke="#1f2a44" stroke-width="3" paint-order="stroke" text-anchor="middle">BROM 3000</text>
+</svg>`;
+function graafmolImg() { return IMG_CACHE._gm || (IMG_CACHE._gm = svgImage(GRAAFMOL_SVG)); }
+/* Tuinkabouter (bovenaanzicht-schuin, zelfde stijl als de kinderen). turned: kijkt de andere kant op (je ziet zijn gezichtje). hat: kleur van de muts. */
+function drawGnome(ctx, x, y, s, turned, hat, t, spin) {
+  ctx.save(); ctx.translate(x, y); ctx.scale(s, s);
+  ctx.fillStyle = 'rgba(0,0,0,.2)'; ctx.beginPath(); ctx.ellipse(0, 0, 8, 2.8, 0, 0, Math.PI * 2); ctx.fill();
+  const sq = spin != null ? Math.abs(Math.cos(spin * Math.PI)) * .7 + .3 : 1; ctx.scale(sq, 1);
+  const face = spin != null ? (spin > .5) === !turned : !turned;   // true = gezicht naar ons
+  rrect(ctx, -5.5, -12, 11, 11, 4); fillStroke(ctx, '#2f6ad9', 1);         // jasje
+  ctx.fillStyle = '#5e3d24'; ctx.fillRect(-5.5, -5, 11, 2);                  // riem
+  ctx.fillStyle = '#ffd23f'; ctx.fillRect(-1.2, -5.2, 2.4, 2.4);
+  circle(ctx, 0, -16, 5.4); fillStroke(ctx, '#ffd9b8', 1);                   // hoofd
+  if (face) {
+    ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.moveTo(-5.2, -15.5); ctx.quadraticCurveTo(0, -4, 5.2, -15.5); ctx.quadraticCurveTo(0, -12.5, -5.2, -15.5); ctx.fill(); ctx.strokeStyle = OUT; ctx.lineWidth = .7; ctx.stroke();
+    ctx.fillStyle = '#1f2a44'; circle(ctx, -2, -17.2, .9); ctx.fill(); circle(ctx, 2, -17.2, .9); ctx.fill();
+    ctx.fillStyle = '#ff9f8a'; circle(ctx, 0, -15.4, 1.5); ctx.fill();
+  } else { ctx.fillStyle = '#fff'; ctx.beginPath(); ctx.arc(0, -15, 5, .1 * Math.PI, .9 * Math.PI); ctx.fill(); }
+  ctx.fillStyle = hat || '#e8403a'; ctx.beginPath(); ctx.moveTo(-6, -18.5); ctx.quadraticCurveTo(0, -21, 6, -18.5); ctx.lineTo(face ? 1.5 : -1.5, -31); ctx.closePath(); ctx.fill(); ctx.strokeStyle = OUT; ctx.lineWidth = 1; ctx.stroke();
+  ctx.restore();
+}
+
 /* ===== core/dialog.js ===== */
 /* =========================================================
    Praatwolken onderin: talk([[wie, tekst], ...]) en ask(wie, tekst, [keuzes]) -> Promise.
-   wie: p (speler), f (beste vriend), mama, papa, mol, '' (verteller). {p} en {f} worden namen.
+   wie: p (speler), f (beste vriend), mama, papa, mol, vlieg, brom (buurman Brom), '' (verteller). {p} en {f} worden namen.
    ========================================================= */
 const NPC_LOOKS = {
   mama: { skin: '#f6c69e', hair: 'lang', hairCol: '#8a4b25', shirt: '#d6336c', apron: true, pants: '#3b4767' },
@@ -1290,6 +1529,7 @@ function speaker(who) {
   if (who === 'papa') return { name: 'Papa', look: NPC_LOOKS.papa, adult: true, col: '#2f6b4b', pitch: .8 };
   if (who === 'mol') return { name: 'Supermol', mol: true, col: '#7a4a2a', pitch: 1.6 };
   if (who === 'vlieg') return { name: 'Vliegbot', vlieg: true, col: '#1fa6e0', pitch: 1.9 };
+  if (who === 'brom') return { name: 'Buurman Brom', brom: true, col: '#7a5a2a', pitch: .62 };
   return { name: '', col: '#6a3bd6', pitch: 1 };
 }
 const fillNames = t => String(t).replace(/\{p\}/g, esc(pName())).replace(/\{f\}/g, esc(fName()));
@@ -1300,7 +1540,7 @@ function showLine(who, text, choices) {
     DLG.open = true; DLG.res = res; DLG.full = fillNames(text); DLG.shown = 0; DLG.typing = true; DLG.choices = choices || null; DLG.t0 = performance.now();
     $('#dlg').classList.add('show');
     const port = $('#dlgPort'); port.style.display = sp.name ? '' : 'none';
-    if (sp.name) { if (sp.mol) drawPortrait(port, null, { mol: true }); else if (sp.vlieg) drawPortrait(port, null, { vlieg: true }); else drawPortrait(port, sp.look, { adult: sp.adult }); }
+    if (sp.name) { if (sp.mol) drawPortrait(port, null, { mol: true }); else if (sp.brom) drawPortrait(port, null, { brom: true }); else if (sp.vlieg) drawPortrait(port, null, { vlieg: true }); else drawPortrait(port, sp.look, { adult: sp.adult }); }
     const nm = $('#dlgName'); nm.textContent = sp.name || '📢'; nm.style.background = sp.col;
     $('#dlgMsg').innerHTML = ''; $('#dlgChoices').innerHTML = ''; $('#dlgNext').style.visibility = 'hidden';
     clearInterval(DLG.timer);
@@ -1420,6 +1660,9 @@ function registerItem(o) { GB.ITEMS[o.id] = Object.assign({ cat: 'materiaal' }, 
   { id: 'frisbee', name: 'Frisbee', cat: 'deco', desc: 'Die lag al maanden op het dak!' },
   { id: 'robotknuffel', name: 'Robotknuffel', cat: 'deco', desc: 'Een zachte robotknuffel. Lag boven op de kast.' },
   { id: 'trofee', name: 'Escape-trofee', cat: 'deco', desc: 'Voor de slimste speurders van de escaperoom!' },
+  // Fase 3: buurman Brom
+  { id: 'koekje', name: 'Koekje van mama', cat: 'eten', desc: 'Vers uit de oven. Mama geeft er elke dag één.' },
+  { id: 'koekjestrommel', name: 'Appelkoekjes', cat: 'eten', desc: 'Een trommel appelkoekjes. Daar wordt zelfs buurman Brom vrolijk van!' },
   { id: 'tandwiel', name: 'Geheimzinnig tandwiel', cat: 'sleutel', desc: 'Een gouden tandwiel met een vreemd teken. Is er nóg een robot?' },
 ].forEach(registerItem);
 const VLIEG_PARTS = ['propellers', 'afstandsbediening', 'camera', 'lichtframe'];
@@ -1443,6 +1686,8 @@ registerRecipe({ id: 'ladder', name: 'Ladder', icon: 'ladder', needs: ['planken'
   hint: 'Planken + touw. Om bij het zolderluik te komen.' });
 registerRecipe({ id: 'molbrandstof', name: 'Mol-brandstof', icon: 'molbrandstof', needs: ['wortel', 'appel'], gives: { energie: 1 }, once: false,
   hint: 'Wortel + appel = 1 ⚡ energie. Elke dag opnieuw!' });
+registerRecipe({ id: 'koekjestrommel', name: 'Appelkoekjes', icon: 'koekjestrommel', needs: ['koekje', 'appel'], gives: { item: 'koekjestrommel' }, once: false,
+  hint: 'Koekje van mama + appel uit de boom. Om buurman Brom blij te maken!', when: () => S.buur && S.buur.met });
 
 /* ===== data/robots.js ===== */
 /* =========================================================
@@ -1517,6 +1762,15 @@ function registerAch(o) { GB.ACHIEVEMENTS[o.id] = o; }
   { id: 'vliegbot', icon: '🚁', name: 'Piloot', desc: 'De Vliegbot gebouwd!' },
   { id: 'vlieg5', icon: '🪺', name: 'Hoog in de lucht', desc: 'Alle 5 hoge plekken bezocht met de Vliegbot.' },
   { id: 'deco', icon: '🎨', name: 'Binnenhuisarchitect', desc: 'Iets moois in de basis gezet.' },
+  { id: 'buurman', icon: '👀', name: 'Buurman Brom', desc: 'Buurman Brom houdt jullie in de gaten. Oei!' },
+  { id: 'teslim', icon: '😎', name: 'Te slim af!', desc: 'Voor het eerst een streek uitgehaald bij buurman Brom.' },
+  { id: 'mollenrace3', icon: '🏁', name: 'Mollenkampioen', desc: 'De Mollenrace gewonnen op ⭐⭐⭐.' },
+  { id: 'kabouter', icon: '🍄', name: 'Kabouterkoning', desc: 'Alle tuinkabouters omgedraaid zonder één keer betrapt te worden.' },
+  { id: 'belletje', icon: '🔔', name: 'Belletje-lel-kampioen', desc: 'Belletje lellen gewonnen op ⭐⭐⭐.' },
+  { id: 'klusje', icon: '🧹', name: 'Lieve helper', desc: 'Een klusje voor mama gedaan.' },
+  { id: 'koekjes', icon: '🍪', name: 'Vrede met koekjes', desc: 'Buurman Brom blij gemaakt met appelkoekjes.' },
+  { id: 'nietsmam', icon: '🤫', name: 'Niks, mam!', desc: 'Bijna betrapt… maar niks verraden.' },
+  { id: 'brein10', icon: '🧠', name: 'Meesterbrein', desc: '10 streken gelukt bij buurman Brom.' },
   { id: 'samen', icon: '👫', name: 'Samen spelen', desc: 'Een spel met 2 spelers gespeeld.' },
 ].forEach(registerAch);
 
@@ -1772,7 +2026,7 @@ registerMap({
     { id: 'kapstok', kind: 'coatrack', x: 10, y: 8, use: { label: 'Bekijk', loot: 'camera', after: 'vliegtekening', unlessRobot: 'vliegbot', text: 'In de zak van papa’s oude jas zit… een mini-camera! Perfect voor de Vliegbot!', empty: 'Jassen en sjaals. En papa’s gekke hoed.' } },
     { id: 'schoenen', kind: 'shoes', x: 10, y: 13, use: { label: 'Bekijk', empty: 'Een stapel schoenen. Pfoe, wat een luchtje!' } },
     { id: 'klok', kind: 'clock', x: 13, y: 5, solid: false, layer: 0 },
-    { id: 'voordeur', kind: 'door', x: 11, y: 15, solid: false, layer: 0 },
+    { id: 'voordeur', kind: 'door', dyn: 'doorDyn', x: 11, y: 15, solid: false, layer: 0 },
     // woonkamer
     { id: 'tv', kind: 'tv', x: 2, y: 8, w: 3, use: { label: 'Open', loot: 'batterijtjes', text: 'In het laatje onder de tv liggen batterijtjes!', empty: 'Er is een tekenfilm over… robots! Leuk, maar we hebben werk te doen.' } },
     { id: 'bank', kind: 'sofa', x: 2, y: 12, w: 3, use: { label: 'Bekijk', loot: 'energie', text: 'Tussen de kussens van de bank… een glimmende energie-batterij!', empty: ['Kruimels, een munt en een haarspeld.', 'Even zitten… nee, verder!'] } },
@@ -1998,6 +2252,7 @@ function buildBaseMap() {
       { id: 'automaat', kind: 'automaat', x: 26, y: 11, use: { label: 'Automaat', icon: '🪙', action: 'automaat' } },
       { id: 'hqrug', kind: 'rug', x: 18, y: 14, w: 6, h: 2, solid: false, layer: 0, color: '#3f6fe0' },
       { id: 'hqbank', kind: 'sofaBase', x: 19, y: 17, w: 3, use: { label: 'Bekijk', empty: ['Onze eigen bank in onze eigen basis!', 'Even uitrusten… zo, weer verder!'] } },
+      ...(S.buur.met ? [{ id: 'buurbord', kind: 'buurBoard', x: 25, y: 11, use: { label: 'Plan', icon: '🤫', action: 'buurplan' } }] : []),
       ...[[16, 17], [25, 17], [16, 15]].map(([x, y], i) => ({ id: 'deco_hq' + i, kind: 'decoSpot', dyn: 'decoSpotDyn', x, y, solid: false, use: { label: 'Versier', icon: '🎨', action: 'deco' } })),
     );
     areas.unshift({ name: '🖥️ Hoofdkwartier', x: 15, y: 11, w: 12, h: 8 });
@@ -2013,6 +2268,7 @@ buildBaseMap();
    - Supermol gebouwd + luik geopend: Hoofdkwartier + Bowlingbaan meteen gegraven.
    - Elke echte kalenderdag (middernacht, klok van het apparaat): 1 nieuwe kamer (ook in te halen na dagen weg).
    - Met DIG_COST energie: meteen een extra kamer ('Graaf nu').
+   - Fase 3: als buurman Brom oplet (buurGateOn), wacht een nieuwe kamer op een gelukte streek (zie buurman.js).
    ========================================================= */
 const DIG_COST = 3;
 const nextRoom = () => roomList().find(r => !r.soon && !isDug(r.id));
@@ -2023,7 +2279,7 @@ function digRoom(id, how) {
   buildBaseMap(); BUS.emit('dug', id);
 }
 function openBase() { // eerste keer: luik open, HQ + bowling
-  setFlag('baseOpen'); S.base.lastDay = dayKey(); save();
+  setFlag('baseOpen'); S.base.lastDay = dayKey(); S.buur.fresh = 1; save();
   digRoom('hq', 'start'); const r = nextRoom(); if (r) digRoom(r.id, 'start'); S.base.news = []; save(); achieve('basis');
 }
 // Kijk of er sinds de laatste keer nieuwe dagen zijn: geeft de nieuw gegraven kamers terug.
@@ -2034,14 +2290,15 @@ function checkDailyDig() {
   const n = daysBetween(S.base.lastDay, today);
   if (n < 0) { S.base.lastDay = today; save(); return []; }
   if (n === 0) return [];
+  if (buurGateOn()) { S.base.lastDay = today; save(); buurQueueDays(n); return []; }   // buurman Brom let op: eerst een streek (buurman.js)
   const dug = [];
   for (let i = 0; i < n; i++) { const r = nextRoom(); if (!r) break; digRoom(r.id, 'dag'); dug.push(r); }
   S.base.lastDay = today; save();
   return dug;
 }
 function digNow() {
-  const r = nextRoom(); if (!r || S.energie < DIG_COST) return null;
-  addEnergie(-DIG_COST); S.stats.dugByEnergy++; digRoom(r.id, 'energie'); achieve('graafnu'); return r;
+  const r = nextRoom(); if (!r || S.energie < DIG_COST || !econDigsLeft(S.econ, dayKey())) return null;
+  econDig(S.econ, dayKey()); addEnergie(-DIG_COST); S.stats.dugByEnergy++; digRoom(r.id, 'energie'); achieve('graafnu'); return r;
 }
 function unlockAllRooms() {
   if (!robotBuilt('supermol')) { ROBOT_PARTS.forEach(p => S.seenItems[p] = 1); S.robots.supermol = { built: dayKey() }; S.crafted.supermol = 1; setFlag('molFollow'); }
@@ -2049,6 +2306,7 @@ function unlockAllRooms() {
   if (!has('bouwtekening')) giveItem('bouwtekening');
   if (!flag('baseOpen')) openBase();
   let r; while ((r = nextRoom())) digRoom(r.id, 'ouders');
+  S.buur.due = 0; S.buur.nowReq = 0;
   buildVliegbotNow();
   save(); buildBaseMap();
 }
@@ -2162,7 +2420,7 @@ function worldUpdate(dt) {
   findNear();
   if (INPUT.actQueued) { INPUT.actQueued = false; if (free && W.near) doAct(W.near); }
   // camera
-  const tx = W.camTarget ? W.camTarget.x : p.x, ty = W.camTarget ? W.camTarget.y : p.y - T * .5; W.cam.x += (tx - W.cam.x) * Math.min(1, dt * 8); W.cam.y += (ty - W.cam.y) * Math.min(1, dt * 8); clampCam();
+  const tx = W.camTarget ? W.camTarget.x : p.x, ty = W.camTarget ? W.camTarget.y : p.y - T * .5; W.cam.x += (tx - W.cam.x) * Math.min(1, dt * 8); W.cam.y += (ty - W.cam.y) * Math.min(1, dt * (W.camFree ? 3 : 8)); if (!W.camFree) clampCam();
   // deeltjes
   W.parts = W.parts.filter(q => (q.life -= dt) > 0); W.parts.forEach(q => { q.x += q.vx * dt; q.y += q.vy * dt; q.vy += (q.g || 0) * dt; });
   if (W.bubble && W.t > W.bubble.until) W.bubble = null;
@@ -2187,6 +2445,12 @@ function followTrail(b, dist, dt) {
 }
 function updateNpcs(dt) {
   for (const n of WORLD.npcs) {
+    if (n.cut) { // gescripte wandeling (filmpjes)
+      const c = n.cut, dx = c.x - n.x, dy = c.y - n.y, m = Math.hypot(dx, dy);
+      if (m > 1.5) { const sp = Math.min(m, SPEED * (c.sp || .55) * dt); n.x += dx / m * sp; n.y += dy / m * sp; n.moving = true; n.ph += dt * 10; n.dir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : (dy < 0 ? 'up' : 'down'); }
+      else { n.moving = false; if (c.dir) n.dir = c.dir; if (c.done) { const d = c.done; c.done = null; d(); } }
+      continue;
+    }
     if (n.talking) { n.moving = false; const dx = WORLD.p.x - n.x, dy = WORLD.p.y - n.y; n.dir = Math.abs(dx) > Math.abs(dy) ? (dx < 0 ? 'left' : 'right') : (dy < 0 ? 'up' : 'down'); continue; }
     if (n.tx === null) { n.wait -= dt; n.moving = false; if (n.wait <= 0) { const a = n.area; n.tx = (a.x + Math.random() * a.w) * T; n.ty = (a.y + .7 + Math.random() * (a.h - 1)) * T; n.give = 4; } continue; }
     const dx = n.tx - n.x, dy = n.ty - n.y, m = Math.hypot(dx, dy); n.give -= dt;
@@ -2233,7 +2497,7 @@ function findNear() {
     const d = Math.min(rectDist(fx, fy, o), rectDist(p.x, p.y - 6, o) + 6);
     if (d < 16 && d < bd) { bd = d; best = { type: 'obj', o }; }
   }
-  for (const n of W.npcs) { const d = Math.hypot(n.x - fx, n.y - fy); if (d < 30 && d - 4 < bd) { bd = d - 4; best = { type: 'npc', n }; } }
+  for (const n of W.npcs) { if (n.cutActor) continue; const d = Math.hypot(n.x - fx, n.y - fy); if (d < 30 && d - 4 < bd) { bd = d - 4; best = { type: 'npc', n }; } }
   if (W.mol) { const d = Math.hypot(W.mol.x - fx, W.mol.y - fy); if (d < 30 && d < bd) { bd = d; best = { type: 'mol' }; } }
   if (W.drone && !W.drone.hold) { const d = Math.hypot(W.drone.x - fx, W.drone.y - fy); if (d < 22 && d < bd) { bd = d; best = { type: 'drone' }; } }
   if (W.f && !best) { const d = Math.hypot(W.f.x - fx, W.f.y - fy); if (d < 24) best = { type: 'friend' }; }
@@ -2273,9 +2537,10 @@ async function useObject(o) {
   const u = o.use;
   if (u.needs && !has(u.needs)) { SFX.nope(); await talk([['p', u.needText]]); return; }
   if (lootAvail(o)) {
+    if (u.loot === 'energie' && u.daily && econEnergyFull()) { await talk([['f', 'Hier ligt nog energie, maar de Supermol zit vandaag al vol. Morgen ligt het er nog!']]); return; }
     SFX.open(); if (u.text) await talk([['p', u.text]]);
     S.found[o.id] = u.daily ? dayKey() : 1; save();
-    if (u.loot === 'energie') { addEnergie(1); S.flags.energieFound = (S.flags.energieFound || 0) + 1; save(); await foundPopup('energie'); }
+    if (u.loot === 'energie') { if (u.daily) earnEnergie(1); else addEnergie(1); S.flags.energieFound = (S.flags.energieFound || 0) + 1; save(); await foundPopup('energie'); }
     else { giveItem(u.loot); await foundPopup(u.loot); }
     WORLD.rebuild(); BUS.emit('found', u.loot); return;
   }
@@ -2321,7 +2586,7 @@ function worldDraw() {
   ents.push({ y: W.p.y, d: () => drawKid(c, S.chars.p, W.p.x, W.p.y, W.p.dir, W.p.ph, W.p.moving, { t: W.t }) });
   if (W.f) ents.push({ y: W.f.y, d: () => drawKid(c, S.chars.f, W.f.x, W.f.y, W.f.dir, W.f.ph || 0, W.f.moving, { t: W.t + 1.3 }) });
   if (W.mol) ents.push({ y: W.mol.y, d: () => drawMol(c, W.mol.x, W.mol.y, W.mol.dir === 'left' ? 'left' : 'right', W.t, 40, W.mol.digging) });
-  for (const n of W.npcs) ents.push({ y: n.y, d: () => drawKid(c, NPC_LOOKS[n.id], n.x, n.y, n.dir, n.ph, n.moving, { t: W.t + 2, adult: true }) });
+  for (const n of W.npcs) ents.push({ y: n.y, d: () => n.id === 'brom' ? drawBrom(c, n.x, n.y, n.dir, n.ph, n.moving, { t: W.t + 2, mood: n.mood }) : drawKid(c, NPC_LOOKS[n.id], n.x, n.y, n.dir, n.ph, n.moving, { t: W.t + 2, adult: true }) });
   ents.sort((a, b) => a.y - b.y).forEach(e => e.d());
   for (let cy = cy0; cy <= cy1; cy++) for (let cx = cx0; cx <= cx1; cx++) { const cv = chunkCanvas('o', cx, cy); if (cv) c.drawImage(cv, cx * size, cy * size, size + pad, size + pad); }
   drawFlyTop(c, W.t);
@@ -2389,12 +2654,14 @@ function goalKey() {
   if (!robotBuilt('supermol')) { if (!hasBlueprint()) return 'tekening'; return partsHave() < 5 ? 'onderdelen' : 'bouwen'; }
   if (!flag('baseOpen')) return has('zaklamp') ? 'kelder' : 'zaklamp';
   if (!flag('monitorSeen')) return 'monitor';
+  if (buurWaiting()) return buurLeft() > 0 ? 'buurdig' : 'buurmorgen';   // buurman Brom let op (buurman.js)
   if (!(S.stats.games.bowling > 0)) return 'bowling';
   if (!robotBuilt('vliegbot')) {
     if (!S.seenItems.vliegtekening) { if (isDug('minigolf')) return 'vliegkist'; }
     else return vliegHave() < VLIEG_PARTS.length ? 'vliegdelen' : 'vliegbouwen';
   } else if (flyCount() < allFlySpots().length && !(S.flags.flyGoalSkip > 0)) return 'vliegen';
   if (isDug('escaperoom') && !flag('first_escaperoom')) return 'escape';
+  if (S.buur.met && !S.buur.total && S.buur.on) return 'buurplan';
   return nextRoom() ? 'wachten' : 'klaar';
 }
 function nextGoal() {
@@ -2414,6 +2681,9 @@ function nextGoal() {
     wachten: r ? `⛏️ Morgen graaft de Supermol de ${r.name}! (of verzamel 3 ⚡)` : '',
     escape: '🔐 Ontsnap uit de Escaperoom (rechtsboven in de basis)',
     klaar: '🎉 Alle kamers zijn klaar! Speel, verzamel en haal alle prestaties.',
+    buurdig: r ? `🤫 Eerst een streek bij buurman Brom: dan graaft de Supermol de ${r.name}!` : '',
+    buurmorgen: '😴 Morgen graaft de Supermol verder… tenzij!',
+    buurplan: '🤫 Bekijk het Buurman-plan in het Hoofdkwartier',
   }[k];
 }
 function hint() {
@@ -2451,6 +2721,9 @@ function hint() {
     if (m === 'afstandsbediening') return GB.MINIGAMES.racebaan && isDug('racebaan') ? 'Rij een keer de hele race uit in de Racebaan. Dan krijgen we de afstandsbediening!' : 'De afstandsbediening krijgen we bij de Racebaan. Die graaft de Supermol binnenkort!';
   }
   if (k === 'vliegbouwen') return 'We hebben alle 4 onderdelen! Snel naar de werkbank in de speelkamer!';
+  if (k === 'buurdig') return 'De Supermol wil graven, maar buurman Brom luistert mee! Op het Buurman-plan in het Hoofdkwartier kiezen we een streek. Lukt die? Dan graaft de mol meteen.';
+  if (k === 'buurmorgen') return S.buur.klus !== dayKey() ? 'Mama zegt: morgen weer. Tenzij we haar helpen met een klusje! Kijk op het Buurman-plan.' : has('koekjestrommel') ? 'Met onze appelkoekjes maken we buurman Brom vrolijk! Kijk op het Buurman-plan.' : 'Morgen mag de Supermol weer graven. Appelkoekjes maak je met een koekje van mama en een appel!';
+  if (k === 'buurplan') return 'Buurman Brom houdt ons in de gaten! In het Hoofdkwartier hangt ons Buurman-plan. Daar kiezen we een streek.';
   if (k === 'escape') return 'In de Escaperoom (rechtsboven in de basis) zitten puzzels en raadsels. Elke puzzel geeft een cijfer voor de deur. Lukt het ons om te ontsnappen?';
   if (k === 'vliegen') { const l = allFlySpots().filter(sp => !flyDone(sp)); return `Met de Vliegbot kunnen we nog bij ${l.map(s => s.name).join(', ')}. Loop erheen en tik op 🚁 Vlieg!`; }
   const tips = [];
@@ -2469,7 +2742,11 @@ const CHATTER = ['Psst… niemand mag van onze basis weten, hè?', 'Weet je wat 
 GB.TALKS.friend = async () => { await talk([['f', hint()]]); };
 GB.TALKS.mama = async () => {
   const today = dayKey();
-  if (S.flags.mamaKoek !== today) { setFlag('mamaKoek', today); await talk([['mama', 'Hallo jongens! Willen jullie een koekje? Vers uit de oven!'], ['f', 'Mmm, lekker! Dank u wel!'], ['mama', pick(mamaHints())]]); return; }
+  if (S.flags.mamaKoek !== today) {
+    setFlag('mamaKoek', today);
+    if (S.buur.met) { await talk([['mama', 'Hallo jongens! Willen jullie een koekje? Vers uit de oven!'], ['f', 'Mmm, lekker! Dank u wel!'], ['p', '(fluistert) Bewaar er eentje… Met een appel maken we er appelkoekjes van voor buurman Brom!']]); giveItem('koekje'); await foundPopup('koekje'); return; }
+    await talk([['mama', 'Hallo jongens! Willen jullie een koekje? Vers uit de oven!'], ['f', 'Mmm, lekker! Dank u wel!'], ['mama', pick(mamaHints())]]); return;
+  }
   await talk([['mama', pick(mamaHints())]]);
 };
 function mamaHints() {
@@ -2478,6 +2755,7 @@ function mamaHints() {
   if (k === 'zaklamp') h.push('Een zaklamp? Daar heb je een lampje en batterijtjes voor nodig, schat.');
   if (k === 'tekening') h.push('Wat gaan jullie bouwen? Kijk anders eens in de boekenkast in de speelkamer.');
   if (flag('baseOpen')) h.push('Jullie zijn wel veel in de kelder de laatste tijd… Wat doen jullie daar toch?', 'Ik hoorde gerommel onder de vloer. Zou het de verwarming zijn?');
+  if (S.buur.met) h.push('Buurman Brom klaagt weer over lawaai. Ik hoor nooit iets!', 'Die buurman Brom, die moppert ook altijd.');
   h.push('Vergeet niet ook even buiten te spelen!', 'Wat zijn jullie toch druk vandaag!', 'Een appel per dag houdt de dokter weg. De appelboom staat in de tuin!');
   return h;
 }
@@ -2496,6 +2774,15 @@ GB.TALKS.mol = async () => {
   if (!flag('baseOpen')) { await talk([['mol', 'Piep piep! Supermol klaar om te graven! Waar zal ik graven?'], ['f', 'In de kelder! Daar ziet niemand het.']]); return; }
   const r = nextRoom();
   if (!r) { await talk([['mol', 'Piep! Alles is gegraven. Ik wacht op nieuwe bouwtekeningen voor nieuwe kamers!']]); return; }
+  if (buurWaiting()) {
+    const a = await ask('mol', buurLeft() > 0 ? `Piep! Ik sta klaar om de ${r.name} te graven… maar buurman Brom luistert mee! Eerst een streek, dan graaf ik.` : `Piep… Voor vandaag is het genoeg, zegt mama. Morgen graaf ik de ${r.name}. Tenzij…`, ['🤫 Naar het Buurman-plan', 'Straks']);
+    if (a === 0) openBuurPlan(); return;
+  }
+  if (S.energie >= DIG_COST && !canDigNow()) { await talk([['mol', `Piep! Vannacht graaf ik de ${r.name}. ${ECON_DIG_TXT}`]]); return; }
+  if (buurGateOn() && S.energie >= DIG_COST) {
+    const a = await ask('mol', `Piep! Vannacht wil ik de ${r.name} graven. Maar ik heb ${S.energie} ⚡ energie… Zal ik nu meteen graven? Dan moeten we wel eerst buurman Brom te slim af zijn!`, ['⛏️ Ja! Eerst een streek', 'Nee, later']);
+    if (a === 0 && buurRequestNow()) openBuurPlan(); return;
+  }
   if (S.energie >= DIG_COST) {
     const a = await ask('mol', `Piep! Vannacht graaf ik de ${r.name}. Maar ik heb ${S.energie} ⚡ energie… Zal ik nu meteen graven?`, ['⛏️ Ja, graaf nu! (3 ⚡)', 'Nee, later']);
     if (a === 0) await digNowCutscene();
@@ -2515,9 +2802,11 @@ GB.ACTIONS.barrier = async o => {
   await talk([['f', `Achter deze planken graaft de Supermol de ${r.emoji} ${r.name}! Dat gebeurt ${when}.`]]);
 };
 GB.ACTIONS.automaat = async () => {
+  const td = dayKey();
+  if (!econCanBuy(S.econ, td)) { await talk([['', econEnergyFull() ? `Energie-automaat: 😴 De Supermol heeft vandaag al genoeg energie gekregen (${ECON.E_DAY} ⚡ per dag). Morgen weer!` : `Energie-automaat: 🔒 Vandaag al ${ECON.BUY_MAX}× gekocht. De automaat wordt vannacht weer bijgevuld!`]]); return; }
   if (S.munten < 50) { await talk([['', `Energie-automaat: 50 🪙 munten = 1 ⚡ energie. Je hebt ${S.munten} munten. Speel spelletjes om munten te verdienen!`]]); return; }
-  const a = await ask('', `Energie-automaat: 50 🪙 munten = 1 ⚡ energie. Je hebt ${S.munten} munten.`, ['🪙 Kopen!', 'Nee, bewaren']);
-  if (a === 0) { addMunten(-50); addEnergie(1); SFX.energie(); toast('⚡ +1 energie!', 'gold'); burst(WORLD.p.x, WORLD.p.y - 30, 16, ['#ffd23f', '#4cd964', '#fff']); }
+  const a = await ask('', `Energie-automaat: 50 🪙 munten = 1 ⚡ energie. Je hebt ${S.munten} munten. (Vandaag nog ${ECON.BUY_MAX - (S.econ.day === td ? S.econ.buy : 0)}× te koop.)`, ['🪙 Kopen!', 'Nee, bewaren']);
+  if (a === 0 && econBuy(S.econ, td)) { addMunten(-50); addEnergie(1); SFX.energie(); toast('⚡ +1 energie!', 'gold'); burst(WORLD.p.x, WORLD.p.y - 30, 16, ['#ffd23f', '#4cd964', '#fff']); }
 };
 GB.ACTIONS.deco = async o => {
   const cur = S.base.deco[o.id];
@@ -2568,7 +2857,7 @@ async function digBaseCutscene() {
   WORLD.busy--; updateHud();
 }
 async function digNowCutscene() {
-  const r = nextRoom(); if (!r || S.energie < DIG_COST) return;
+  const r = nextRoom(); if (!r || !canDigNow()) return;
   WORLD.busy++;
   if (WORLD.map.id === 'basis' && WORLD.mol) WORLD.mol.digging = true;
   SFX.dig(); WORLD.shake = 2; $('#fade').style.transition = 'opacity .5s'; await wait(900); $('#fade').classList.add('on'); await wait(600);
@@ -2623,6 +2912,7 @@ function storyTick(dt) {
   chatterT -= dt; digCheckT -= dt;
   if (chatterT <= 0 && !WORLD.busy && !DLG.open && !WORLD.bubble) { chatterT = rnd(40, 70); friendSays(Math.random() < .6 ? hint() : pick(CHATTER), 5); }
   if (digCheckT <= 0) { digCheckT = 20; const d = checkDailyDig(); if (d.length) showDigNews(d); }
+  buurTick(dt); if (BUUR.news) buurNews();
 }
 
 /* ===== world/vliegbot.js ===== */
@@ -2731,6 +3021,254 @@ function buildVliegbotNow() {
   S.found.vliegkist = 1; S.robots.vliegbot = { built: dayKey() }; S.crafted.vliegbot = 1; S.flags.vliegFollow = 1; save();
   if (WORLD.map) droneSpawn();
 }
+
+/* ===== world/buurman.js ===== */
+/* =========================================================
+   BUURMAN BROM (fase 3)
+   - Filmpje: na de eerste kamer(s) belt buurman Brom aan en klaagt bij mama over het lawaai. Oude saves: de volgende keer in huis.
+   - Graaf-poort: als de Supermol een nieuwe kamer wil graven (dag-kamer of 'Graaf nu'), moet eerst een streek lukken.
+     Gegraven kamers blijven altijd open. Per dag S.buur.tries mislukte pogingen (0 = onbeperkt); daarna wacht de kamer tot morgen,
+     TENZIJ: 1x per dag een klusje voor mama (+1 poging) of appelkoekjes voor de buurman (dan graaft de mol toch).
+   - Buurman-plan (bord in het HQ + knop op de monitor): alle streken, ook voor de lol (munten, 1x per dag ⚡, prestaties).
+   Nieuwe streek? Entry in PRANKS + registerMinigame({ id, prank: true, ... }) die buurFinish() aanroept.
+   ========================================================= */
+const PRANKS = [
+  { id: 'mollenrace', name: 'Mollenrace', emoji: '🦫', desc: 'Race onder de grond tegen de Graafmol van de buurman.' },
+  { id: 'kabouters', name: 'Tuinkabouters', emoji: '🍄', desc: 'Sluip zijn tuin in en draai de kabouters om. Stilstaan als hij kijkt!' },
+  { id: 'belletje', name: 'Belletje lellen', emoji: '🔔', desc: 'Bel aan en verstop je snel voordat de deur opengaat!' },
+  { id: 'water', name: 'Waterpistolen', emoji: '💦', desc: 'Een watergevecht over de schutting.', soon: true },
+  { id: 'cameras', name: 'Langs de camera’s', emoji: '📹', desc: 'Sluip langs zijn nieuwe beveiligingscamera’s.', soon: true },
+  { id: 'stil', name: 'Geluid dempen', emoji: '🔇', desc: 'Maak de Supermol superstil.', soon: true },
+];
+const BUUR = { test: false, cut: false, wait: 0, replay: false, news: false, doorOpen: false };
+const BUUR_COINS = [10, 15, 20];
+const buurGateOn = () => !!(S.buur.on && S.buur.met && flag('baseOpen') && robotBuilt('supermol'));
+function buurDay() { const t = dayKey(); if (S.buur.day !== t) { S.buur.day = t; S.buur.lost = 0; S.buur.extra = 0; save(); } }
+function buurLeft() { buurDay(); return S.buur.tries ? Math.max(0, S.buur.tries + S.buur.extra - S.buur.lost) : Infinity; }
+const buurRemaining = () => roomList().filter(r => !r.soon && !isDug(r.id)).length;
+// Wacht er een kamer op een gelukte streek?
+function buurWaiting() {
+  const b = S.buur;
+  if (!buurGateOn() || !nextRoom()) { if (b.due || b.nowReq) { b.due = 0; b.nowReq = 0; save(); } return false; }
+  if (b.nowReq && !b.due && !canDigNow()) { b.nowReq = 0; save(); }
+  return b.due > 0 || b.nowReq > 0;
+}
+const buurLocked = () => buurWaiting() && buurLeft() <= 0;       // pogingen op voor vandaag
+const buurLevel = id => { const w = S.buur.wins[id] || 0; return w >= 5 ? 3 : w >= 2 ? 2 : 1; };
+const buurStars = n => '⭐'.repeat(n);
+// Met welke inzet start een streek? (test vanuit het ouderpaneel telt nooit mee)
+function buurCtx() { return { dig: !BUUR.test && buurWaiting() && buurLeft() > 0 }; }
+// Dag-kamers worden 'wachtend' in plaats van meteen gegraven (aangeroepen vanuit checkDailyDig)
+function buurQueueDays(n) {
+  const b = S.buur, before = b.due; b.due = Math.min(buurRemaining(), b.due + n); save();
+  if (b.due > before) BUUR.news = true;
+}
+function buurRequestNow() { if (!buurGateOn() || !nextRoom() || !canDigNow()) return false; S.buur.nowReq = 1; save(); return true; }
+
+/* ---------- na een streek: uitslag + gevolgen ---------- */
+// o: { won, level, lines: [], scores?: [{name, text}] , perfect }
+function buurFinish(api, id, o) {
+  const b = S.buur, ctx = (MG.inst && MG.inst.bctx) || { dig: false }; buurDay();
+  b.plays[id] = (b.plays[id] || 0) + 1;
+  const lines = (o.lines || []).slice(); let after = null, noAgain = false, backLabel = null, title;
+  if (o.won) {
+    const oldLvl = buurLevel(id); b.wins[id] = (b.wins[id] || 0) + 1; b.total++; b.lvl[id] = Math.max(b.lvl[id] || 0, o.level);
+    achieve('teslim'); if (b.total >= 10) achieve('brein10');
+    if (o.level >= 3) achieve({ mollenrace: 'mollenrace3', belletje: 'belletje' }[id] || '_');
+    const nl = buurLevel(id); if (nl > oldLvl) lines.push(`🔓 Nieuw niveau vrij: <b>${buurStars(nl)}</b>!`);
+    title = '😎 Te slim af!';
+    if (ctx.dig) { lines.push('⛏️ Buurman Brom heeft niks door. Nu kan de Supermol graven!'); after = async () => { await buurDigAfterWin(); await buurBijna(); }; noAgain = true; backLabel = '⛏️ Laat de mol graven!'; }
+    else { if (!BUUR.test) after = () => buurBijna(); }
+  } else {
+    title = '😬 Betrapt!';
+    if (ctx.dig && S.buur.tries) {
+      b.lost++; const left = buurLeft();
+      lines.push(left ? `Nog <b>${left}</b> ${left === 1 ? 'poging' : 'pogingen'} vandaag om buurman Brom te slim af te zijn.` : 'Dat was de laatste poging van vandaag…');
+      if (!left) { noAgain = true; after = () => buurOutScene(); }
+    } else lines.push('Geeft niks! Probeer het gerust nog een keer.');
+  }
+  save(); if (WORLD.map && WORLD.map.id === 'basis') buildBaseMap();
+  const sc = o.scores || api.players.map(p => ({ name: p.name, score: o.won ? o.level : 0, text: o.won ? buurStars(o.level) + ' gelukt' : 'betrapt' }));
+  if (o.won) S.hi[id] = Math.max(S.hi[id] || 0, o.level);   // 'record' = hoogste niveau gewonnen (zonder 'Nieuw record!'-kop)
+  api.end({ scores: sc.map(s => ({ name: s.name, score: o.won ? o.level : 0, text: s.text })), winner: null, best: o.won ? o.level : 0, noRecord: true, title, lines,
+    coins: o.won ? BUUR_COINS[o.level - 1] : 3, bonus: !!o.won, after, noAgain, backLabel });
+}
+// De mol graaft (na een gelukte streek of koekjes)
+async function buurDigAfterWin() {
+  const b = S.buur; let how = null;
+  if (!nextRoom()) { b.due = 0; b.nowReq = 0; save(); return; }
+  if (b.due > 0) { b.due--; how = 'dag'; } else if (b.nowReq && canDigNow()) { b.nowReq = 0; econDig(S.econ, dayKey()); addEnergie(-DIG_COST); S.stats.dugByEnergy++; how = 'energie'; } else return;
+  save(); const r = nextRoom();
+  if (!(WORLD.active && WORLD.map)) { digRoom(r.id, how); if (how === 'energie') achieve('graafnu'); return; }
+  WORLD.busy++;
+  try {
+    if (WORLD.map.id === 'basis' && WORLD.mol) WORLD.mol.digging = true;
+    SFX.dig(); WORLD.shake = 2; $('#fade').style.transition = 'opacity .5s'; await wait(900); $('#fade').classList.add('on'); await wait(600);
+    digRoom(r.id, how); if (how === 'energie') achieve('graafnu');
+    if (WORLD.map.id === 'basis') loadMap('basis', { px: WORLD.p.x, py: WORLD.p.y, dir: WORLD.p.dir });
+    if (WORLD.mol) WORLD.mol.digging = false;
+    $('#fade').classList.remove('on'); await wait(500); $('#fade').style.transition = '';
+    SFX.build(); toast(`⛏️ Nieuwe kamer: <b>${r.emoji} ${r.name}</b>!`, 'gold');
+    await talk([['mol', `Piep! Buurman Brom had niks door. De ${r.name} is klaar!`], ['f', 'Yes! Kom, we gaan kijken! Op de monitor zie je waar hij is.']]);
+  } finally { WORLD.busy--; updateHud(); }
+}
+// 'Bijna betrapt!': mama vraagt wat jullie doen (alleen voor de lol, max 1x per dag, altijd na de allereerste streek)
+async function buurBijna() {
+  const b = S.buur, today = dayKey();
+  if (!(WORLD.active && WORLD.map) || b.bijna === today || (b.total > 1 && Math.random() > .45)) return;
+  b.bijna = today; save(); WORLD.busy++;
+  try {
+    await wait(300); toast('😳 <b>Bijna betrapt!</b>', 'gold');
+    const under = WORLD.map.underground || WORLD.map.id === 'kelder';
+    await talk([['mama', under ? 'Jongens? Wat is dat voor gestommel daar beneden? Wat zijn jullie aan het doen?' : 'Hé, jullie twee… Wat zijn jullie aan het doen?'], ['p', 'Niks, mam!'], ['f', 'Echt helemaal niks!'],
+      ['mama', 'Hmm… Ik houd jullie in de gaten, hoor!'], ['f', '(fluistert) Pfoe… Dat was op het nippertje!']]);
+    achieve('nietsmam');
+  } finally { WORLD.busy--; }
+}
+// Pogingen op: mama roept. Daarna het plan met de TENZIJ-knoppen.
+async function buurOutScene() {
+  if (!(WORLD.active && WORLD.map)) return;
+  WORLD.busy++;
+  try {
+    SFX.mealCall();
+    await talk([['mama', '{p}! {f}! Genoeg gespeeld voor vandaag, morgen weer verder!'], ['p', 'Ooo… Dan graaft de Supermol pas morgen.'], ['f', 'Tenzij…'], ['p', 'Tenzij wat?'], ['f', buurTenzijText()]]);
+  } finally { WORLD.busy--; updateHud(); }
+  openBuurPlan();
+}
+function buurTenzijText() {
+  const k = S.buur.klus !== dayKey(), c = has('koekjestrommel') || (has('koekje') && has('appel'));
+  if (k && c) return 'Tenzij we mama helpen met een klusje! Dan mogen we vast nog één keer. Of… we geven buurman Brom appelkoekjes. Daar wordt hij vast vrolijk van!';
+  if (k) return 'Tenzij we mama helpen met een klusje! Dan mogen we vast nog één keer.' + (S.buur.koek ? '' : ' (En met appelkoekjes wordt buurman Brom vast vrolijk…)');
+  if (c) return 'Tenzij we buurman Brom appelkoekjes geven! Daar wordt hij vast vrolijk van.';
+  return 'Hmm… nee, morgen weer. Zullen we zolang iets anders spelen?';
+}
+/* ---------- TENZIJ ---------- */
+async function buurKoekjes() {
+  if (!buurLocked()) return;
+  if (!has('koekjestrommel')) { if (has('koekje') && has('appel')) { closeOv('scrBuur'); await talk([['f', 'We hebben een koekje en een appel! Aan de werkbank in de speelkamer maken we er appelkoekjes van.']]); } return; }
+  closeOv('scrBuur'); takeItem('koekjestrommel'); S.buur.koek = dayKey(); save(); achieve('koekjes');
+  WORLD.busy++;
+  try {
+    SFX.doorbell(); await wait(700);
+    await talk([['', 'Jullie zetten een trommel appelkoekjes op de stoep bij buurman Brom en bellen aan…'], ['brom', 'Hm? Wat is dit nou? Appelkoekjes? Voor mij?'], ['brom', '…Hmpf. Nou… Dank je wel dan. Mmm. Lekker!'], ['f', '(fluistert) Hij is helemaal blij! Snel, Supermol, nu kun je graven!']]);
+  } finally { WORLD.busy--; }
+  await buurDigAfterWin();
+}
+function buurKlusje() { if (!buurLocked() || S.buur.klus === dayKey()) return; closeOv('scrBuur'); openSetup('klusje'); }
+// klusje gedaan (aangeroepen door het klusjes-spel)
+function buurKlusDone() { if (S.buur.klus === dayKey()) return false; S.buur.klus = dayKey(); if (S.buur.tries) S.buur.extra++; save(); achieve('klusje'); return true; }
+
+/* ---------- het Buurman-plan (bord in het HQ) ---------- */
+function openBuurPlan() { SFX.click(); renderBuurPlan(); openOv('scrBuur'); }
+function renderBuurPlan() {
+  const b = S.buur, waiting = buurWaiting(), left = buurLeft(), locked = waiting && left <= 0, r = nextRoom();
+  let st;
+  if (!buurGateOn() && !b.met) st = '<p>Nog niks aan de hand…</p>';
+  else if (locked) st = `<h3>😴 Genoeg voor vandaag!</h3><p>Morgen mag de Supermol de <b>${r.emoji} ${r.name}</b> weer proberen te graven. Alle kamers en spellen blijven gewoon open.</p><p><b>TENZIJ…</b> 👇</p>`;
+  else if (waiting) st = `<h3>⛏️ De Supermol wil graven!</h3><p>Hij wil de <b>${r.emoji} ${r.name}</b> graven${b.nowReq && !b.due ? ' (met 3 ⚡)' : ''}. Maar buurman Brom luistert mee… <b>Haal eerst een streek uit!</b> Lukt het? Dan graaft de Supermol meteen.</p>
+      ${b.tries ? `<div class="tries">Pogingen vandaag: ${Array.from({ length: b.tries + b.extra }, (_, i) => `<span class="${i < b.lost ? 'used' : ''}"></span>`).join('')} <b>nog ${left}</b></div>` : '<div class="tries">Pogingen: <b>onbeperkt</b></div>'}`;
+  else if (!b.on) st = '<h3>😎 Streken voor de lol</h3><p>Papa of mama heeft de buurman-poort uitgezet: de Supermol graaft zonder streek. Streken uithalen kan nog steeds!</p>';
+  else if (r) st = `<h3>👀 Buurman Brom let op</h3><p>Morgen wil de Supermol de <b>${r.emoji} ${r.name}</b> graven: dan moeten jullie buurman Brom eerst te slim af zijn. Nu spelen is voor de lol: 🪙 munten, ⚡ 1x per dag per streek en prestaties.</p>`;
+  else st = '<h3>🎉 Alle kamers zijn gegraven!</h3><p>Streken uithalen kan altijd: 🪙 munten, ⚡ 1x per dag per streek en prestaties. En wie weet krijgt de Supermol ooit nieuwe bouwtekeningen…</p>';
+  const tz = locked ? `<div class="hqcard tenzij"><h3>🤞 Tenzij…</h3><div class="tzrow">
+      <button class="btn small ${b.klus === dayKey() ? '' : 'green'}" id="bzKlus" ${b.klus === dayKey() ? 'disabled' : ''}>🧹 Klusje voor mama${b.klus === dayKey() ? ': vandaag al gedaan' : ' (+1 poging)'}</button>
+      <button class="btn small ${has('koekjestrommel') ? 'orange' : ''}" id="bzKoek" ${has('koekjestrommel') ? '' : 'disabled'}>🍪 Appelkoekjes geven${has('koekjestrommel') ? ' (dan graaft hij toch)' : ''}</button></div>
+      <p class="small">${has('koekjestrommel') ? 'Met appelkoekjes wordt buurman Brom even vrolijk en graaft de Supermol meteen.' : 'Appelkoekjes maak je aan de werkbank: een koekje van mama (elke dag) + een appel uit de boom.'}</p></div>` : '';
+  const cards = PRANKS.map(p => {
+    const g = GB.MINIGAMES[p.id], soon = p.soon || !g, w = b.wins[p.id] || 0, lv = buurLevel(p.id);
+    return `<div class="prank ${soon ? 'soon' : ''}"><span class="pe">${p.emoji}</span><span class="pt"><b>${p.name}</b><small>${p.desc}</small>
+      ${soon ? '<small class="ps">🔜 Binnenkort</small>' : `<small class="ps">${buurStars(lv)}${lv < 3 ? '<span class="off">' + buurStars(3 - lv) + '</span>' : ''} · ${w}× gelukt</small>`}</span>
+      ${soon ? '' : `<button class="btn small ${locked ? '' : 'green'}" data-prank="${p.id}" ${locked ? 'disabled' : ''}>${locked ? '😴 Morgen' : '▶️ Speel'}</button>`}</div>`;
+  }).join('');
+  $('#buurBody').innerHTML = `<div class="buurtop"><div class="hqcard buurwho"><canvas id="buurPort" width="150" height="150"></canvas><div class="bubble">${pick(['Ik houd jullie in de gaten!', 'Hmpf! Wat is dat gerommel toch?', 'Ik zie jullie wel, hoor!', 'Grrr… Kwajongens!', 'Mijn kopjes rammelen weer in de kast!'])}</div><b>Buurman Brom</b><small>${b.total ? `Al ${b.total}× te slim af!` : 'Nog nooit te slim af…'}</small></div>
+    <div class="hqcard buurst">${st}</div></div>${tz}<div class="pranks">${cards}</div>`;
+  drawPortrait($('#buurPort'), null, { brom: true, mood: locked ? 'blij' : waiting ? 'boos' : 'zoek' });
+  const k = $('#bzKlus'); if (k) k.onclick = () => { SFX.click(); buurKlusje(); };
+  const c = $('#bzKoek'); if (c) c.onclick = () => { SFX.click(); buurKoekjes(); };
+}
+$('#buurBody').addEventListener('click', e => { const p = e.target.closest('[data-prank]'); if (!p || p.disabled) return; SFX.click(); closeOv('scrBuur'); BUUR.test = false; openSetup(p.dataset.prank); });
+
+/* ---------- het filmpje: buurman Brom aan de voordeur ---------- */
+FURN.doorDyn = (c, o, X, Y, W, H) => {
+  if (!BUUR.doorOpen) return;
+  c.fillStyle = '#9fd36a'; c.fillRect(X + 3, Y - 2, W - 6, H + 2); c.fillStyle = 'rgba(255,255,220,.5)'; c.fillRect(X + 3, Y - 2, W - 6, 6);
+  box(c, X + W - 6, Y - 4, 7, H + 4, 2, '#b0552f');
+};
+FURN.buurBoard = (c, o, X, Y, W, H) => {   // het Buurman-plan: prikbord aan de muur van het HQ
+  box(c, X + 1, Y - 34, W - 2, 32, 4, '#7a4a2a'); c.fillStyle = '#d9a866'; c.fillRect(X + 4, Y - 31, W - 8, 26);
+  c.fillStyle = '#fff'; c.fillRect(X + 6, Y - 29, 11, 12); c.fillStyle = '#f2c3a0'; circle(c, X + 11.5, Y - 23, 4); c.fill(); c.fillStyle = '#c9c9c9'; c.fillRect(X + 8.5, Y - 21.5, 6, 1.8);
+  c.strokeStyle = '#e8403a'; c.lineWidth = 1.4; c.beginPath(); c.moveTo(X + 7, Y - 28); c.lineTo(X + 16, Y - 18); c.moveTo(X + 16, Y - 28); c.lineTo(X + 7, Y - 18); c.stroke();
+  c.fillStyle = '#fff6a0'; c.fillRect(X + 18, Y - 28, 9, 8); c.fillStyle = '#a8e6ff'; c.fillRect(X + 17, Y - 17, 11, 9);
+  c.strokeStyle = '#e8403a'; c.lineWidth = 1; c.beginPath(); c.moveTo(X + 12, Y - 18); c.lineTo(X + 22, Y - 24); c.lineTo(X + 22, Y - 12); c.stroke();
+  [[X + 11, Y - 30], [X + 22, Y - 29], [X + 22, Y - 18]].forEach(([x, y]) => dot(c, x, y, 1.6, '#e8403a'));
+  box(c, X + 3, Y - 2, W - 6, H - 4, 3, '#5d4630', 1.5); c.fillStyle = '#ffd23f'; c.font = 'bold 9px sans-serif'; c.textAlign = 'center'; c.fillText('🤫', X + W / 2, Y + 11);
+};
+function npcWalk(n, x, y, dir, sp) { return new Promise(res => { n.cut = { x: x * T, y: y * T, dir, sp: sp || .55, done: res }; }); }
+async function buurCutscene(fromBase) {
+  if (BUUR.cut) return; BUUR.cut = true; BUUR.replay = false; WORLD.busy++;
+  const W = WORLD;
+  try {
+    SFX.doorbell(); await wait(fromBase ? 900 : 600);
+    if (fromBase) await talk([['', 'Ding dong! 🔔'], ['f', 'Hé, de deurbel! Wie zou dat zijn?'], ['p', 'Kom, we gaan stiekem kijken!']]);
+    $('#fade').classList.add('on'); await wait(350);
+    if (W.map.id !== 'huis') loadMap('huis', 'start');
+    W.p.x = 10.6 * T; W.p.y = 11.1 * T; W.p.dir = 'down'; W.p.moving = false;
+    W.f.x = 11.5 * T; W.f.y = 10.9 * T; W.f.dir = 'down'; W.f.hold = true; W.f.moving = false; W.trail = [{ x: W.f.x, y: W.f.y }, { x: W.p.x, y: W.p.y }];
+    if (W.mol) W.mol.hold = true;
+    let mama = W.npcs.find(n => n.id === 'mama'); if (mama) { mama.x = 14.6 * T; mama.y = 10.7 * T; }
+    const brom = { id: 'brom', x: 11.5 * T, y: 16.7 * T, dir: 'up', moving: false, ph: 0, tx: null, ty: null, wait: 99, area: { x: 11, y: 14, w: 1, h: 1 }, cutActor: true };
+    W.camTarget = { x: 11.9 * T, y: 13.3 * T }; W.camFree = true; W.cam.x = W.camTarget.x; W.cam.y = W.camTarget.y;
+    await wait(100); $('#fade').classList.remove('on'); await wait(400);
+    if (!S.buur.met) SFX.doorbell();
+    await talk([['f', '(fluistert) Ssst… Mama gaat opendoen.']]);
+    if (mama) { await npcWalk(mama, 12.6, 12.2, 'down'); await npcWalk(mama, 12.6, 14.6, 'left'); }
+    SFX.door(); BUUR.doorOpen = true; W.npcs.push(brom); await wait(250);
+    await npcWalk(brom, 11.5, 15.6, 'right', .4);
+    await talk([['mama', 'Hallo! O… buurman Brom.'],
+      ['brom', 'Dag mevrouw. Zeg eens… Wordt u niet gek van al dat lawaai?'],
+      ['mama', 'Lawaai? Welk lawaai? Ik heb niks gehoord, hoor.'],
+      ['brom', 'Niks gehoord?! Het bonkt en het rommelt de hele dag! Onder de grond! Mijn kopjes rammelen in de kast!'],
+      ['mama', 'Nou, dat zal de verwarming wel zijn. Fijne dag nog, buurman!']]);
+    if (mama) mama.dir = 'down';
+    brom.mood = 'roep'; SFX.grumble();
+    await talk([['brom', 'Ho, ho! Niet zo snel! Ik weet heus wel wie u in bescherming neemt. Uw eigen {p}! En die {f}!']]);
+    brom.dir = 'up'; await wait(300);
+    await talk([['brom', 'Ik zag ze al door de tuin struinen. Ik houd ze in de gaten, die twee!']]);
+    brom.mood = 'boos'; brom.dir = 'right';
+    await talk([['mama', 'Dag, buurman Brom!']]);
+    await npcWalk(brom, 11.5, 16.8, 'down', .5); W.npcs = W.npcs.filter(n => n !== brom); BUUR.doorOpen = false; SFX.door(); W.shake = .4;
+    await wait(400);
+    if (mama) { mama.dir = 'up'; await talk([['mama', 'Pff, wat een mopperkont. Bonken onder de grond… Hoe verzint hij het!']]); npcWalk(mama, 14.6, 10.7, 'right').then(() => { mama.cut = null; }); }
+    W.camTarget = { x: 11.1 * T, y: 10.4 * T };
+    await talk([['p', '(fluistert) Oei… Hij heeft onze basis gehoord!'],
+      ['f', 'Psst, {p}… We moeten hem te slim af zijn…'],
+      ['p', 'Ja! Voordat de Supermol verder graaft, halen we eerst een streek bij hem uit. Dan let hij niet op het gegraaf!'],
+      ['f', 'Kom, in het Hoofdkwartier maken we een Buurman-plan! 🤫']]);
+    S.buur.met = true; S.buur.metDay = dayKey(); save(); achieve('buurman'); buildBaseMap();
+  } finally {
+    W.camTarget = null; W.camFree = false; W.f.hold = false; if (W.mol) W.mol.hold = false; BUUR.doorOpen = false; W.npcs = W.npcs.filter(n => !n.cutActor);
+    W.npcs.forEach(n => { if (n.cut && n.cut.done) { const d = n.cut.done; n.cut = null; d(); } });
+    BUUR.cut = false; WORLD.busy--; updateHud();
+  }
+}
+// Wanneer speelt het filmpje? Nieuw spel: na het eerste potje bowlen (lawaai!) belt hij aan. Oude saves: de volgende keer in huis.
+function buurTick(dt) {
+  if ((S.buur.met && !BUUR.replay) || BUUR.cut || !flag('baseOpen') || !S.introDone || !WORLD.map) return;
+  if (WORLD.busy || DLG.open || anyOverlay() || MG.active || (typeof MEAL !== 'undefined' && MEAL.st && MEAL.st !== 'idle')) { BUUR.wait = 0; return; }
+  const id = WORLD.map.id, ready = id === 'huis' || (id === 'basis' && S.buur.fresh && S.stats.games.bowling > 0 && !BUUR.replay);
+  if (!ready) { BUUR.wait = 0; return; }
+  BUUR.wait += dt; if (BUUR.wait > (id === 'huis' ? 1.2 : 2.2)) { BUUR.wait = 0; buurCutscene(id !== 'huis'); }
+}
+// Nieuws: er wacht een kamer (na een nieuwe dag)
+async function buurNews() {
+  if (!BUUR.news || !buurWaiting() || !(WORLD.active && WORLD.map) || WORLD.busy || DLG.open || anyOverlay() || MG.active) return;
+  BUUR.news = false; const r = nextRoom();
+  await info(`<div style="font-size:64px;line-height:1">🦫⛏️👀</div><h2>De Supermol wil graven!</h2><p>De Supermol staat klaar om de <b>${r.emoji} ${r.name}</b> te graven${S.buur.due > 1 ? ` (en daarna nog ${S.buur.due - 1} kamer${S.buur.due > 2 ? 's' : ''})` : ''}. Maar buurman Brom let op…</p><p>Haal eerst een <b>streek</b> bij hem uit! Kies er een op het <b>Buurman-plan</b> in het Hoofdkwartier.</p>`, [['ok', 'Oké! 🤫', 'green']]);
+  updateHud();
+}
+GB.ACTIONS.buurplan = async () => { openBuurPlan(); };
+GB.TALKS.brom = async () => { await talk([['brom', 'Hmpf!']]); };
+function buurSkip() { S.buur.met = true; S.buur.on = false; save(); }   // alleen voor tests: oude gedrag (geen filmpje, geen poort)
 
 /* ===== world/meals_logic.js ===== */
 /* =========================================================
@@ -2876,7 +3414,7 @@ function enterWorld() {
   if (boxHits(WORLD.p.x, WORLD.p.y)) loadMap(map, Object.keys(GB.MAPS[map].spawns)[0]);
   updateHud(); syncActBtn();
   if (!S.introDone) introCutscene();
-  else { const d = checkDailyDig(); if (d.length) setTimeout(() => showDigNews(d), 600); }
+  else { const d = checkDailyDig(); if (d.length) setTimeout(() => showDigNews(d), 600); else if (BUUR.news) setTimeout(buurNews, 700); }
 }
 function goTitle() { WORLD.active = false; save(); show('scrTitle'); renderTitle(); musicWant('titel'); }
 
@@ -2961,7 +3499,7 @@ function renderBook() {
   } else if (bookTab === 'ach') {
     const all = Object.values(GB.ACHIEVEMENTS), got = all.filter(a => S.ach[a.id]).length;
     h = `<div class="panel"><h3>🏆 Prestaties: ${got} van ${all.length}</h3><div class="achgrid">${all.map(a => `<div class="achv ${S.ach[a.id] ? '' : 'off'}"><span class="ai">${a.icon}</span><span><b>${a.name}</b><span class="small-note">${a.desc}</span></span></div>`).join('')}</div></div>
-      <div class="panel"><h3>⭐ Highscores</h3><p>${Object.values(GB.MINIGAMES).map(g => `${g.emoji} ${g.name}: <b>${mgRecText(g, g.id)}</b>`).join(' · ')}</p></div>`;
+      <div class="panel"><h3>⭐ Highscores</h3><p>${Object.values(GB.MINIGAMES).filter(g => !g.hidden).map(g => `${g.emoji} ${g.name}: <b>${mgRecText(g, g.id)}</b>`).join(' · ')}</p></div>`;
   } else {
     h = `<div class="panel"><h3>🗺️ Kamers van de basis</h3><div class="achgrid">${roomList().map(r => { const d = isDug(r.id); return `<div class="achv ${d ? '' : 'off'}"><span class="ai">${r.emoji}</span><span><b>${r.name}</b><span class="small-note">${d ? '✅ Gegraven' : r.soon ? '🔜 Binnenkort' : '⛏️ Nog niet gegraven'}</span></span></div>`; }).join('')}</div></div>`;
   }
@@ -2988,12 +3526,27 @@ function renderOuders() {
   $('#oudUnlock').textContent = robotBuilt('supermol') ? '🔓 Alle kamers openen + Vliegbot bouwen' : '🔓 Supermol + Vliegbot bouwen en alle kamers openen (slaat de zoektocht over)';
   $('#oudUnlock').disabled = robotBuilt('supermol') && flag('baseOpen') && !nextRoom() && robotBuilt('vliegbot');
   const g = S.stats.games, mins = Math.round((now() - (S.created || now())) / 60000);
-  $('#oudStats').innerHTML = S.started ? `Spelers: <b>${esc(pName())}</b> en <b>${esc(fName())}</b>. Onderdelen: ${partsHave()}/5 · Supermol: ${robotBuilt('supermol') ? 'gebouwd' : 'nog niet'} · Vliegbot: ${robotBuilt('vliegbot') ? `gebouwd, ${flyCount()}/${allFlySpots().length} hoge plekken` : S.seenItems.vliegtekening ? `onderdelen ${vliegHave()}/${VLIEG_PARTS.length}` : 'nog niet'} · Prestaties: ${Object.keys(S.ach).length}/${Object.keys(GB.ACHIEVEMENTS).length}.<br>Gespeeld: ${Object.values(GB.MINIGAMES).map(m => `${m.emoji} ${m.name} ${g[m.id] || 0}× (beste ${mgRecText(m, m.id)})`).join(' · ')}.<br>Eerste start: ${S.created ? new Date(S.created).toLocaleDateString('nl-NL') : '-'} (${mins > 1440 ? Math.round(mins / 1440) + ' dagen' : mins + ' min'} geleden).` : 'Er is nog geen spel gestart.';
+  $('#oudStats').innerHTML = S.started ? `Spelers: <b>${esc(pName())}</b> en <b>${esc(fName())}</b>. Onderdelen: ${partsHave()}/5 · Supermol: ${robotBuilt('supermol') ? 'gebouwd' : 'nog niet'} · Vliegbot: ${robotBuilt('vliegbot') ? `gebouwd, ${flyCount()}/${allFlySpots().length} hoge plekken` : S.seenItems.vliegtekening ? `onderdelen ${vliegHave()}/${VLIEG_PARTS.length}` : 'nog niet'} · Prestaties: ${Object.keys(S.ach).length}/${Object.keys(GB.ACHIEVEMENTS).length}.<br>Gespeeld: ${Object.values(GB.MINIGAMES).filter(m => !m.hidden).map(m => `${m.emoji} ${m.name} ${g[m.id] || 0}× (beste ${mgRecText(m, m.id)})`).join(' · ')}.<br>Eerste start: ${S.created ? new Date(S.created).toLocaleDateString('nl-NL') : '-'} (${mins > 1440 ? Math.round(mins / 1440) + ' dagen' : mins + ' min'} geleden).` : 'Er is nog geen spel gestart.';
   const rb = $('#oudReset'); rb.dataset.armed = ''; rb.textContent = '🗑️ Spel wissen';
-  mealRenderOuders();
+  mealRenderOuders(); buurRenderOuders();
+  const ee = S.econ, td = dayKey(), today = ee.day === td;
+  $('#oudEcon').innerHTML = `<b>Daglimieten</b> (zodat munten en energie niet eindeloos zijn): per spel per dag ${ECON.FULL_PLAYS} potjes met volle munten, daarna ${ECON.TRICKLE_PLAYS} potjes ${ECON.TRICKLE} muntje, daarna 0. Energie uit alles samen max ${ECON.E_DAY} ⚡ per dag (vandaag ${today ? ee.e : 0}); de automaat verkoopt max ${ECON.BUY_MAX} ⚡ per dag (vandaag ${today ? ee.buy : 0}); 'Graaf nu' max ${ECON.DIG_NOW_MAX}× per dag (vandaag ${today ? ee.digs : 0}). De knop hieronder (+3 energie) telt niet mee.`;
 }
+function buurRenderOuders() {
+  const b = S.buur;
+  $$('#oudBuur button').forEach(x => x.classList.toggle('on', (x.dataset.v === '1') === !!b.on));
+  $$('#oudBuurTries button').forEach(x => x.classList.toggle('on', +x.dataset.v === b.tries));
+  const w = PRANKS.filter(p => GB.MINIGAMES[p.id]).map(p => `${p.emoji} ${p.name} ${b.wins[p.id] || 0}× gelukt`).join(' · ');
+  $('#oudBuurStatus').innerHTML = `Filmpje: ${b.met ? 'gezien' : flag('baseOpen') ? 'speelt de volgende keer in huis' : 'komt na de eerste kamers'}. ${buurWaiting() ? `Er wacht een kamer op een streek (pogingen vandaag nog ${b.tries ? buurLeft() : 'onbeperkt'}). ` : ''}Streken: ${w}.`;
+  $('#oudBuurPlay').innerHTML = '<span class="sk">▶️ Uitproberen</span>' + PRANKS.filter(p => GB.MINIGAMES[p.id]).map(p => `<button class="btn small purple" data-bp="${p.id}">${p.emoji} ${p.name}</button>`).join('') + '<button class="btn small" data-bp="klusje">🧹 Klusje</button>';
+}
+$('#oudBuur').addEventListener('click', e => { const x = e.target.closest('button'); if (!x) return; S.buur.on = x.dataset.v === '1'; save(); SFX.click(); renderOuders(); });
+$('#oudBuurTries').addEventListener('click', e => { const x = e.target.closest('button'); if (!x) return; S.buur.tries = +x.dataset.v; save(); SFX.click(); renderOuders(); });
+$('#oudBuurCut').addEventListener('click', () => { SFX.click(); S.buur.met = false; BUUR.replay = true; save(); renderOuders(); toast('🎬 Het filmpje van buurman Brom speelt zodra jullie in het huis zijn.', 'gold'); });
+$('#oudBuurReset').addEventListener('click', () => { SFX.click(); buurDay(); S.buur.lost = 0; save(); renderOuders(); toast('🔄 Pogingen van vandaag staan weer op nul.', 'gold'); });
+$('#oudBuurPlay').addEventListener('click', e => { const x = e.target.closest('[data-bp]'); if (!x) return; SFX.click(); closeOv('mdOuders'); BUUR.test = true; openSetup(x.dataset.bp); });
 holdButton($('#btnParent'), 2000, () => { SFX.click(); renderOuders(); const md = $('#mdOuders'); md.classList.add('show'); md.style.pointerEvents = 'none'; const en = () => { clearTimeout(en.t); en.t = setTimeout(() => { md.style.pointerEvents = ''; }, 400); }; window.addEventListener('pointerup', en, { once: true }); en.t = setTimeout(() => { md.style.pointerEvents = ''; }, 5000); });
-$('#oudClose').addEventListener('click', () => { SFX.click(); closeOv('mdOuders'); renderTitle(); });
+$('#oudClose').addEventListener('click', () => { SFX.click(); closeOv('mdOuders'); renderTitle(); BUUR.test = false; });
 $('#oudMusic').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { setSound('music', b.dataset.v === '1'); renderOuders(); } });
 $('#oudSfx').addEventListener('click', e => { const b = e.target.closest('button'); if (b) { setSound('sfx', b.dataset.v === '1'); renderOuders(); } });
 $('#volMusic').addEventListener('input', e => { S.musicVol = +e.target.value; $('#volMusicVal').textContent = S.musicVol + '%'; applyVolumes(); save(); });
@@ -3012,7 +3565,7 @@ $('#oudReset').addEventListener('click', e => { const b = e.currentTarget; if (!
    gewone recepten een rijtje: A + B = C. Onderdelen tikken (vliegt naar zijn vakje) of slepen.
    ========================================================= */
 const WB = { rid: null, placed: new Set(), busy: false };
-function recipeVisible(r) { return true; }
+function recipeVisible(r) { return !r.when || r.when(); }
 function recipeLocked(r) { return r.blueprint && !S.seenItems[r.blueprint] && !S.crafted[r.id]; }
 function recipeDone(r) { return r.once && S.crafted[r.id] > 0; }
 function recipeReady(r) { return !recipeLocked(r) && !recipeDone(r) && r.needs.every(n => has(n)); }
@@ -3091,6 +3644,7 @@ function sparks(el, n) { if (!el) return; const host = $('#bp'), r = el.getBound
 })();
 $('#wbBuild').addEventListener('click', async () => {
   const r = GB.RECIPES[WB.rid]; if (!recipeReady(r) || WB.placed.size !== r.needs.length || WB.busy) return;
+  if (r.gives.energie && econEnergyFull()) { SFX.nope(); $('#wbMsg').textContent = `De Supermol zit vandaag al vol energie (${ECON.E_DAY} ⚡ per dag). Bewaar je spullen tot morgen!`; return; }
   WB.busy = true; $('#wbBuild').disabled = true; $('#wbBuild').style.animation = '';
   const bp = $('#bp'), slots = $$('#bp .bslot[data-slot]');
   SFX.hammer(); bp.style.animation = 'shake .5s'; slots.forEach(s => { s.style.transition = 'all .6s ease-in'; s.style.left = '50%'; s.style.top = '50%'; s.style.transform = 'translate(-50%,-50%) scale(.4) rotate(540deg)'; s.style.opacity = '.2'; });
@@ -3099,7 +3653,7 @@ $('#wbBuild').addEventListener('click', async () => {
   let label = '';
   if (r.gives.robot) { S.robots[r.gives.robot] = { built: dayKey() }; label = `${GB.ROBOTS[r.gives.robot].name} is klaar!`; achieve(r.gives.robot); }
   if (r.gives.item) { giveItem(r.gives.item); label = `${itemName(r.gives.item)} gemaakt!`; }
-  if (r.gives.energie) { addEnergie(r.gives.energie); label = `+${r.gives.energie} ⚡ energie voor de Supermol!`; }
+  if (r.gives.energie) { earnEnergie(r.gives.energie); label = `+${r.gives.energie} ⚡ energie voor de Supermol!`; }
   save();
   bp.style.animation = ''; const res = $('#bpRes'); res.classList.add('show');
   res.innerHTML = `<div style="position:absolute;inset:0;background:#fff;animation:fadein .15s reverse forwards;opacity:0"></div><div style="width:${r.gives.robot ? 'min(62%,420px)' : '130px'};animation:popin .6s">${r.gives.robot ? GB.ROBOTS[r.gives.robot].svg() : iconHTML(r.gives.energie ? 'energie' : r.gives.item)}</div><div style="font-size:1.5em;font-weight:700;text-shadow:0 3px 0 rgba(0,0,0,.3);animation:popin .7s">${label}</div>`;
@@ -3118,21 +3672,29 @@ $('#wbBuild').addEventListener('click', async () => {
    en alle kamers (gegraven: ga erheen / speel; nog niet: wanneer; binnenkort).
    ========================================================= */
 let hqTimer = 0;
-function openHQ() { SFX.click(); renderHQ(); openOv('scrHQ'); clearInterval(hqTimer); hqTimer = setInterval(() => { if (!$('#scrHQ').classList.contains('show')) { clearInterval(hqTimer); return; } renderHQStatus(); drawHQMap(); }, 1000); }
+function openHQ() { SFX.click(); renderHQ(); openOv('scrHQ'); clearInterval(hqTimer); hqTimer = setInterval(() => { if (!$('#scrHQ').classList.contains('show')) { clearInterval(hqTimer); return; } const cd = $('#hqCd'), st = molStatus(); if (cd && st.ms && $('#hqMol').dataset.k === hqKey()) cd.textContent = fmtDur(st.ms); else renderHQStatus(); drawHQMap(); }, 1000); }
 function renderHQ() { renderHQStatus(); drawHQMap(); renderHQRooms(); }
+const hqKey = () => [S.energie, S.munten, buurWaiting(), buurLeft(), S.buur.total, nextRoom() && nextRoom().id, (molStatus().ms / 864e5 * 1000 | 0)].join();
 function renderHQStatus() {
-  const st = molStatus(), r = st.next;
+  const st = molStatus(), r = st.next; $('#hqMol').dataset.k = hqKey();
   const frac = st.ms ? 1 - st.ms / 86400000 : 1;
-  $('#hqMol').innerHTML = `<h3>🦫 Supermol</h3><div style="display:flex;gap:10px;align-items:center"><div style="width:90px;flex:none">${SUPERMOL_SVG}</div><div>${r && flag('baseOpen') ? `<b>Supermol graaft…</b><br>Volgende kamer: <b>${r.emoji} ${r.name}</b><br>Klaar: morgen` : st.text}</div></div>
+  $('#hqMol').innerHTML = `<h3>🦫 Supermol</h3><div style="display:flex;gap:10px;align-items:center"><div style="width:90px;flex:none">${SUPERMOL_SVG}</div><div>${buurWaiting() ? `<b>Supermol staat klaar!</b><br>Wil graven: <b>${r.emoji} ${r.name}</b><br>👀 Maar buurman Brom luistert mee…` : r && flag('baseOpen') ? `<b>Supermol graaft…</b><br>Volgende kamer: <b>${r.emoji} ${r.name}</b><br>Klaar: morgen${buurGateOn() ? ' (na een streek 🤫)' : ''}` : st.text}</div></div>
     ${st.ms ? `<div class="hqbar"><i style="width:${(frac * 100).toFixed(1)}%"></i></div><div>Nog <span class="cd" id="hqCd">${fmtDur(st.ms)}</span></div>` : ''}
     ${robotBuilt('vliegbot') ? `<div style="display:flex;gap:10px;align-items:center;margin-top:6px"><div style="width:60px;flex:none">${VLIEGBOT_SVG}</div><div style="font-size:.9em">🚁 <b>Vliegbot</b>: hoge plekken ${flyCount()}/${allFlySpots().length}</div></div>`
       : S.seenItems.vliegtekening ? `<div style="font-size:.9em;margin-top:6px">🚁 Vliegbot-onderdelen: <b>${vliegHave()}/${VLIEG_PARTS.length}</b></div>` : ''}`;
-  const can = S.energie >= DIG_COST && !!r && flag('baseOpen');
+  const can = canDigNow() && !!r && flag('baseOpen'), dl = econDigsLeft(S.econ, dayKey()), gate = buurGateOn(), waiting = buurWaiting();
   $('#hqEnergy').innerHTML = `<h3>⚡ Energie</h3><div class="energybar">${Array.from({ length: DIG_COST }, (_, i) => `<span class="eb ${i < S.energie ? 'on' : ''}"></span>`).join('')}<b style="margin-left:6px">${S.energie}</b></div>
-    <p style="margin:.4em 0;font-size:.85em">Met ${DIG_COST} energie graaft de Supermol <b>meteen</b> een extra kamer.</p>
-    <button class="btn ${can ? 'green' : ''}" id="hqDig" ${can ? '' : 'disabled'}>⛏️ Graaf nu!</button>
-    <p style="margin:.5em 0 0;font-size:.8em">🪙 ${S.munten} munten · energie-automaat: 50 munten = 1 ⚡</p>`;
-  const b = $('#hqDig'); if (b) b.onclick = async () => { closeOv('scrHQ'); await digNowCutscene(); };
+    <p style="margin:.4em 0;font-size:.85em">${dl ? `Met ${DIG_COST} energie graaft de Supermol <b>meteen</b> een extra kamer (vandaag nog ${dl}×).` : `⏸️ ${ECON_DIG_TXT}`}</p>
+    ${waiting ? '<button class="btn orange" id="hqDig">🤫 Eerst een streek!</button>' : `<button class="btn ${can ? 'green' : ''}" id="hqDig" ${can ? '' : 'disabled'}>⛏️ Graaf nu!</button>`}
+    <p style="margin:.5em 0 0;font-size:.8em">🪙 ${S.munten} munten · energie-automaat: 50 munten = 1 ⚡ (max ${ECON.BUY_MAX}× per dag) · ⚡ verdienen vandaag: nog ${econEnergyLeft(S.econ, dayKey())} van ${ECON.E_DAY}</p>`;
+  const b = $('#hqDig'); if (b) b.onclick = async () => { closeOv('scrHQ'); if (gate) { if (!waiting) buurRequestNow(); openBuurPlan(); return; } await digNowCutscene(); };
+  const bc = $('#hqBuur'); bc.style.display = S.buur.met ? '' : 'none';
+  if (S.buur.met) {
+    const L = buurLeft(), lk = waiting && L <= 0;
+    bc.innerHTML = `<h3>🤫 Buurman-plan</h3><div style="display:flex;gap:10px;align-items:center"><canvas id="hqBrom" width="72" height="72" style="width:60px;height:60px;flex:none"></canvas><div style="font-size:.9em">${waiting ? (lk ? '😴 Genoeg voor vandaag… <b>tenzij!</b>' : `<b>Eerst een streek!</b> ${S.buur.tries ? `Nog ${L} ${L === 1 ? 'poging' : 'pogingen'} vandaag.` : ''}`) : `Buurman Brom houdt jullie in de gaten. ${S.buur.total ? `Al ${S.buur.total}× te slim af!` : ''}`}</div></div>
+      <button class="btn ${waiting ? 'orange' : 'purple'}" id="hqBuurGo" style="margin-top:6px">🤫 Buurman-plan</button>`;
+    drawPortrait($('#hqBrom'), null, { brom: true, mood: lk ? 'blij' : 'boos' }); $('#hqBuurGo').onclick = () => { closeOv('scrHQ'); openBuurPlan(); };
+  }
 }
 function renderHQRooms() {
   const nr = nextRoom();
@@ -3177,6 +3739,8 @@ function drawHQMap() {
    Extra opties: low: true (lager is beter, bv. slagen of tijd), fmt(v) (hoe een score eruitziet), firstReward: 'item'
    (krijg je de eerste keer dat je het spel uitspeelt), recText() (eigen record-tekst). end(res) mag res.coins, res.bonus
    en res.hiKey (record per baan) zelf invullen; res.title (eigen kop) en res.noRecord (telt niet als record).
+   Fase 3: res.after (async, na 'Terug' in de wereld), res.noAgain (geen 'Nog een keer'), res.backLabel (eigen tekst op de terugknop).
+   hidden: true = niet in lijstjes (klusje). prank: true = een streek voor buurman Brom (zie world/buurman.js).
    ========================================================= */
 const mgFmt = (g, v) => g.fmt ? g.fmt(v) : fmtNum(v);
 const mgRecText = (g, id) => g.recText ? g.recText() : S.hi[id] == null || (!S.hi[id] && g.low) ? '–' : mgFmt(g, S.hi[id] || 0);
@@ -3196,7 +3760,8 @@ function openSetup(id) {
   $('#setupCard').innerHTML = `<h2>${g.emoji} ${g.name}</h2><p style="margin:0">${g.help}</p>
     <div class="plsel"><button data-n="1" class="${setupN === 1 ? 'on' : ''}"><canvas width="90" height="76"></canvas>1 speler<small>${esc(pl[0].name)}</small></button>
     <button data-n="2" class="${setupN === 2 ? 'on' : ''}"><span style="display:flex"><canvas width="90" height="76" style="width:64px"></canvas><canvas width="90" height="76" style="width:64px"></canvas></span>2 spelers<small>${esc(pl[0].name)} &amp; ${esc(pl[1].name)} · ${g.twoMode}</small></button></div>
-    <p style="margin:0;font-size:.9em">🏆 Record: <b>${mgRecText(g, id)}</b> · ${bonusDone ? '⚡ Energie van vandaag al verdiend' : `⚡ ${g.bonusText}`}</p>
+    <p style="margin:0;font-size:.9em">🏆 Record: <b>${mgRecText(g, id)}</b>${g.bonusText ? ` · ${bonusDone ? '⚡ Energie van vandaag al verdiend' : econEnergyFull() ? '⚡ Vandaag al genoeg energie verdiend' : `⚡ ${g.bonusText}`}` : ''}</p>
+    <p class="coinleft" style="margin:0">${econCardLine(id)}</p>
     <div class="btnrow"><button class="btn white" id="setBack">⬅️ Terug</button><button class="btn big green" id="setGo">▶️ Start!</button></div>`;
   const cvs = $$('#setupCard canvas'); drawPortrait(cvs[0], pl[0].look); drawPortrait(cvs[1], pl[0].look); drawPortrait(cvs[2], pl[1].look);
   $$('#setupCard [data-n]').forEach(b => b.onclick = () => { SFX.click(); setupN = +b.dataset.n; $$('#setupCard [data-n]').forEach(x => x.classList.toggle('on', x === b)); });
@@ -3226,7 +3791,7 @@ function mgStart(id, n) {
 function mgStop(quiet) {
   if (MG.inst && MG.inst.destroy) try { MG.inst.destroy(); } catch (e) { console.warn(e); }
   MG.inst = null; MG.active = false; MG.api = null; $('#mgCtl').innerHTML = ''; $('#mgBanner').classList.remove('show');
-  if (!quiet) { show(WORLD.map ? 'scrWorld' : 'scrTitle'); musicWant(WORLD.map ? WORLD.map.music : 'titel'); save(); }
+  if (!quiet) { const w = WORLD.map && WORLD.active; show(w ? 'scrWorld' : 'scrTitle'); musicWant(w ? WORLD.map.music : 'titel'); if (!w) renderTitle(); save(); }
 }
 MG.tick = dt => { if (MG.paused || !MG.inst) return; MG.t += dt; MG.inst.tick(Math.min(dt, 1 / 20)); };
 addEventListener('resize', () => { if (MG.active && MG.inst) { const s = mgSize(); if (MG.inst.resize) MG.inst.resize(s.W, s.H); } });
@@ -3277,9 +3842,9 @@ function mgFinish(res) {
   const id = MG.id, g = GB.MINIGAMES[id], today = dayKey();
   const best = res.best != null ? res.best : (g.low ? Math.min : Math.max)(...res.scores.map(s => s.score));
   const hk = res.hiKey || id, old = S.hi[hk], rec = !res.noRecord && (g.low ? (!old || best < old) : best > (old || 0)); if (rec) S.hi[hk] = best;
-  const coins = res.coins != null ? Math.max(1, res.coins) : Math.max(1, g.coins(best)); addMunten(coins);
+  const ec = earnCoins(id, res.coins != null ? res.coins : g.coins(best)), coins = ec.coins;
   if (S.daily.day !== today) { S.daily.day = today; S.daily.bonus = {}; }
-  let bonus = false; if ((res.bonus != null ? res.bonus : best >= g.bonusAt) && !S.daily.bonus[id]) { S.daily.bonus[id] = 1; addEnergie(1); bonus = true; }
+  let bonus = false, eFull = false; if ((res.bonus != null ? res.bonus : best >= g.bonusAt) && !S.daily.bonus[id]) { if (earnEnergie(1)) { S.daily.bonus[id] = 1; bonus = true; } else eFull = true; }
   S.stats.games[id] = (S.stats.games[id] || 0) + 1; if (MG.n > 1) achieve('samen');
   let first = null; if (g.firstReward && !flag('first_' + id) && !(VLIEG_PARTS.includes(g.firstReward) && (robotBuilt('vliegbot') || S.seenItems[g.firstReward]))) { S.flags['first_' + id] = 1; first = g.firstReward; giveItem(first); }
   save();
@@ -3288,13 +3853,14 @@ function mgFinish(res) {
     <table class="scoretab">${res.scores.map((s, i) => `<tr><td>${many && i === res.winner ? '👑 ' : ''}${esc(s.name)}</td><td style="text-align:right"><b>${s.text || mgFmt(g, s.score)}</b></td></tr>`).join('')}</table>
     ${(res.lines || []).map(l => `<p style="margin:0">${l}</p>`).join('')}
     ${many && rec ? '<p style="margin:0">🎉 Nieuw record!</p>' : ''}<p style="margin:0">🏆 Record${res.hiKey && res.recName ? ` ${esc(res.recName)}` : ''}: <b>${res.hiKey ? mgFmt(g, S.hi[hk]) : mgRecText(g, id)}</b></p>
-    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center"><span class="pill">🪙 +${coins} munten</span>${bonus ? '<span class="pill" style="background:#fff3b0">⚡ +1 energie (bonus van vandaag!)</span>' : ''}${first ? `<span class="pill" style="background:#d9f5ff">🎁 Eerste keer uitgespeeld: <b>${esc(itemName(first))}!</b></span>` : ''}</div>
-    ${!bonus && !S.daily.bonus[id] && g.bonusText ? `<p style="margin:0;font-size:.85em">⚡ ${g.bonusText}</p>` : ''}
-    <div class="btnrow"><button class="btn white" id="resBack">⬅️ Terug</button><button class="btn big green" id="resAgain">🔁 Nog een keer</button></div>`;
+    <div style="display:flex;gap:8px;flex-wrap:wrap;justify-content:center"><span class="pill">🪙 +${coins} ${coins === 1 ? 'muntje' : 'munten'}</span>${bonus ? '<span class="pill" style="background:#fff3b0">⚡ +1 energie (bonus van vandaag!)</span>' : ''}${first ? `<span class="pill" style="background:#d9f5ff">🎁 Eerste keer uitgespeeld: <b>${esc(itemName(first))}!</b></span>` : ''}</div>
+    ${ec.note ? `<p class="coinleft" style="margin:0">${ec.note}</p>` : ''}${eFull ? `<p class="coinleft" style="margin:0">${ECON_FULL_TXT}</p>` : !bonus && !S.daily.bonus[id] && g.bonusText ? `<p style="margin:0;font-size:.85em">⚡ ${g.bonusText}</p>` : ''}
+    <div class="btnrow"><button class="btn ${res.backLabel ? 'big green' : 'white'}" id="resBack">${res.backLabel || '⬅️ Terug'}</button>${res.noAgain ? '' : '<button class="btn big green" id="resAgain">🔁 Nog een keer</button>'}</div>`;
   setTimeout(() => { (rec || bonus) ? SFX.fanfare() : SFX.coin(); }, 200);
   const gift = async () => { if (!first) return; const f = first; first = null; await foundPopup(f); BUS.emit('found', f); };
-  $('#resBack').onclick = async () => { SFX.click(); closeOv('mdResult'); mgStop(); await gift(); };
-  $('#resAgain').onclick = async () => { SFX.click(); closeOv('mdResult'); await gift(); mgStart(id, MG.n); };
+  const after = res.after;
+  $('#resBack').onclick = async () => { SFX.click(); closeOv('mdResult'); mgStop(); await gift(); if (after) { try { await after(); } catch (e) { console.warn(e); } } };
+  if ($('#resAgain')) $('#resAgain').onclick = async () => { SFX.click(); closeOv('mdResult'); await gift(); mgStart(id, MG.n); };
   MG.paused = true; openOv('mdResult'); BUS.emit('res');
 }
 
@@ -3394,10 +3960,10 @@ async function mealArrive() {
     }
     // beloning
     const r = mealReward(S.meals, dayKey());
-    S.stats.meals = (S.stats.meals || 0) + 1; addMunten(r.coins); if (r.energy) addEnergie(r.energy); save();
+    S.stats.meals = (S.stats.meals || 0) + 1; const ec = earnCoins('eten', r.coins); r.coins = ec.coins; if (r.energy && !earnEnergie(r.energy)) { r.energy = 0; r.dayFull = true; } save();
     r.energy ? SFX.energie() : SFX.coin();
     burst(W.p.x + 13, W.p.y - 40, 22, ['#ffd23f', '#fff', '#ff6fa8', '#4cd964']);
-    toast(`🍽️ <span>Smakelijk gegeten! <b>🪙 +${r.coins}</b>${r.energy ? ' <b>⚡ +1 energie</b>' : ''}${r.capped ? '<br><small>⚡ Vandaag al 2× energie van het eten gehad</small>' : ''}</span>`, 'gold');
+    toast(`🍽️ <span>Smakelijk gegeten! <b>🪙 +${r.coins}</b>${r.energy ? ' <b>⚡ +1 energie</b>' : ''}${r.capped ? '<br><small>⚡ Vandaag al 2× energie van het eten gehad</small>' : r.dayFull ? '<br><small>⚡ Vandaag al genoeg energie verdiend</small>' : ''}${ec.kind !== 'full' ? '<br><small>🪙 Genoeg muntjes van het eten vandaag</small>' : ''}</span>`, 'gold');
     achieve('smakelijk');
     await wait(900);
     if (caller) caller.talking = false;
@@ -5521,6 +6087,402 @@ class EscapeGame {
   }
 }
 
+/* ===== minigames/buur_common.js ===== */
+/* =========================================================
+   Gedeeld door de streken van buurman Brom: niveau kiezen (⭐ ⭐⭐ ⭐⭐⭐, groeit mee met het aantal keer gewonnen),
+   tekstjes die opploppen, en een joystick per speler (sluipspellen, fase 3.2/3.3).
+   ========================================================= */
+const BUUR_LVL_NAMES = ['Makkelijk', 'Gemiddeld', 'Moeilijk'], BUUR_LVL_NEED = [0, 2, 5];
+function buurChoose(id, intro) {
+  const el = $('#mgBanner'), unlocked = buurLevel(id), ctx = buurCtx(), r = nextRoom(), wins = S.buur.wins[id] || 0;
+  const stake = ctx.dig ? `<p style="margin:.3em 0;font-weight:700;color:#b5452b">⛏️ Lukt het? Dan graaft de Supermol de ${r ? r.emoji + ' ' + r.name : 'nieuwe kamer'}!${S.buur.tries ? ` <span style="font-weight:600">(nog ${buurLeft()} ${buurLeft() === 1 ? 'poging' : 'pogingen'} vandaag)</span>` : ''}</p>` : BUUR.test ? '<p style="margin:.3em 0;font-size:.85em">🧪 Uitproberen (telt niet mee voor het graven)</p>' : '<p style="margin:.3em 0;font-size:.85em">Voor de lol: 🪙 munten en 1x per dag ⚡</p>';
+  el.innerHTML = `<h2 style="margin:0 0 4px">${intro.title}</h2><p style="margin:0 0 6px;font-size:.9em;max-width:520px">${intro.text}</p>${stake}
+    <div class="lvlrow">${[1, 2, 3].map(l => { const lock = l > unlocked; return `<button class="btn ${lock ? 'white' : l === unlocked ? 'green' : 'white'} lvl" data-l="${l}" ${lock ? 'disabled' : ''}><span>${lock ? '🔒' : buurStars(l)}</span><small>${BUUR_LVL_NAMES[l - 1]}${lock ? ` · nog ${BUUR_LVL_NEED[l - 1] - wins}× winnen` : ''}</small></button>`; }).join('')}</div>`;
+  el.classList.add('show'); el.onclick = null;
+  return new Promise(res => { el.onclick = e => { const b = e.target.closest('[data-l]'); if (!b || b.disabled) return; SFX.click(); el.classList.remove('show'); el.onclick = null; res(+b.dataset.l); }; });
+}
+// opploppende tekstjes (schermcoördinaten)
+function buurPopDraw(c, pops, W, H) {
+  for (const p of pops) {
+    const k = Math.min(1, p.t * 5); c.save(); c.globalAlpha = Math.min(1, (p.life - p.t) * 2.5);
+    c.font = `900 ${p.size || 24}px Fredoka, system-ui, sans-serif`; const tw = c.measureText(p.txt).width / 2 + 8;
+    c.translate(clamp(p.x, tw, W - tw), clamp(p.y - p.t * 18, 70, H - 20)); c.scale(k, k); c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.lineWidth = 6; c.strokeStyle = 'rgba(31,42,68,.75)'; c.strokeText(p.txt, 0, 0); c.fillStyle = p.col || '#ffd23f'; c.fillText(p.txt, 0, 0); c.restore();
+  }
+}
+function buurPopTick(pops, dt) { for (let i = pops.length - 1; i >= 0; i--) if ((pops[i].t += dt) > pops[i].life) pops.splice(i, 1); }
+// Brom in een tekstwolkje bovenin (tijdens een streek)
+function buurSay(c, txt, x, y, W, mood, t) {
+  c.save(); c.font = '700 15px Fredoka, system-ui, sans-serif'; const w = Math.min(W - 20, c.measureText(txt).width + 64), h = 46, bx = clamp(x - w / 2, 10, W - w - 10);
+  c.fillStyle = 'rgba(0,0,0,.18)'; rrect(c, bx + 2, y + 3, w, h, 16); c.fill(); c.fillStyle = '#fff'; rrect(c, bx, y, w, h, 16); c.fill(); c.strokeStyle = '#7a5a2a'; c.lineWidth = 3; c.stroke();
+  drawBrom(c, bx + 26, y + 52, 'down', 0, false, { scale: .95, noShadow: true, mood: mood || 'roep', t });
+  c.save(); rrect(c, bx, y, w, h, 16); c.clip(); c.restore();
+  c.fillStyle = '#1f2a44'; c.textAlign = 'left'; c.textBaseline = 'middle'; c.fillText(txt, bx + 52, y + h / 2 + 1); c.restore();
+}
+/* Joystick per speler (multi-touch). zones(): [{x,y,w,h}] per speler; geeft per speler {x,y} in -1..1. Toetsen: WASD (speler 1) en pijltjes (speler 2; solo: ook speler 1). */
+class BuurJoy {
+  constructor(cv, n, zones) {
+    this.cv = cv; this.n = n; this.zones = zones; this.st = Array.from({ length: n }, () => ({ id: null, ox: 0, oy: 0, x: 0, y: 0, kx: 0, ky: 0 })); this.keys = {};
+    this.down = e => { const r = this.cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top; const zs = this.zones();
+      for (let i = 0; i < this.n; i++) { const z = zs[i], s = this.st[i]; if (s.id === null && x >= z.x && x <= z.x + z.w && y >= z.y && y <= z.y + z.h) { e.preventDefault(); audioUnlock(); s.id = e.pointerId; s.ox = x; s.oy = y; s.x = 0; s.y = 0; s.cx = x; s.cy = y; try { this.cv.setPointerCapture(e.pointerId); } catch (_) { } return; } } };
+    this.move = e => { const s = this.st.find(s => s.id === e.pointerId); if (!s) return; const r = this.cv.getBoundingClientRect(), x = e.clientX - r.left, y = e.clientY - r.top, R = 46; let dx = x - s.ox, dy = y - s.oy; const m = Math.hypot(dx, dy); if (m > R) { s.ox += dx / m * (m - R); s.oy += dy / m * (m - R); dx = x - s.ox; dy = y - s.oy; } s.x = dx / R; s.y = dy / R; s.cx = x; s.cy = y; };
+    this.up = e => { const s = this.st.find(s => s.id === e.pointerId); if (s) { s.id = null; s.x = 0; s.y = 0; } };
+    cv.addEventListener('pointerdown', this.down); addEventListener('pointermove', this.move); addEventListener('pointerup', this.up); addEventListener('pointercancel', this.up);
+  }
+  key(k, down) {
+    const v = down ? 1 : 0, many = this.n > 1, m = { w: [0, 'u'], s: [0, 'd'], a: [0, 'l'], d: [0, 'r'], arrowup: [many ? 1 : 0, 'u'], arrowdown: [many ? 1 : 0, 'd'], arrowleft: [many ? 1 : 0, 'l'], arrowright: [many ? 1 : 0, 'r'] }[k];
+    if (!m) return false; this.keys[m[0] + m[1]] = v; return true;
+  }
+  get(i) { const s = this.st[i], k = this.keys; let x = s.x + (k[i + 'r'] || 0) - (k[i + 'l'] || 0), y = s.y + (k[i + 'd'] || 0) - (k[i + 'u'] || 0); const m = Math.hypot(x, y); if (m > 1) { x /= m; y /= m; } return { x, y, m: Math.min(1, m) }; }
+  reset() { this.st.forEach(s => { s.id = null; s.x = 0; s.y = 0; }); this.keys = {}; }
+  draw(c) { // zones + knopje
+    const zs = this.zones();
+    this.st.forEach((s, i) => { const z = zs[i], cx = s.id !== null ? s.ox : z.x + z.w / 2, cy = s.id !== null ? s.oy : z.y + z.h / 2;
+      c.fillStyle = 'rgba(255,255,255,.18)'; c.beginPath(); c.arc(cx, cy, 52, 0, 7); c.fill(); c.strokeStyle = 'rgba(255,255,255,.55)'; c.lineWidth = 3; c.stroke();
+      c.fillStyle = i ? 'rgba(255,138,31,.9)' : 'rgba(63,140,255,.9)'; c.beginPath(); c.arc(cx + s.x * 40, cy + s.y * 40, 24, 0, 7); c.fill(); c.strokeStyle = '#fff'; c.lineWidth = 3; c.stroke(); });
+  }
+  destroy() { this.cv.removeEventListener('pointerdown', this.down); removeEventListener('pointermove', this.move); removeEventListener('pointerup', this.up); removeEventListener('pointercancel', this.up); }
+}
+
+/* ===== minigames/mollenrace_logic.js ===== */
+/* =========================================================
+   MOLLENRACE – logica (zonder tekenen, getest in tests/unit.js).
+   Een baan is een strook onder de grond van MR.LEN tegels lang en 3 rijen hoog (y 0..3). De mol graaft zelf vooruit;
+   jij stuurt op en neer. Stenen = BONK (even stil), wortels = langzaam, ⚡ = turbo. Er is altijd een vrije doorgang:
+   tussen twee stenen-rijtjes zit genoeg ruimte om van de ene naar de andere rij te sturen.
+   ========================================================= */
+const MR = { LEN: 64, V0: 4.2, VY: 4.6, ACC: 9, BOOST: 1.5, BOOST_T: 1.4, STUN: .75, ROOT_K: .5, HW: .34, YMIN: .42, YMAX: 2.58 };
+const MR_LEVELS = [
+  { brom: 3.8, gap: [3.4, 4.6], two: .25, roots: 0, zaps: 6, sput: [.4] },
+  { brom: 4.0, gap: [3.2, 4.1], two: .5, roots: 4, zaps: 6, sput: [] },
+  { brom: 4.05, gap: [3.0, 3.7], two: .7, roots: 7, zaps: 6, sput: [] },
+];
+function mrBuild(level, seed) {
+  const L = MR_LEVELS[level - 1], R = mulberry32(seed || 1), rocks = [], roots = [], zaps = [], cols = [];
+  let x = 6, free = 1;
+  while (x < MR.LEN - 5) {
+    // welke rijen zijn dicht? nooit alle 3; de vrije rij is altijd te bereiken
+    const two = R() < L.two; let open;
+    if (two) { open = [Math.floor(R() * 3)]; } else { const blk = Math.floor(R() * 3); open = [0, 1, 2].filter(i => i !== blk); }
+    if (open.every(o => Math.abs(o - free) > 1)) open = two ? [1] : [1, open.find(o => o !== 1)]; // altijd een vrije rij vlak naast je
+    for (let row = 0; row < 3; row++) if (!open.includes(row)) rocks.push({ x: x + (R() - .5) * .3, y: row + .5 + (R() - .5) * .2, r: .4 + R() * .06, hit: false });
+    cols.push({ x, open }); free = open[Math.floor(R() * open.length)];
+    x += L.gap[0] + R() * (L.gap[1] - L.gap[0]);
+  }
+  // wortels: in een vrije rij tussen twee rijtjes (dus je moet kiezen: wortels of andere rij)
+  for (let i = 0; i < L.roots && cols.length > 2; i++) { const c = cols[1 + Math.floor(R() * (cols.length - 2))], row = c.open[Math.floor(R() * c.open.length)]; if (roots.some(r => Math.abs(r.x - c.x) < 3)) continue; roots.push({ x: c.x - .3, y: row, w: 1.8 + R() * .8, h: 1 }); }
+  // ⚡: vaak vlak naast een steen (risico = beloning)
+  for (let i = 0; i < L.zaps && cols.length; i++) { const c = cols[Math.floor((i + .5) / L.zaps * cols.length)], row = c.open[Math.floor(R() * c.open.length)]; zaps.push({ x: c.x + (R() < .5 ? -.2 : .3), y: row + .5, on: true }); }
+  return { level, L, rocks, roots, zaps, cols, len: MR.LEN };
+}
+function mrMole() { return { x: 1.2, y: 1.5, vx: 0, stun: 0, boost: 0, done: false, time: 0, hits: 0, zaps: 0, inRoot: false }; }
+// één stapje; inp: -1 (omhoog), 0, 1 (omlaag). Geeft gebeurtenissen terug: 'bonk', 'zap', 'root', 'finish'
+function mrStep(tr, m, inp, dt, t) {
+  const ev = []; if (m.done) return ev;
+  m.time += dt;
+  if (m.stun > 0) { m.stun -= dt; m.vx = Math.min(m.vx, 0) * .9; }
+  const inRoot = tr.roots.some(r => m.x + MR.HW > r.x && m.x - MR.HW < r.x + r.w && m.y > r.y && m.y < r.y + r.h);
+  if (inRoot && !m.inRoot) ev.push('root'); m.inRoot = inRoot;
+  if (m.boost > 0) m.boost -= dt;
+  const v = m.stun > 0 ? 0 : MR.V0 * (m.boost > 0 ? MR.BOOST : 1) * (inRoot ? MR.ROOT_K : 1);
+  m.vx += clamp(v - m.vx, -MR.ACC * dt * 2, MR.ACC * dt);
+  if (m.stun <= 0) m.y = clamp(m.y + clamp(inp, -1, 1) * MR.VY * dt, MR.YMIN, MR.YMAX);
+  m.x += m.vx * dt;
+  for (const r of tr.rocks) if (!r.hit && Math.abs(r.x - m.x) < 1 && Math.hypot((r.x - m.x) * .9, r.y - m.y) < r.r + MR.HW) { r.hit = true; m.stun = MR.STUN; m.vx = -1.6; m.hits++; ev.push('bonk'); }
+  for (const z of tr.zaps) if (z.on && Math.hypot(z.x - m.x, z.y - m.y) < .55) { z.on = false; m.boost = MR.BOOST_T; m.zaps++; ev.push('zap'); }
+  if (m.x >= tr.len) { m.x = tr.len; m.done = true; ev.push('finish'); }
+  void t; return ev;
+}
+// Graafmol van de buurman: vaste snelheid, soms proest hij even (op vaste plekken per niveau)
+function mrBrom(level) { return { x: 1.2, y: 1.5, v: MR_LEVELS[level - 1].brom, sput: MR_LEVELS[level - 1].sput.slice(), stall: 0, done: false, time: 0 }; }
+function mrBromStep(tr, b, dt) {
+  const ev = []; if (b.done) return ev; b.time += dt;
+  if (b.stall > 0) { b.stall -= dt; return ev; }
+  if (b.sput.length && b.x >= b.sput[0] * tr.len) { b.sput.shift(); b.stall = .9; ev.push('proest'); return ev; }
+  b.x += b.v * dt; b.y = 1.5 + Math.sin(b.x * .7) * .55;
+  if (b.x >= tr.len) { b.x = tr.len; b.done = true; ev.push('finish'); }
+  return ev;
+}
+// Hulpje voor tests: een speler die slim stuurt (kiest bij elk rijtje stenen de dichtstbijzijnde vrije rij en pakt ⚡ als die op de route ligt).
+// skill < 1 = later reageren (kijkt minder ver vooruit).
+function mrBot(tr, m, skill) {
+  const sk = skill || 1, i = tr.cols.findIndex(c => c.x + .8 > m.x); if (i < 0) return 0;
+  const c1 = tr.cols[i], c2 = tr.cols[i + 1], cur = clamp(Math.round(m.y - .5), 0, 2);
+  if (c1.x - m.x > 2.2 * sk + .9) return 0; // nog te ver weg om te zien
+  const score = r => Math.abs(r + .5 - m.y) + (c2 && !c2.open.includes(r) ? .6 : 0) - (tr.zaps.some(z => z.on && Math.floor(z.y) === r && z.x > m.x && z.x < c1.x + 2) ? .7 : 0)
+    + (tr.roots.some(q => q.y === r && q.x < c1.x + 1 && q.x + q.w > m.x) ? .9 : 0);
+  const want = c1.open.slice().sort((a, b) => score(a) - score(b))[0] ?? cur;
+  const ty = want + .5; return Math.abs(ty - m.y) < .08 ? 0 : Math.sign(ty - m.y);
+}
+
+/* ===== minigames/mollenrace.js ===== */
+/* =========================================================
+   MOLLENRACE – streek 1 tegen buurman Brom (logica in mollenrace_logic.js).
+   Onder de grond: de Supermol tegen de Graafmol van de buurman. Je mol graaft zelf vooruit; jij stuurt met ▲ ▼
+   langs de stenen (BONK = even stil), door de wortels gaat het langzaam en ⚡ geeft turbo. Eerder bij de schat = gewonnen.
+   2 spelers: ieder een eigen Supermol-baan (eigen knoppen links en rechts); als één van jullie eerder is dan Brom, winnen jullie samen.
+   ========================================================= */
+registerMinigame({
+  id: 'mollenrace', name: 'Mollenrace', emoji: '🏁', music: 'buurman', twoMode: 'samen tegen de buurman', prank: true,
+  help: 'Race onder de grond tegen de <b>Graafmol van buurman Brom</b>! Je mol graaft zelf. Stuur met <b>▲ en ▼</b> (of W/S en de pijltjes) langs de stenen. Door wortels ga je langzaam, ⚡ geeft turbo. Wie is het eerst bij de schat?',
+  bonusText: 'Win van de buurman voor 1 energie (1x per dag)', fmt: v => v ? buurStars(v) : '–',
+  create: api => new MolRace(api),
+});
+const MR_DT = 1 / 120;
+class MolRace {
+  constructor(api) {
+    this.api = api; this.c = api.ctx; this.players = api.players; this.n = this.players.length; this.state = 'choose'; this.t = 0; this.acc = 0;
+    this.bctx = buurCtx(); this.keys = {}; this.hold = this.players.map(() => ({ u: 0, d: 0 })); this.pops = []; this.parts = []; this.btns = [];
+    this.W = api.W; this.H = api.H; this.level = 1; this.setup(1); this.layout();
+    buurChoose('mollenrace', { title: '🏁 Mollenrace', text: 'Buurman Brom bouwde zelf een <b>Graafmol</b>. Zijn mol is sterk, maar jouw Supermol is slimmer! Stuur langs de stenen, pak de ⚡ en wees eerder bij de schat.' })
+      .then(l => { if (MG.inst === this) this.start(l); });
+  }
+  setup(level) {
+    const seed = (Date.now() / 1000 | 0) % 100000 + 1;
+    this.level = level; this.tracks = this.players.map(() => mrBuild(level, seed)); this.moles = this.players.map(() => mrMole());
+    this.trails = this.players.map(() => [[1.2, 1.5]]); this.brom = mrBrom(level); this.btrail = [[1.2, 1.5]]; this.winner = null; this.endT = 0; this.rootSaid = false;
+  }
+  start(level) {
+    this.setup(level); this.state = 'count'; this.cd = 3.2; this.makeButtons(); SFX.tick();
+  }
+  destroy() { $('#mgBanner').classList.remove('show'); }
+  resize(W, H) { this.W = W; this.H = H; this.layout(); this.placeButtons(); }
+  layout() {
+    const W = this.W, H = this.H, land = W > H * 1.1, bw = clamp(Math.min(W, H) * .15, 56, 86); this.bw = bw; this.land = land;
+    const nl = this.n + 1, top = 96;
+    let x0 = 8, x1 = W - 8, y1 = H - 10;
+    if (land) { x0 = bw + 26; x1 = W - bw - 26; } else y1 = H - (bw * 2 + 30);
+    const lh = Math.min((y1 - top - (nl - 1) * 8) / nl, 200), lw = x1 - x0;
+    const k = Math.max(16, Math.min((lh - 14) / 3, lw / 9)), h = k * 3 + 14;
+    const used = nl * h + (nl - 1) * 10, y0 = top + Math.max(0, (y1 - top - used) / 2);
+    this.k = k; this.lanes = []; for (let i = 0; i < nl; i++) this.lanes.push({ x: x0, y: y0 + i * (h + 10), w: lw, h });
+    this.bar = { x: x0, y: 62, w: lw, h: 24 };
+  }
+  makeButtons() {
+    $('#mgCtl').innerHTML = ''; this.btns = [];
+    const sides = this.n > 1 ? [0, 1] : [0, 0];
+    sides.forEach((pi, si) => {
+      const col = this.n > 1 ? (pi ? '#ffd9b3' : '#cfe2ff') : null;
+      const up = this.api.button('▲', this.n > 1 ? esc(this.players[pi].name) : '', () => { this.hold[pi].u = 1; }, () => { this.hold[pi].u = 0; }, { color: col });
+      const dn = this.api.button('▼', '', () => { this.hold[pi].d = 1; }, () => { this.hold[pi].d = 0; }, { color: col });
+      up.dataset.mr = `u${si}`; dn.dataset.mr = `d${si}`; this.btns.push([up, dn, si]);
+    });
+    this.placeButtons();
+  }
+  placeButtons() {
+    const W = this.W, H = this.H, bw = this.bw;
+    for (const [up, dn, si] of this.btns) {
+      if (this.land) { const x = si ? W - bw - 12 : 12; this.api.place(up, x, H / 2 - bw - 8 + 20, bw, bw); this.api.place(dn, x, H / 2 + 8 + 20, bw, bw); }
+      else { const x = si ? W - bw - 14 : 14; this.api.place(up, x, H - bw * 2 - 22, bw, bw); this.api.place(dn, x, H - bw - 12, bw, bw); }
+    }
+  }
+  key(k, down) {
+    const v = down ? 1 : 0, two = this.n > 1;
+    const m = { w: [0, 'u'], s: [0, 'd'], arrowup: [two ? 1 : 0, 'u'], arrowdown: [two ? 1 : 0, 'd'] }[k];
+    if (!m) return false; this.keys[m[0] + m[1]] = v; return true;
+  }
+  inp(i) { const h = this.hold[i]; return (h.d || this.keys[i + 'd'] ? 1 : 0) - (h.u || this.keys[i + 'u'] ? 1 : 0); }
+  pop(txt, x, y, col, size) { this.pops.push({ txt, x, y, col, size, t: 0, life: 1.1 }); }
+  laneXY(li, tx, ty, camX) { const L = this.lanes[li], k = this.k; return [L.x + (tx - camX) * k, L.y + 12 + ty * k]; }
+  cam(li, x) { const view = this.lanes[li].w / this.k; return clamp(x - view * .3, 0, MR.LEN + 3 - view); }
+  tick(dt) {
+    this.t += dt; buurPopTick(this.pops, dt);
+    for (let i = this.parts.length - 1; i >= 0; i--) { const p = this.parts[i]; p.t += dt; p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 6 * dt; if (p.t > p.life) this.parts.splice(i, 1); }
+    if (this.state === 'count') { const o = Math.ceil(this.cd); this.cd -= dt; if (Math.ceil(this.cd) !== o && this.cd > 0) SFX.tick(); if (this.cd <= 0) { this.state = 'race'; SFX.boost(); } }
+    else if (this.state === 'race' || this.state === 'end') {
+      this.acc += dt;
+      while (this.acc >= MR_DT) { this.acc -= MR_DT; this.step(MR_DT); }
+      if (this.state === 'end' && (this.endT += dt) > 1.6 && !this.done) { this.done = true; this.finish(); }
+    }
+    this.draw();
+  }
+  step(dt) {
+    const racing = this.state === 'race';
+    this.moles.forEach((m, i) => {
+      const ev = mrStep(this.tracks[i], m, racing ? this.inp(i) : 0, dt, this.t), li = i + 1, cx = this.cam(li, m.x), [sx, sy] = this.laneXY(li, m.x, m.y, cx);
+      const tr = this.trails[i], last = tr[tr.length - 1]; if (Math.hypot(m.x - last[0], m.y - last[1]) > .15) tr.push([m.x, m.y]);
+      for (const e of ev) {
+        if (e === 'bonk') { SFX.bonk(); this.pop('BONK!', sx + 20, sy - 10, '#ff6b6b', 26); for (let j = 0; j < 8; j++) this.parts.push({ li, x: m.x + .5, y: m.y, vx: rnd(-1, 2), vy: rnd(-3, -1), t: 0, life: .6, col: '#9aa3b2' }); if (navigator.vibrate) try { navigator.vibrate(40); } catch (_) { } }
+        if (e === 'zap') { SFX.zap(); this.pop('⚡ Turbo!', sx + 10, sy - 14, '#ffd23f', 22); }
+        if (e === 'root' && !this.rootSaid) { this.rootSaid = true; this.pop('Wortels… langzaam!', sx + 20, sy - 14, '#c8f08f', 18); }
+        if (e === 'finish' && racing && this.winner == null && !this.brom.done) { this.winner = i; this.state = 'end'; SFX.fanfare(); this.pop('🏆 Eerst bij de schat!', this.W / 2, this.lanes[li].y + 20, '#ffd23f', 26); }
+      }
+    });
+    const b = this.brom, ev = mrBromStep(this.tracks[0], b, dt), bl = this.btrail, lb = bl[bl.length - 1]; if (Math.hypot(b.x - lb[0], b.y - lb[1]) > .15) bl.push([b.x, b.y]);
+    for (const e of ev) {
+      const [sx, sy] = this.laneXY(0, b.x, b.y, this.cam(0, b.x));
+      if (e === 'proest') { SFX.grumble(); this.pop('Proest! Hè?!', sx + 10, sy - 12, '#ffffff', 18); for (let j = 0; j < 10; j++) this.parts.push({ li: 0, x: b.x - .6, y: b.y - .2, vx: rnd(-1.5, -.2), vy: rnd(-1.5, -.3), t: 0, life: .9, col: 'rgba(80,80,80,.8)', smoke: 1 }); }
+      if (e === 'finish' && racing && this.winner == null) { this.winner = -1; this.state = 'end'; SFX.shout(); this.pop('Hahaa! Eerst!', sx - 40, sy - 12, '#ff6b6b', 24); }
+    }
+    if (this.state === 'end') return;
+    // Graafmol rommelt: rookwolkjes
+    if (racing && Math.random() < dt * 6) this.parts.push({ li: 0, x: b.x - .7, y: b.y - .3, vx: rnd(-1.2, -.4), vy: rnd(-1, -.3), t: 0, life: .7, col: 'rgba(90,90,90,.55)', smoke: 1 });
+  }
+  finish() {
+    const won = this.winner >= 0, m = won ? this.moles[this.winner] : null;
+    const lines = won ? [`🏁 ${esc(this.players[this.winner].name)} was eerst bij de schat (${m.time.toFixed(1).replace('.', ',')} sec)! De Graafmol van buurman Brom kwam te laat.`] : ['🐌 De Graafmol van buurman Brom was eerder… Stuur langs de stenen en pak de ⚡!'];
+    const sc = this.players.map((p, i) => ({ name: p.name, text: this.moles[i].done ? `${this.moles[i].time.toFixed(1).replace('.', ',')} sec${i === this.winner ? ' 🏆' : ''}` : 'te laat' }));
+    buurFinish(this.api, 'mollenrace', { won, level: this.level, lines, scores: sc });
+  }
+  /* ---------- tekenen ---------- */
+  draw() {
+    const c = this.c, W = this.W, H = this.H, dpr = this.api.dpr;
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const g = c.createLinearGradient(0, 0, 0, H); g.addColorStop(0, '#7fc8f8'); g.addColorStop(.12, '#bfe6ff'); g.addColorStop(.13, '#6dbb4a'); g.addColorStop(.16, '#5a3a22'); g.addColorStop(1, '#3d2614'); c.fillStyle = g; c.fillRect(0, 0, W, H);
+    for (let i = 0; i < 40; i++) { dot(c, hash2(i, 1) * W, H * .16 + hash2(i, 2) * H * .84, 2 + hash2(i, 3) * 3, 'rgba(255,255,255,.05)'); }
+    this.drawBar(c);
+    this.drawLane(c, 0, null);
+    this.players.forEach((p, i) => this.drawLane(c, i + 1, i));
+    buurPopDraw(c, this.pops, W, H);
+    if (this.state === 'count') { const n = Math.ceil(this.cd); c.save(); c.font = '900 72px Fredoka, system-ui'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineWidth = 10; c.strokeStyle = '#1f2a44'; const s = n > 0 ? String(n) : 'Graaf!'; c.strokeText(s, W / 2, H / 2); c.fillStyle = '#ffd23f'; c.fillText(s, W / 2, H / 2); c.restore(); }
+    if (this.state === 'choose') { c.fillStyle = 'rgba(0,0,0,.25)'; c.fillRect(0, 0, W, H); }
+  }
+  drawBar(c) {
+    const B = this.bar; box(c, B.x, B.y, B.w, B.h, 12, 'rgba(255,255,255,.88)', 2);
+    const px = x => B.x + 18 + (B.w - 44) * clamp(x / MR.LEN, 0, 1);
+    c.fillStyle = '#c9b49a'; rrect(c, B.x + 16, B.y + B.h / 2 - 3, B.w - 40, 6, 3); c.fill();
+    c.font = '18px system-ui, "Apple Color Emoji", "Segoe UI Emoji"'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('🎁', B.x + B.w - 14, B.y + B.h / 2 + 1);
+    const gm = graafmolImg(); if (gm.complete && gm.naturalWidth) c.drawImage(gm, px(this.brom.x) - 13, B.y + 1, 26, 21);
+    this.moles.forEach((m, i) => { const x = px(m.x); dot(c, x, B.y + B.h / 2, 9, this.players[i].col); c.strokeStyle = '#fff'; c.lineWidth = 2; c.beginPath(); c.arc(x, B.y + B.h / 2, 9, 0, 7); c.stroke(); c.fillStyle = '#fff'; c.font = '900 11px Fredoka, system-ui'; c.fillText(String(i + 1), x, B.y + B.h / 2 + 1); });
+  }
+  drawLane(c, li, pi) {
+    const L = this.lanes[li], k = this.k, isB = pi == null, m = isB ? this.brom : this.moles[pi], tr = isB ? null : this.tracks[pi], camX = this.cam(li, m.x), t = this.t;
+    c.save(); box(c, L.x - 3, L.y - 3, L.w + 6, L.h + 6, 14, isB ? '#7a5a2a' : this.players[pi].col, 0); rrect(c, L.x, L.y, L.w, L.h, 11); c.clip();
+    // grond + grasrandje
+    c.fillStyle = isB ? '#6b4a2e' : '#8a5a34'; c.fillRect(L.x, L.y, L.w, L.h);
+    const x0 = Math.floor(camX) - 1, x1 = Math.ceil(camX + L.w / k) + 1;
+    for (let x = x0; x <= x1; x++) for (let r = 0; r < 3; r++) {
+      const sx = L.x + (x - camX) * k, sy = L.y + 12 + r * k;
+      if ((x + r) % 2) { c.fillStyle = 'rgba(0,0,0,.06)'; c.fillRect(sx, sy, k, k); }
+      if (hash2(x * 3 + li, r) < .35) dot(c, sx + hash2(x, r + 9) * k, sy + hash2(x + 5, r) * k, 1.5 + hash2(x, r + 3) * 2.5, 'rgba(50,30,15,.45)');
+      if (hash2(x + 77, r * 5 + li) < .06) { c.fillStyle = 'rgba(255,240,200,.5)'; c.save(); c.translate(sx + k * .5, sy + k * .5); c.rotate(hash2(x, r) * 3); c.fillRect(-k * .18, -1.5, k * .36, 3); c.restore(); } // botje/wormpje
+    }
+    c.fillStyle = '#5fb444'; c.fillRect(L.x, L.y, L.w, 10); c.fillStyle = '#4a9a36'; for (let x = x0; x <= x1; x++) { const sx = L.x + (x - camX) * k; c.beginPath(); c.moveTo(sx, 10 + L.y); c.lineTo(sx + k * .25, L.y + 3); c.lineTo(sx + k * .5, 10 + L.y); c.fill(); }
+    // tunnel
+    const trail = isB ? this.btrail : this.trails[pi];
+    c.lineCap = 'round'; c.lineJoin = 'round';
+    for (const [w, col] of [[.78, '#3a2213'], [.62, '#4f311b']]) { c.strokeStyle = col; c.lineWidth = k * w; c.beginPath(); trail.forEach(([x, y], j) => { const [sx, sy] = this.laneXY(li, x, y, camX); j ? c.lineTo(sx, sy) : c.moveTo(sx, sy); }); const [ex, ey] = this.laneXY(li, m.x, m.y, camX); c.lineTo(ex, ey); c.stroke(); }
+    // finish: schatkist + geblokte streep
+    { const [fx] = this.laneXY(li, MR.LEN, 0, camX); if (fx < L.x + L.w + k * 2) { for (let r = 0; r < 6; r++) { c.fillStyle = r % 2 ? '#fff' : '#1f2a44'; c.fillRect(fx - 4, L.y + 12 + r * k / 2, 8, k / 2); } this.chest(c, fx + k * 1.1, L.y + 12 + k * 1.5, k); } }
+    if (tr) {
+      for (const q of tr.roots) { const [sx, sy] = this.laneXY(li, q.x, q.y, camX); if (sx > L.x + L.w || sx + q.w * k < L.x) continue; c.fillStyle = 'rgba(120,70,30,.35)'; rrect(c, sx, sy + 2, q.w * k, k - 4, 8); c.fill(); c.strokeStyle = '#c98a4a'; c.lineWidth = Math.max(2, k * .08); for (let j = 0; j < 4; j++) { c.beginPath(); c.moveTo(sx + j * q.w * k / 4, sy + 3); c.bezierCurveTo(sx + (j + .5) * q.w * k / 4, sy + k * .5, sx + (j + .2) * q.w * k / 4, sy + k * .7, sx + (j + .8) * q.w * k / 4, sy + k - 3); c.stroke(); } }
+      for (const z of tr.zaps) if (z.on) { const [sx, sy] = this.laneXY(li, z.x, z.y, camX); if (sx < L.x - k || sx > L.x + L.w + k) continue; const p = 1 + Math.sin(t * 6 + z.x) * .1; c.fillStyle = 'rgba(255,230,80,.35)'; c.beginPath(); c.arc(sx, sy, k * .42 * p, 0, 7); c.fill(); c.fillStyle = '#1f2a44'; c.font = `${Math.round(k * .6)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('⚡', sx, sy + 1); }
+      for (const r of tr.rocks) { const [sx, sy] = this.laneXY(li, r.x, r.y, camX); if (sx < L.x - k || sx > L.x + L.w + k) continue; this.rock(c, sx, sy, r.r * k, r.hit, r.x); }
+    } else if (this.state !== 'choose') { // Brom's baan: hij boort dwars door alles heen
+      for (let x = 8; x < MR.LEN - 3; x += 5.5) { const y = .5 + hash2(x | 0, 4) * 2, [sx, sy] = this.laneXY(li, x, y, camX); if (sx < L.x - k || sx > L.x + L.w + k) continue; this.rock(c, sx, sy, k * .42, m.x > x, x); }
+    }
+    // deeltjes
+    for (const p of this.parts) if (p.li === li) { const [sx, sy] = this.laneXY(li, p.x, p.y, camX); c.globalAlpha = 1 - p.t / p.life; dot(c, sx, sy, p.smoke ? k * (.12 + p.t * .3) : k * .08, p.col); c.globalAlpha = 1; }
+    // de mol zelf
+    const [mx, my] = this.laneXY(li, m.x, m.y, camX), shake = (isB ? (m.stall > 0) : m.stun > 0) ? Math.sin(t * 60) * 2 : 0;
+    const img = isB ? graafmolImg() : molImg(), mw = k * 1.5;
+    if (!isB && m.boost > 0) { c.fillStyle = 'rgba(255,220,60,.5)'; for (let j = 0; j < 3; j++) c.fillRect(mx - mw * .5 - 10 - j * 8 - (t * 80 % 8), my - k * .25 + j * k * .2, 8, 3); }
+    if (img.complete && img.naturalWidth) { c.save(); c.translate(mx + shake, my + Math.sin(t * 30) * 1); c.drawImage(img, -mw * .55, -mw * .45, mw, mw * .8); c.restore(); }
+    if (!isB && m.stun > 0) { c.font = `${Math.round(k * .45)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.textAlign = 'center'; c.fillText('💫', mx, my - k * .55); }
+    c.restore();
+    // naambordje
+    const name = isB ? 'Buurman Brom' : this.players[pi].name; c.font = '700 13px Fredoka, system-ui'; const tw = c.measureText(name).width + 16;
+    box(c, L.x + 6, L.y + L.h - 22, tw, 18, 9, 'rgba(255,255,255,.9)', 0); c.fillStyle = isB ? '#7a5a2a' : this.players[pi].col; c.textAlign = 'left'; c.textBaseline = 'middle'; c.fillText(name, L.x + 14, L.y + L.h - 12.5);
+    if (isB && this.state === 'race' && m.x < 6) { c.save(); c.globalAlpha = clamp(1 - m.x / 6, 0, 1); buurSay(c, 'Mijn Graafmol is de snelste!', L.x + L.w * .6, L.y + 2, this.W, 'roep', t); c.restore(); }
+  }
+  rock(c, x, y, r, hit, seed) {
+    if (hit) { for (let j = 0; j < 4; j++) { const a = hash2(seed * 10 | 0, j) * 6.28; box(c, x + Math.cos(a) * r * .6 - r * .2, y + Math.abs(Math.sin(a)) * r * .5, r * .4, r * .3, 3, '#9aa3b2', 1.5); } return; }
+    c.save(); c.translate(x, y); c.fillStyle = '#8c94a3'; c.strokeStyle = '#1f2a44'; c.lineWidth = 2.5; c.beginPath();
+    for (let j = 0; j < 9; j++) { const a = j / 9 * Math.PI * 2, rr = r * (.85 + hash2(seed * 7 | 0, j) * .25); j ? c.lineTo(Math.cos(a) * rr, Math.sin(a) * rr * .9) : c.moveTo(Math.cos(a) * rr, Math.sin(a) * rr * .9); }
+    c.closePath(); c.fill(); c.stroke(); c.fillStyle = 'rgba(255,255,255,.35)'; c.beginPath(); c.ellipse(-r * .3, -r * .35, r * .3, r * .15, -.4, 0, 7); c.fill();
+    c.strokeStyle = 'rgba(31,42,68,.4)'; c.lineWidth = 1.5; c.beginPath(); c.moveTo(r * .1, -r * .2); c.lineTo(r * .3, r * .2); c.lineTo(r * .15, r * .45); c.stroke(); c.restore();
+  }
+  chest(c, x, y, k) {
+    const w = k * 1.1, h = k * .8; box(c, x - w / 2, y - h * .2, w, h * .7, 4, '#b5652b', 2.5); c.fillStyle = '#d4843f'; c.beginPath(); c.ellipse(x, y - h * .2, w / 2, h * .35, 0, Math.PI, 0); c.fill(); c.strokeStyle = '#1f2a44'; c.lineWidth = 2.5; c.stroke();
+    c.fillStyle = '#ffd23f'; c.fillRect(x - w / 2, y - h * .05, w, 4); box(c, x - 5, y - h * .15, 10, 10, 2, '#ffd23f', 2);
+    const s = (this.t * 2) % 1; dot(c, x - w * .3 + s * 6, y - h * .55 - s * 6, 2.5, 'rgba(255,240,150,' + (1 - s) + ')');
+  }
+}
+
+/* ===== minigames/klusje.js ===== */
+/* =========================================================
+   KLUSJE VOOR MAMA – de 'tenzij' als de pogingen van vandaag op zijn (1x per dag: +1 poging).
+   Speelgoed opruimen: sleep elk ding naar de goede bak (speelgoed in de kist, kleren in de wasmand).
+   Kan niet mislukken; een verkeerde bak = het ding springt terug. 2 spelers: allebei tegelijk slepen.
+   ========================================================= */
+registerMinigame({
+  id: 'klusje', name: 'Klusje voor mama', emoji: '🧹', music: 'buurman', twoMode: 'samen opruimen', hidden: true,
+  help: 'Ruim de kamer op voor mama! Sleep het <b>speelgoed in de kist</b> en de <b>kleren in de wasmand</b>.',
+  bonusText: '', fmt: v => v ? v + ' sec' : '–', low: true,
+  create: api => new Klusje(api),
+});
+const KL_TOYS = ['🧸', '⚽', '🚗', '🧩', '🪀', '🦖', '🤖', '🎲', '🪁', '🚂'], KL_CLOTHES = ['🧦', '👕', '👖', '🧢', '🧣', '🩳'];
+class Klusje {
+  constructor(api) {
+    this.api = api; this.c = api.ctx; this.W = api.W; this.H = api.H; this.t = 0; this.state = 'intro'; this.items = []; this.drag = {}; this.pops = []; this.done = 0;
+    this.bctx = { dig: false }; this.layout();
+    const R = mulberry32(Date.now() % 1e6 | 0), sh = a => a.map(v => [R(), v]).sort((a, b) => a[0] - b[0]).map(v => v[1]);
+    const list = sh(KL_TOYS).slice(0, 7).map(e => ({ e, kind: 'kist' })).concat(sh(KL_CLOTHES).slice(0, 5).map(e => ({ e, kind: 'was' })));
+    this.items = sh(list).map((o, i) => Object.assign(o, { u: .08 + R() * .84, v: .08 + R() * .6, rot: (R() - .5) * .8, home: null, fly: 0, id: i }));
+    this.down = e => this.pDown(e); this.move = e => this.pMove(e); this.up = e => this.pUp(e);
+    api.cv.addEventListener('pointerdown', this.down); addEventListener('pointermove', this.move); addEventListener('pointerup', this.up); addEventListener('pointercancel', this.up);
+    api.banner(`<h2>🧹 Klusje voor mama</h2><p>Mama: "Als jullie de speelkamer opruimen, mogen jullie daarna nog <b>één keertje</b> spelen."</p><p>🧸 Speelgoed → <b>speelgoedkist</b> · 🧦 Kleren → <b>wasmand</b></p>`, { button: '🧹 Aan de slag!' }).then(() => { if (MG.inst === this) { this.state = 'play'; this.t0 = this.t; } });
+  }
+  destroy() { const cv = this.api.cv; cv.removeEventListener('pointerdown', this.down); removeEventListener('pointermove', this.move); removeEventListener('pointerup', this.up); removeEventListener('pointercancel', this.up); }
+  resize(W, H) { this.W = W; this.H = H; this.layout(); }
+  layout() {
+    const W = this.W, H = this.H, bh = clamp(H * .2, 90, 150), bw = Math.min(W * .36, bh * 1.6);
+    this.floor = { x: 14, y: 96, w: W - 28, h: H - 96 - bh - 26 };
+    this.bins = { kist: { x: W / 2 - bw - 12, y: H - bh - 14, w: bw, h: bh }, was: { x: W / 2 + 12, y: H - bh - 14, w: bw, h: bh } };
+    this.sz = clamp(Math.min(W, H) * .1, 40, 66);
+  }
+  pos(it) { if (it.dx != null) return [it.dx, it.dy]; const F = this.floor; return [F.x + this.sz / 2 + it.u * (F.w - this.sz), F.y + this.sz / 2 + it.v * (F.h - this.sz)]; }
+  xy(e) { const r = this.api.cv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; }
+  pDown(e) {
+    if (this.state !== 'play' || MG.paused) return; const [x, y] = this.xy(e);
+    const it = this.items.filter(i => !i.home && !Object.values(this.drag).includes(i)).reverse().find(i => { const [ix, iy] = this.pos(i); return Math.hypot(ix - x, iy - y) < this.sz * .7; });
+    if (!it) return; e.preventDefault(); audioUnlock(); this.drag[e.pointerId] = it; it.dx = x; it.dy = y; SFX.pickup(); this.items.splice(this.items.indexOf(it), 1); this.items.push(it);
+  }
+  pMove(e) { const it = this.drag[e.pointerId]; if (!it) return; [it.dx, it.dy] = this.xy(e); }
+  pUp(e) {
+    const it = this.drag[e.pointerId]; if (!it) return; delete this.drag[e.pointerId];
+    const [x, y] = [it.dx, it.dy], hit = Object.entries(this.bins).find(([, b]) => x > b.x - 10 && x < b.x + b.w + 10 && y > b.y - 30 && y < b.y + b.h + 10);
+    if (hit && hit[0] === it.kind) { it.home = hit[0]; it.fly = 0; it.fx = x; it.fy = y; this.done++; SFX.coin(); this.pops.push({ txt: pick(['Netjes!', 'Top!', 'Hup!', 'Goed zo!']), x, y: y - 30, t: 0, life: .9, size: 20 }); if (this.done >= this.items.length) this.win(); }
+    else if (hit) { SFX.nope(); this.pops.push({ txt: it.kind === 'was' ? 'Kleren in de wasmand!' : 'Speelgoed in de kist!', x, y: y - 30, t: 0, life: 1.3, size: 18, col: '#ffb3b3' }); }
+    const F = this.floor; if (!it.home) { it.u = clamp((x - F.x - this.sz / 2) / (F.w - this.sz), 0, 1); it.v = clamp((y - F.y - this.sz / 2) / (F.h - this.sz), 0, 1); }
+    it.dx = it.dy = null;
+  }
+  async win() {
+    this.state = 'won'; SFX.fanfare(); const sec = Math.round(this.t - this.t0);
+    await new Promise(r => setTimeout(r, 900)); if (MG.inst !== this) return;
+    const extra = BUUR.test ? false : buurKlusDone();
+    this.api.end({ scores: this.api.players.map(p => ({ name: p.name, score: sec, text: sec + ' sec' })), winner: null, best: sec, title: '✨ Wat netjes!', coins: 5, bonus: false,
+      lines: [`Mama: "Wat een mooie opgeruimde kamer! Dank jullie wel, lieverds."`, extra ? '🎯 <b>+1 poging</b> voor vandaag! Probeer de buurman nog één keer te slim af te zijn.' : BUUR.test ? '🧪 Uitproberen: telt niet mee.' : 'Het extra keertje van vandaag hadden jullie al.'],
+      noAgain: true, backLabel: extra ? '🤫 Naar het Buurman-plan' : '⬅️ Terug', after: extra ? () => openBuurPlan() : null });
+  }
+  tick(dt) {
+    this.t += dt; buurPopTick(this.pops, dt); for (const it of this.items) if (it.home) it.fly = Math.min(1, it.fly + dt * 3);
+    const c = this.c, W = this.W, H = this.H; c.setTransform(this.api.dpr, 0, 0, this.api.dpr, 0, 0);
+    // vloer (planken) + kleed
+    c.fillStyle = '#d9a86c'; c.fillRect(0, 0, W, H); for (let y = 0; y < H; y += 28) { c.fillStyle = (y / 28) % 2 ? 'rgba(120,70,20,.08)' : 'rgba(255,255,255,.05)'; c.fillRect(0, y, W, 28); c.fillStyle = 'rgba(120,70,20,.25)'; c.fillRect(0, y, W, 1.5); for (let x = (y * 7) % 160; x < W; x += 160) c.fillRect(x, y, 1.5, 28); }
+    const F = this.floor; box(c, F.x + 10, F.y + 10, F.w - 20, F.h - 20, 30, '#7cc7e8', 0); c.strokeStyle = '#fff'; c.lineWidth = 4; c.setLineDash([10, 8]); rrect(c, F.x + 22, F.y + 22, F.w - 44, F.h - 44, 22); c.stroke(); c.setLineDash([]);
+    // bakken
+    for (const [k, b] of Object.entries(this.bins)) {
+      if (k === 'kist') { box(c, b.x, b.y + b.h * .2, b.w, b.h * .8, 10, '#e8403a', 3); c.fillStyle = '#ffd23f'; c.fillRect(b.x + 6, b.y + b.h * .45, b.w - 12, 8); box(c, b.x - 4, b.y + b.h * .08, b.w + 8, b.h * .2, 8, '#c22f2a', 3); }
+      else { box(c, b.x + 6, b.y + b.h * .2, b.w - 12, b.h * .8, 18, '#f3dca8', 3); c.strokeStyle = 'rgba(150,100,40,.5)'; c.lineWidth = 2; for (let x = b.x + 16; x < b.x + b.w - 12; x += 12) { c.beginPath(); c.moveTo(x, b.y + b.h * .25); c.lineTo(x, b.y + b.h - 4); c.stroke(); } box(c, b.x, b.y + b.h * .14, b.w, b.h * .14, 8, '#e6c487', 3); }
+      c.font = '700 15px Fredoka, system-ui'; c.textAlign = 'center'; c.textBaseline = 'middle'; const lb = k === 'kist' ? '🧸 Speelgoed' : '🧦 Kleren'; const tw = c.measureText(lb).width + 18;
+      box(c, b.x + b.w / 2 - tw / 2, b.y + b.h * .55, tw, 24, 12, 'rgba(255,255,255,.92)', 0); c.fillStyle = '#1f2a44'; c.fillText(lb, b.x + b.w / 2, b.y + b.h * .55 + 12.5);
+    }
+    // dingen
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    for (const it of this.items) {
+      let [x, y] = this.pos(it), s = this.sz;
+      if (it.home) { const b = this.bins[it.home], tx = b.x + b.w / 2 + ((it.id * 37) % 60 - 30) * b.w / 200, ty = b.y + b.h * .3; if (it.fly >= 1) continue; x = lerp(it.fx, tx, it.fly); y = lerp(it.fy, ty, it.fly) - Math.sin(it.fly * Math.PI) * 40; s *= 1 - it.fly * .5; }
+      const dr = it.dx != null; c.save(); c.translate(x, y + (dr ? -4 : 0)); c.rotate(dr ? 0 : it.rot + Math.sin(this.t * 2 + it.id) * .05); if (dr) c.scale(1.15, 1.15);
+      c.fillStyle = 'rgba(0,0,0,.15)'; c.beginPath(); c.ellipse(0, s * .38, s * .35, s * .1, 0, 0, 7); c.fill();
+      c.font = `${Math.round(s * .82)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.fillStyle = '#1f2a44'; c.fillText(it.e, 0, 0); c.restore();
+    }
+    const left = this.items.length - this.done; c.font = '700 16px Fredoka, system-ui'; const txt = left ? `Nog ${left} ${left === 1 ? 'ding' : 'dingen'} opruimen` : '✨ Klaar!'; const tw = c.measureText(txt).width + 24;
+    box(c, W / 2 - tw / 2, 62, tw, 28, 14, 'rgba(255,255,255,.92)', 0); c.fillStyle = '#1f2a44'; c.fillText(txt, W / 2, 77);
+    buurPopDraw(c, this.pops, W, H);
+  }
+}
+
 /* ===== main.js ===== */
 /* =========================================================
    OPSTARTEN + test-haakjes (window.__gb, alleen gebruikt door de automatische tests).
@@ -5541,6 +6503,8 @@ window.__gb = {
   bowlingScore, bowlingNext, frameMarks, BlokGame, BowlSim, enterWorld, goTitle, DLG, hideDlg, useObject, doAct, robotBuilt,
   MEAL, MEALS, MEAL_WINDOW, mealCall, mealCancel, mealTarget, mealRoute, renderOuders, addMunten, rectDist,
   GOLF_HOLES, GOLF, golfPar, FLY_SPOTS, allFlySpots, flyCount, flyDone, nearFlySpot, flyCutscene, buildVliegbotNow, vliegHave, VLIEG_PARTS, findNear, nearLabel, lootAvail, takeItem, goalKey, nextGoal, hint,
+  ECON, econCardLine, canDigNow, ECON_FULL_TXT, econDigsLeft, econEnergyLeft,
+  BUUR, PRANKS, buurGateOn, buurWaiting, buurLeft, buurLevel, buurCutscene, buurSkip, openBuurPlan, renderBuurPlan, buurRequestNow, buurDigAfterWin, buurKlusDone, buurLocked, drawBrom, drawGnome, buurNews,
 };
 
 </script>
