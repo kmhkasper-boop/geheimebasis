@@ -1927,7 +1927,7 @@ const BASE_SLOTS = {
   C: { room: [15, 11, 12, 8] },
   W: { room: [2, 12, 10, 6], tunnel: [12, 13, 3, 3], parent: 'C', stub: [14, 13, 1, 3], vert: true },
   E: { room: [30, 12, 10, 6], tunnel: [27, 13, 3, 3], parent: 'C', stub: [27, 13, 1, 3], vert: true },
-  N: { room: [16, 2, 10, 6], tunnel: [19, 8, 4, 3], parent: 'C', stub: [19, 10, 4, 1] },
+  N: { room: [16, 2, 10, 6], tunnel: [20, 8, 3, 3], parent: 'C', stub: [20, 10, 3, 1] }, // naast de monitor (16-19), niet erachter
   S: { room: [16, 22, 10, 6], tunnel: [19, 19, 4, 3], parent: 'C', stub: [19, 19, 4, 1] },
   NW: { room: [2, 2, 10, 6], tunnel: [6, 8, 2, 4], parent: 'W', stub: [6, 11, 2, 1] },
   NE: { room: [30, 2, 10, 6], tunnel: [34, 8, 2, 4], parent: 'E', stub: [34, 11, 2, 1] },
@@ -1938,6 +1938,25 @@ const BASE_SLOTS = {
 const ROOM_PROPS = {
   minigolf: [{ id: 'vliegkist', kind: 'chest', x: 8, y: 4, use: { label: 'Open', loot: 'vliegtekening', unlessRobot: 'vliegbot', text: 'Een oude kist… met een opgerolde tekening erin. Van een VLIEGENDE robot!', empty: 'De kist is leeg. De vliegtekening zit in mijn rugzak.' } }],
 };
+// Waar komen tunnels de kamer in (boven- en onderwand)? Altijd uit ALLE plekken berekend (ook nog niet gegraven kamers),
+// zodat een automaat nooit in een latere tunnelopening staat en niet verspringt als er een kamer bij komt.
+function slotOpenings(slot) {
+  const sl = BASE_SLOTS[slot], [rx, ry, rw, rh] = sl.room, top = [], bot = [];
+  const add = t => { if (!t) return; const [x, y, w, h] = t; if (x + w <= rx || x >= rx + rw) return; for (let i = x; i < x + w; i++) { if (y + h === ry) top.push(i); if (y === ry + rh) bot.push(i); } };
+  add(sl.tunnel); for (const k in BASE_SLOTS) if (BASE_SLOTS[k].parent === slot) add(BASE_SLOTS[k].tunnel);
+  return { top, bot };
+}
+// Plek voor de speelautomaat (2 breed): tegen de wand zonder eigen tunnel, zo dicht mogelijk bij het midden, met minstens
+// 1 tegel ruimte naast elke tunnelopening. Bij gelijke afstand: de kant die het verst van de eigen tunnel af ligt.
+function machineSpot(slot) {
+  const sl = BASE_SLOTS[slot], [rx, ry, rw, rh] = sl.room, op = slotOpenings(slot);
+  const fromTop = !!sl.tunnel && sl.tunnel[1] + sl.tunnel[3] === ry, wall = fromTop ? op.bot : op.top;
+  const c = rx + rw / 2 - 1, own = sl.tunnel ? sl.tunnel[0] + sl.tunnel[2] / 2 : c + 1;
+  const ok = x => ![x - 1, x, x + 1, x + 2].some(i => wall.includes(i));
+  const cand = []; for (let x = rx + 1; x <= rx + rw - 3; x++) if (ok(x)) cand.push(x);
+  cand.sort((a, b) => Math.abs(a - c) - Math.abs(b - c) || Math.abs(b + 1 - own) - Math.abs(a + 1 - own));
+  return { x: cand.length ? cand[0] : c, y: fromTop ? ry + rh - 1 : ry, fromTop, top: op.top };
+}
 const roomBySlot = slot => Object.values(GB.ROOMS).find(r => r.slot === slot);
 const isDug = id => S.base.dug.includes(id);
 function buildBaseMap() {
@@ -1952,13 +1971,16 @@ function buildBaseMap() {
       carve(r.floor || 'M', sl.room); if (sl.tunnel) carve('u', sl.tunnel);
       areas.push({ name: r.emoji + ' ' + r.name, x: rx, y: ry, w: rw, h: rh });
       if (sl.tunnel) areas.push({ name: 'Tunnel', x: sl.tunnel[0], y: sl.tunnel[1], w: sl.tunnel[2], h: sl.tunnel[3] });
-      const fromTop = slot === 'S'; // deze kamer heeft de tunnel aan de bovenkant: automaat dan onderaan
-      spawns['room_' + r.id] = fromTop ? { x: rx + rw / 2 - .5, y: ry + 1.2, dir: 'down' } : { x: rx + rw / 2 - .5, y: ry + rh - 2.2, dir: 'up' };
-      for (let i = 0; i < 3; i++) { const lx = rx + 1 + Math.round(i * (rw - 3) / 2); if (fromTop && i === 1) continue; objects.push({ id: 'lamp_' + slot + i, kind: 'lamp', x: lx, y: ry - 1, solid: false, layer: 0 }); }
-      if (r.machine) objects.push({ id: 'machine_' + r.id, kind: 'machine', dyn: 'machineDyn', game: r.machine, x: rx + rw / 2 - 1, y: fromTop ? ry + rh - 1 : ry, w: 2, h: 1, use: { label: 'Speel', icon: '🎮', action: 'minigame', room: r.id } });
+      const ms = machineSpot(slot), fromTop = ms.fromTop; // tunnel aan de bovenkant: automaat dan onderaan
+      spawns['room_' + r.id] = slot === 'C' ? { x: rx + rw / 2 - .5, y: ry + rh - 3.4, dir: 'down' } // HQ: vóór de bank, niet erin
+        : fromTop ? { x: rx + rw / 2 - .5, y: ry + 1.2, dir: 'down' } : { x: rx + rw / 2 - .5, y: ry + rh - 2.2, dir: 'up' };
+      for (let i = 0; i < 3; i++) { const lx = rx + 1 + Math.round(i * (rw - 3) / 2); if (ms.top.includes(lx)) continue; objects.push({ id: 'lamp_' + slot + i, kind: 'lamp', x: lx, y: ry - 1, solid: false, layer: 0 }); }
+      if (r.machine) objects.push({ id: 'machine_' + r.id, kind: 'machine', dyn: 'machineDyn', game: r.machine, x: ms.x, y: ms.y, w: 2, h: 1, use: { label: 'Speel', icon: '🎮', action: 'minigame', room: r.id } });
       (ROOM_PROPS[r.id] || []).forEach(o => objects.push(Object.assign({}, o, { x: rx + o.x, y: ry + o.y })));
       if (slot !== 'C') {
-        for (let i = 0; i < r.decoSpots; i++) objects.push({ id: 'deco_' + r.id + i, kind: 'decoSpot', dyn: 'decoSpotDyn', x: i === 0 ? rx + 1 : rx + rw - 2, y: ry + 1, solid: false, use: { label: 'Versier', icon: '🎨', action: 'deco' } });
+        for (let i = 0; i < r.decoSpots; i++) { // versierplek recht onder de automaat? dan naar de hoek onderin (zelfde id: versiering blijft)
+          const dx = i === 0 ? rx + 1 : rx + rw - 2, under = r.machine && !fromTop && dx >= ms.x && dx <= ms.x + 1;
+          objects.push({ id: 'deco_' + r.id + i, kind: 'decoSpot', dyn: 'decoSpotDyn', x: dx, y: under ? ry + rh - 2 : ry + 1, solid: false, use: { label: 'Versier', icon: '🎨', action: 'deco' } }); }
         objects.push({ id: 'rug_' + r.id, kind: 'rug', x: rx + 3, y: ry + 2, w: rw - 6, h: 3, solid: false, layer: 0, color: { bowling: '#c4452c', blokken: '#3f6fe0', flipper: '#9b5de5', minigolf: '#2a7a43', racebaan: '#4a4f5c', escaperoom: '#6a3bd6' }[r.machine] || '#8a6a52' });
       }
     } else if (sl.parent && slotDug(sl.parent)) {
@@ -1971,12 +1993,12 @@ function buildBaseMap() {
   if (isDug('hq')) {
     objects.push(
       { id: 'ladderop', kind: 'ladderUp', x: 15, y: 11, solid: false, layer: 0 },
-      { id: 'monitor', kind: 'monitor', dyn: 'monitorDyn', x: 19, y: 11, w: 4, use: { label: 'Monitor', icon: '🖥️', action: 'monitor' } },
+      { id: 'monitor', kind: 'monitor', dyn: 'monitorDyn', x: 16, y: 11, w: 4, use: { label: 'Monitor', icon: '🖥️', action: 'monitor' } },
       { id: 'dock', kind: 'dock', x: 23, y: 11, w: 2, h: 2, solid: false, layer: 0 },
       { id: 'automaat', kind: 'automaat', x: 26, y: 11, use: { label: 'Automaat', icon: '🪙', action: 'automaat' } },
       { id: 'hqrug', kind: 'rug', x: 18, y: 14, w: 6, h: 2, solid: false, layer: 0, color: '#3f6fe0' },
       { id: 'hqbank', kind: 'sofaBase', x: 19, y: 17, w: 3, use: { label: 'Bekijk', empty: ['Onze eigen bank in onze eigen basis!', 'Even uitrusten… zo, weer verder!'] } },
-      ...[[16, 17], [25, 17], [16, 13]].map(([x, y], i) => ({ id: 'deco_hq' + i, kind: 'decoSpot', dyn: 'decoSpotDyn', x, y, solid: false, use: { label: 'Versier', icon: '🎨', action: 'deco' } })),
+      ...[[16, 17], [25, 17], [16, 15]].map(([x, y], i) => ({ id: 'deco_hq' + i, kind: 'decoSpot', dyn: 'decoSpotDyn', x, y, solid: false, use: { label: 'Versier', icon: '🎨', action: 'deco' } })),
     );
     areas.unshift({ name: '🖥️ Hoofdkwartier', x: 15, y: 11, w: 12, h: 8 });
   }
@@ -2113,9 +2135,15 @@ function moveBody(b, dx, dy) {
 }
 
 /* ---------- update ---------- */
+// Vangnet: sta je (of je vriend) per ongeluk in een muur of een meubel, schuif dan naar de dichtstbijzijnde vrije plek.
+function nudgeFree(b) {
+  if (!b || !boxHits(b.x, b.y)) return;
+  for (let r = 4; r <= 160; r += 4) for (let a = 0; a < 16; a++) { const x = b.x + Math.cos(a / 16 * 6.2832) * r, y = b.y + Math.sin(a / 16 * 6.2832) * r; if (!boxHits(x, y)) { b.x = x; b.y = y; return; } }
+}
 function worldUpdate(dt) {
   const W = WORLD, p = W.p; W.t += dt;
   const free = !W.busy && !DLG.open && !anyOverlay();
+  if (free) { nudgeFree(p); if (W.f && !W.f.moving && !W.f.hold) nudgeFree(W.f); }
   W.prev.x = p.x; W.prev.y = p.y;
   const d = free ? inputDir() : { x: 0, y: 0, m: 0 };
   p.moving = d.m > 0;
@@ -2844,6 +2872,7 @@ function enterWorld() {
   show('scrWorld'); WORLD.active = true; closeOv('scrCreate');
   const map = GB.MAPS[S.map] ? S.map : 'huis';
   if (S.pos) loadMap(map, { px: S.pos.x, py: S.pos.y, dir: S.dir }); else loadMap(map, map === 'basis' ? 'ladder' : 'start');
+  nudgeFree(WORLD.p); // opgeslagen plek in een muur (bv. na een verbouwing van de basis)? naar de dichtstbijzijnde vrije plek
   if (boxHits(WORLD.p.x, WORLD.p.y)) loadMap(map, Object.keys(GB.MAPS[map].spawns)[0]);
   updateHud(); syncActBtn();
   if (!S.introDone) introCutscene();
