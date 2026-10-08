@@ -6646,6 +6646,430 @@ class Kabouters {
   }
 }
 
+/* ===== minigames/belletje_logic.js ===== */
+/* =========================================================
+   BELLETJE LELLEN – logica (zonder tekenen, getest in tests/unit.js). Streek 3 tegen buurman Brom.
+   Avond, voortuin van Brom (BL.W x BL.H tegels; huis + voordeur bovenaan, hek met twee openingen onderaan).
+   Een ronde:
+   - 'sneak'  : sluip naar de deurmat. Wie op de mat stapt, belt aan (ding-dong!).
+   - 'ring'   : de deur gaat over L.delay seconden open (je hoort hem aankomen, de balk loopt leeg). RENNEN en verstoppen:
+                achter de kliko, achter een struik of naast/achter de auto (elke verstopplek is voor 1 kind).
+   - 'open'   : de deur gaat open, Brom stapt naar buiten met een zaklamp.
+   - 'search' : hij schijnt even rond (L.search sec). Wie niet verstopt zit en in de lichtbundel komt = betrapt.
+                Op ⭐⭐ en ⭐⭐⭐ onthoudt hij waar jullie de vorige keer zaten (👀): daar schijnt hij eerst. Dus elke keer een andere plek!
+   - 'back'   : Brom moppert en gaat weer naar binnen. Niemand betrapt = ronde gelukt.
+   Betrapt: dat kind gaat terug naar de stoep, een leven minder, de ronde telt niet. L.rings keer gelukt = gewonnen.
+   2 spelers: allebei verstoppen (de ronde lukt alleen als niemand betrapt is). Levens zijn samen.
+   ========================================================= */
+const BL = { W: 16, H: 11, HOUSE_H: 2.3, FENCE_Y: 9.7, SPEED: 3.0, R: .3, DOOR_X: 8, MAT_Y: 2.95, MAT_R: .6, BROM_Y: 3.25, HIDE_R: .5,
+  CAUGHT_T: 1.2, BACK_T: 2.0, CHECK_T: .8, CONE: .3, RANGE: 14, NEAR: 1.15, GATES: [[7.1, 8.9], [11.4, 14.6]], START_Y: 10.35, DUO: .4 };   // DUO: met z'n tweeën iets meer tijd om je te verstoppen
+const BL_LEVELS = [
+  { rings: 3, delay: [4.2, 4.8], open: .9, search: 2.6, memory: 0, lives: 3, time: 150, objs: ['kliko', 'struik', 'struik2', 'auto'] },
+  { rings: 4, delay: [2.8, 3.3], open: .7, search: 3.0, memory: 1, lives: 3, time: 150, objs: ['kliko', 'struik', 'struik2', 'auto'] },
+  { rings: 5, delay: [2.0, 2.4], open: .5, search: 3.3, memory: 1, lives: 2, time: 160, objs: ['kliko', 'struik', 'struik2', 'auto'] },
+];
+// basisplekken (met een beetje willekeur per potje)
+const BL_OBJS = {
+  kliko: { type: 'kliko', x: 4.6, y: 4.4, r: .45 },
+  struik: { type: 'struik', x: 2.7, y: 6.7, r: .8 },
+  struik2: { type: 'struik', x: 9.4, y: 6.9, r: .8 },
+  auto: { type: 'auto', x: 12.7, y: 5.9, w: 2.0, h: 3.1 },
+};
+function blBuild(level, seed, n) {
+  const L = BL_LEVELS[level - 1], R = mulberry32(seed || 1), objs = [], zones = [];
+  const bx = BL.DOOR_X, by = BL.BROM_Y;
+  for (const id of L.objs) {
+    const b = BL_OBJS[id], j = id === 'auto' ? .25 : id === 'kliko' ? .3 : .5, o = Object.assign({}, b, { x: b.x + (R() - .5) * j * 2, y: b.y + (R() - .5) * j * 2 });
+    objs.push(o);
+    if (o.type === 'auto') {      // naast de auto (weg van de deur) en achter de auto
+      zones.push({ x: o.x + o.w / 2 + .45, y: o.y + .2, obj: objs.length - 1 }, { x: o.x - .1, y: o.y + o.h / 2 + .45, obj: objs.length - 1 });
+    } else {                       // achter het ding, gezien vanaf de deur
+      const dx = o.x - bx, dy = o.y - by, d = Math.hypot(dx, dy), s = o.r + .4;
+      zones.push({ x: o.x + dx / d * s, y: o.y + dy / d * s, obj: objs.length - 1 });
+    }
+  }
+  zones.forEach((z, i) => { z.id = i; z.owner = -1; z.marked = false; });
+  const players = Array.from({ length: n || 1 }, (_, i) => { const x = n > 1 ? (i ? 8.45 : 7.55) : 8; return { x, y: BL.START_Y, sx: x, sy: BL.START_Y, dir: 'up', moving: false, caught: 0, hidden: -1, ph: 0, rang: 0, hid: 0 }; });
+  return { level, L, R, objs, zones, players, lives: L.lives, time: 0, rounds: 0, caught: 0, ph: 'sneak', phT: 0, delay: 0, fail: false,
+    brom: { y: 1.9, a: Math.PI / 2, out: 0, door: 0, check: [], sweep: [0, 0] }, done: null };
+}
+// zit speler p veilig verstopt? (verstopplek waar hij 'eigenaar' van is)
+const blZoneOf = (st, i) => st.zones.find(z => z.owner === i) || null;
+function blSolid(st, x, y, pad) {
+  for (const o of st.objs) {
+    if (o.type === 'auto') { if (Math.abs(x - o.x) < o.w / 2 + pad && Math.abs(y - o.y) < o.h / 2 + pad) return o; }
+    else if (Math.hypot(x - o.x, y - o.y) < (o.type === 'struik' ? o.r * .85 : o.r) + pad) return o;
+  }
+  return null;
+}
+function blPush(st, p) {
+  for (const o of st.objs) {
+    if (o.type === 'auto') {
+      const hw = o.w / 2 + BL.R, hh = o.h / 2 + BL.R, dx = p.x - o.x, dy = p.y - o.y;
+      if (Math.abs(dx) < hw && Math.abs(dy) < hh) { const ox = hw - Math.abs(dx), oy = hh - Math.abs(dy); if (ox < oy) p.x = o.x + Math.sign(dx || 1) * hw; else p.y = o.y + Math.sign(dy || 1) * hh; }
+    } else {
+      const r = (o.type === 'struik' ? o.r * .85 : o.r) + BL.R, dx = p.x - o.x, dy = p.y - o.y, d = Math.hypot(dx, dy);
+      if (d < r && d > 1e-6) { p.x = o.x + dx / d * r; p.y = o.y + dy / d * r; }
+    }
+  }
+}
+const blInGate = x => BL.GATES.some(([a, b]) => x >= a + BL.R * .8 && x <= b - BL.R * .8);
+// waar zoekt de zaklamp nu? (hoek; 0 = naar rechts, PI/2 = recht naar beneden)
+function blSearch(st) {
+  const b = st.brom, t = st.phT, nC = b.check.length;
+  if (t < nC * BL.CHECK_T) { const z = st.zones[b.check[Math.floor(t / BL.CHECK_T)]]; return Math.atan2(z.y - BL.BROM_Y, z.x - BL.DOOR_X); }
+  const u = clamp((t - nC * BL.CHECK_T) / Math.max(.5, st.L.search - nC * BL.CHECK_T), 0, 1), e = u < .5 ? 2 * u * u : 1 - Math.pow(-2 * u + 2, 2) / 2;
+  return b.sweep[0] + (b.sweep[1] - b.sweep[0]) * e;
+}
+function blInBeam(st, x, y) {
+  if (st.ph !== 'search') return false;
+  const dx = x - BL.DOOR_X, dy = y - BL.BROM_Y, d = Math.hypot(dx, dy);
+  if (d < BL.NEAR) return true;
+  let da = Math.atan2(dy, dx) - st.brom.a; da = Math.atan2(Math.sin(da), Math.cos(da));
+  return d < BL.RANGE && Math.abs(da) < BL.CONE + .25 / Math.max(1, d);
+}
+// hoe lang blijft Brom buiten staan voordat hij weer naar binnen loopt? (betrapt: even mopperen)
+const blHold = st => st.fail ? .9 : .35;
+function blSet(st, ph, ev) { st.ph = ph; st.phT = 0; ev.push({ e: ph }); }
+// één stapje. inp[i] = {x, y} (-1..1). Geeft gebeurtenissen terug.
+function blStep(st, inp, dt) {
+  const ev = []; if (st.done) return ev; const L = st.L, R = st.R, b = st.brom;
+  st.time += dt; st.phT += dt;
+  // spelers
+  st.players.forEach((p, i) => {
+    if (p.caught > 0) { p.caught -= dt; p.moving = false; if (p.caught <= 0) { p.x = p.sx; p.y = p.sy; p.dir = 'up'; } return; }
+    const v = inp[i] || { x: 0, y: 0 }, m = Math.min(1, Math.hypot(v.x, v.y)); p.moving = m > .15;
+    if (p.moving) {
+      const ox = p.x, oy = p.y, k = BL.SPEED * dt / Math.max(m, 1e-6) * m; p.x += v.x * k; p.y += v.y * k; p.ph += dt * 14;
+      p.dir = Math.abs(v.x) > Math.abs(v.y) ? (v.x < 0 ? 'left' : 'right') : (v.y < 0 ? 'up' : 'down');
+      // hek: alleen door de openingen
+      const band = y => y > BL.FENCE_Y - .3 && y < BL.FENCE_Y + .2;
+      if (band(p.y) && !blInGate(p.x)) { if (band(oy) && blInGate(ox)) p.x = ox; else p.y = oy; }   // in de opening: niet zijwaarts het hek in
+      p.x = clamp(p.x, .4, BL.W - .4); p.y = clamp(p.y, BL.HOUSE_H + .5, BL.H - .3);
+      blPush(st, p);
+    }
+    // verstopplek pakken / loslaten
+    const own = blZoneOf(st, i);
+    if (own && Math.hypot(p.x - own.x, p.y - own.y) > BL.HIDE_R) own.owner = -1;
+    if (!blZoneOf(st, i)) { const z = st.zones.find(z => z.owner < 0 && Math.hypot(p.x - z.x, p.y - z.y) <= BL.HIDE_R); if (z) { z.owner = i; ev.push({ e: 'hide', i, z }); } }
+    const zz = blZoneOf(st, i); p.hidden = zz ? zz.id : -1;
+  });
+  // fases
+  if (st.ph === 'sneak') {
+    const i = st.players.findIndex(p => p.caught <= 0 && Math.hypot(p.x - BL.DOOR_X, p.y - BL.MAT_Y) < BL.MAT_R);
+    if (i >= 0) { st.players[i].rang++; st.delay = L.delay[0] + R() * (L.delay[1] - L.delay[0]) + (st.players.length > 1 ? BL.DUO : 0); st.fail = false; blSet(st, 'ring', ev); ev[ev.length - 1].i = i; }
+  } else if (st.ph === 'ring') {
+    if (st.phT >= st.delay) {
+      blSet(st, 'open', ev);
+      b.check = L.memory ? st.zones.filter(z => z.marked).map(z => z.id) : [];
+      const lr = R() < .5; b.sweep = lr ? [.15, Math.PI - .15] : [Math.PI - .15, .15];
+    }
+  } else if (st.ph === 'open') {
+    b.out = Math.min(1, st.phT / L.open); b.door = clamp(st.phT / L.open * 1.6, 0, 1);
+    if (st.phT >= L.open) blSet(st, 'search', ev);
+  } else if (st.ph === 'search') {
+    b.a = blSearch(st);
+    st.players.forEach((p, i) => {
+      if (p.caught > 0) return;
+      const z = p.hidden >= 0 ? st.zones[p.hidden] : null, safe = z && !z.marked;
+      if (!safe && blInBeam(st, p.x, p.y)) {
+        p.caught = BL.CAUGHT_T; st.caught++; if (z) z.owner = -1; p.hidden = -1;
+        if (!st.fail) { st.fail = true; st.lives--; }
+        ev.push({ e: 'caught', i, marked: !!z });
+      }
+    });
+    if (st.fail && st.phT > .05) { blSet(st, 'back', ev); }
+    else if (st.phT >= L.search) blSet(st, 'back', ev);
+  } else if (st.ph === 'back') {
+    const hold = blHold(st); b.out = st.phT < hold ? 1 : Math.max(0, 1 - (st.phT - hold) / .75);
+    b.door = clamp(1 - (st.phT - hold - .6) / .4, 0, 1);
+    if (st.phT >= BL.BACK_T) {
+      if (!st.fail) {
+        st.rounds++; ev.push({ e: 'safe' });
+        st.players.forEach(p => { if (p.hidden >= 0) p.hid++; });
+        if (L.memory) st.zones.forEach(z => { z.marked = z.owner >= 0; });
+      }
+      if (st.rounds >= L.rings) { st.done = 'win'; ev.push({ e: 'win' }); return ev; }
+      blSet(st, 'sneak', ev);
+    }
+  }
+  if (!st.done && st.lives <= 0 && st.players.every(p => p.caught <= 0)) { st.done = 'lose'; ev.push({ e: 'lose', why: 'levens' }); }
+  else if (!st.done && st.time >= L.time) { st.done = 'lose'; ev.push({ e: 'lose', why: 'tijd' }); }
+  return ev;
+}
+// Hulpje voor tests: een kind dat het spel snapt. opt.react = reactietijd na het aanbellen, opt.careless = let niet op 👀,
+// opt.stay = verstopt zich niet (blijft staan).
+function blBot(st, i, opt) {
+  opt = opt || {}; const p = st.players[i]; if (p.caught > 0) return { x: 0, y: 0 };
+  let tx, ty;
+  if (st.ph === 'sneak') { tx = BL.DOOR_X + (i ? .25 : 0); ty = BL.MAT_Y; p.botZone = -1; }
+  else {
+    if (st.ph === 'ring' && st.phT < (opt.react || 0)) return { x: 0, y: 0 };
+    if (opt.stay) return { x: 0, y: 0 };
+    if (p.botZone == null || p.botZone < 0) {
+      const taken = st.players.map((q, j) => j !== i ? q.botZone : -1);
+      const ok = st.zones.filter(z => (opt.careless || !z.marked) && !taken.includes(z.id) && (z.owner < 0 || z.owner === i));
+      ok.sort((a, b) => Math.hypot(a.x - p.x, a.y - p.y) - Math.hypot(b.x - p.x, b.y - p.y));
+      p.botZone = ok.length ? ok[opt.rand ? Math.floor(opt.rand() * ok.length) : 0].id : -1;
+    }
+    if (p.botZone < 0) return { x: 0, y: 0 };
+    const z = st.zones[p.botZone]; tx = z.x; ty = z.y;
+    if (Math.hypot(tx - p.x, ty - p.y) < BL.HIDE_R * .4) return { x: 0, y: 0 };
+  }
+  // door het hek? eerst naar de opening
+  if ((p.y > BL.FENCE_Y - .35) !== (ty > BL.FENCE_Y - .35) && !blInGate(p.x)) { const g = BL.GATES.map(([a, b]) => (a + b) / 2).sort((a, b) => Math.abs(a - p.x) - Math.abs(b - p.x))[0]; tx = g; ty = BL.FENCE_Y + (p.y > BL.FENCE_Y ? -.6 : .6); }
+  // de auto staat in de weg? via de dichtstbijzijnde hoek eromheen
+  const blocked = (ax, ay, bx2, by2, o) => { for (let k = 1; k < 20; k++) { const x = ax + (bx2 - ax) * k / 20, y = ay + (by2 - ay) * k / 20; if (Math.abs(x - o.x) < o.w / 2 + BL.R - .05 && Math.abs(y - o.y) < o.h / 2 + BL.R - .05) return true; } return false; };
+  for (const o of st.objs) if (o.type === 'auto' && blocked(p.x, p.y, tx, ty, o)) {
+    const cs = [[-1, -1], [1, -1], [-1, 1], [1, 1]].map(([sx, sy]) => ({ x: o.x + sx * (o.w / 2 + .6), y: o.y + sy * (o.h / 2 + .6) })).filter(c => Math.hypot(c.x - p.x, c.y - p.y) > .2 && !blocked(p.x, p.y, c.x, c.y, o));
+    const cost = c => Math.hypot(c.x - p.x, c.y - p.y) + Math.hypot(tx - c.x, ty - c.y) + (blocked(c.x, c.y, tx, ty, o) ? 50 : 0);
+    cs.sort((a, b) => cost(a) - cost(b));
+    if (cs.length) { tx = cs[0].x; ty = cs[0].y; }
+  }
+  const dx = tx - p.x, dy = ty - p.y, d = Math.hypot(dx, dy); if (d < 1e-6) return { x: 0, y: 0 };
+  const a0 = Math.atan2(dy, dx), look = Math.min(.7, d);
+  for (const da of [0, .5, -.5, 1, -1, 1.5, -1.5, 2.2, -2.2]) {
+    const a = a0 + da; if (!blSolid(st, p.x + Math.cos(a) * look, p.y + Math.sin(a) * look, BL.R * .9)) return { x: Math.cos(a), y: Math.sin(a) };
+  }
+  return { x: dx / d, y: dy / d };
+}
+
+/* ===== minigames/belletje.js ===== */
+/* =========================================================
+   BELLETJE LELLEN – streek 3 tegen buurman Brom (logica in belletje_logic.js).
+   Het is avond. Sluip naar de voordeur van Brom en stap op de deurmat: ding-dong! Nu snel verstoppen
+   (achter de kliko, een struik of de auto) voordat de deur opengaat. Brom komt naar buiten met een zaklamp en schijnt even rond.
+   Wie in het licht staat is betrapt. Op ⭐⭐/⭐⭐⭐ onthoudt hij jullie vorige verstopplek (👀): kies dan een andere!
+   1 speler: joystick (of WASD/pijltjes). 2 spelers: ieder een eigen kind en joystick (links / rechts; WASD en pijltjes). Allebei verstoppen!
+   ========================================================= */
+registerMinigame({
+  id: 'belletje', name: 'Belletje lellen', emoji: '🔔', music: 'buurman', twoMode: 'samen, ieder een eigen kind', prank: true,
+  help: 'Sluip naar de voordeur van <b>buurman Brom</b> en stap op de deurmat: <b>ding-dong!</b> Ren dan snel weg en <b>verstop je</b> achter de kliko, een struik of de auto, voordat hij met zijn zaklamp naar buiten komt. Zit je in het licht? Betrapt!',
+  bonusText: 'Win van de buurman voor 1 energie (1x per dag)', fmt: v => v ? buurStars(v) : '–',
+  create: api => new Belletje(api),
+});
+const BL_DT = 1 / 120;
+const BL_SAY = {
+  open: ['Wie belt daar?!', 'Hallo-o? Wie is daar?', 'Ik hoorde de bel heus wel!', 'Wie stoort mij bij mijn soep?'],
+  check: ['Daar zaten jullie vorige keer!', 'Eens kijken… daar?', 'Ik weet heus wel waar jullie zaten!'],
+  caught: ['Hebbes! Belletje lellen, hè?', 'Aha! Daar zit je!', 'Ik zie je wel, kwajongen!', 'Betrapt! Wegwezen!'],
+  back: ['Hmpf. Weer niemand…', 'Die bel is zeker kapot.', 'Grrr… ik krijg jullie nog wel!', 'Rare bel. Ik ga weer naar binnen.'],
+};
+class Belletje {
+  constructor(api) {
+    this.api = api; this.c = api.ctx; this.players = api.players; this.n = this.players.length; this.state = 'choose'; this.t = 0; this.acc = 0;
+    this.bctx = buurCtx(); this.pops = []; this.say = null; this.flash = 0; this.stepT = 0; this.W = api.W; this.H = api.H;
+    this.st = blBuild(1, 1, this.n); this.layout();
+    this.joy = new BuurJoy(api.cv, this.n, () => this.zones(), i => this.home(i));
+    buurChoose('belletje', { title: '🔔 Belletje lellen', text: 'Het is avond. Sluip naar de voordeur van buurman Brom en stap op de <b>deurmat</b> om aan te bellen. Dan <b>snel verstoppen</b> voordat hij met zijn zaklamp naar buiten komt!' })
+      .then(l => { if (MG.inst === this) this.start(l); });
+  }
+  start(level) { this.level = level; this.st = blBuild(level, (Date.now() / 1000 | 0) % 100000 + 11, this.n); this.state = 'count'; this.cd = 3.2; this.joy.reset(); SFX.tick(); this.say = { txt: 'Eindelijk rust. Lekker soep eten…', t: 0, life: 3, mood: 'blij' }; }
+  destroy() { this.joy.destroy(); $('#mgBanner').classList.remove('show'); }
+  resize(W, H) { this.W = W; this.H = H; this.layout(); }
+  layout() {
+    const W = this.W, H = this.H, port = H > W * 1.05, top = 92, below = port ? Math.min(220, H * .26) : 8;
+    const k = Math.max(14, Math.min((W - 16) / BL.W, (H - top - below) / BL.H)); this.k = k; this.port = port;
+    this.ox = (W - k * BL.W) / 2; this.oy = top + (port ? 6 : Math.max(0, (H - top - below - k * BL.H) / 2));
+  }
+  zones() { const W = this.W, H = this.H, y = this.port ? this.oy + this.k * BL.H * .5 : H * .3; return this.n > 1 ? [{ x: 0, y, w: W / 2, h: H - y }, { x: W / 2, y, w: W / 2, h: H - y }] : [{ x: 0, y, w: W, h: H - y }]; }
+  home(i) { const W = this.W, H = this.H, m = 76; return this.n > 1 ? [i ? W - m : m, H - m] : [this.port ? W / 2 : m, H - m]; }
+  key(k, down) { return this.joy.key(k, down); }
+  X(x) { return this.ox + x * this.k; } Y(y) { return this.oy + y * this.k; }
+  pop(txt, x, y, col, size) { this.pops.push({ txt, x, y, col, size, t: 0, life: 1.3 }); }
+  talk(kind, mood, life) { this.say = { txt: pick(BL_SAY[kind]), t: 0, life: life || 2.2, mood }; }
+  tick(dt) {
+    this.t += dt; buurPopTick(this.pops, dt); if (this.say && (this.say.t += dt) > this.say.life) this.say = null; this.flash = Math.max(0, this.flash - dt);
+    if (this.state === 'count') { const o = Math.ceil(this.cd); this.cd -= dt; if (Math.ceil(this.cd) !== o && this.cd > 0) SFX.tick(); if (this.cd <= 0) { this.state = 'play'; SFX.sneak(); } }
+    else if (this.state === 'play' || this.state === 'end') {
+      this.acc += dt;
+      while (this.acc >= BL_DT) { this.acc -= BL_DT; this.step(BL_DT); }
+      if (this.state === 'end' && (this.endT += dt) > 1.8 && !this.done) { this.done = true; this.finish(); }
+    }
+    this.draw();
+  }
+  step(dt) {
+    const st = this.st, play = this.state === 'play';
+    const ev = blStep(st, play ? this.players.map((_, i) => this.joy.get(i)) : this.players.map(() => ({ x: 0, y: 0 })), play ? dt : 0);
+    if (play && st.players.some(p => p.moving) && (this.stepT += dt) > (st.ph === 'sneak' ? .42 : .26)) { this.stepT = 0; st.ph === 'sneak' ? SFX.sneak() : SFX.step(); }
+    if (play && st.ph === 'ring') { const left = st.delay - st.phT; if (Math.floor((left + dt) * 2) !== Math.floor(left * 2) && left < st.delay - .8) SFX.bonk(); }
+    const dx = this.X(BL.DOOR_X), dy = this.Y(BL.HOUSE_H);
+    for (const e of ev) {
+      if (e.e === 'ring') { SFX.doorbell(); this.pop('🔔 Ding-dong!', dx, dy - this.k * .4, '#ffd23f', 26); }
+      if (e.e === 'open') { SFX.door(); this.talk(st.brom.check.length ? 'check' : 'open', 'roep', 2.4); }
+      if (e.e === 'search') { SFX.tick(); }
+      if (e.e === 'hide') {
+        const z = e.z; SFX.whoosh();
+        if (z.marked && st.L.memory) this.pop('👀 Hier zoekt hij eerst!', this.X(z.x), this.Y(z.y) - this.k * 1.3, '#ff6b6b', 18);
+        else if (st.ph !== 'sneak') this.pop('🤫', this.X(z.x), this.Y(z.y) - this.k * 1.3, '#ffffff', 24);
+      }
+      if (e.e === 'caught') { const p = st.players[e.i]; SFX.caught(); SFX.shout(); this.flash = .5; this.talk('caught', 'roep', 2.4); this.pop('❗', this.X(p.x), this.Y(p.y) - this.k * 1.4, '#ff6b6b', 30); if (navigator.vibrate) try { navigator.vibrate(120); } catch (_) { } }
+      if (e.e === 'back' && !st.fail) { SFX.grumble(); this.talk('back', 'boos', 2.2); }
+      if (e.e === 'safe') { SFX.door(); if (st.rounds < st.L.rings) this.pop(`✅ ${st.rounds}/${st.L.rings} gelukt!`, this.W / 2, this.Y(BL.HOUSE_H + 2.2), '#c8f08f', 26); if (st.L.memory && st.rounds < st.L.rings) setTimeout(() => { if (MG.inst === this) this.pop('👀 Brom onthoudt je plek…', this.W / 2, this.Y(BL.HOUSE_H + 3.2), '#ffb347', 20); }, 700); }
+      if (e.e === 'win') { this.state = 'end'; this.endT = 0; SFX.fanfare(); this.say = { txt: 'Nou moe! Ik ga maar in bad.', t: 0, life: 2.5, mood: 'boos' }; this.pop('🔔 Gelukt!', this.W / 2, this.H / 2, '#ffd23f', 32); }
+      if (e.e === 'lose') { this.state = 'end'; this.endT = 0; SFX.aww(); this.pop(e.why === 'tijd' ? '⏰ De tijd is op!' : '😬 Te vaak betrapt!', this.W / 2, this.H / 2, '#ff6b6b', 28); }
+    }
+  }
+  finish() {
+    const st = this.st, won = st.done === 'win', L = st.L;
+    const lines = won ? [`🔔 ${L.rings}× aangebeld en niet gevonden! Buurman Brom snapt er niks van.`,
+      this.level >= 3 ? '🏆 Gewonnen op ⭐⭐⭐: <b>Belletje-lel-kampioen!</b>' : st.caught ? `🔦 ${st.caught}× betrapt, maar toch gelukt!` : '🤫 Niet één keer betrapt. Knap!']
+      : [st.lives <= 0 ? '🔦 Buurman Brom heeft jullie te vaak gevonden… Verstop je snel, en elke keer op een andere plek!' : `⏰ De tijd was op (nog ${L.rings - st.rounds}× aanbellen).`];
+    if (won && this.level < 3) lines.push('Win op ⭐⭐⭐ en word Belletje-lel-kampioen!');
+    const sc = this.players.map((p, i) => ({ name: p.name, text: `${st.players[i].rang}× aangebeld` }));
+    buurFinish(this.api, 'belletje', { won, level: this.level, lines, scores: sc });
+  }
+  /* ---------- tekenen ---------- */
+  draw() {
+    const c = this.c, W = this.W, H = this.H, k = this.k, st = this.st, t = this.t, ph = st.ph, play = this.state === 'play';
+    c.setTransform(this.api.dpr, 0, 0, this.api.dpr, 0, 0);
+    c.fillStyle = '#23402f'; c.fillRect(0, 0, W, H); for (let i = 0; i < 60; i++) dot(c, hash2(i, 5) * W, hash2(i, 6) * H, 10 + hash2(i, 7) * 16, 'rgba(10,30,25,.4)'); // haag in de avond
+    const X = x => this.X(x), Y = y => this.Y(y);
+    c.save(); rrect(c, X(0), Y(0), k * BL.W, k * BL.H, 12); c.clip();
+    // gazon
+    for (let i = 0; i < BL.W; i++) { c.fillStyle = i % 2 ? '#5f9e4a' : '#67a852'; c.fillRect(X(i), Y(BL.HOUSE_H), k + 1, k * (BL.FENCE_Y - BL.HOUSE_H)); }
+    // tuinpad van de deur naar het hek + oprit
+    c.fillStyle = '#d6cbb4'; for (let y = BL.HOUSE_H + .2; y < BL.FENCE_Y; y += .62) rrect(c, X(BL.DOOR_X - .55 + (Math.floor(y / .62) % 2) * .06), Y(y), k * 1.1, k * .5, 4), c.fill();
+    c.fillStyle = '#9b9b9b'; c.fillRect(X(BL.GATES[1][0] + .2), Y(BL.HOUSE_H + 1.5), k * (BL.GATES[1][1] - BL.GATES[1][0] - .4), k * (BL.FENCE_Y - BL.HOUSE_H - 1.5));
+    // stoep
+    c.fillStyle = '#b9b4a8'; c.fillRect(X(0), Y(BL.FENCE_Y), k * BL.W, k * (BL.H - BL.FENCE_Y)); c.strokeStyle = 'rgba(0,0,0,.12)'; c.lineWidth = 1.5; for (let x = 0; x < BL.W; x += 1.5) { c.beginPath(); c.moveTo(X(x), Y(BL.FENCE_Y)); c.lineTo(X(x), Y(BL.H)); c.stroke(); }
+    this.drawHouse(c);
+    // verstopplekken (stippelrondjes) + 👀 waar hij eerst kijkt
+    const showZ = play && (ph === 'sneak' || ph === 'ring');
+    for (const z of st.zones) {
+      if (z.owner >= 0) continue;
+      if (z.marked && st.L.memory && ph !== 'back') { c.save(); c.setLineDash([5, 4]); c.strokeStyle = 'rgba(255,107,107,.9)'; c.lineWidth = 2.5; c.beginPath(); c.ellipse(X(z.x), Y(z.y), k * .45, k * .28, 0, 0, 7); c.stroke(); c.restore(); }
+      else if (showZ) { c.save(); c.setLineDash([5, 4]); c.strokeStyle = `rgba(255,255,255,${ph === 'ring' ? .55 + Math.sin(t * 10) * .25 : .35})`; c.lineWidth = 2; c.beginPath(); c.ellipse(X(z.x), Y(z.y), k * .45, k * .28, 0, 0, 7); c.stroke(); c.restore(); }
+    }
+    // figuren op volgorde van y (verstopte kinderen vlak vóór hun ding getekend, zodat het ding ze half bedekt)
+    const items = [];
+    st.objs.forEach((o, oi) => items.push({ y: o.y + (o.type === 'auto' ? o.h / 2 : .1), f: () => this.drawObj(c, o, oi) }));
+    st.players.forEach((p, i) => {
+      if (p.y > BL.FENCE_Y - .2) return;
+      const z = p.hidden >= 0 ? st.zones[p.hidden] : null, o = z ? st.objs[z.obj] : null;
+      items.push({ y: o ? o.y + (o.type === 'auto' ? o.h / 2 : .1) - .01 : p.y, f: () => this.drawPlayer(c, p, i) });
+    });
+    if (st.brom.out > 0 || ph === 'open') items.push({ y: BL.HOUSE_H + .3 + st.brom.out * (BL.BROM_Y - BL.HOUSE_H - .3), f: () => this.drawBrom(c) });
+    items.sort((a, b) => a.y - b.y).forEach(o => o.f());
+    // hek met twee openingen
+    const gate = x => BL.GATES.some(([a, b]) => x > a && x < b);
+    for (let x = .15; x < BL.W; x += .42) if (!gate(x + .1)) box(c, X(x), Y(BL.FENCE_Y - .55), k * .2, k * .62, 2, '#efe6d2', 1.2);
+    c.fillStyle = '#efe6d2'; let x0 = 0; for (const [a, b] of BL.GATES.concat([[BL.W, BL.W]])) { c.fillRect(X(x0), Y(BL.FENCE_Y - .38), k * (a - x0), k * .1); c.fillRect(X(x0), Y(BL.FENCE_Y - .1), k * (a - x0), k * .1); x0 = b; }
+    st.players.forEach((p, i) => { if (p.y > BL.FENCE_Y - .2) this.drawPlayer(c, p, i); });
+    // lantaarnpaal op de stoep
+    const lx = X(5.6), ly = Y(BL.FENCE_Y + .6); box(c, lx - k * .07, ly - k * 2.4, k * .14, k * 2.4, 2, '#3d4658', 1); dot(c, lx, ly - k * 2.5, k * .22, '#fff3b0');
+    // avond: alles een beetje donker, behalve de lampen en de zaklamp
+    c.fillStyle = 'rgba(12,20,52,.42)'; c.fillRect(X(0), Y(0), k * BL.W, k * BL.H);
+    const glow = (x, y, r, a) => { const g = c.createRadialGradient(x, y, 0, x, y, r); g.addColorStop(0, `rgba(255,230,140,${a})`); g.addColorStop(1, 'rgba(255,230,140,0)'); c.fillStyle = g; c.beginPath(); c.arc(x, y, r, 0, 7); c.fill(); };
+    glow(lx, ly - k * 2.5, k * 2.4, .35);
+    if (st.brom.out > 0 || ph === 'open' || ph === 'search') glow(X(BL.DOOR_X), Y(BL.HOUSE_H), k * 2.2, .35);
+    if (ph === 'search') this.drawBeam(c);
+    c.restore();
+    // rand-signaal
+    if (play && (ph === 'ring' || ph === 'search')) { const pulse = .5 + Math.sin(t * (ph === 'search' ? 14 : 9)) * .5; c.strokeStyle = ph === 'search' ? `rgba(255,214,90,${.45 + pulse * .4})` : `rgba(255,170,40,${.35 + pulse * .5})`; c.lineWidth = 10; c.strokeRect(5, 5, W - 10, H - 10); }
+    if (this.flash) { c.fillStyle = `rgba(232,64,58,${this.flash * .5})`; c.fillRect(0, 0, W, H); }
+    this.drawHud(c);
+    buurPopDraw(c, this.pops, W, H);
+    if (this.say) { c.save(); c.globalAlpha = Math.min(1, (this.say.life - this.say.t) * 3); buurSay(c, this.say.txt, W / 2, this.port ? Y(BL.H) + 14 : Y(BL.FENCE_Y) - 62, W, this.say.mood, t); c.restore(); }
+    if (this.state === 'play' || this.state === 'count') this.joy.draw(c);
+    if (this.state === 'count') { const n = Math.ceil(this.cd); c.save(); c.font = '900 64px Fredoka, system-ui'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineWidth = 10; c.strokeStyle = '#1f2a44'; const s = n > 0 ? String(n) : 'Sluipen!'; c.strokeText(s, W / 2, H / 2); c.fillStyle = '#ffd23f'; c.fillText(s, W / 2, H / 2); c.restore(); }
+    if (this.state === 'choose') { c.fillStyle = 'rgba(0,0,0,.25)'; c.fillRect(0, 0, W, H); }
+  }
+  drawHouse(c) {
+    const k = this.k, X = x => this.X(x), Y = y => this.Y(y), t = this.t, st = this.st, ph = st.ph, dx = BL.DOOR_X;
+    c.fillStyle = '#d9c7a3'; c.fillRect(X(0), Y(0), k * BL.W, k * BL.HOUSE_H);
+    c.strokeStyle = 'rgba(150,110,70,.25)'; c.lineWidth = 1; for (let y = .6; y < BL.HOUSE_H; y += .3) { c.beginPath(); c.moveTo(X(0), Y(y)); c.lineTo(X(BL.W), Y(y)); c.stroke(); }
+    c.fillStyle = '#8f3a2a'; c.fillRect(X(0), Y(0), k * BL.W, k * .5); for (let x = 0; x < BL.W; x += .5) { c.fillStyle = 'rgba(0,0,0,.12)'; c.fillRect(X(x), Y(0), 2, k * .5); }
+    // ramen: het licht gaat aan als hij eraan komt
+    const lit = ph === 'ring' ? clamp((st.phT - .4) / .5, 0, 1) : (ph === 'open' || ph === 'search' || (ph === 'back' && st.brom.out > 0)) ? 1 : 0;
+    for (const wx of [3.2, 12.8]) {
+      const x0 = X(wx - 1), y0 = Y(.75), ww = k * 2, wh = k * 1.2;
+      box(c, x0 - 3, y0 - 3, ww + 6, wh + 6, 4, '#fff', 2); c.fillStyle = lit ? `rgb(${38 + 217 * lit | 0},${50 + 170 * lit | 0},${77 + 50 * lit | 0})` : '#26324d'; c.fillRect(x0, y0, ww, wh);
+      c.fillStyle = '#d9a43a'; c.fillRect(x0, y0, ww * .22, wh); c.fillRect(x0 + ww * .78, y0, ww * .22, wh); c.fillStyle = '#fff'; c.fillRect(x0 - 4, y0 + wh, ww + 8, k * .12);
+    }
+    // voordeur (gaat open) + bordje + deurbel + deurmat
+    const open = ph === 'open' || ph === 'search' || ph === 'back' ? st.brom.door : 0;
+    const dw = k * 1.15, dh = k * 1.55, d0 = X(dx) - dw / 2, dy0 = Y(BL.HOUSE_H) - dh;
+    box(c, d0 - 4, dy0 - 4, dw + 8, dh + 4, 4, '#f4ecd8', 2);
+    c.fillStyle = '#ffd98a'; c.fillRect(d0, dy0, dw, dh);   // warm licht in de gang
+    if (open < 1) { box(c, d0, dy0, dw * (1 - open), dh, 3, '#6b8f3a', 2); dot(c, d0 + dw * (1 - open) - k * .16, dy0 + dh * .55, k * .06, '#ffd23f'); }
+    else { c.fillStyle = '#4e6b2a'; c.fillRect(d0 - k * .1, dy0, k * .12, dh); }
+    box(c, X(dx) - k * .55, dy0 - k * .38, k * 1.1, k * .26, 3, '#fff', 1); c.fillStyle = '#7a5a2a'; c.font = `700 ${Math.round(k * .18)}px Fredoka, system-ui`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('BROM', X(dx), dy0 - k * .25);
+    const bx = X(dx + .9), by = Y(BL.HOUSE_H - .85), ring = ph === 'ring' && st.phT < 1;
+    box(c, bx - k * .14, by - k * .2, k * .28, k * .4, 4, '#f4ecd8', 1.2); dot(c, bx, by, k * .08 * (ring ? 1.3 : 1), ring ? '#ffd23f' : '#e8b33a');
+    if (ring) { c.strokeStyle = `rgba(255,210,63,${1 - st.phT})`; c.lineWidth = 3; c.beginPath(); c.arc(bx, by, k * (.25 + st.phT * .6), 0, 7); c.stroke(); }
+    const mx = X(dx), my = Y(BL.MAT_Y); box(c, mx - k * .6, my - k * .3, k * 1.2, k * .6, 5, '#9a6a34', 1.5); c.fillStyle = 'rgba(255,255,255,.35)'; c.fillRect(mx - k * .45, my - k * .06, k * .9, k * .12);
+    // sneak: knipperend belletje boven de mat
+    if (this.state === 'play' && ph === 'sneak') { const b = Math.sin(t * 6) * k * .08; c.font = `${Math.round(k * .5)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.fillStyle = '#1f2a44'; c.fillText('🔔', mx, my - k * .75 + b); }
+    // ring: aftelbalk boven de deur (zo lang heb je nog)
+    if (ph === 'ring') { const left = clamp(1 - st.phT / st.delay, 0, 1), bw = k * 2.2, x0 = X(dx) - bw / 2, y0 = dy0 - k * .72; box(c, x0, y0, bw, k * .2, 5, 'rgba(31,42,68,.85)', 0); box(c, x0 + 2, y0 + 2, Math.max(0, (bw - 4) * left), k * .2 - 4, 4, left > .45 ? '#4cd964' : left > .2 ? '#ffb347' : '#ff6b6b', 0);
+      c.font = `${Math.round(k * .36)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.fillText('👣', X(dx) + Math.sin(t * 9) * k * .15, dy0 + dh * .45); }
+  }
+  drawBrom(c) {
+    const st = this.st, k = this.k, b = st.brom, ph = st.ph, y = BL.HOUSE_H + .3 + b.out * (BL.BROM_Y - BL.HOUSE_H - .3), x = this.X(BL.DOOR_X), yy = this.Y(y);
+    const dir = ph === 'back' && st.phT > blHold(st) ? 'up' : ph === 'search' ? (b.a < 1.05 ? 'right' : b.a > 2.1 ? 'left' : 'down') : 'down';
+    drawBrom(c, x, yy, dir, this.t * 8, ph === 'open' || (ph === 'back' && b.out > 0 && b.out < 1), { scale: k / 32 * 1.15, mood: ph === 'search' ? 'zoek' : (st.fail ? 'roep' : 'boos'), t: this.t });
+    if (ph === 'search' || ph === 'open') { // zaklamp in zijn hand
+      const hx = x + Math.cos(b.a) * k * .45, hy = yy - k * .62 + Math.sin(b.a) * k * .2;
+      c.save(); c.translate(hx, hy); c.rotate(ph === 'search' ? b.a : Math.PI / 2); box(c, -k * .12, -k * .07, k * .32, k * .14, 3, '#3d4658', 1); dot(c, k * .22, 0, k * .08, '#fff8c0'); c.restore();
+      this.beamFrom = [hx, hy];
+    }
+  }
+  drawBeam(c) {
+    const st = this.st, k = this.k, a = st.brom.a, [hx, hy] = this.beamFrom || [this.X(BL.DOOR_X), this.Y(BL.BROM_Y) - k * .6], R = k * BL.RANGE, w = BL.CONE + .04;
+    c.save(); c.globalCompositeOperation = 'lighter';
+    const g = c.createRadialGradient(hx, hy, k * .2, hx, hy, R * .75); g.addColorStop(0, 'rgba(255,236,150,.55)'); g.addColorStop(1, 'rgba(255,236,150,.05)');
+    c.fillStyle = g; c.beginPath(); c.moveTo(hx, hy); c.arc(hx, hy, R, a - w, a + w); c.closePath(); c.fill(); c.restore();
+  }
+  drawObj(c, o, oi) {
+    const k = this.k, x = this.X(o.x), y = this.Y(o.y);
+    if (o.type === 'struik') {
+      const r = o.r * k; c.fillStyle = 'rgba(0,0,0,.2)'; c.beginPath(); c.ellipse(x, y + r * .45, r * 1.05, r * .35, 0, 0, 7); c.fill();
+      for (const [dx, dy, rr, col] of [[-.45, .05, .62, '#2f7a34'], [.45, .05, .62, '#2f7a34'], [0, -.3, .7, '#3a8f3c'], [-.2, .2, .6, '#358537'], [.25, .25, .55, '#358537']]) dot(c, x + dx * r, y + dy * r, rr * r, col);
+      dot(c, x - r * .2, y - r * .5, r * .22, 'rgba(255,255,255,.18)'); dot(c, x + r * .35, y - r * .1, r * .08, '#e8403a'); dot(c, x - r * .45, y + r * .1, r * .08, '#e8403a');
+    } else if (o.type === 'kliko') {
+      const w = k * .82, h = k * 1.05; c.fillStyle = 'rgba(0,0,0,.22)'; c.beginPath(); c.ellipse(x, y + k * .1, w * .62, k * .18, 0, 0, 7); c.fill();
+      box(c, x - w / 2, y - h, w, h, 5, '#3c8d4a', 2); box(c, x - w / 2 - 2, y - h - k * .12, w + 4, k * .2, 4, '#2c6e39', 2);
+      c.fillStyle = 'rgba(255,255,255,.2)'; c.fillRect(x - w * .3, y - h * .8, w * .1, h * .6); dot(c, x - w * .32, y, k * .1, '#1f2a44'); dot(c, x + w * .32, y, k * .1, '#1f2a44');
+      c.fillStyle = '#fff'; c.font = `700 ${Math.round(k * .2)}px Fredoka, system-ui`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('♻', x + w * .08, y - h * .5);
+    } else if (o.type === 'auto') {
+      const w = o.w * k, h = o.h * k, x0 = x - w / 2, y0 = y - h / 2 - k * .35;
+      c.fillStyle = 'rgba(0,0,0,.25)'; rrect(c, x0 + 3, y0 + k * .5, w, h, k * .45); c.fill();
+      for (const [wx, wy] of [[.05, .2], [.95, .2], [.05, .78], [.95, .78]]) box(c, x0 + w * wx - k * .14, y0 + h * wy, k * .28, k * .55, 4, '#1f2a44', 0);
+      box(c, x0, y0, w, h, k * .45, '#3b7bd4', 2.5); box(c, x0 + w * .12, y0 + h * .2, w * .76, h * .22, 6, '#bfe3ff', 1.5); box(c, x0 + w * .12, y0 + h * .62, w * .76, h * .16, 6, '#bfe3ff', 1.5);
+      box(c, x0 + w * .16, y0 + h * .44, w * .68, h * .16, 5, '#2f68b8', 0); dot(c, x0 + w * .2, y0 + k * .12, k * .1, '#fff6b0'); dot(c, x0 + w * .8, y0 + k * .12, k * .1, '#fff6b0');
+      dot(c, x0 + w * .2, y0 + h - k * .1, k * .09, '#e8403a'); dot(c, x0 + w * .8, y0 + h - k * .1, k * .09, '#e8403a');
+    }
+    // 🤫 boven een ding waar iemand achter zit
+    const hid = this.st.zones.some(z => z.obj === oi && z.owner >= 0);
+    if (hid) { const top = o.type === 'auto' ? y - o.h * k / 2 - k * .6 : y - (o.type === 'kliko' ? k * 1.4 : o.r * k * 1.2); c.font = `${Math.round(k * .45)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = '#1f2a44'; c.fillText('🤫', x, top); }
+    // 👀 op een plek waar hij eerst gaat kijken
+    if (this.st.L.memory && this.st.zones.some(z => z.obj === oi && z.marked) && this.st.ph !== 'back') { const z = this.st.zones.find(z => z.obj === oi && z.marked); c.save(); c.translate(this.X(z.x), this.Y(z.y) + k * .55); dot(c, 0, 0, k * .24, '#e8403a'); c.font = `${Math.round(k * .28)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('👀', 0, 1); c.restore(); }
+  }
+  drawPlayer(c, p, i) {
+    const k = this.k, hid = p.hidden >= 0, x = this.X(p.x) + (p.caught > 0 ? Math.sin(this.t * 50) * 2 : 0), y = this.Y(p.y);
+    if (p.caught > 0 && p.caught < .35) c.globalAlpha = p.caught / .35;
+    c.save(); c.translate(x, y); if (hid && !p.moving) c.scale(1, .8);   // gehurkt
+    drawKid(c, this.players[i].look, 0, 0, hid && !p.moving ? 'up' : p.dir, p.ph, p.moving, { scale: k / 32 * 1.15, t: this.t });
+    c.restore(); c.globalAlpha = 1;
+    if (this.n > 1) dot(c, x, y - k * (hid ? 1.3 : 1.55), k * .13, this.players[i].col);
+  }
+  drawHud(c) {
+    const st = this.st, W = this.W, left = Math.max(0, st.L.time - st.time), ph = st.ph;
+    const txt = `🔔 ${st.rounds}/${st.L.rings}   ${'❤️'.repeat(Math.max(0, st.lives))}${'🤍'.repeat(Math.max(0, st.L.lives - st.lives))}   ⏱️ ${Math.floor(left / 60)}:${String(Math.floor(left % 60)).padStart(2, '0')}`;
+    c.font = '700 16px Fredoka, system-ui, "Apple Color Emoji", "Segoe UI Emoji"'; const tw = c.measureText(txt).width + 26;
+    box(c, W / 2 - tw / 2, 58, tw, 28, 14, 'rgba(255,255,255,.92)', 0); c.fillStyle = '#1f2a44'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(txt, W / 2, 73);
+    if (this.state !== 'play') return;
+    const all = st.players.every(p => p.hidden >= 0 || p.caught > 0);
+    const s = ph === 'sneak' ? '🔔 Sluip naar de deurmat…' : ph === 'ring' ? (all ? (this.n > 1 ? '🤫 Allebei verstopt!' : '🤫 Verstopt!') : '🏃 Snel verstoppen!') : ph === 'open' || ph === 'search' ? '🔦 Muisstil blijven zitten…' : '';
+    if (!s) return;
+    const big = ph !== 'sneak'; c.font = `900 ${big ? 26 : 18}px Fredoka, system-ui, "Apple Color Emoji", "Segoe UI Emoji"`;
+    const y = this.port ? this.Y(BL.H) + 92 : this.Y(BL.HOUSE_H) + this.k * 1.5;
+    // staand: onder het veld (onder het tekstwolkje)
+    c.lineWidth = 7; c.strokeStyle = '#1f2a44'; c.strokeText(s, W / 2, y); c.fillStyle = ph === 'ring' && !all ? '#ffb347' : ph === 'sneak' ? '#ffffff' : '#c8f08f'; c.fillText(s, W / 2, y);
+  }
+}
+
 /* ===== minigames/klusje.js ===== */
 /* =========================================================
    KLUSJE VOOR MAMA – de 'tenzij' als de pogingen van vandaag op zijn (1x per dag: +1 poging).
