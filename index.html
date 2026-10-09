@@ -3801,7 +3801,12 @@ function mgSize() {
 }
 // HUD-vakjes van dit frame (voor de automatische overlap-test in tests/viewports*.js)
 MG.hud = [];
-function mgHud(x, y, w, h, name) { if (MG.hud.length < 60) MG.hud.push({ x, y, w, h, name: name || '' }); }
+function mgHud(x, y, w, h, name) {
+  // vangnet: een HUD met NaN/oneindige maten betekent dat de indeling van het spel kapot is (zo ging Blokken in v10 mis) -> 1x console-fout
+  if (![x, y, w, h].every(Number.isFinite) || w < 0 || h < 0) { const k = (MG.inst && MG.inst.constructor.name) + ':' + name; MG.hudBad = k; if (!mgHud.bad[k]) { mgHud.bad[k] = 1; console.error(`Minigame-indeling kapot: HUD '${name}' heeft ongeldige maten (${[x, y, w, h].join(', ')})`); } return; }
+  if (MG.hud.length < 60) MG.hud.push({ x, y, w, h, name: name || '' });
+}
+mgHud.bad = {};
 function mgStart(id, n) {
   const g = GB.MINIGAMES[id]; mgStop(true);
   MG.id = id; MG.n = n; MG.paused = false; MG.t = 0; MG.prevMusic = MUS.want;
@@ -3814,14 +3819,34 @@ function mgStart(id, n) {
   };
   MG.inst = g.create(api); MG.active = true; musicWant(g.music);
   if (MG.inst.resize) MG.inst.resize(sz.W, sz.H);
+  MG.sizeKey = mgMeasure();
+  // eerste keer openen: als het scherm net zichtbaar werd kan de maat nog 0/verkeerd zijn -> volgende frames nog eens meten
+  requestAnimationFrame(() => { mgRelayout(); requestAnimationFrame(() => mgRelayout()); });
 }
 function mgStop(quiet) {
   if (MG.inst && MG.inst.destroy) try { MG.inst.destroy(); } catch (e) { console.warn(e); }
   MG.inst = null; MG.active = false; MG.api = null; $('#mgCtl').innerHTML = ''; mgBannerClaim(); $('#mgBanner').classList.remove('show');
   if (!quiet) { const w = WORLD.map && WORLD.active; show(w ? 'scrWorld' : 'scrTitle'); musicWant(w ? WORLD.map.music : 'titel'); if (!w) renderTitle(); save(); }
 }
-MG.tick = dt => { if (MG.paused || !MG.inst) return; MG.t += dt; MG.hud = []; MG.inst.tick(Math.min(dt, 1 / 20)); };
-addEventListener('resize', () => { if (MG.active && MG.inst) { const s = mgSize(); if (MG.inst.resize) MG.inst.resize(s.W, s.H); } });
+MG.tick = dt => { if (MG.paused || !MG.inst) return; MG.t += dt; MG.hud = []; MG.hudBad = null; MG.inst.tick(Math.min(dt, 1 / 20)); };
+/* Opnieuw indelen als het speelveld verandert: draaien (orientationchange; iOS geeft de eindmaat soms pas later),
+   resize, visualViewport (adresbalk/toetsenbord), lettertype geladen (de titelbalk wordt dan hoger -> api.top) en een
+   ResizeObserver op canvas + knoppenbalk. Alleen als W/H/top echt veranderen (canvas.width zetten wist het beeld). */
+function mgMeasure() {
+  const r = mgCv.getBoundingClientRect(); let bar = 0;
+  $$('#scrMG .mgtop .iconbtn, #scrMG .mgtop .title span').forEach(b => { const q = b.getBoundingClientRect(); if (q.height) bar = Math.max(bar, q.bottom); });
+  return [Math.round(r.width), Math.round(r.height), Math.round((bar || r.top + 62) - r.top + 6), Math.round(r.left), Math.round(r.top)].join();
+}
+function mgRelayout(force) {
+  if (!MG.active || !MG.inst || !MG.api) return;
+  const k = mgMeasure(); if (!force && k === MG.sizeKey) return;
+  MG.sizeKey = k; const s = mgSize(); if (MG.inst.resize) MG.inst.resize(s.W, s.H);
+}
+addEventListener('resize', () => mgRelayout());
+addEventListener('orientationchange', () => { mgRelayout(); setTimeout(() => mgRelayout(), 300); setTimeout(() => mgRelayout(), 800); });
+if (window.visualViewport) visualViewport.addEventListener('resize', () => mgRelayout());
+if (document.fonts) { document.fonts.ready.then(() => mgRelayout()); document.fonts.addEventListener && document.fonts.addEventListener('loadingdone', () => mgRelayout()); }
+if (window.ResizeObserver) { const ro = new ResizeObserver(() => mgRelayout()); ro.observe(mgCv); const t = $('#scrMG .mgtop'); if (t) ro.observe(t); }
 /* ---------- banner in het midden (tik om verder te gaan) ---------- */
 /* Elke banner (en elke start/stop van een spel) 'claimt' #mgBanner. Een oude banner-timer (bv. 'Hole 1' van minigolf als je snel
    wisselt) mag dan niet meer de banner van het volgende spel verbergen of zijn klik-handler wissen. */
@@ -4704,7 +4729,9 @@ class BlokkenGame {
       this.api.place(P.btn.left, 14, yb, b, b); this.api.place(P.btn.right, 26 + b, yb, b, b); this.api.place(P.btn.soft, 20 + b * .5, ya, b, b * .85);
       this.api.place(P.btn.rot, W - 14 - b, yb, b, b); this.api.place(P.btn.hard, W - 26 - 2 * b, yb, b, b); this.api.place(P.btn.hold, W - 20 - b * 1.5, ya, b, b * .85);
     } else {
-      const P = this.P[0], bh = clamp(W / 6.6, 54, 110), avail = H - top - bh - 28, cs = Math.floor(Math.min(avail / 20, (W - 40) / 15.2));   // bord 10 + 2 panelen van 2.6 + 2x12px tussenruimte + rand P.cs = cs; P.bx = (W - cs * 10) / 2; P.by = top + 4; P.side = cs * 2.6;
+      const P = this.P[0], bh = clamp(W / 6.6, 54, 110), avail = H - top - bh - 28, cs = Math.floor(Math.min(avail / 20, (W - 40) / 15.2));
+      // breedte: bord 10 + 2 panelen van 2.6 cellen + 2x12px tussenruimte + rand
+      P.cs = cs; P.bx = (W - cs * 10) / 2; P.by = top + 4; P.side = cs * 2.6;
       const n = 6, gap = 8, bw = (W - 20 - gap * (n - 1)) / n;
       ['left', 'right', 'soft', 'hold', 'rot', 'hard'].forEach((k, j) => this.api.place(P.btn[k], 10 + j * (bw + gap), H - bh - 12, bw, bh));
     }
