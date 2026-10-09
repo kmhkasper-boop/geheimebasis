@@ -660,7 +660,7 @@ h1,h2,h3{margin:0}
     <h2>👪 Voor ouders</h2>
     <div><h3>🦫 Zo werkt de graafdag</h3>
       <p>Als de Supermol gebouwd is, graaft hij meteen het <b>Hoofdkwartier</b> en de <b>Bowlingbaan</b>. Daarna graaft hij <b>elke echte kalenderdag één nieuwe kamer</b> (om middernacht, op de klok van dit apparaat). Was je kind een paar dagen weg, dan staan die kamers er bij terugkomst allemaal. Volgorde: Blokkenkamer, Flipperkastkamer, Minigolf, Racebaan, Escaperoom.</p>
-      <p>⛏️ <b>De diepe kelder</b> (aflevering 4): als de basis af is, ligt in de Escaperoom de tekening van het <b>Boorbeest</b>. Met 5 onderdelen (het gouden tandwiel uit de eik, de Flipperkast, de ketel in de kelder en twee gewonnen streken bij buurman Brom) bouwen de kinderen het aan de werkbank. Dan komt er een <b>lift</b> in het Hoofdkwartier naar een tweede verdieping met een kristalgrot en nieuwe spelkamers (eerst de <b>Grottenjacht</b>); die worden op dezelfde manier gegraven. Meer kamers volgen in de volgende versies.</p>
+      <p>⛏️ <b>De diepe kelder</b> (aflevering 4): als de basis af is, ligt in de Escaperoom de tekening van het <b>Boorbeest</b>. Met 5 onderdelen (het gouden tandwiel uit de eik, de Flipperkast, de ketel in de kelder en twee gewonnen streken bij buurman Brom) bouwen de kinderen het aan de werkbank. Dan komt er een <b>lift</b> in het Hoofdkwartier naar een tweede verdieping met een kristalgrot en nieuwe spelkamers (de <b>Grottenjacht</b>, het <b>Mijnkarretje</b> en <b>Kristallen matchen</b>); die worden op dezelfde manier gegraven. Elk spel kan alleen of met z'n tweeën op één apparaat, en de dagelijkse grens voor munten en energie geldt ook hier. Meer kamers volgen in de volgende versies.</p>
       <p>Sneller graven kan met <b>⚡ energie-batterijen</b>: met 3 stuks graaft de Supermol meteen een extra kamer (knop <b>Graaf nu</b> op de monitor). Energie vind je verstopt in huis en tuin, krijg je van mol-brandstof (wortel + appel, die groeien elke dag opnieuw), één keer per dag per spel bij een goede score, en in de energie-automaat (50 munten). Munten verdien je met de spelletjes.</p>
       <div class="orow"><span id="oudStatus" class="small-note"></span></div>
       <p id="oudEcon" class="small-note"></p>
@@ -1025,6 +1025,12 @@ const TRACKS = {
   grottenjacht: { naam: 'Grottenjacht', bpm: 140, root: 329.63, scale: MINOR, swing: 0, lead: 'chip', lv: .12, bv: .21, pad: 0, stab: .02,
     bass: 'r o r o f o r o', stabs: '. x . . . x . .', drums: { k: 'x . . . x . . .', h: '. x . x . x . x', c: '. . . . x . . .' }, prog: 'I vi IV V I vi iv V',
     mel: ['0 2 4 2 7 . 4 .', '5 4 2 4 0 . . .', '3 5 7 5 9 . 7 .', '8 7 6 7 4 . . .', '0 2 4 2 7 . 9 .', '10 9 7 9 5 . . .', '3 4 5 6 7 6 5 4', '7 . 4 . 0 . . .'] },
+  mijnkarretje: { naam: 'Mijnkarretje', bpm: 152, root: 293.66, scale: MAJOR, swing: 0, lead: 'chip', lv: .12, bv: .22, pad: 0, stab: .02,
+    bass: 'r . r o f . r o', stabs: '. x . x . x . x', drums: { k: 'x . . x x . . .', h: 'x x x x x x x x', c: '. . x . . . x .' }, prog: 'I IV V I vi IV V V',
+    mel: ['0 . 2 4 7 . 4 .', '5 . 4 2 4 . . .', '7 . 9 7 5 . 4 .', '2 . 4 2 0 . . .', '0 2 4 5 7 . 9 .', '11 . 9 7 5 . 4 .', '4 5 7 9 11 . 9 .', '7 . . . 0 . . .'] },
+  kristallen: { naam: 'Kristallen matchen', bpm: 108, root: 349.23, scale: MAJOR, swing: .12, lead: 'bell', lv: .13, bv: .2, pad: .03, stab: 0,
+    bass: 'r . . o f . o .', drums: { k: 'x . . . x . . .', h: '. . x . . . x .', t: '. . . . . . . x' }, prog: 'I iii IV V I vi ii V',
+    mel: ['4 . 7 . 9 . 7 .', '11 . 9 7 4 - . .', '5 . 9 . 11 . 9 .', '7 - - - . . . .', '4 . 7 . 9 . 11 .', '12 . 11 9 7 - . .', '5 . 4 . 2 . 4 .', '0 - - - . . . .'] },
 };
 const tok = s => s.trim().split(/\s+/);
 function scheduleBar(ctx, out, tr, bar, t0) {
@@ -1787,8 +1793,8 @@ registerRoom({ id: 'escaperoom', name: 'Escaperoom', emoji: '🔐', order: 6, sl
 // Aflevering 4: de diepe kelder (level 2, onder de basis; zie world/diep.js). Pas te graven als het Boorbeest gebouwd is.
 registerRoom({ id: 'grot', name: 'Kristalgrot', emoji: '💎', order: 7, level: 2, slot: 'C', floor: 'X', desc: 'De grote grot onder de basis, met de lift, het Boorbeest en een ondergrondse rivier.', decoSpots: 0 });
 registerRoom({ id: 'grottenjacht', name: 'Grottenjacht', emoji: '🦇', order: 8, level: 2, slot: 'W', floor: 'Y', machine: 'grottenjacht', minigame: 'grottenjacht', desc: 'Verzamel alle kristallen in het doolhof, maar pas op voor de vleermuizen!' });
-registerRoom({ id: 'mijnkarretje', name: 'Mijnkarretje', emoji: '🛤️', order: 9, level: 2, slot: 'E', floor: 'Y', machine: 'mijnkarretje', minigame: 'mijnkarretje', soon: true, desc: 'Race met het mijnkarretje over de rails: wissel van spoor, spring en duik!' });
-registerRoom({ id: 'kristallen', name: 'Kristallenkamer', emoji: '💠', order: 10, level: 2, slot: 'N', floor: 'Y', machine: 'kristallen', minigame: 'kristallen', soon: true, desc: 'Zet drie kristallen op een rij!' });
+registerRoom({ id: 'mijnkarretje', name: 'Mijnkarretje', emoji: '🛤️', order: 9, level: 2, slot: 'E', floor: 'Y', machine: 'mijnkarretje', minigame: 'mijnkarretje', desc: 'Race met het mijnkarretje over de rails: wissel van spoor, spring en duik!' });
+registerRoom({ id: 'kristallen', name: 'Kristallenkamer', emoji: '💠', order: 10, level: 2, slot: 'N', floor: 'Y', machine: 'kristallen', minigame: 'kristallen', desc: 'Zet drie kristallen op een rij!' });
 registerRoom({ id: 'rivier', name: 'Ondergrondse rivier', emoji: '🛶', order: 11, level: 2, slot: 'S', floor: 'Y', machine: 'rivier', minigame: 'rivier', soon: true, desc: 'Vaar met een bootje over de wilde ondergrondse rivier!' });
 const roomLevel = r => r.level || 1;
 // Kan deze kamer al gegraven worden? De diepe kelder pas als het Boorbeest er is.
@@ -1844,6 +1850,11 @@ function registerAch(o) { GB.ACHIEVEMENTS[o.id] = o; }
   { id: 'dieper', icon: '😠', name: 'Nog dieper?!', desc: 'Buurman Brom hoorde het Boorbeest.' },
   { id: 'grot1', icon: '🦇', name: 'Vleermuizenjager', desc: 'Een doolhof leeg gemaakt in de Grottenjacht.' },
   { id: 'grot5k', icon: '💎', name: 'Kristalkoning', desc: '5000 punten in de Grottenjacht.' },
+  { id: 'kar1', icon: '🛤️', name: 'Mijnwerker', desc: 'De finish gehaald met het mijnkarretje.' },
+  { id: 'kar0', icon: '🏁', name: 'Foutloos gereden', desc: 'De finish gehaald met het mijnkarretje zonder één keer te botsen.' },
+  { id: 'kristalster', icon: '🌟', name: 'Sterkristal', desc: 'Een sterkristal gemaakt (5 op een rij).' },
+  { id: 'kristalcombo', icon: '💥', name: 'Kettingreactie', desc: '300 punten of meer met één zet bij Kristallen matchen.' },
+  { id: 'kristal3k', icon: '💠', name: 'Kristalkenner', desc: '3000 punten bij Kristallen matchen.' },
   { id: 'samen', icon: '👫', name: 'Samen spelen', desc: 'Een spel met 2 spelers gespeeld.' },
 ].forEach(registerAch);
 
@@ -2405,8 +2416,13 @@ Object.assign(MACHINE_EXTRA, {
     c.fillStyle = '#1a1430'; c.fillRect(sx, sy, sw, sh); c.fillStyle = '#4b3f86'; c.fillRect(sx + 2, sy + 2, sw - 4, 3); c.fillRect(sx + 2, sy + sh - 5, sw - 4, 3);
     for (let i = 0; i < 6; i++) dot(c, sx + 8 + i * 6, sy + sh / 2, 1.4, '#7ef0ff'); const k = (t * .5) % 1; dot(c, sx + 4 + k * (sw - 8), sy + sh / 2, 3.5, '#ffd23f');
     c.fillStyle = '#c58bff'; const bx = sx + 4 + ((k + .4) % 1) * (sw - 8); c.beginPath(); c.moveTo(bx - 5, sy + sh / 2 - 6); c.lineTo(bx, sy + sh / 2 - 3); c.lineTo(bx + 5, sy + sh / 2 - 6); c.lineTo(bx, sy + sh / 2); c.fill(); } },
-  mijnkarretje: { col: '#b5651d', rug: '#6b4a2a', label: 'KAR' },
-  kristallen: { col: '#c0399b', rug: '#5a3b8a', label: 'KRISTAL' },
+  mijnkarretje: { col: '#b5651d', rug: '#6b4a2a', label: 'KAR', screen(c, sx, sy, sw, sh, t) {
+    c.fillStyle = '#2a2140'; c.fillRect(sx, sy, sw, sh); c.fillStyle = '#b8c0cc'; for (let l = 0; l < 3; l++) c.fillRect(sx + 2, sy + sh * (.35 + l * .25), sw - 4, 1.5);
+    const k = (t * .6) % 1, rx = sx + sw - 4 - k * (sw - 8); c.fillStyle = '#8d96a8'; c.beginPath(); c.arc(rx, sy + sh * .6, 3, Math.PI, 0); c.fill();
+    const jy = k > .55 && k < .85 ? Math.sin((k - .55) / .3 * Math.PI) * 5 : 0; c.fillStyle = '#8a5a2b'; c.fillRect(sx + sw * .25, sy + sh * .6 - 6 - jy, 9, 5); dot(c, sx + sw * .25 + 4.5, sy + sh * .6 - 9 - jy, 2, '#ffd9b3'); } },
+  kristallen: { col: '#c0399b', rug: '#5a3b8a', label: 'KRISTAL', screen(c, sx, sy, sw, sh, t) {
+    c.fillStyle = '#160e26'; c.fillRect(sx, sy, sw, sh); const cols = ['#ff5d73', '#ffb627', '#4cd97b', '#3fa9ff', '#b26bff'], n = 5, cw = (sw - 4) / n, rows = Math.floor((sh - 2) / cw), f = Math.floor(t * 1.2);
+    for (let y = 0; y < rows; y++) for (let x = 0; x < n; x++) { const hit = y === rows - 1 && x >= 1 && x <= 3 && (t * 1.2) % 1 > .6; if (hit) continue; dot(c, sx + 2 + (x + .5) * cw, sy + 1 + (y + .5) * cw, cw * .36, cols[Math.floor(hash2(x + f * 3, y) * 5)]); } } },
   rivier: { col: '#1f8ad6', rug: '#1f5f8a', label: 'RIVIER' },
 });
 // --- de kaart ---
@@ -7723,6 +7739,530 @@ function gjDrawBat(c, x, y, s, t, fright, flash) {
   else { dot(c, x - s * .13, y - s * .08, s * .1, '#ffd23f'); dot(c, x + s * .13, y - s * .08, s * .1, '#ffd23f'); dot(c, x - s * .12, y - s * .08, s * .04, '#1f1430'); dot(c, x + s * .14, y - s * .08, s * .04, '#1f1430'); c.fillStyle = '#fff'; c.beginPath(); c.moveTo(x - s * .1, y + s * .15); c.lineTo(x - s * .05, y + s * .27); c.lineTo(x, y + s * .15); c.moveTo(x + s * .02, y + s * .15); c.lineTo(x + s * .07, y + s * .27); c.lineTo(x + s * .12, y + s * .15); c.fill(); }
 }
 
+/* ===== minigames/mijnkar_logic.js ===== */
+/* =========================================================
+   MIJNKARRETJE – logica (zonder DOM, getest in tests/unit.js). Een karretje rijdt vanzelf over 3 sporen door de mijn en gaat
+   steeds harder. Wisselen van spoor (▲ ▼), springen over stenen, bukken onder balken, om houten hekken heen sturen.
+   Botsen = hartje minder (3 hartjes). Kristallen pakken = punten. Halen van de finish (MK.LEN meter) = bonus.
+   2 spelers: ieder een eigen karretje op een eigen baan (zelfde parcours) = race; wie de meeste punten heeft wint.
+   ========================================================= */
+const MK = { LEN: 520, LANES: 3, HEARTS: 3, V0: 5, V1: 9.5, JUMP: .78, DUCK: .9, SWITCH: 7, INV: 1.6, SLOW: .6, HITX: .55, GEM: 5, FINISH: 200, HEART: 50 };
+const mkSpeed = d => MK.V0 + (MK.V1 - MK.V0) * Math.min(1, Math.max(0, d / MK.LEN));
+// parcours: hindernissen (rock = springen, beam = bukken, block = ander spoor) en kristallen; altijd minstens één manier om erdoor te komen
+function mkBuild(seed) {
+  const R = mulberry32(seed || 1), obs = [], gems = []; let d = 16, id = 0;
+  const pick = a => a[Math.floor(R() * a.length)];
+  while (d < MK.LEN - 12) {
+    const prog = d / MK.LEN, v = mkSpeed(d), r = Math.floor(R() * 3);
+    const pats = prog < .2 ? ['rock', 'beam', 'block1'] : prog < .5 ? ['rock', 'beam', 'block1', 'block2', 'rock3'] : ['rock', 'beam', 'block1', 'block2', 'rock3', 'beam3', 'mix'];
+    const pat = pick(pats), add = (lane, type) => obs.push({ id: id++, x: d, lane, type });
+    if (pat === 'rock') add(r, 'rock'); else if (pat === 'beam') add(r, 'beam'); else if (pat === 'block1') add(r, 'block');
+    else if (pat === 'block2') { for (let l = 0; l < 3; l++) if (l !== r) add(l, 'block'); }
+    else if (pat === 'rock3') { for (let l = 0; l < 3; l++) add(l, 'rock'); } else if (pat === 'beam3') { for (let l = 0; l < 3; l++) add(l, 'beam'); }
+    else { const t = ['block', 'rock', 'beam']; const o = R() < .5 ? [0, 1, 2] : [2, 1, 0]; o.forEach((l, i) => add(l, t[(i + r) % 3])); if (!obs.slice(-3).some(q => q.type === 'rock' || q.type === 'beam')) obs[obs.length - 1].type = 'rock'; }
+    const gap = Math.max(4, v * (1.35 - .4 * prog) + R() * v * .6);
+    // een rijtje kristallen in de ruimte tot de volgende hindernis
+    const gl = Math.floor(R() * 3), n = Math.min(5, Math.floor((gap - 2.6) / 1));
+    for (let i = 0; i < n; i++) gems.push({ id: id++, x: d + 1.4 + i, lane: gl });
+    d += gap;
+  }
+  return { seed, obs, gems };
+}
+function mkCart() { return { d: 0, lane: 1, laneF: 1, jumpT: 0, duckT: 0, inv: 0, hearts: MK.HEARTS, gems: 0, crashes: 0, out: false, done: false, oi: 0, gi: 0, hit: {}, got: {}, v: MK.V0, time: 0 }; }
+const mkJumping = c => c.jumpT > .04;
+const mkJumpH = c => c.jumpT > 0 ? Math.sin(Math.PI * (1 - c.jumpT / MK.JUMP)) : 0;
+const mkScore = c => c.gems * MK.GEM + Math.floor(Math.min(c.d, MK.LEN)) + (c.done ? MK.FINISH + c.hearts * MK.HEART : 0);
+// inp: { lane: -1|0|1 (één tik), jump: bool, duck: bool }
+function mkStep(tr, c, inp, dt) {
+  const ev = []; if (c.out || c.done) return ev; inp = inp || {};
+  if (inp.lane) c.lane = Math.max(0, Math.min(MK.LANES - 1, c.lane + inp.lane));
+  if (inp.jump && c.jumpT <= 0) { c.jumpT = MK.JUMP; c.duckT = 0; ev.push({ type: 'jump' }); }
+  if (inp.duck && c.jumpT <= 0 && c.duckT <= 0) { c.duckT = MK.DUCK; ev.push({ type: 'duck' }); }
+  c.v = mkSpeed(c.d) * (c.inv > MK.INV - MK.SLOW ? .45 : 1); c.d += c.v * dt; c.time += dt;
+  const dl = c.lane - c.laneF; c.laneF += Math.sign(dl) * Math.min(Math.abs(dl), MK.SWITCH * dt);
+  c.jumpT = Math.max(0, c.jumpT - dt); c.duckT = Math.max(0, c.duckT - dt); c.inv = Math.max(0, c.inv - dt);
+  const lane = Math.round(c.laneF);
+  while (c.oi < tr.obs.length && tr.obs[c.oi].x < c.d - MK.HITX) c.oi++;
+  for (let i = c.oi; i < tr.obs.length && tr.obs[i].x <= c.d + MK.HITX; i++) {
+    const o = tr.obs[i]; if (o.lane !== lane || c.hit[o.id]) continue;
+    const safe = o.type === 'rock' ? mkJumping(c) : o.type === 'beam' ? c.duckT > 0 : false;
+    if (safe) continue;
+    c.hit[o.id] = 1; if (c.inv > 0) continue;
+    c.hearts--; c.crashes++; c.inv = MK.INV; c.jumpT = 0; c.duckT = 0; ev.push({ type: 'crash', what: o.type, lane });
+    if (c.hearts <= 0) { c.out = true; ev.push({ type: 'out' }); return ev; }
+  }
+  while (c.gi < tr.gems.length && tr.gems[c.gi].x < c.d - .6) c.gi++;
+  for (let i = c.gi; i < tr.gems.length && tr.gems[i].x <= c.d + .5; i++) { const g = tr.gems[i]; if (g.lane !== lane || c.got[g.id] || Math.abs(g.x - c.d) > .5) continue; c.got[g.id] = 1; c.gems++; ev.push({ type: 'gem', lane }); }
+  if (c.d >= MK.LEN) { c.done = true; ev.push({ type: 'finish' }); }
+  return ev;
+}
+// computer-speler voor de tests: kijk vooruit en kies spoor / springen / bukken
+function mkBot(tr, c) {
+  const inp = { lane: 0, jump: false, duck: false }; if (c.out || c.done) return inp;
+  const look = c.v * .55 + .8, near = tr.obs.filter(o => o.x > c.d - .3 && o.x < c.d + look);
+  const at = l => near.filter(o => o.lane === l);
+  const mine = at(c.lane).sort((a, b) => a.x - b.x)[0];
+  if (mine && mine.type === 'block') {
+    const free = [0, 1, 2].filter(l => !at(l).some(o => o.type === 'block')).sort((a, b) => Math.abs(a - c.lane) - Math.abs(b - c.lane));
+    if (free.length) inp.lane = Math.sign(free[0] - c.lane);
+    return inp;
+  }
+  if (mine && mine.type === 'rock' && mine.x - c.d < c.v * .3 + .3) inp.jump = true;
+  if (mine && mine.type === 'beam' && mine.x - c.d < c.v * .25 + .3) inp.duck = true;
+  if (!mine && Math.abs(c.laneF - c.lane) < .01) { const g = tr.gems.find(g => g.x > c.d + .5 && g.x < c.d + look + 2 && !c.got[g.id]); if (g && g.lane !== c.lane && !near.some(o => o.lane === g.lane)) inp.lane = Math.sign(g.lane - c.lane); }
+  return inp;
+}
+
+/* ===== minigames/mijnkar.js ===== */
+/* =========================================================
+   MIJNKARRETJE – speelautomaat in de diepe kelder (logica in mijnkar_logic.js).
+   Knoppen per speler: ▲ ▼ (ander spoor), Spring (over stenen) en Buk (onder balken). Om houten hekken stuur je heen.
+   Toetsen: W/S + D (spring) + A (buk) voor speler 1; pijltjes + spatie/→ (spring) + ← (buk) voor speler 2 (solo ook).
+   2 spelers: race op hetzelfde parcours, ieder een eigen baan (boven = speler 1, onder = speler 2). Meeste punten wint.
+   ========================================================= */
+registerMinigame({
+  id: 'mijnkarretje', name: 'Mijnkarretje', emoji: '🛤️', music: 'mijnkarretje', twoMode: 'race tegen elkaar',
+  help: 'Rij met het <b>mijnkarretje</b> door de mijn! <b>▲ ▼</b> = ander spoor, <b>Spring</b> over stenen, <b>Buk</b> onder balken en stuur om de <b>hekken</b> heen. Pak de kristallen en haal de finish!',
+  coins: s => Math.floor(s / 200) + 2, bonusAt: 1500, bonusText: 'Haal 1.500 punten voor 1 energie (1x per dag)',
+  create: api => new MijnkarGame(api),
+});
+const MK_DT = 1 / 60;
+const MK_KEYS = { w: [0, 'u'], s: [0, 'd'], d: [0, 'j'], a: [0, 'k'], arrowup: [1, 'u'], arrowdown: [1, 'd'], arrowright: [1, 'j'], ' ': [1, 'j'], arrowleft: [1, 'k'] };
+class MijnkarGame {
+  constructor(api) {
+    this.api = api; this.c = api.ctx; this.n = api.players.length; this.t = 0; this.acc = 0; this.state = 'intro'; this.ended = false;
+    const seed = (Math.random() * 1e9) | 0; this.track = mkBuild(seed); this.carts = api.players.map(() => mkCart());
+    this.pend = api.players.map(() => ({ lane: 0, jump: false, duck: false })); this.pops = []; this.parts = []; this.shake = api.players.map(() => 0);
+    this.W = api.W; this.H = api.H; this.layout(); this.makeButtons();
+    api.banner(this.n > 1 ? `<h2>🛤️ Karretjesrace!</h2><p>Boven rijdt ${esc(api.players[0].name)}, onder ${esc(api.players[1].name)}. Wie pakt de meeste kristallen?</p>` : `<h2>🛤️ Mijnkarretje</h2><p>▲ ▼ = ander spoor · Spring over stenen · Buk onder balken</p>`, { ms: 2100 })
+      .then(() => { if (MG.inst === this) { this.state = 'count'; this.cd = 3.2; SFX.tick(); } });
+  }
+  destroy() { }
+  resize(W, H) { this.W = W; this.H = H; this.layout(); this.placeButtons(); }
+  layout() {
+    const W = this.W, H = this.H, land = W > H * 1.1, bw = clamp(Math.min(W, H) * .16, 54, 80); this.bw = bw; this.land = land;
+    const top = this.api.top + 8; let x0 = 8, x1 = W - 8, y1 = H - 8;
+    if (land) { x0 = bw * 2 + 26; x1 = W - bw * 2 - 26; } else y1 = H - (bw * 2 + 30);
+    const ph = Math.min((y1 - top - (this.n - 1) * 10) / this.n, 330), used = ph * this.n + (this.n - 1) * 10, y0 = top + Math.max(0, (y1 - top - used) / 2);
+    this.panels = []; for (let i = 0; i < this.n; i++) this.panels.push({ x: x0, y: y0 + i * (ph + 10), w: x1 - x0, h: ph });
+  }
+  makeButtons() {
+    $('#mgCtl').innerHTML = ''; this.btns = [];
+    for (let pi = 0; pi < this.n; pi++) {
+      const col = this.n > 1 ? (pi ? '#ffd9b3' : '#cfe2ff') : null, sub = this.n > 1 ? esc(this.api.players[pi].name) : '';
+      const mk = (lab, s, k) => { const b = this.api.button(lab, s, () => this.press(pi, k), null, { color: col }); b.dataset.mk = k + pi; return b; };
+      this.btns.push({ pi, u: mk('▲', sub, 'u'), d: mk('▼', '', 'd'), j: mk('⤴', 'Spring', 'j'), k: mk('⤵', 'Buk', 'k') });
+    }
+    this.placeButtons();
+  }
+  placeButtons() {
+    const W = this.W, H = this.H, bw = this.bw, g = 8, P = (b, x, y) => this.api.place(b, x, y, bw, bw);
+    for (const B of this.btns) {
+      if (this.n === 1) {
+        if (this.land) { P(B.u, 12, H / 2 - bw - g / 2 + 14); P(B.d, 12, H / 2 + g / 2 + 14); P(B.j, W - bw - 12, H / 2 - bw - g / 2 + 14); P(B.k, W - bw - 12, H / 2 + g / 2 + 14); }
+        else { P(B.u, 14, H - bw * 2 - 22); P(B.d, 14, H - bw - 12); P(B.j, W - bw - 14, H - bw * 2 - 22); P(B.k, W - bw - 14, H - bw - 12); }
+      } else {
+        const right = B.pi === 1, xa = right ? W - bw * 2 - g - 12 : 12, xb = xa + bw + g;
+        if (this.land) { const yc = H / 2 + 14; P(B.u, xa, yc - bw - g / 2); P(B.d, xa, yc + g / 2); P(B.j, xb, yc - bw - g / 2); P(B.k, xb, yc + g / 2); }
+        else { P(B.u, xa, H - bw * 2 - 22); P(B.d, xa, H - bw - 12); P(B.j, xb, H - bw * 2 - 22); P(B.k, xb, H - bw - 12); }
+      }
+    }
+  }
+  press(pi, k) {
+    if (this.state !== 'race' || pi >= this.n) return; const p = this.pend[pi];
+    if (k === 'u') p.lane = -1; else if (k === 'd') p.lane = 1; else if (k === 'j') p.jump = true; else if (k === 'k') p.duck = true;
+  }
+  key(k, down) {
+    const m = MK_KEYS[k]; if (!m) return false; if (down) this.press(this.n > 1 ? m[0] : 0, m[1]); return true;
+  }
+  tick(dt) {
+    this.t += dt;
+    if (this.state === 'count') { const o = Math.ceil(this.cd); this.cd -= dt; if (Math.ceil(this.cd) !== o && this.cd > 0) SFX.tick(); if (this.cd <= 0) { this.state = 'race'; SFX.boost(); } }
+    else if (this.state === 'race') { this.acc = Math.min(this.acc + dt, .25); while (this.acc >= MK_DT) { this.acc -= MK_DT; this.step(); } }
+    this.pops = this.pops.filter(p => (p.t += dt) < 1); this.parts = this.parts.filter(p => (p.t += dt) < p.life);
+    for (const p of this.parts) { p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 300 * dt; }
+    this.shake = this.shake.map(s => Math.max(0, s - dt));
+    this.draw();
+  }
+  step() {
+    this.carts.forEach((c, i) => {
+      const ev = mkStep(this.track, c, this.pend[i], MK_DT); this.pend[i] = { lane: 0, jump: false, duck: false };
+      for (const e of ev) this.onEvent(i, e);
+    });
+    if (!this.ended && this.carts.every(c => c.done || c.out)) { this.ended = true; this.state = 'end'; setTimeout(() => { if (MG.inst === this) this.finish(); }, 1400); }
+  }
+  cartXY(i) { const P = this.panels[i], c = this.carts[i]; return [P.x + P.w * .24, this.railY(i, c.laneF) - mkJumpH(c) * this.laneH(i) * .7]; }
+  // ruimte voor de balk bovenin (40 px), dan 3 sporen; het kind in het karretje is ongeveer 1,45 spoor hoog
+  laneH(i) { return (this.panels[i].h - 40) / 3.9; }
+  railY(i, l) { const P = this.panels[i]; return P.y + 40 + this.laneH(i) * 1.55 + l * this.laneH(i); }
+  scale(i) { return Math.min(this.panels[i].w / 15, this.laneH(i) * 1.15); }
+  burst(i, cols, n, up) { const [x, y] = this.cartXY(i); for (let k = 0; k < n; k++) { const a = Math.random() * Math.PI * 2, v = 40 + Math.random() * 120; this.parts.push({ pi: i, x, y: y - 10, vx: Math.cos(a) * v, vy: Math.sin(a) * v - (up || 60), t: 0, life: .5 + Math.random() * .4, col: cols[k % cols.length] }); } }
+  onEvent(i, e) {
+    const [x, y] = this.cartXY(i);
+    if (e.type === 'gem') { SFX.pickup(); this.pops.push({ x: x + 10, y: y - 40, txt: '+5', col: '#7ef0ff', t: 0 }); }
+    else if (e.type === 'jump') SFX.whoosh();
+    else if (e.type === 'duck') SFX.step();
+    else if (e.type === 'crash') { SFX.bonk(); this.shake[i] = .35; this.burst(i, e.what === 'block' ? ['#c98a4b', '#8a5a2b'] : e.what === 'beam' ? ['#a0703f', '#fff'] : ['#9aa3b2', '#6b7385'], 14); this.pops.push({ x, y: y - 50, txt: { rock: 'Bonk! Springen!', beam: 'Au! Bukken!', block: 'Krak! Ander spoor!' }[e.what], col: '#ff8a8a', t: 0 }); if (navigator.vibrate) try { navigator.vibrate(50); } catch (_) { } }
+    else if (e.type === 'out') { SFX.aww(); this.pops.push({ x: this.panels[i].x + this.panels[i].w / 2, y: this.panels[i].y + this.panels[i].h / 2, txt: 'Karretje kapot!', col: '#ffd23f', t: 0, big: 1 }); }
+    else if (e.type === 'finish') { SFX.fanfare(); achieve('kar1'); if (this.carts[i].crashes === 0) achieve('kar0'); this.burst(i, ['#ffd23f', '#7ef0ff', '#ff8ad8', '#fff'], 24, 140); this.pops.push({ x: this.panels[i].x + this.panels[i].w / 2, y: this.panels[i].y + this.panels[i].h / 2, txt: '🏁 Finish!', col: '#ffd23f', t: 0, big: 1 }); }
+  }
+  finish() {
+    const pl = this.api.players, sc = this.carts.map((c, i) => ({ name: pl[i].name, score: mkScore(c), text: fmtNum(mkScore(c)) + ' punten' }));
+    let winner = null; if (this.n > 1 && sc[0].score !== sc[1].score) winner = sc[0].score > sc[1].score ? 0 : 1;
+    const lines = this.carts.map((c, i) => `${this.n > 1 ? esc(pl[i].name) + ': ' : ''}${c.done ? '🏁 finish gehaald' : `💥 kapot na ${Math.floor(c.d)} m`} · 💎 ${c.gems}${c.done ? ` · ❤️ ${c.hearts} over` : ''}`);
+    if (!this.carts.some(c => c.done)) lines.push('Tip: spring over de <b>stenen</b>, buk onder de <b>balken</b> en stuur om de <b>hekken</b> heen.');
+    this.api.end({ title: this.n === 1 && this.carts[0].done ? '🏁 Finish gehaald!' : null, scores: sc, winner, best: Math.max(...sc.map(s => s.score)), lines });
+  }
+  draw() {
+    const c = this.c, W = this.W, H = this.H, dpr = this.api.dpr, t = this.t;
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const bg = c.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#1d1530'); bg.addColorStop(1, '#2d2140'); c.fillStyle = bg; c.fillRect(0, 0, W, H);
+    this.panels.forEach((P, i) => this.drawPanel(i));
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    for (const p of this.pops) { c.globalAlpha = 1 - p.t; const fs = p.big ? Math.min(34, this.panels[0].w / 10) : 15; c.font = `800 ${fs}px Fredoka, sans-serif`; c.lineWidth = 4; c.strokeStyle = '#1d1530'; c.fillStyle = p.col; c.strokeText(p.txt, p.x, p.y - p.t * 26); c.fillText(p.txt, p.x, p.y - p.t * 26); }
+    c.globalAlpha = 1;
+    if (this.state === 'count' && this.cd > 0) { const n = Math.ceil(this.cd), fs = Math.min(80, H / 5); c.font = `800 ${fs}px Fredoka, sans-serif`; c.lineWidth = 6; c.strokeStyle = '#1d1530'; c.fillStyle = '#ffd23f'; c.strokeText(n, W / 2, H / 2 - 20); c.fillText(n, W / 2, H / 2 - 20); }
+    if (!this.land && this.state !== 'intro') {
+      c.font = '600 12px Fredoka, sans-serif'; c.fillStyle = 'rgba(255,255,255,.7)'; const y = H - this.bw * 2 - 38;
+      if (this.n === 1) { c.textAlign = 'left'; c.fillText('ander spoor', 14, y); c.textAlign = 'right'; c.fillText('spring / buk', W - 14, y); }
+      else { c.textAlign = 'left'; c.fillText(this.api.players[0].name + ' (boven)', 14, y); c.textAlign = 'right'; c.fillText(this.api.players[1].name + ' (onder)', W - 14, y); }
+    }
+    c.textBaseline = 'alphabetic';
+  }
+  drawPanel(i) {
+    const c = this.c, P = this.panels[i], cart = this.carts[i], k = this.scale(i), lh = this.laneH(i), t = this.t, pl = this.api.players[i];
+    const sh = this.shake[i] > 0 ? Math.sin(t * 80) * 4 * this.shake[i] / .35 : 0;
+    this.api.hud(P.x, P.y, P.w, P.h, 'baan' + i);
+    c.save(); rrect(c, P.x, P.y, P.w, P.h, 14); c.clip(); c.translate(sh, 0);
+    const cx = P.x + P.w * .24, view = d => cx + (d - cart.d) * k;
+    // achtergrond: mijngang met houten stutten en kristallen in de wand
+    const g = c.createLinearGradient(0, P.y, 0, P.y + P.h); g.addColorStop(0, '#2a2140'); g.addColorStop(.3, '#3b2d55'); g.addColorStop(1, '#4a3a2a'); c.fillStyle = g; c.fillRect(P.x - 6, P.y, P.w + 12, P.h);
+    const step = 6, first = Math.floor((cart.d - 6) / step) * step;
+    for (let d = first; d < cart.d + P.w / k; d += step) {
+      const X = P.x + P.w * .24 + (d - cart.d) * k * .6; c.fillStyle = '#5a3d22'; c.fillRect(X, P.y, 7, P.h * .3); c.fillRect(X - 10, P.y + P.h * .06, 27, 6);
+      if (hash2(d, 7) > .5) drawCrystal(c, X + 26, P.y + P.h * .2, 9, CRYSTAL_COLS[(d / step | 0) % 4]);
+    }
+    // lampjes
+    for (let d = first; d < cart.d + P.w / k; d += step * 2) { const X = P.x + P.w * .24 + (d - cart.d) * k * .6 + 3; const gl = c.createRadialGradient(X, P.y + P.h * .13, 1, X, P.y + P.h * .13, 22); gl.addColorStop(0, 'rgba(255,220,140,.6)'); gl.addColorStop(1, 'rgba(255,220,140,0)'); c.fillStyle = gl; c.fillRect(X - 22, P.y + P.h * .13 - 22, 44, 44); dot(c, X, P.y + P.h * .13, 3, '#ffe9a8'); }
+    // sporen (achter naar voor)
+    for (let l = 0; l < MK.LANES; l++) {
+      const y = this.railY(i, l); c.fillStyle = 'rgba(0,0,0,.25)'; c.fillRect(P.x, y + 2, P.w, lh * .2);
+      c.fillStyle = '#6b4a2a'; const s0 = Math.floor(cart.d - 4); for (let d = s0; d < cart.d + P.w / k; d += 1) { const X = view(d); c.fillRect(X, y - 2, k * .32, 8); }
+      c.fillStyle = '#b8c0cc'; c.fillRect(P.x, y - 3, P.w, 3); c.fillStyle = '#8a93a3'; c.fillRect(P.x, y, P.w, 2);
+    }
+    // finishlijn
+    const fx = view(MK.LEN); if (fx < P.x + P.w + 20) { for (let j = 0; j < 8; j++) { c.fillStyle = j % 2 ? '#fff' : '#1f2a44'; c.fillRect(fx, P.y + P.h * .25 + j * (P.h * .7 / 8), 10, P.h * .7 / 8); } }
+    // kristallen en hindernissen, per spoor van achter naar voor (karretje ertussen)
+    const tr = this.track, vis = d => d > cart.d - 3 && d < cart.d + (P.w * .8) / k + 1;
+    for (let l = 0; l < MK.LANES; l++) {
+      const y = this.railY(i, l);
+      for (const gm of tr.gems) if (gm.lane === l && !cart.got[gm.id] && vis(gm.x)) drawCrystal(c, view(gm.x), y - lh * .35 + Math.sin(t * 4 + gm.id) * 2, lh * .38, CRYSTAL_COLS[gm.id % 4]);
+      for (const o of tr.obs) if (o.lane === l && vis(o.x)) mkDrawObs(c, o.type, view(o.x), y, lh, k, cart.hit[o.id]);
+      if (Math.round(cart.laneF) === l || (l === MK.LANES - 1 && cart.laneF > l)) this.drawCart(i);
+    }
+    for (const p of this.parts) if (p.pi === i) { c.globalAlpha = 1 - p.t / p.life; dot(c, p.x, p.y, 3, p.col); }
+    c.globalAlpha = 1;
+    // balk bovenin: naam, hartjes, kristallen, voortgang
+    const bh = 26, bx = P.x + 6, by = P.y + 6, bw = P.w - 12; c.fillStyle = 'rgba(255,255,255,.92)'; rrect(c, bx, by, bw, bh, 10); c.fill();
+    c.font = `700 ${bw < 330 ? 12 : 14}px Fredoka, sans-serif`; c.textBaseline = 'middle'; c.fillStyle = '#1f2a44';
+    c.textAlign = 'left'; c.fillText(`${this.n > 1 ? pl.name + ' ' : ''}⭐ ${fmtNum(mkScore(cart))}`, bx + 8, by + bh / 2);
+    c.textAlign = 'right'; c.fillText(`💎 ${cart.gems}  ${'❤️'.repeat(Math.max(0, cart.hearts))}${'🖤'.repeat(MK.HEARTS - Math.max(0, cart.hearts))}`, bx + bw - 8, by + bh / 2);
+    const px = bx + 8, pw = bw - 16, py = by + bh + 5; c.fillStyle = 'rgba(255,255,255,.25)'; rrect(c, px, py, pw, 6, 3); c.fill();
+    this.carts.forEach((o, j) => { if (j === i) return; dot(c, px + pw * Math.min(1, o.d / MK.LEN), py + 3, 4, this.api.players[j].col); });
+    c.fillStyle = '#ffd23f'; rrect(c, px, py, pw * Math.min(1, cart.d / MK.LEN), 6, 3); c.fill(); dot(c, px + pw * Math.min(1, cart.d / MK.LEN), py + 3, 5, this.n > 1 ? pl.col : '#ffd23f');
+    // springend karretje op het bovenste spoor mag over de balk heen
+    if (mkJumpH(cart) > 0 && cart.laneF < .6) this.drawCart(i);
+    if (cart.out) { c.fillStyle = 'rgba(20,14,34,.55)'; c.fillRect(P.x, P.y, P.w, P.h); }
+    c.restore();
+    if (this.n > 1) { c.strokeStyle = pl.col; c.lineWidth = 3; rrect(c, P.x, P.y, P.w, P.h, 14); c.stroke(); }
+  }
+  drawCart(i) {
+    const c = this.c, cart = this.carts[i], [x, y] = this.cartXY(i), lh = this.laneH(i), s = lh * .9, t = this.t;
+    if (cart.inv > 0 && (t * 12 | 0) % 2) return;
+    const ducking = cart.duckT > 0, jumping = mkJumpH(cart) > 0;
+    // schaduw op de rail tijdens het springen
+    if (jumping) { c.fillStyle = 'rgba(0,0,0,.25)'; c.beginPath(); c.ellipse(x, this.railY(i, cart.laneF) + 2, s * .55, s * .1, 0, 0, 7); c.fill(); }
+    // kind in het karretje (bukken = diep in de bak)
+    const kidY = y - s * .42 + (ducking ? s * .45 : 0);
+    { c.save(); c.beginPath(); c.rect(x - s, y - s * 2.2, s * 2, s * 2.2 - s * .42 + 1); c.clip(); drawKid(c, this.api.players[i].look, x, kidY, 'right', t * 6, false, { scale: s / 34, t }); c.restore(); }
+    // bak
+    c.fillStyle = '#8a5a2b'; c.strokeStyle = LINE; c.lineWidth = 1.5; c.beginPath(); c.moveTo(x - s * .62, y - s * .5); c.lineTo(x + s * .62, y - s * .5); c.lineTo(x + s * .5, y - s * .1); c.lineTo(x - s * .5, y - s * .1); c.closePath(); c.fill(); c.stroke();
+    c.fillStyle = '#a8743f'; c.fillRect(x - s * .58, y - s * .5, s * 1.16, s * .08); c.fillStyle = '#5a3d22'; c.fillRect(x - s * .2, y - s * .44, s * .04, s * .3); c.fillRect(x + s * .16, y - s * .44, s * .04, s * .3);
+    // wielen
+    const a = cart.d * 3; for (const wx of [-s * .3, s * .3]) { dot(c, x + wx, y - s * .06, s * .13, '#3b3f4a'); c.strokeStyle = '#b8c0cc'; c.lineWidth = 1.5; c.beginPath(); c.moveTo(x + wx + Math.cos(a) * s * .1, y - s * .06 + Math.sin(a) * s * .1); c.lineTo(x + wx - Math.cos(a) * s * .1, y - s * .06 - Math.sin(a) * s * .1); c.stroke(); }
+    if (this.n > 1) dot(c, x, y - s * 1.75 + (ducking ? s * .45 : 0), Math.max(3, s * .08), this.api.players[i].col);
+  }
+}
+function mkDrawObs(c, type, x, y, lh, k, hit) {
+  c.strokeStyle = LINE; c.lineWidth = 1.5;
+  if (type === 'rock') {
+    const s = lh * .42; c.fillStyle = hit ? '#6b7385' : '#8d96a8'; c.beginPath(); c.moveTo(x - s, y); c.quadraticCurveTo(x - s * .9, y - s * .9, x - s * .1, y - s); c.quadraticCurveTo(x + s * .8, y - s * 1.05, x + s, y); c.closePath(); c.fill(); c.stroke();
+    c.fillStyle = 'rgba(255,255,255,.35)'; c.beginPath(); c.ellipse(x - s * .35, y - s * .65, s * .25, s * .12, -.4, 0, 7); c.fill();
+  } else if (type === 'beam') {
+    const top = y - lh * 1.5, by = y - lh * .62; c.fillStyle = '#6b4a2a'; c.fillRect(x - 4, top, 8, by - top);
+    c.fillStyle = hit ? '#7a5a3a' : '#a0703f'; rrect(c, x - lh * .55, by - lh * .2, lh * 1.1, lh * .22, 3); c.fill(); c.stroke();
+    c.fillStyle = '#ffd23f'; for (let j = 0; j < 3; j++) c.fillRect(x - lh * .45 + j * lh * .35, by - lh * .16, lh * .14, lh * .14);
+  } else {
+    const w = lh * .9, h = lh * 1.05; c.fillStyle = hit ? '#8a6a4a' : '#c98a4b'; c.fillRect(x - w / 2, y - h, w * .12, h); c.fillRect(x + w / 2 - w * .12, y - h, w * .12, h);
+    for (let j = 0; j < 2; j++) { const yy = y - h * (.85 - j * .4); c.fillStyle = j ? '#e8463c' : '#fff'; rrect(c, x - w / 2 - 2, yy, w + 4, h * .22, 3); c.fill(); c.stroke(); }
+    c.fillStyle = '#fff'; c.font = `800 ${Math.max(9, lh * .22)}px Fredoka, sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('✕', x, y - h * .74);
+  }
+}
+
+/* ===== minigames/kristal_logic.js ===== */
+/* =========================================================
+   KRISTALLEN MATCHEN – logica (zonder DOM, getest in tests/unit.js). Een bord van 7x7 kristallen in 5 kleuren.
+   Wissel twee buren om: 3 of meer op een rij verdwijnen, er vallen nieuwe kristallen in (kettingreactie = meer punten).
+   4 op een rij = lijnkristal (ruimt bij een volgende rij zijn hele rij of kolom op), 5 = sterkristal (wissel hem met een kristal:
+   alle kristallen van die kleur weg). Solo: KM.MOVES zetten. 2 spelers: om de beurt, ieder KM.MOVES2 zetten, eigen punten.
+   ========================================================= */
+const KM = { W: 7, H: 7, COLORS: 5, MOVES: 20, MOVES2: 10, PTS: 10 };
+function kmBuild(seed, n) {
+  const st = { rnd: mulberry32(seed || 1), id: 0, n: n || 1, turn: 0, scores: Array(n || 1).fill(0), moves: n > 1 ? [KM.MOVES2, KM.MOVES2] : [KM.MOVES], done: false, best: 0, shuffles: 0, specials: 0 };
+  st.board = []; for (let y = 0; y < KM.H; y++) { st.board.push([]); for (let x = 0; x < KM.W; x++) { let c; do c = Math.floor(st.rnd() * KM.COLORS); while ((x >= 2 && st.board[y][x - 1].c === c && st.board[y][x - 2].c === c) || (y >= 2 && st.board[y - 1][x].c === c && st.board[y - 2][x].c === c)); st.board[y].push(kmGem(st, c)); } }
+  if (!kmFindMove(st.board)) kmShuffle(st);
+  return st;
+}
+function kmGem(st, c, sp, dir) { return { id: ++st.id, c: c == null ? Math.floor(st.rnd() * KM.COLORS) : c, sp: sp || null, dir: dir || null }; }
+const kmCopy = b => b.map(r => r.map(g => g && Object.assign({}, g)));
+// alle rijen van 3+ (horizontaal en verticaal); sterren tellen niet als kleur
+function kmRuns(b) {
+  const runs = [];
+  for (let y = 0; y < KM.H; y++) for (let x = 0; x < KM.W;) { const g = b[y][x]; let e = x + 1; if (g && g.sp !== 'star') while (e < KM.W && b[y][e] && b[y][e].sp !== 'star' && b[y][e].c === g.c) e++; if (g && g.sp !== 'star' && e - x >= 3) runs.push({ dir: 'h', cells: Array.from({ length: e - x }, (_, i) => [x + i, y]) }); x = e; }
+  for (let x = 0; x < KM.W; x++) for (let y = 0; y < KM.H;) { const g = b[y][x]; let e = y + 1; if (g && g.sp !== 'star') while (e < KM.H && b[e][x] && b[e][x].sp !== 'star' && b[e][x].c === g.c) e++; if (g && g.sp !== 'star' && e - y >= 3) runs.push({ dir: 'v', cells: Array.from({ length: e - y }, (_, i) => [x, y + i]) }); y = e; }
+  return runs;
+}
+const kmAdj = (a, b) => Math.abs(a[0] - b[0]) + Math.abs(a[1] - b[1]) === 1;
+function kmSwapCells(b, a, c) { const t = b[a[1]][a[0]]; b[a[1]][a[0]] = b[c[1]][c[0]]; b[c[1]][c[0]] = t; }
+// is deze wissel een geldige zet?
+function kmValid(b, a, c) { if (!kmAdj(a, c)) return false; const g1 = b[a[1]][a[0]], g2 = b[c[1]][c[0]]; if (g1.sp === 'star' || g2.sp === 'star') return true; const t = kmCopy(b); kmSwapCells(t, a, c); return kmRuns(t).length > 0; }
+function kmFindMove(b) { for (let y = 0; y < KM.H; y++) for (let x = 0; x < KM.W; x++) for (const [dx, dy] of [[1, 0], [0, 1]]) { const c = [x + dx, y + dy]; if (c[0] < KM.W && c[1] < KM.H && kmValid(b, [x, y], c)) return [[x, y], c]; } return null; }
+function kmShuffle(st) {
+  let k = 0; do { const all = st.board.flat(); for (let i = all.length - 1; i > 0; i--) { const j = Math.floor(st.rnd() * (i + 1)); [all[i], all[j]] = [all[j], all[i]]; } for (let y = 0; y < KM.H; y++) for (let x = 0; x < KM.W; x++) st.board[y][x] = all[y * KM.W + x]; k++; }
+  while ((kmRuns(st.board).length || !kmFindMove(st.board)) && k < 200);
+  if (k >= 200) { st.board = st.board.map(r => r.map(() => kmGem(st))); while (kmRuns(st.board).length || !kmFindMove(st.board)) st.board = st.board.map(r => r.map(() => kmGem(st))); }
+  st.shuffles++;
+}
+// zet: wissel a en c. Geeft { ok, steps: [{ cleared, made, pts, board }] } terug (stappen voor de animatie)
+function kmSwap(st, a, c) {
+  if (st.done || !kmValid(st.board, a, c)) return { ok: false, steps: [] };
+  const b = st.board, g1 = b[a[1]][a[0]], g2 = b[c[1]][c[0]], steps = []; let level = 0, total = 0;
+  kmSwapCells(b, a, c);
+  let forced = null;
+  if (g1.sp === 'star' || g2.sp === 'star') {
+    // ster: alle kristallen van de kleur van de ander weg (2 sterren: alles)
+    const both = g1.sp === 'star' && g2.sp === 'star', col = g1.sp === 'star' ? g2.c : g1.c; forced = new Set();
+    for (let y = 0; y < KM.H; y++) for (let x = 0; x < KM.W; x++) { const g = b[y][x]; if (both || g === g1 && g1.sp === 'star' || g === g2 && g2.sp === 'star' || (g.sp !== 'star' && g.c === col)) forced.add(x + ',' + y); }
+  }
+  for (;;) {
+    const runs = forced ? [] : kmRuns(b), clear = new Set(forced || []), made = [];
+    for (const r of runs) {
+      r.cells.forEach(([x, y]) => clear.add(x + ',' + y));
+      if (r.cells.length >= 4) { const pos = r.cells.find(([x, y]) => (x === a[0] && y === a[1]) || (x === c[0] && y === c[1])) || r.cells[Math.floor(r.cells.length / 2)]; made.push({ x: pos[0], y: pos[1], sp: r.cells.length >= 5 ? 'star' : 'line', dir: r.dir, c: b[r.cells[0][1]][r.cells[0][0]].c }); }
+    }
+    forced = null; if (!clear.size) break;
+    // lijnkristallen in de opruiming ruimen hun rij of kolom op (kettingreactie)
+    let grew = true; const fired = new Set();
+    while (grew) { grew = false; for (const k of [...clear]) { if (fired.has(k)) continue; const [x, y] = k.split(',').map(Number), g = b[y][x]; if (g && g.sp === 'line') { fired.add(k); for (let i = 0; i < (g.dir === 'h' ? KM.W : KM.H); i++) { const kk = g.dir === 'h' ? i + ',' + y : x + ',' + i; if (!clear.has(kk)) { clear.add(kk); grew = true; } } } } }
+    level++; const pts = clear.size * KM.PTS * level; total += pts;
+    const cleared = [...clear].map(k => k.split(',').map(Number));
+    cleared.forEach(([x, y]) => { b[y][x] = null; });
+    made.forEach(m => { if (!b[m.y][m.x]) { b[m.y][m.x] = kmGem(st, m.c, m.sp, m.dir); st.specials++; } });
+    // vallen + bijvullen
+    for (let x = 0; x < KM.W; x++) { let w = KM.H - 1; for (let y = KM.H - 1; y >= 0; y--) if (b[y][x]) { const g = b[y][x]; b[y][x] = null; b[w][x] = g; w--; } for (let y = w; y >= 0; y--) b[y][x] = kmGem(st); }
+    steps.push({ cleared, made, pts, level, board: kmCopy(b) });
+    if (level > 20) break;
+  }
+  const p = st.turn; st.scores[p] += total; st.best = Math.max(st.best, total); st.moves[p]--;
+  if (st.n > 1) st.turn = st.moves[1 - p] > 0 ? 1 - p : p;
+  st.done = st.moves.every(m => m <= 0);
+  let shuffled = false; if (!st.done && !kmFindMove(b)) { kmShuffle(st); shuffled = true; }
+  return { ok: true, steps, total, shuffled, player: p };
+}
+// computer-speler (tests): de zet met de meeste punten (proberen op een kopie)
+function kmBot(st) {
+  let best = null, bs = -1;
+  for (let y = 0; y < KM.H; y++) for (let x = 0; x < KM.W; x++) for (const [dx, dy] of [[1, 0], [0, 1]]) {
+    const c = [x + dx, y + dy]; if (c[0] >= KM.W || c[1] >= KM.H || !kmValid(st.board, [x, y], c)) continue;
+    const t = { board: kmCopy(st.board), rnd: mulberry32(7), id: st.id, n: 1, turn: 0, scores: [0], moves: [99], done: false, best: 0, shuffles: 0, specials: 0 };
+    const r = kmSwap(t, [x, y], c); if (r.total > bs) { bs = r.total; best = [[x, y], c]; }
+  }
+  return best;
+}
+
+/* ===== minigames/kristal.js ===== */
+/* =========================================================
+   KRISTALLEN MATCHEN – speelautomaat in de diepe kelder (logica in kristal_logic.js).
+   Veeg een kristal naar zijn buurman, of tik er één aan en dan de buurman. 3 op een rij = weg!
+   Toetsen: pijltjes = kader verplaatsen, spatie/enter = pakken, dan een pijltje = wisselen.
+   2 spelers: om de beurt op hetzelfde bord, ieder 10 zetten. Meeste punten wint.
+   ========================================================= */
+registerMinigame({
+  id: 'kristallen', name: 'Kristallen matchen', emoji: '💠', music: 'kristallen', twoMode: 'om de beurt',
+  help: '<b>Veeg</b> een kristal naar zijn buurman (of tik ze allebei aan). <b>3 op een rij</b> = weg! 4 op een rij maakt een <b>lijnkristal</b>, 5 een <b>sterkristal</b>. Je hebt 20 zetten.',
+  coins: s => Math.floor(s / 250) + 2, bonusAt: 2500, bonusText: 'Haal 2.500 punten voor 1 energie (1x per dag)',
+  create: api => new KristalGame(api),
+});
+const KM_COLS = ['#ff5d73', '#ffb627', '#4cd97b', '#3fa9ff', '#b26bff'];
+const KM_DIRS = { arrowup: [0, -1], arrowdown: [0, 1], arrowleft: [-1, 0], arrowright: [1, 0], w: [0, -1], s: [0, 1], a: [-1, 0], d: [1, 0] };
+class KristalGame {
+  constructor(api) {
+    this.api = api; this.c = api.ctx; this.n = api.players.length; this.t = 0; this.started = false; this.ended = false;
+    this.st = kmBuild((Math.random() * 1e9) | 0, this.n); this.view = kmCopy(this.st.board); this.pos = {}; this.popping = {}; this.queue = []; this.busy = false; this.wait = 0;
+    this.sel = null; this.cur = [3, 3]; this.held = false; this.ptr = null; this.idle = 0; this.pops = []; this.parts = []; this.shownScores = this.st.scores.slice();
+    this.W = api.W; this.H = api.H; this.layout(); this.snap();
+    this.onDown = e => this.pDown(e); this.onMove = e => this.pMove(e); this.onUp = e => this.pUp(e);
+    api.cv.addEventListener('pointerdown', this.onDown); addEventListener('pointermove', this.onMove); addEventListener('pointerup', this.onUp); addEventListener('pointercancel', this.onUp);
+    api.banner(this.n > 1 ? `<h2>💠 Kristallen matchen</h2><p>Om de beurt! ${esc(api.players[0].name)} begint. Ieder heeft ${KM.MOVES2} zetten.</p>` : `<h2>💠 Kristallen matchen</h2><p>Veeg kristallen om. 3 op een rij = weg! Je hebt ${KM.MOVES} zetten.</p>`, { ms: 2000 }).then(() => { if (MG.inst === this) this.started = true; });
+  }
+  destroy() { const c = this.api.cv; c.removeEventListener('pointerdown', this.onDown); removeEventListener('pointermove', this.onMove); removeEventListener('pointerup', this.onUp); removeEventListener('pointercancel', this.onUp); }
+  resize(W, H) { this.W = W; this.H = H; this.layout(); }
+  layout() {
+    const W = this.W, H = this.H, top = this.api.top, land = W > H * 1.15; this.land = land;
+    const side = land && this.n > 1 ? Math.min(150, W * .2) : 0;
+    this.hudBox = { x: 8, y: top, w: W - 16, h: 30 };
+    const y0 = top + 30 + 10, y1 = H - (land ? 10 : 40);
+    const cs = Math.max(20, Math.floor(Math.min((W - 16 - side * 2) / KM.W, (y1 - y0) / KM.H, 78)));
+    this.cs = cs; this.bx = Math.round((W - cs * KM.W) / 2); this.by = Math.round(y0 + Math.max(0, (y1 - y0 - cs * KM.H) / 2)); this.side = side;
+  }
+  snap() { this.view.forEach((r, y) => r.forEach((g, x) => { if (g) this.pos[g.id] = { x, y }; })); }
+  cell(e) { const [px, py] = this.api.xy(e), x = Math.floor((px - this.bx) / this.cs), y = Math.floor((py - this.by) / this.cs); return x >= 0 && y >= 0 && x < KM.W && y < KM.H ? [x, y] : null; }
+  canPlay() { return this.started && !this.ended && !this.busy && !this.st.done; }
+  pDown(e) { e.preventDefault(); const c = this.cell(e); if (!c) { this.sel = null; return; } const [x, y] = this.api.xy(e); this.ptr = { id: e.pointerId, c, x, y, moved: false }; }
+  pMove(e) {
+    const p = this.ptr; if (!p || p.id !== e.pointerId || p.moved) return; const [x, y] = this.api.xy(e), dx = x - p.x, dy = y - p.y;
+    if (Math.hypot(dx, dy) < Math.max(12, this.cs * .3)) return; p.moved = true;
+    const d = Math.abs(dx) > Math.abs(dy) ? [Math.sign(dx), 0] : [0, Math.sign(dy)], to = [p.c[0] + d[0], p.c[1] + d[1]];
+    if (to[0] >= 0 && to[1] >= 0 && to[0] < KM.W && to[1] < KM.H) this.tryMove(p.c, to);
+  }
+  pUp(e) {
+    const p = this.ptr; if (!p || p.id !== e.pointerId) return; this.ptr = null; if (p.moved) return;
+    if (this.sel && kmAdj(this.sel, p.c)) { this.tryMove(this.sel, p.c); return; }
+    if (this.sel && this.sel[0] === p.c[0] && this.sel[1] === p.c[1]) { this.sel = null; return; }
+    this.sel = p.c; this.cur = p.c.slice(); SFX.click();
+  }
+  key(k, down) {
+    if (!down) return false; const d = KM_DIRS[k]; if (d || k === ' ' || k === 'enter') this.keyMode = true;
+    if (d) { const to = [clamp(this.cur[0] + d[0], 0, KM.W - 1), clamp(this.cur[1] + d[1], 0, KM.H - 1)]; if (this.held) { this.held = false; this.tryMove(this.cur, to); } else this.cur = to; this.sel = this.held ? this.cur : null; return true; }
+    if (k === ' ' || k === 'enter') { this.held = !this.held; this.sel = this.held ? this.cur.slice() : null; return true; }
+    return false;
+  }
+  tryMove(a, c) {
+    this.sel = null; this.held = false; this.idle = 0; if (!this.canPlay()) return;
+    const prev = kmCopy(this.view), sw = kmCopy(prev); kmSwapCells(sw, a, c);
+    const r = kmSwap(this.st, a, c);
+    if (!r.ok) { SFX.nope(); this.queue.push({ view: sw, t: .16 }, { view: prev, t: .16 }); this.busy = true; return; }
+    SFX.move(); this.queue.push({ view: sw, t: .16 });
+    r.steps.forEach((s, i) => { this.queue.push({ pop: s, t: .26 }); this.queue.push({ view: kmCopy(s.board), settle: true, t: .08, step: s, i }); });
+    if (r.shuffled) this.queue.push({ msg: '🔀 Schudden!', t: .5 }, { view: kmCopy(this.st.board), fresh: true, settle: true, t: .1 });
+    this.queue.push({ done: r, t: 0 }); this.busy = true;
+  }
+  runQueue(dt) {
+    if (!this.queue.length) { this.busy = false; return; }
+    const q = this.queue[0];
+    if (!q.started) {
+      q.started = true;
+      if (q.view) { if (q.fresh) this.pos = {}; this.setView(q.view); }
+      if (q.pop) { const s = q.pop; s.cleared.forEach(([x, y]) => { const g = this.view[y][x]; if (g) this.popping[g.id] = 0; this.burst(x, y, g ? KM_COLS[g.c] : '#fff'); });
+        const mx = s.cleared.reduce((a, [x]) => a + x, 0) / s.cleared.length, my = s.cleared.reduce((a, [, y]) => a + y, 0) / s.cleared.length;
+        this.pops.push({ x: mx, y: my, txt: '+' + s.pts, t: 0, col: '#fff' }); if (s.level > 1) this.pops.push({ x: KM.W / 2 - .5, y: my - 1, txt: `Kettingreactie x${s.level}!`, t: 0, col: '#ffd23f', big: 1 });
+        if (s.cleared.length >= 7) SFX.fourlines(); else if (s.level > 1) SFX.spare(); else SFX.clear();
+        if (s.made.some(m => m.sp === 'star')) { achieve('kristalster'); SFX.zap(); } else if (s.made.length) SFX.zap(); }
+      if (q.msg) this.pops.push({ x: KM.W / 2 - .5, y: KM.H / 2 - .5, txt: q.msg, t: 0, col: '#ffd23f', big: 1 });
+      if (q.done) this.afterMove(q.done);
+    }
+    if (q.settle && !this.settled()) return;
+    q.t -= dt; if (q.t <= 0) this.queue.shift();
+  }
+  setView(v) {
+    const cols = Array(KM.W).fill(0);
+    for (let x = 0; x < KM.W; x++) for (let y = KM.H - 1; y >= 0; y--) { const g = v[y][x]; if (g && !this.pos[g.id]) cols[x]++; }
+    const seen = Array(KM.W).fill(0);
+    for (let x = 0; x < KM.W; x++) for (let y = KM.H - 1; y >= 0; y--) { const g = v[y][x]; if (g && !this.pos[g.id]) { seen[x]++; this.pos[g.id] = { x, y: -seen[x] - .3, vy: 0 }; } }
+    this.popping = {}; this.view = v;
+  }
+  settled() { return this.view.every((r, y) => r.every((g, x) => !g || (Math.abs(this.pos[g.id].x - x) < .02 && Math.abs(this.pos[g.id].y - y) < .02))); }
+  afterMove(r) {
+    const st = this.st; this.shownScores = st.scores.slice();
+    if (r.total >= 300) achieve('kristalcombo');
+    if (st.done) { this.ended = true; setTimeout(() => { if (MG.inst === this) this.finish(); }, 1000); return; }
+    if (this.n > 1 && st.turn !== r.player) this.pops.push({ x: KM.W / 2 - .5, y: KM.H - 1.6, txt: `Beurt: ${this.api.players[st.turn].name}`, t: 0, col: this.api.players[st.turn].col, big: 1 });
+  }
+  burst(x, y, col) { for (let k = 0; k < 6; k++) { const a = Math.random() * 7, v = 1 + Math.random() * 2.5; this.parts.push({ x: x + .5, y: y + .5, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 1.5, t: 0, life: .5 + Math.random() * .3, col }); } }
+  tick(dt) {
+    this.t += dt; this.runQueue(dt);
+    if (this.canPlay()) this.idle += dt;
+    for (const id in this.popping) this.popping[id] += dt;
+    for (let y = 0; y < KM.H; y++) for (let x = 0; x < KM.W; x++) {
+      const g = this.view[y][x]; if (!g) continue; const p = this.pos[g.id];
+      if (p.y < y) { p.vy = (p.vy || 0) + 40 * dt; p.y = Math.min(y, p.y + p.vy * dt); if (p.y >= y) p.vy = 0; } else p.y += (y - p.y) * Math.min(1, dt * 18);
+      p.x += (x - p.x) * Math.min(1, dt * 18); if (Math.abs(p.x - x) < .01) p.x = x; if (Math.abs(p.y - y) < .01) p.y = y;
+    }
+    this.pops = this.pops.filter(p => (p.t += dt) < 1.2); this.parts = this.parts.filter(p => (p.t += dt) < p.life);
+    for (const p of this.parts) { p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 8 * dt; }
+    this.draw();
+  }
+  finish() {
+    const st = this.st, pl = this.api.players;
+    if (this.n === 1 && st.scores[0] >= 3000) achieve('kristal3k');
+    const sc = this.n > 1 ? pl.map((p, i) => ({ name: p.name, score: st.scores[i], text: fmtNum(st.scores[i]) + ' punten' })) : [{ name: pl[0].name, score: st.scores[0], text: fmtNum(st.scores[0]) + ' punten' }];
+    let winner = null; if (this.n > 1 && sc[0].score !== sc[1].score) winner = sc[0].score > sc[1].score ? 0 : 1;
+    const lines = [`💥 Beste zet: <b>${fmtNum(st.best)}</b> punten`]; if (st.specials) lines.push(`✨ ${st.specials} speciale ${st.specials === 1 ? 'kristal' : 'kristallen'} gemaakt`);
+    this.api.end({ scores: sc, winner, best: Math.max(...sc.map(s => s.score)), lines });
+  }
+  draw() {
+    const c = this.c, W = this.W, H = this.H, dpr = this.api.dpr, cs = this.cs, bx = this.bx, by = this.by, t = this.t, st = this.st;
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const bg = c.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#24163a'); bg.addColorStop(1, '#3a2257'); c.fillStyle = bg; c.fillRect(0, 0, W, H);
+    for (let i = 0; i < 14; i++) { const x = hash2(i, 3) * W, y = hash2(i, 9) * H, s = (Math.sin(t * 1.5 + i) + 1) / 2; c.fillStyle = `rgba(255,255,255,${.08 + s * .2})`; c.beginPath(); c.arc(x, y, 1.5 + s, 0, 7); c.fill(); }
+    this.api.hud(bx, by, cs * KM.W, cs * KM.H, 'bord');
+    c.fillStyle = '#160e26'; rrect(c, bx - 6, by - 6, cs * KM.W + 12, cs * KM.H + 12, 14); c.fill();
+    for (let y = 0; y < KM.H; y++) for (let x = 0; x < KM.W; x++) { c.fillStyle = (x + y) % 2 ? 'rgba(255,255,255,.06)' : 'rgba(255,255,255,.11)'; rrect(c, bx + x * cs + 1, by + y * cs + 1, cs - 2, cs - 2, cs * .18); c.fill(); }
+    const hint = this.canPlay() && this.idle > 6 ? kmFindMove(st.board) : null;
+    if (hint) { const k = (Math.sin(t * 6) + 1) / 2; c.strokeStyle = `rgba(255,255,255,${.4 + k * .5})`; c.lineWidth = 3; hint.forEach(([x, y]) => { rrect(c, bx + x * cs + 3, by + y * cs + 3, cs - 6, cs - 6, cs * .18); c.stroke(); }); }
+    c.save(); c.beginPath(); c.rect(bx - 6, by - 6, cs * KM.W + 12, cs * KM.H + 12); c.clip();
+    for (const r of this.view) for (const g of r) if (g) { const p = this.pos[g.id], pp = this.popping[g.id]; let s = cs * .4; if (pp != null) s *= Math.max(0, 1 - pp / .22) * (1 + pp * 2); if (s <= .5) continue; kmDrawGem(c, bx + (p.x + .5) * cs, by + (p.y + .5) * cs, s, g, t); }
+    c.restore();
+    const sel = this.sel || (this.held ? this.cur : null); if (sel) { c.strokeStyle = '#ffd23f'; c.lineWidth = 3.5; rrect(c, bx + sel[0] * cs + 2, by + sel[1] * cs + 2, cs - 4, cs - 4, cs * .2); c.stroke(); }
+    if (this.keyMode || this.held) { c.strokeStyle = 'rgba(255,255,255,.8)'; c.lineWidth = 2; c.setLineDash([5, 4]); rrect(c, bx + this.cur[0] * cs + 4, by + this.cur[1] * cs + 4, cs - 8, cs - 8, cs * .18); c.stroke(); c.setLineDash([]); }
+    for (const p of this.parts) { c.globalAlpha = 1 - p.t / p.life; dot(c, bx + p.x * cs, by + p.y * cs, Math.max(2, cs * .06), p.col); }
+    c.globalAlpha = 1; c.textAlign = 'center'; c.textBaseline = 'middle';
+    for (const p of this.pops) { c.globalAlpha = Math.min(1, 1.6 - p.t * 1.3); const fs = p.big ? clamp(cs * .55, 18, 32) : clamp(cs * .45, 14, 26); c.font = `800 ${fs}px Fredoka, sans-serif`; c.lineWidth = 4; c.strokeStyle = '#24163a'; c.fillStyle = p.col; const X = bx + (p.x + .5) * cs, Y = by + (p.y + .5) * cs - p.t * 30; c.strokeText(p.txt, X, Y); c.fillText(p.txt, X, Y); }
+    c.globalAlpha = 1;
+    // HUD bovenin
+    const B = this.hudBox, pl = this.api.players; this.api.hud(B.x, B.y, B.w, B.h, 'score'); c.fillStyle = 'rgba(255,255,255,.92)'; rrect(c, B.x, B.y, B.w, B.h, 12); c.fill();
+    const fs = B.w < 360 ? 13 : 15; c.font = `700 ${fs}px Fredoka, sans-serif`; c.fillStyle = '#1f2a44'; const yy = B.y + B.h / 2;
+    if (this.n === 1) { c.textAlign = 'left'; c.fillText(`⭐ ${fmtNum(st.scores[0])}`, B.x + 10, yy); c.textAlign = 'right'; c.fillText(`🔄 ${st.moves[0]} ${st.moves[0] === 1 ? 'zet' : 'zetten'} over`, B.x + B.w - 10, yy); }
+    else {
+      [0, 1].forEach(i => { const on = st.turn === i && !st.done, x = i ? B.x + B.w / 2 + 2 : B.x + 2, w = B.w / 2 - 4; if (on) { c.fillStyle = hexA(pl[i].col, .35); rrect(c, x, B.y + 2, w, B.h - 4, 10); c.fill(); }
+        c.fillStyle = '#1f2a44'; c.textAlign = i ? 'right' : 'left'; c.fillText(`${on ? '▶ ' : ''}${pl[i].name} ⭐ ${fmtNum(st.scores[i])} · 🔄 ${st.moves[i]}`, i ? x + w - 8 : x + 8, yy); });
+    }
+    // uitleg onderin
+    if (!this.land || this.n > 1) {
+      c.font = '600 13px Fredoka, sans-serif'; c.fillStyle = 'rgba(255,255,255,.75)'; c.textAlign = 'center';
+      const txt = st.done ? '' : this.n > 1 ? `Beurt: ${pl[st.turn].name} · veeg of tik twee buren` : 'Veeg een kristal naar zijn buurman · 3 op een rij!';
+      const y = this.land ? H - 8 : Math.min(H - 18, by + cs * KM.H + 24); if (txt && (!this.land || by + cs * KM.H + 14 < H)) c.fillText(txt, W / 2, y);
+    }
+    c.textBaseline = 'alphabetic';
+  }
+}
+// kristal tekenen: elke kleur een eigen vorm (ook goed te zien als je kleuren lastig vindt)
+function kmDrawGem(c, x, y, s, g, t) {
+  const col = KM_COLS[g.c]; c.save(); c.translate(x, y);
+  if (g.sp === 'star') { const k = t * 2; c.rotate(Math.sin(k) * .2); c.beginPath(); for (let i = 0; i < 10; i++) { const a = -Math.PI / 2 + i * Math.PI / 5, r = i % 2 ? s * .45 : s; c.lineTo(Math.cos(a) * r, Math.sin(a) * r); } c.closePath();
+    const gr = c.createLinearGradient(-s, -s, s, s); KM_COLS.forEach((cc, i) => gr.addColorStop(i / 4, cc)); c.fillStyle = gr; c.fill(); c.strokeStyle = '#fff'; c.lineWidth = 2; c.stroke(); dot(c, 0, 0, s * .18, '#fff'); c.restore(); return; }
+  c.beginPath();
+  if (g.c === 0) { c.arc(0, 0, s * .9, 0, 7); }
+  else if (g.c === 1) { c.moveTo(0, -s); c.lineTo(s * .8, 0); c.lineTo(0, s); c.lineTo(-s * .8, 0); c.closePath(); }
+  else if (g.c === 2) { rrect(c, -s * .78, -s * .78, s * 1.56, s * 1.56, s * .3); }
+  else if (g.c === 3) { for (let i = 0; i < 6; i++) { const a = i * Math.PI / 3 + Math.PI / 6; c.lineTo(Math.cos(a) * s * .92, Math.sin(a) * s * .92); } c.closePath(); }
+  else { c.moveTo(0, -s * .95); c.lineTo(s * .92, s * .7); c.lineTo(-s * .92, s * .7); c.closePath(); }
+  const gr = c.createLinearGradient(0, -s, 0, s); gr.addColorStop(0, '#fff'); gr.addColorStop(.25, col); gr.addColorStop(1, col); c.fillStyle = gr; c.fill(); c.strokeStyle = 'rgba(0,0,0,.35)'; c.lineWidth = 1.5; c.stroke();
+  c.fillStyle = 'rgba(255,255,255,.55)'; c.beginPath(); c.ellipse(-s * .25, -s * .35, s * .22, s * .12, -.5, 0, 7); c.fill();
+  if (g.sp === 'line') { c.strokeStyle = '#fff'; c.lineWidth = Math.max(2, s * .14); c.beginPath(); if (g.dir === 'h') { c.moveTo(-s * .8, 0); c.lineTo(s * .8, 0); c.moveTo(-s * .5, -s * .25); c.lineTo(-s * .8, 0); c.lineTo(-s * .5, s * .25); c.moveTo(s * .5, -s * .25); c.lineTo(s * .8, 0); c.lineTo(s * .5, s * .25); } else { c.moveTo(0, -s * .8); c.lineTo(0, s * .8); c.moveTo(-s * .25, -s * .5); c.lineTo(0, -s * .8); c.lineTo(s * .25, -s * .5); c.moveTo(-s * .25, s * .5); c.lineTo(0, s * .8); c.lineTo(s * .25, s * .5); } c.stroke(); }
+  c.restore();
+}
+
 /* ===== minigames/klusje.js ===== */
 /* =========================================================
    KLUSJE VOOR MAMA – de 'tenzij' als de pogingen van vandaag op zijn (1x per dag: +1 poging).
@@ -7829,7 +8369,7 @@ window.__gb = {
   GOLF_HOLES, GOLF, golfPar, FLY_SPOTS, allFlySpots, flyCount, flyDone, nearFlySpot, flyCutscene, buildVliegbotNow, vliegHave, VLIEG_PARTS, findNear, nearLabel, lootAvail, takeItem, goalKey, nextGoal, hint,
   ECON, econCardLine, canDigNow, ECON_FULL_TXT, econDigsLeft, econEnergyLeft,
   BUUR, PRANKS, buurGateOn, buurWaiting, buurLeft, buurLevel, buurCutscene, buurSkip, openBuurPlan, renderBuurPlan, buurRequestNow, buurDigAfterWin, buurKlusDone, buurLocked, drawBrom, drawGnome, buurNews,
-  buurFinish, BOOR_PARTS, boorHave, buildBoorbeestNow, digDeepStart, buildDeepMap, buildBaseMap, roomList, roomLevel, partNotNeeded, gjBuild, GJ, GJ_LEVELS,
+  buurFinish, BOOR_PARTS, boorHave, buildBoorbeestNow, digDeepStart, buildDeepMap, buildBaseMap, roomList, roomLevel, partNotNeeded, gjBuild, GJ, GJ_LEVELS, MK, mkBuild, mkCart, mkStep, mkScore, KM, kmBuild, kmFindMove, kmSwap,
 };
 
 </script>
