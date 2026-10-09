@@ -664,7 +664,7 @@ h1,h2,h3{margin:0}
     <div><h3>🦫 Zo werkt de graafdag</h3>
       <p>Als de Supermol gebouwd is, graaft hij meteen het <b>Hoofdkwartier</b> en de <b>Bowlingbaan</b>. Daarna graaft hij <b>elke echte kalenderdag één nieuwe kamer</b> (om middernacht, op de klok van dit apparaat). Was je kind een paar dagen weg, dan staan die kamers er bij terugkomst allemaal. Volgorde: Blokkenkamer, Flipperkastkamer, Minigolf, Racebaan, Escaperoom.</p>
       <p>⛏️ <b>De diepe kelder</b> (aflevering 4): als de basis af is, ligt in de Escaperoom de tekening van het <b>Boorbeest</b>. Met 5 onderdelen (het gouden tandwiel uit de eik, de Flipperkast, de ketel in de kelder en twee gewonnen streken bij buurman Brom) bouwen de kinderen het aan de werkbank. Dan komt er een <b>lift</b> in het Hoofdkwartier naar een tweede verdieping met een kristalgrot en nieuwe spelkamers (de <b>Grottenjacht</b>, het <b>Mijnkarretje</b>, <b>Kristallen matchen</b> en de <b>Ondergrondse rivier</b>); die worden op dezelfde manier gegraven. Bij de rivier dobbert flessenpost met een half afgescheurde tekening van de <b>Ruimtebot</b>: de 4 onderdelen (raketmotor: de rivier uitvaren, zonnepanelen: Kristallen matchen, maanwielen: de finish van het Mijnkarretje, antenne: met de Vliegbot bovenop de kristalpilaar) kun je al verzamelen. Elk spel kan alleen of met z'n tweeën op één apparaat, en de dagelijkse grens voor munten en energie geldt ook hier.</p>
-      <p>☁️ <b>Tussen hemel en aarde</b> (aflevering 5, de laatste): de andere helft van de Ruimtebot-tekening hangt op het prikbord in het <b>tuinhuisje</b>. De Ruimtebot is te groot voor de werkbank in de speelkamer en wordt op de bouwplek in het tuinhuisje gebouwd. Na een filmpje vliegt hij de kinderen naar een <b>zwevend wolkeneiland</b> met een Wolken-HQ en een telescoop (derde verdieping op de monitor). De Supermol graaft daar op dezelfde manier nieuwe spelkamers: <b>Meteorietenregen</b> en <b>Zwaartekracht-springen</b> (meer volgt). Heen en terug vliegen kan altijd met de Ruimtebot in de tuin.</p>
+      <p>☁️ <b>Tussen hemel en aarde</b> (aflevering 5, de laatste): de andere helft van de Ruimtebot-tekening hangt op het prikbord in het <b>tuinhuisje</b>. De Ruimtebot is te groot voor de werkbank in de speelkamer en wordt op de bouwplek in het tuinhuisje gebouwd. Na een filmpje vliegt hij de kinderen naar een <b>zwevend wolkeneiland</b> met een Wolken-HQ en een telescoop (derde verdieping op de monitor). De Supermol graaft daar op dezelfde manier 5 nieuwe spelkamers: <b>Meteorietenregen</b>, <b>Zwaartekracht-springen</b>, <b>Planeetgolf</b>, <b>Sterrenbeelden</b> en <b>Ruimtepong</b> (solo tegen de Ruimtebot of met z'n tweeën tegen elkaar). Het spannende slot volgt nog. Heen en terug vliegen kan altijd met de Ruimtebot in de tuin.</p>
       <p>Sneller graven kan met <b>⚡ energie-batterijen</b>: met 3 stuks graaft de Supermol meteen een extra kamer (knop <b>Graaf nu</b> op de monitor). Energie vind je verstopt in huis en tuin, krijg je van mol-brandstof (wortel + appel, die groeien elke dag opnieuw), één keer per dag per spel bij een goede score, en in de energie-automaat (50 munten per ⚡, altijd te koop, zonder daglimiet). Munten verdien je met de spelletjes (per spel per dag een maximum).</p>
       <div class="orow"><span id="oudStatus" class="small-note"></span></div>
       <p id="oudEcon" class="small-note"></p>
@@ -1049,6 +1049,15 @@ const TRACKS = {
   zwaartekracht: { naam: 'Zwaartekracht-springen', bpm: 112, root: 349.23, scale: MAJOR, swing: .2, lead: 'marimba', lv: .17, bv: .19, pad: .02, stab: 0,
     bass: 'r . o . f . o .', drums: { k: 'x . . . x . . .', t: '. . x . . x . .' }, prog: 'I IV vi V I IV V I',
     mel: ['0 . 4 7 . 4 9 .', '7 - . . 5 . 4 .', '3 . 5 8 . 5 10 .', '9 - . . . . . .', '0 . 4 7 . 9 11 .', '12 - . 11 9 . 7 .', '5 . 7 . 9 . 11 .', '12 - - - . . . .'] },
+  planeetgolf: { naam: 'Planeetgolf', bpm: 92, root: 329.63, scale: MAJOR, swing: .25, lead: 'bell', lv: .14, bv: .17, pad: .03, stab: 0,
+    bass: 'r . . o r . f .', drums: { k: 'x . . . x . . .', h: '. . x . . . x x' }, prog: 'I vi ii V I IV ii V',
+    mel: ['4 . . 7 9 . 7 .', '4 - . . 2 . . .', '5 . . 9 11 . 9 .', '7 - - - . . . .', '4 . 7 . 12 . 11 9', '7 - . 4 5 . . .', '2 . 4 . 5 . 7 .', '4 - - - . . . .'] },
+  sterrenbeelden: { naam: 'Sterrenbeelden', bpm: 76, root: 261.63, scale: MAJOR, swing: 0, lead: 'bell', lv: .13, bv: .12, pad: .05, stab: 0,
+    bass: 'r - - - f - - -', drums: { h: '. . x . . . x .' }, prog: 'I V vi IV I V IV I',
+    mel: ['7 . 9 . 11 - . .', '12 - - . 11 . . .', '9 . 7 . 9 - . .', '7 - - - . . . .', '4 . 7 . 9 - . .', '11 - - . 12 . . .', '14 . 12 . 11 . 9 .', '7 - - - . . . .'] },
+  ruimtepong: { naam: 'Ruimtepong', bpm: 132, root: 311.13, scale: MINOR, swing: 0, lead: 'chip', lv: .12, bv: .21, pad: 0, stab: .02,
+    bass: 'r o r o r o f o', stabs: 'x . . x . . x .', drums: { k: 'x . . . x . x .', h: 'x x x x x x x x', c: '. . . . x . . .' }, prog: 'I iv V I vi iv V V',
+    mel: ['0 . 3 . 7 . 3 .', '5 . 3 . 2 - . .', '0 . 3 . 7 . 10 .', '8 - - - . . . .', '7 . 8 . 10 . 12 .', '10 . 8 . 7 - . .', '5 . 3 . 2 . 3 .', '0 - - - . . . .'] },
 };
 const tok = s => s.trim().split(/\s+/);
 function scheduleBar(ctx, out, tr, bar, t0) {
@@ -1866,9 +1875,9 @@ registerRoom({ id: 'rivier', name: 'Ondergrondse rivier', emoji: '🛶', order: 
 registerRoom({ id: 'wolk', name: 'Wolken-HQ', emoji: '☁️', order: 12, level: 3, slot: 'C', floor: 'Z', desc: 'Het hoofdkwartier op het zwevende eiland, met de telescoop en de Ruimtebot.', decoSpots: 0 });
 registerRoom({ id: 'meteorieten', name: 'Meteorietenregen', emoji: '☄️', order: 13, level: 3, slot: 'W', floor: 'I', machine: 'meteorieten', minigame: 'meteorieten', desc: 'Vlieg met je raketje tussen de vallende meteorieten door en vang de sterren!' });
 registerRoom({ id: 'zwaartekracht', name: 'Zwaartekracht-springen', emoji: '🪐', order: 14, level: 3, slot: 'E', floor: 'I', machine: 'zwaartekracht', minigame: 'zwaartekracht', desc: 'Spring van planeetje naar planeetje, helemaal naar de top!' });
-registerRoom({ id: 'planeetgolf', name: 'Planeetgolf', emoji: '⛳', order: 15, level: 3, slot: 'N', floor: 'I', machine: 'planeetgolf', minigame: 'planeetgolf', soon: true, desc: 'Golf in de ruimte: de planeten trekken aan je bal!' });
-registerRoom({ id: 'sterrenbeelden', name: 'Sterrenbeelden', emoji: '✨', order: 16, level: 3, slot: 'S', floor: 'I', machine: 'sterrenbeelden', minigame: 'sterrenbeelden', soon: true, desc: 'Verbind de sterren en ontdek de sterrenbeelden.' });
-registerRoom({ id: 'ruimtepong', name: 'Ruimtepong', emoji: '🏓', order: 17, level: 3, slot: 'NW', floor: 'I', machine: 'ruimtepong', minigame: 'ruimtepong', soon: true, desc: 'Pong met een komeet! Wie houdt hem het langst in de lucht?' });
+registerRoom({ id: 'planeetgolf', name: 'Planeetgolf', emoji: '⛳', order: 15, level: 3, slot: 'N', floor: 'I', machine: 'planeetgolf', minigame: 'planeetgolf', desc: 'Golf in de ruimte: de planeten trekken aan je bal!' });
+registerRoom({ id: 'sterrenbeelden', name: 'Sterrenbeelden', emoji: '✨', order: 16, level: 3, slot: 'S', floor: 'I', machine: 'sterrenbeelden', minigame: 'sterrenbeelden', desc: 'Verbind de sterren en ontdek de sterrenbeelden.' });
+registerRoom({ id: 'ruimtepong', name: 'Ruimtepong', emoji: '🏓', order: 17, level: 3, slot: 'NW', floor: 'I', machine: 'ruimtepong', minigame: 'ruimtepong', desc: 'Pong met een komeet! Tegen de Ruimtebot of tegen elkaar.' });
 const roomLevel = r => r.level || 1;
 // Kan deze kamer al gegraven worden? De diepe kelder pas als het Boorbeest er is.
 const roomOpen = r => roomLevel(r) === 1 || (typeof robotBuilt === 'function' && robotBuilt(roomLevel(r) === 3 ? 'ruimtebot' : 'boorbeest'));
@@ -1941,6 +1950,12 @@ function registerAch(o) { GB.ACHIEVEMENTS[o.id] = o; }
   { id: 'meteoor1', icon: '☄️', name: 'Meteorietenmeester', desc: 'Een hele Meteorietenregen overleefd.' },
   { id: 'meteoor0', icon: '🛡️', name: 'Geen deukje', desc: 'Een Meteorietenregen overleefd zonder één keer geraakt te worden.' },
   { id: 'zwaar1', icon: '🪐', name: 'Planeetspringer', desc: 'De top gehaald bij Zwaartekracht-springen.' },
+  { id: 'pgolf1', icon: '⛳', name: 'Ruimtegolfer', desc: 'Alle 6 holes van Planeetgolf gespeeld.' },
+  { id: 'pgolf0', icon: '🌟', name: 'Raak in één', desc: 'Een hole-in-one bij Planeetgolf.' },
+  { id: 'sterren1', icon: '✨', name: 'Sterrenkijker', desc: 'Een heel potje Sterrenbeelden uitgespeeld.' },
+  { id: 'sterren0', icon: '🔭', name: 'Sterrenkenner', desc: 'Sterrenbeelden zonder één foutje.' },
+  { id: 'pong1', icon: '🏓', name: 'Komeetkaatser', desc: 'De Ruimtebot verslagen bij Ruimtepong.' },
+  { id: 'pong0', icon: '🤖', name: 'Bliep bloep… au!', desc: 'De Ruimtebot met 5-0 verslagen bij Ruimtepong.' },
   { id: 'zwaar0', icon: '🌠', name: 'Sterrenvanger', desc: 'Alle sterren van een toren gepakt bij Zwaartekracht-springen.' },
   { id: 'samen', icon: '👫', name: 'Samen spelen', desc: 'Een spel met 2 spelers gespeeld.' },
 ].forEach(registerAch);
@@ -2737,6 +2752,15 @@ Object.assign(MACHINE_EXTRA, {
   zwaartekracht: { col: '#1f8ad6', rug: '#2b4f8a', label: 'PLANEET', screen(c, sx, sy, sw, sh, t) {
     c.fillStyle = '#0b1430'; c.fillRect(sx, sy, sw, sh); dot(c, sx + sw * .3, sy + sh * .75, 5, '#ff8ad8'); dot(c, sx + sw * .7, sy + sh * .4, 4, '#7ef0ff');
     const k = (t * .8) % 1, x = sx + sw * (.3 + .4 * k), y = sy + sh * (.68 - .35 * k) - Math.sin(k * Math.PI) * 8; dot(c, x, y, 2.2, '#ffd23f'); } },
+  planeetgolf: { col: '#2fa36b', rug: '#2b5f4a', label: 'GOLF', screen(c, sx, sy, sw, sh, t) {
+    c.fillStyle = '#0b1430'; c.fillRect(sx, sy, sw, sh); dot(c, sx + sw * .5, sy + sh * .5, 6, '#ff8ad8'); dot(c, sx + sw * .8, sy + sh * .2, 2.5, '#05060f');
+    const k = (t * .5) % 1, a = -Math.PI * .9 + k * Math.PI * 1.2, x = sx + sw * .5 + Math.cos(a) * sw * .32, y = sy + sh * .5 + Math.sin(a) * sh * .36; dot(c, x, y, 2, '#fff'); } },
+  sterrenbeelden: { col: '#3b4fd6', rug: '#2b2f6b', label: 'STERREN', screen(c, sx, sy, sw, sh, t) {
+    c.fillStyle = '#0b1430'; c.fillRect(sx, sy, sw, sh); const P = [[.15, .7], [.35, .3], [.6, .45], [.85, .2]], n = Math.floor(t * 1.5) % 5;
+    c.strokeStyle = '#ffe680'; c.lineWidth = 1.5; c.beginPath(); P.slice(0, Math.max(1, n)).forEach(([x, y], i) => i ? c.lineTo(sx + sw * x, sy + sh * y) : c.moveTo(sx + sw * x, sy + sh * y)); c.stroke(); P.forEach(([x, y]) => dot(c, sx + sw * x, sy + sh * y, 2, '#fff')); } },
+  ruimtepong: { col: '#d63b8a', rug: '#5e2b4f', label: 'PONG', screen(c, sx, sy, sw, sh, t) {
+    c.fillStyle = '#0b1430'; c.fillRect(sx, sy, sw, sh); const k = (Math.sin(t * 2.4) + 1) / 2, bx = sx + sw * (.2 + .6 * ((t * .7) % 1 < .5 ? (t * .7 % 1) * 2 : 2 - (t * .7 % 1) * 2)), by = sy + 4 + (sh - 8) * k;
+    c.fillStyle = '#3f8cff'; c.fillRect(sx + sw * .3, sy + sh - 3, sw * .3, 2); c.fillStyle = '#c7d3ea'; c.fillRect(sx + sw * .4, sy + 1, sw * .3, 2); dot(c, bx, by, 2, '#7ef0ff'); } },
 });
 // --- de kaart ---
 function buildIslandMap() {
@@ -3318,7 +3342,7 @@ function nextGoal() {
     tekeninghelft: '📌 Waar is de andere helft van de Ruimtetekening? Kijk in het tuinhuisje!',
     ruimtebouwen: '🛠️ Bouw de Ruimtebot op de bouwplek in het tuinhuisje',
     eiland: '🚀 Vlieg met de Ruimtebot (in de tuin) naar het zwevende eiland',
-    eilandvervolg: '🔭 Op het eiland komen nog meer kamers! Kijk eens door de telescoop…',
+    eilandvervolg: '🔭 Alle kamers op het eiland zijn klaar! Kijk eens door de telescoop…',
   }[k];
 }
 function hint() {
@@ -3336,7 +3360,7 @@ function hint() {
   if (k === 'tekeninghelft') return 'Alle 4 de onderdelen! Nu nog de rest van de tekening… Papa hangt altijd papiertjes op het prikbord in het tuinhuisje. Zou het daar zijn?';
   if (k === 'ruimtebouwen') return 'De tekening is compleet! De Ruimtebot is te groot voor de werkbank. In het tuinhuisje is een grote bouwplek!';
   if (k === 'eiland') return 'De Ruimtebot staat in de tuin, naast het tuinhuisje. Op naar het zwevende eiland!';
-  if (k === 'eilandvervolg') return 'De Supermol graaft nog meer kamers in het eiland. Wat zou er door de telescoop te zien zijn?';
+  if (k === 'eilandvervolg') return 'Buurman Brom is in zijn schuur aan het knutselen aan zijn grasmaaier… Wat zou hij van plan zijn? Wordt vervolgd!';
   if (k === 'lift') return 'In het Hoofdkwartier zit nu een lift. Daarmee gaan we naar beneden!';
   if (k === 'boordelen') {
     const m = BOOR_PARTS.find(p => !S.seenItems[p]);
@@ -10144,6 +10168,636 @@ class ZwaarGame {
   drawStar(X, Y, r, t) { const c = this.c; c.save(); c.translate(X, Y); c.rotate(Math.sin(t * 2) * .3); c.fillStyle = '#ffd23f'; c.strokeStyle = '#b8860b'; c.lineWidth = 1.5; c.beginPath(); for (let j = 0; j < 10; j++) { const a = -Math.PI / 2 + j * Math.PI / 5, rr = j % 2 ? r * .45 : r; c.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); } c.closePath(); c.fill(); c.stroke(); c.restore(); }
 }
 
+/* ===== minigames/pgolf_logic.js ===== */
+/* =========================================================
+   PLANEETGOLF – logica (zonder DOM, getest in tests/unit.js). Golf in de ruimte: planeten trekken aan je bal.
+   Veld: x van 0 tot PG.W, y van 0 (boven) tot PG.H (onder). Je mikt door terug te trekken (katapult); de bal vliegt,
+   wordt afgebogen door de zwaartekracht van planeten, stuitert tegen planeten, rotsen en de rand, en remt langzaam af.
+   In de hole (langzaam genoeg) = raak. 6 holes, elk met een par. Max PG.MAXS slagen per hole (daarna gaat de bal er vanzelf in).
+   2 spelers: om de beurt slaan, ieder een eigen bal op dezelfde hole; wie de minste slagen heeft, wint.
+   ========================================================= */
+const PG = { W: 10, H: 14, BR: .22, VMAX: 12, DRAG: .42, G: 1, HOLE_R: .42, HOLE_V: 7.5, HOLE_PULL: 7, STOP_V: .3, MAX_T: 9, MAXS: 6, BOUNCE: .62, STAR: 10 };
+// planeet: x, y, r, m (zwaartekracht), col; rots: x, y, r (alleen stuiteren); ster: x, y (bonus)
+const PG_HOLES = [
+  { name: 'Eerste slag', par: 2, ball: [5, 12.3], hole: [5, 2.6], planets: [], rocks: [{ x: 3, y: 7, r: .5 }, { x: 7, y: 7.6, r: .6 }], stars: [[5, 7.3]] },
+  { name: 'Om de planeet', par: 2, ball: [5, 12.3], hole: [5, 2.4], planets: [{ x: 5, y: 7.3, r: 1.3, m: 9, col: '#ff8ad8' }], rocks: [], stars: [[2.6, 7.3], [7.4, 7.3]] },
+  { name: 'Slingerbocht', par: 3, ball: [1.8, 12.4], hole: [8.2, 2.4], planets: [{ x: 3.1, y: 5.6, r: 1, m: 8, col: '#7ef0ff' }, { x: 7, y: 9.2, r: 1.1, m: 8, col: '#ffd23f' }], rocks: [], stars: [[5, 7.4]] },
+  { name: 'Rotsengordel', par: 3, ball: [5, 12.4], hole: [7.6, 2.4], planets: [{ x: 8.2, y: 10.2, r: .9, m: 6, col: '#8affb0' }], rocks: [{ x: 3.9, y: 6.6, r: .55 }, { x: 5.1, y: 6.4, r: .55 }, { x: 6.3, y: 6.6, r: .55 }, { x: 7.5, y: 6.4, r: .55 }, { x: 8.7, y: 6.6, r: .55 }], stars: [[1.6, 6.5]] },
+  { name: 'Achter de reus', par: 3, ball: [5, 12.5], hole: [5, 2.2], planets: [{ x: 5, y: 6.4, r: 1.9, m: 14, col: '#ff9f43' }, { x: 1.6, y: 10, r: .55, m: 3, col: '#c7b8ff' }], rocks: [], stars: [[1.4, 5.5], [8.6, 5.5]] },
+  { name: 'Maanbaan', par: 3, ball: [1.6, 12.4], hole: [6.9, 4.6], planets: [{ x: 5.2, y: 4.4, r: 1.1, m: 10, col: '#6fb6f5' }, { x: 7.4, y: 10.2, r: .8, m: 5, col: '#ff8ad8' }], rocks: [{ x: 8.6, y: 2.8, r: .5 }], stars: [[3.2, 8.4]] },
+];
+function pgBall(h) { return { x: h.ball[0], y: h.ball[1], vx: 0, vy: 0, moving: false, t: 0, sunk: false, strokes: 0, got: {} }; }
+function pgState(n) { return { n, hole: 0, turn: 0, balls: Array.from({ length: n }, () => pgBall(PG_HOLES[0])), cards: Array.from({ length: n }, () => []), stars: Array.from({ length: n }, () => 0), holeDone: false, done: false }; }
+const pgAcc = (h, x, y) => {
+  let ax = 0, ay = 0;
+  for (const p of h.planets) { const dx = p.x - x, dy = p.y - y, d2 = dx * dx + dy * dy, d = Math.sqrt(d2), f = PG.G * p.m / (d2 + .5); ax += dx / d * f; ay += dy / d * f; }
+  const dx = h.hole[0] - x, dy = h.hole[1] - y, d = Math.hypot(dx, dy); if (d < 1.1 && d > .01) { ax += dx / d * PG.HOLE_PULL * (1 - d / 1.1); ay += dy / d * PG.HOLE_PULL * (1 - d / 1.1); }
+  return [ax, ay];
+};
+function pgShoot(b, ang, pow) { const v = PG.VMAX * Math.max(.08, Math.min(1, pow)); b.vx = Math.cos(ang) * v; b.vy = Math.sin(ang) * v; b.moving = true; b.t = 0; b.strokes++; }
+// één bal een stapje verder; geeft gebeurtenissen terug
+function pgMove(h, b, dt, ev, i) {
+  if (!b.moving) return;
+  b.t += dt; const [ax, ay] = pgAcc(h, b.x, b.y); b.vx += ax * dt; b.vy += ay * dt; const dr = Math.exp(-PG.DRAG * dt); b.vx *= dr; b.vy *= dr;
+  b.x += b.vx * dt; b.y += b.vy * dt;
+  const R = PG.BR;
+  if (b.x < R) { b.x = R; b.vx = Math.abs(b.vx) * PG.BOUNCE; ev && ev.push({ type: 'wall', i }); }
+  if (b.x > PG.W - R) { b.x = PG.W - R; b.vx = -Math.abs(b.vx) * PG.BOUNCE; ev && ev.push({ type: 'wall', i }); }
+  if (b.y < R) { b.y = R; b.vy = Math.abs(b.vy) * PG.BOUNCE; ev && ev.push({ type: 'wall', i }); }
+  if (b.y > PG.H - R) { b.y = PG.H - R; b.vy = -Math.abs(b.vy) * PG.BOUNCE; ev && ev.push({ type: 'wall', i }); }
+  for (const o of h.planets.concat(h.rocks)) {
+    const dx = b.x - o.x, dy = b.y - o.y, d = Math.hypot(dx, dy), m = o.r + R; if (d >= m || d < 1e-6) continue;
+    const nx = dx / d, ny = dy / d, vn = b.vx * nx + b.vy * ny; b.x = o.x + nx * m; b.y = o.y + ny * m;
+    if (vn < 0) { b.vx -= (1 + PG.BOUNCE) * vn * nx; b.vy -= (1 + PG.BOUNCE) * vn * ny; ev && ev.push({ type: o.m ? 'planet' : 'rock', i, x: b.x, y: b.y }); }
+  }
+  h.stars.forEach((s, k) => { if (!b.got[k] && Math.hypot(s[0] - b.x, s[1] - b.y) < .5) { b.got[k] = 1; ev && ev.push({ type: 'star', i, x: s[0], y: s[1] }); } });
+  const sp = Math.hypot(b.vx, b.vy);
+  if (Math.hypot(h.hole[0] - b.x, h.hole[1] - b.y) < PG.HOLE_R && sp < PG.HOLE_V) { b.x = h.hole[0]; b.y = h.hole[1]; b.vx = b.vy = 0; b.moving = false; b.sunk = true; ev && ev.push({ type: 'sunk', i, strokes: b.strokes }); return; }
+  const [ax2, ay2] = pgAcc(h, b.x, b.y);
+  if ((sp < PG.STOP_V && Math.hypot(ax2, ay2) < 2.5) || b.t > PG.MAX_T) { b.vx = b.vy = 0; b.moving = false; ev && ev.push({ type: 'stop', i }); }
+}
+// simuleer één slag zonder gebeurtenissen (voor bot en voorspelling); geeft { b, sunk, path }
+function pgSim(h, from, ang, pow, maxT, keepPath) {
+  const b = { x: from.x, y: from.y, vx: 0, vy: 0, moving: false, t: 0, sunk: false, strokes: 0, got: {} }, path = []; pgShoot(b, ang, pow);
+  const dt = 1 / 60; let k = 0; while (b.moving && b.t < (maxT || PG.MAX_T + 1)) { pgMove(h, b, dt, null, 0); if (keepPath && k++ % 3 === 0) path.push([b.x, b.y]); }
+  return { b, sunk: b.sunk, path };
+}
+// wie is aan de beurt na een slag (spelers met een bal in de hole slaan over)
+function pgNextTurn(st) { for (let k = 1; k <= st.n; k++) { const j = (st.turn + k) % st.n; if (!st.balls[j].sunk) return j; } return -1; }
+function pgStep(st, dt) {
+  const ev = []; if (st.done || st.holeDone) return ev; const h = PG_HOLES[st.hole], b = st.balls[st.turn];
+  if (!b.moving) return ev;
+  pgMove(h, b, dt, ev, st.turn);
+  if (!b.moving) {
+    if (!b.sunk && b.strokes >= PG.MAXS) { b.sunk = true; b.strokes = PG.MAXS + 1; b.x = h.hole[0]; b.y = h.hole[1]; ev.push({ type: 'giveup', i: st.turn }); }
+    const nx = pgNextTurn(st);
+    if (nx < 0) { st.holeDone = true; st.balls.forEach((q, i) => { st.cards[i].push(q.strokes); st.stars[i] += Object.keys(q.got).length; }); ev.push({ type: 'holeDone' }); }
+    else { if (nx !== st.turn) ev.push({ type: 'turn', i: nx }); st.turn = nx; }
+  }
+  return ev;
+}
+function pgNextHole(st) {
+  if (!st.holeDone) return false; st.hole++; st.holeDone = false;
+  if (st.hole >= PG_HOLES.length) { st.done = true; st.hole = PG_HOLES.length - 1; return false; }
+  st.balls = st.balls.map(() => pgBall(PG_HOLES[st.hole])); st.turn = (st.hole % st.n); return true;
+}
+const pgHolePts = (s, par) => Math.max(10, 60 + (par - s) * 20) + (s === 1 ? 50 : 0);
+const pgScore = (st, i) => st.cards[i].reduce((a, s, h) => a + pgHolePts(s, PG_HOLES[h].par), 0) + st.stars[i] * PG.STAR;
+const pgTotal = (st, i) => st.cards[i].reduce((a, s) => a + s, 0);
+const pgParSum = n => PG_HOLES.slice(0, n).reduce((a, h) => a + h.par, 0);
+// bot: zoekt de slag die erin gaat, anders de slag die het dichtst bij de hole eindigt
+function pgBot(h, from, steps) {
+  let best = null, bd = 1e9; const A = steps || 72;
+  for (let a = 0; a < A; a++) for (const pw of [.2, .3, .4, .5, .6, .7, .8, .9, 1]) {
+    const ang = a / A * Math.PI * 2, r = pgSim(h, from, ang, pw);
+    const d = r.sunk ? -1 + pw * .01 : Math.hypot(r.b.x - h.hole[0], r.b.y - h.hole[1]);
+    if (d < bd) { bd = d; best = { ang, pow: pw, sunk: r.sunk, end: r.b }; }
+  }
+  return best;
+}
+
+/* ===== minigames/pgolf.js ===== */
+/* =========================================================
+   PLANEETGOLF – speelautomaat op het wolkeneiland (logica in pgolf_logic.js).
+   Mikken: zet je vinger ergens neer en trek naar achteren (zoals een katapult); de pijl en het stippellijntje laten zien
+   waar de bal heen gaat. Loslaten = slaan. Toetsen: pijltjes links/rechts = mikken, op/neer = kracht, spatie = slaan.
+   2 spelers: om de beurt, ieder een eigen bal (blauw en oranje) op dezelfde hole.
+   ========================================================= */
+registerMinigame({
+  id: 'planeetgolf', name: 'Planeetgolf', emoji: '⛳', music: 'planeetgolf', twoMode: 'om de beurt, wie heeft de minste slagen?',
+  help: 'Golf in de ruimte! <b>Trek</b> je vinger naar achteren en <b>laat los</b> om te slaan. De <b>planeten</b> trekken aan je bal, dus kijk goed naar het stippellijntje. 6 holes, haal de <b>par</b>!',
+  coins: s => Math.floor(s / 30) + 2, bonusAt: 420, bonusText: 'Haal 420 punten voor 1 energie (1x per dag)',
+  create: api => new PlaneetGolf(api),
+});
+const PGV_DT = 1 / 60;
+class PlaneetGolf {
+  constructor(api) {
+    this.api = api; this.c = api.ctx; this.n = api.players.length; this.t = 0; this.acc = 0; this.state = 'intro'; this.ended = false;
+    this.st = pgState(this.n); this.aim = null; this.kAim = { ang: -Math.PI / 2, pow: .5, on: false }; this.pops = []; this.parts = []; this.trail = [];
+    this.W = api.W; this.H = api.H; this.layout();
+    this.onDown = e => this.pDown(e); this.onMove = e => this.pMove(e); this.onUp = e => this.pUp(e);
+    api.cv.addEventListener('pointerdown', this.onDown); addEventListener('pointermove', this.onMove); addEventListener('pointerup', this.onUp); addEventListener('pointercancel', this.onUp);
+    this.holeIntro(true);
+  }
+  destroy() { const c = this.api.cv; c.removeEventListener('pointerdown', this.onDown); removeEventListener('pointermove', this.onMove); removeEventListener('pointerup', this.onUp); removeEventListener('pointercancel', this.onUp); }
+  resize(W, H) { this.W = W; this.H = H; this.layout(); }
+  layout() {
+    const W = this.W, H = this.H, top = this.api.top, land = W > H * 1.1; this.land = land;
+    this.hudBox = { x: 8, y: top, w: W - 16, h: 30 };
+    const y0 = top + 38, y1 = H - (land ? 6 : 34);
+    const k = Math.max(14, Math.min((W - 16) / PG.W, (y1 - y0) / PG.H)); this.k = k;
+    const fw = k * PG.W, fh = k * PG.H; this.field = { x: (W - fw) / 2, y: y0 + Math.max(0, (y1 - y0 - fh) * (land ? .5 : .6)), w: fw, h: fh };
+  }
+  sx(x) { return this.field.x + x * this.k; }
+  sy(y) { return this.field.y + y * this.k; }
+  hole() { return PG_HOLES[this.st.hole]; }
+  holeIntro(first) {
+    const h = this.hole(), st = this.st, pl = this.api.players; this.state = 'intro'; this.trail = [];
+    const who = this.n > 1 ? `<p>${esc(pl[st.turn].name)} begint.</p>` : '';
+    this.api.banner(`<h2>⛳ Hole ${st.hole + 1}: ${esc(h.name)}</h2><p>Par ${h.par}${first ? ' · trek terug en laat los om te slaan' : ''}</p>${who}`, { ms: first ? 2300 : 1500 })
+      .then(() => { if (MG.inst === this && !this.ended) this.state = 'play'; });
+  }
+  canAim() { const b = this.st.balls[this.st.turn]; return this.state === 'play' && !b.moving && !b.sunk && !this.st.holeDone && !this.st.done; }
+  pDown(e) { e.preventDefault(); if (!this.canAim()) return; const [x, y] = this.api.xy(e); this.aim = { id: e.pointerId, x0: x, y0: y, x, y }; this.kAim.on = false; }
+  pMove(e) { if (!this.aim || this.aim.id !== e.pointerId) return; const [x, y] = this.api.xy(e); this.aim.x = x; this.aim.y = y; }
+  pUp(e) {
+    if (!this.aim || this.aim.id !== e.pointerId) return; const a = this.aimVec(); this.aim = null;
+    if (a && a.pow >= .08 && this.canAim()) this.shoot(a.ang, a.pow);
+  }
+  // trek-vector -> richting (tegenovergesteld) + kracht 0..1
+  aimVec() {
+    if (this.aim) { const dx = this.aim.x0 - this.aim.x, dy = this.aim.y0 - this.aim.y, d = Math.hypot(dx, dy); if (d < 8) return null; return { ang: Math.atan2(dy, dx), pow: Math.min(1, d / (this.k * 4)) }; }
+    if (this.kAim.on) return { ang: this.kAim.ang, pow: this.kAim.pow };
+    return null;
+  }
+  key(k, down) {
+    if (!down) return ['arrowleft', 'arrowright', 'arrowup', 'arrowdown', ' ', 'enter'].includes(k); if (!this.canAim()) return false;
+    const A = this.kAim;
+    if (k === 'arrowleft') { A.on = true; A.ang -= .06; return true; }
+    if (k === 'arrowright') { A.on = true; A.ang += .06; return true; }
+    if (k === 'arrowup') { A.on = true; A.pow = Math.min(1, A.pow + .05); return true; }
+    if (k === 'arrowdown') { A.on = true; A.pow = Math.max(.1, A.pow - .05); return true; }
+    if ((k === ' ' || k === 'enter') && A.on) { A.on = false; this.shoot(A.ang, A.pow); return true; }
+    return false;
+  }
+  shoot(ang, pow) { const b = this.st.balls[this.st.turn]; pgShoot(b, ang, pow); this.trail = []; SFX.sling(); }
+  tick(dt) {
+    this.t += dt;
+    if (this.state === 'play') {
+      this.acc = Math.min(this.acc + dt, .25);
+      while (this.acc >= PGV_DT) { this.acc -= PGV_DT; const b = this.st.balls[this.st.turn]; if (b.moving && (this.t * 60 | 0) % 2 === 0) this.trail.push([b.x, b.y]); for (const e of pgStep(this.st, PGV_DT)) this.onEvent(e); }
+      if (this.trail.length > 90) this.trail.shift();
+    }
+    this.pops = this.pops.filter(p => (p.t += dt) < 1.4); this.parts = this.parts.filter(p => (p.t += dt) < p.life);
+    for (const p of this.parts) { p.x += p.vx * dt; p.y += p.vy * dt; }
+    this.draw();
+  }
+  burst(x, y, cols, n) { for (let k = 0; k < n; k++) { const a = Math.random() * 7, v = 1 + Math.random() * 3; this.parts.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, t: 0, life: .5 + Math.random() * .5, col: cols[k % cols.length] }); } }
+  word(s, par) { return s === 1 ? '🌟 Raak in één!' : s <= par - 1 ? 'Super!' : s === par ? 'Par! Goed zo!' : s > PG.MAXS ? 'Volgende keer beter!' : 'Gehaald!'; }
+  onEvent(e) {
+    const h = this.hole(), pl = this.api.players;
+    if (e.type === 'planet' || e.type === 'rock' || e.type === 'wall') SFX.bumper();
+    else if (e.type === 'star') { SFX.pickup(); this.pops.push({ x: e.x, y: e.y - .6, txt: '+10', col: '#ffd23f', t: 0 }); }
+    else if (e.type === 'sunk') { SFX.hole(); this.burst(h.hole[0], h.hole[1], ['#ffd23f', '#7ef0ff', '#fff'], 22); this.pops.push({ x: h.hole[0], y: h.hole[1] + 1.2, txt: (this.n > 1 ? pl[e.i].name + ': ' : '') + this.word(e.strokes, h.par), col: '#ffd23f', t: 0, big: 1 }); if (e.strokes === 1) achieve('pgolf0'); }
+    else if (e.type === 'giveup') { SFX.aww(); this.pops.push({ x: h.hole[0], y: h.hole[1] + 1.2, txt: `${PG.MAXS} slagen: de bal mag erin`, col: '#ffd23f', t: 0 }); }
+    else if (e.type === 'turn') { this.trail = []; this.pops.push({ x: PG.W / 2, y: PG.H - 1.4, txt: `Beurt: ${pl[e.i].name}`, col: pl[e.i].col, t: 0, big: 1 }); }
+    else if (e.type === 'holeDone') {
+      this.state = 'between';
+      setTimeout(() => { if (MG.inst !== this) return; if (pgNextHole(this.st)) this.holeIntro(false); else this.endGame(); }, 1700);
+    }
+  }
+  endGame() { if (this.ended) return; this.ended = true; this.state = 'end'; achieve('pgolf1'); SFX.fanfare(); setTimeout(() => { if (MG.inst === this) this.finish(); }, 600); }
+  finish() {
+    const st = this.st, pl = this.api.players, par = pgParSum(PG_HOLES.length);
+    const scores = pl.map((p, i) => ({ name: p.name, score: pgScore(st, i), text: `${pgScore(st, i)} punten · ${pgTotal(st, i)} slagen` }));
+    const lines = pl.map((p, i) => { const d = pgTotal(st, i) - par; return `${this.n > 1 ? esc(p.name) + ': ' : ''}${pgTotal(st, i)} slagen (par ${par}${d ? `, ${d > 0 ? '+' : ''}${d}` : ', precies par!'}) · ⭐ ${st.stars[i]}`; });
+    lines.push('Slagen per hole: ' + PG_HOLES.map((h, k) => pl.map((_, i) => st.cards[i][k]).join('/')).join(' · '));
+    let winner = null; if (this.n > 1) { const a = pgTotal(st, 0), b = pgTotal(st, 1); winner = a !== b ? (a < b ? 0 : 1) : scores[0].score !== scores[1].score ? (scores[0].score > scores[1].score ? 0 : 1) : null; }
+    const best = Math.max(...scores.map(s => s.score));
+    this.api.end({ title: this.n === 1 && pgTotal(st, 0) <= par ? '⛳ Onder of op par!' : null, scores, winner, best, lines, finished: true });
+  }
+  draw() {
+    const c = this.c, W = this.W, H = this.H, dpr = this.api.dpr, t = this.t, st = this.st, F = this.field, k = this.k, h = this.hole(), pl = this.api.players;
+    c.setTransform(dpr, 0, 0, dpr, 0, 0); c.fillStyle = '#0b1028'; c.fillRect(0, 0, W, H);
+    this.api.hud(F.x, F.y, F.w, F.h, 'golf');
+    c.save(); rrect(c, F.x, F.y, F.w, F.h, 14); c.clip();
+    const g = c.createLinearGradient(0, F.y, 0, F.y + F.h); g.addColorStop(0, '#16123f'); g.addColorStop(1, '#23306e'); c.fillStyle = g; c.fillRect(F.x, F.y, F.w, F.h);
+    for (let i = 0; i < 46; i++) { c.globalAlpha = .3 + .5 * Math.abs(Math.sin(t * (.5 + hash2(i, 5)) + i)); dot(c, F.x + hash2(i, 3) * F.w, F.y + hash2(3, i) * F.h, i % 6 ? 1 : 1.8, '#fff'); }
+    c.globalAlpha = 1;
+    // zwaartekracht-ringen
+    for (const p of h.planets) { for (let r = 1; r <= 3; r++) { c.strokeStyle = `rgba(255,255,255,${.09 - r * .02})`; c.lineWidth = 2; c.beginPath(); c.arc(this.sx(p.x), this.sy(p.y), (p.r + r * .7 * Math.sqrt(p.m / 8)) * k + Math.sin(t * 2 - r) * 2, 0, 7); c.stroke(); } }
+    for (const p of h.planets) this.drawPlanet(p);
+    for (const o of h.rocks) this.drawRock(o);
+    // hole + vlag
+    const hx = this.sx(h.hole[0]), hy = this.sy(h.hole[1]);
+    c.fillStyle = `rgba(126,240,255,${.18 + .1 * Math.sin(t * 4)})`; c.beginPath(); c.arc(hx, hy, PG.HOLE_R * k * 2.2, 0, 7); c.fill();
+    c.fillStyle = '#05060f'; c.beginPath(); c.ellipse(hx, hy, PG.HOLE_R * k, PG.HOLE_R * k * .8, 0, 0, 7); c.fill(); c.strokeStyle = '#7ef0ff'; c.lineWidth = 2; c.stroke();
+    c.strokeStyle = '#eef3ff'; c.lineWidth = 2; c.beginPath(); c.moveTo(hx, hy); c.lineTo(hx, hy - k * 1.3); c.stroke();
+    c.fillStyle = '#ff5a6e'; c.beginPath(); c.moveTo(hx, hy - k * 1.3); c.lineTo(hx + k * .65 + Math.sin(t * 5) * 2, hy - k * 1.1); c.lineTo(hx, hy - k * .9); c.fill();
+    // sterren (verdwijnen voor wie ze al heeft)
+    const cur = st.balls[st.turn];
+    h.stars.forEach((s, i) => { if (cur.got[i]) return; this.drawStar(this.sx(s[0]), this.sy(s[1]), k * .32, t + i); });
+    // spoor
+    if (this.trail.length > 1) { c.strokeStyle = pl[st.turn].col; c.globalAlpha = .45; c.lineWidth = Math.max(2, k * .08); c.beginPath(); this.trail.forEach(([x, y], i) => i ? c.lineTo(this.sx(x), this.sy(y)) : c.moveTo(this.sx(x), this.sy(y))); c.stroke(); c.globalAlpha = 1; }
+    // mikken: pijl + voorspelling
+    const a = this.canAim() ? this.aimVec() : null;
+    if (a) {
+      const p = pgSim(h, cur, a.ang, a.pow, .75, true).path; c.fillStyle = '#fff';
+      p.forEach(([x, y], i) => { c.globalAlpha = .85 - i / p.length * .7; dot(c, this.sx(x), this.sy(y), Math.max(2, k * .07), '#fff'); }); c.globalAlpha = 1;
+      const bx = this.sx(cur.x), by = this.sy(cur.y), L = k * (.8 + a.pow * 1.6), ex = bx + Math.cos(a.ang) * L, ey = by + Math.sin(a.ang) * L;
+      c.strokeStyle = a.pow > .8 ? '#ff7a59' : '#ffd23f'; c.lineWidth = Math.max(3, k * .12); c.lineCap = 'round'; c.beginPath(); c.moveTo(bx, by); c.lineTo(ex, ey); c.stroke();
+      c.fillStyle = c.strokeStyle; c.beginPath(); c.moveTo(ex + Math.cos(a.ang) * k * .3, ey + Math.sin(a.ang) * k * .3); c.lineTo(ex + Math.cos(a.ang + 2.4) * k * .3, ey + Math.sin(a.ang + 2.4) * k * .3); c.lineTo(ex + Math.cos(a.ang - 2.4) * k * .3, ey + Math.sin(a.ang - 2.4) * k * .3); c.fill(); c.lineCap = 'butt';
+      if (this.aim) { c.strokeStyle = 'rgba(255,255,255,.35)'; c.setLineDash([5, 6]); c.lineWidth = 2; c.beginPath(); c.moveTo(this.aim.x0, this.aim.y0); c.lineTo(this.aim.x, this.aim.y); c.stroke(); c.setLineDash([]); }
+    }
+    st.balls.forEach((b, i) => { if (b.sunk) return; this.drawBall(b, i, i === st.turn); });
+    for (const p of this.parts) { c.globalAlpha = 1 - p.t / p.life; dot(c, this.sx(p.x), this.sy(p.y), Math.max(2, k * .08), p.col); }
+    c.globalAlpha = 1; c.textAlign = 'center'; c.textBaseline = 'middle';
+    for (const p of this.pops) { c.globalAlpha = Math.min(1, 1.4 - p.t); const fs = p.big ? clamp(k * .62, 16, 28) : clamp(k * .45, 12, 18); c.font = `800 ${fs}px Fredoka, sans-serif`; c.lineWidth = 4; c.strokeStyle = '#0b1028'; c.fillStyle = p.col; const tw = Math.min(F.w - 16, c.measureText(p.txt).width), X = clamp(this.sx(p.x), F.x + 8 + tw / 2, F.x + F.w - 8 - tw / 2), Y = this.sy(p.y) - p.t * 18; c.strokeText(p.txt, X, Y, F.w - 16); c.fillText(p.txt, X, Y, F.w - 16); }
+    c.globalAlpha = 1; c.restore();
+    // HUD
+    const B = this.hudBox; this.api.hud(B.x, B.y, B.w, B.h, 'score'); c.fillStyle = 'rgba(255,255,255,.92)'; rrect(c, B.x, B.y, B.w, B.h, 12); c.fill();
+    const fs = B.w < 360 ? 13 : 15; c.font = `700 ${fs}px Fredoka, sans-serif`; c.fillStyle = '#1f2a44'; c.textBaseline = 'middle'; const yy = B.y + B.h / 2;
+    c.textAlign = 'left'; c.fillText(`⛳ ${st.hole + 1}/${PG_HOLES.length} · par ${h.par}`, B.x + 10, yy);
+    c.textAlign = 'right'; c.fillText(this.n > 1 ? pl.map((p, i) => `${p.name} ${st.balls[i].strokes}`).join('  ·  ') : `Slagen: ${st.balls[0].strokes}  ·  totaal ${pgTotal(st, 0) + (st.holeDone ? 0 : st.balls[0].strokes)}`, B.x + B.w - 10, yy);
+    if (!this.land) { c.font = '600 13px Fredoka, sans-serif'; c.fillStyle = 'rgba(255,255,255,.75)'; c.textAlign = 'center'; c.fillText(this.n > 1 ? `Beurt: ${pl[st.turn].name} · trek terug en laat los` : 'Trek terug en laat los om te slaan', W / 2, Math.min(H - 14, F.y + F.h + 20)); }
+    c.textBaseline = 'alphabetic';
+  }
+  drawPlanet(p) {
+    const c = this.c, k = this.k, X = this.sx(p.x), Y = this.sy(p.y), r = p.r * k;
+    const g = c.createRadialGradient(X - r * .35, Y - r * .35, r * .1, X, Y, r); g.addColorStop(0, '#fff'); g.addColorStop(.25, p.col); g.addColorStop(1, shade(p.col, -.45));
+    c.fillStyle = g; c.beginPath(); c.arc(X, Y, r, 0, 7); c.fill(); c.strokeStyle = '#1f2a44'; c.lineWidth = 2; c.stroke();
+    c.fillStyle = 'rgba(0,0,0,.12)'; dot(c, X + r * .3, Y + r * .2, r * .2, 'rgba(0,0,0,.14)'); dot(c, X - r * .35, Y + r * .35, r * .12, 'rgba(0,0,0,.14)');
+    if (p.r > 1.5) { c.strokeStyle = 'rgba(255,255,255,.55)'; c.lineWidth = 3; c.beginPath(); c.ellipse(X, Y, r * 1.45, r * .35, -.3, Math.PI * .05, Math.PI * .95); c.stroke(); }
+  }
+  drawRock(o) {
+    const c = this.c, k = this.k, X = this.sx(o.x), Y = this.sy(o.y), r = o.r * k; c.fillStyle = '#8a6a52'; c.strokeStyle = '#3d2c22'; c.lineWidth = 1.8; c.beginPath();
+    for (let j = 0; j < 8; j++) { const a = j / 8 * Math.PI * 2, rr = r * (.85 + hash2(o.x * 10 | 0, j) * .2); c.lineTo(X + Math.cos(a) * rr, Y + Math.sin(a) * rr); } c.closePath(); c.fill(); c.stroke(); dot(c, X - r * .25, Y - r * .2, r * .2, '#6b4f3a');
+  }
+  drawStar(X, Y, r, t) { const c = this.c; c.save(); c.translate(X, Y); c.rotate(Math.sin(t * 2) * .3); c.fillStyle = '#ffd23f'; c.strokeStyle = '#b8860b'; c.lineWidth = 1.5; c.beginPath(); for (let j = 0; j < 10; j++) { const a = -Math.PI / 2 + j * Math.PI / 5, rr = j % 2 ? r * .45 : r; c.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); } c.closePath(); c.fill(); c.stroke(); c.restore(); }
+  drawBall(b, i, cur) {
+    const c = this.c, k = this.k, X = this.sx(b.x), Y = this.sy(b.y), r = Math.max(6, PG.BR * k), col = this.api.players[i].col;
+    if (cur && !b.moving && this.state === 'play') { c.strokeStyle = col; c.globalAlpha = .5 + .4 * Math.sin(this.t * 6); c.lineWidth = 3; c.beginPath(); c.arc(X, Y, r * 2, 0, 7); c.stroke(); c.globalAlpha = 1; }
+    c.fillStyle = '#fff'; c.beginPath(); c.arc(X, Y, r, 0, 7); c.fill(); c.strokeStyle = col; c.lineWidth = Math.max(2.5, r * .35); c.stroke();
+    if (!cur) { c.globalAlpha = .6; c.fillStyle = col; c.beginPath(); c.arc(X, Y, r * .4, 0, 7); c.fill(); c.globalAlpha = 1; }
+  }
+}
+
+/* ===== minigames/sterren_logic.js ===== */
+/* =========================================================
+   STERRENBEELDEN – logica (zonder DOM, getest in tests/unit.js). Verbind de sterren tot een sterrenbeeld.
+   Elke ronde één sterrenbeeld: sterren (x, y van 0 tot 1) en lijnen (paren sterren). Tik een ster en dan een andere ster
+   (of sleep van ster naar ster): is dat een lijn van het sterrenbeeld, dan verschijnt hij. Alle lijnen = klaar, en het plaatje
+   verschijnt. Ronde 1 (en 2 bij solo) met een stippellijn-hulp; daarna een geheugen-ronde: het sterrenbeeld is eerst even te zien.
+   Na 3 foutjes in een geheugen-ronde flitst de hulp nog even op.
+   Solo: 4 sterrenbeelden. 2 spelers: om de beurt, ieder 3 (wie de meeste punten heeft, wint).
+   ========================================================= */
+const SB = { SOLO: 4, DUO: 3, SHOW: 3.6, REVEAL: 2.4, HINT_AT: 3, HINT_T: 1.6, BASE: 100, TIME_BONUS: 40, MISTAKE: 15, MIN: 20 };
+const SB_SKY = [
+  { id: 'beer', name: 'de Grote Beer', pic: '🐻', s: [[.08, .34], [.24, .28], [.4, .34], [.54, .46], [.6, .74], [.86, .76], [.9, .48]], e: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 3]] },
+  { id: 'raket', name: 'de Raket', pic: '🚀', s: [[.5, .06], [.36, .34], [.64, .34], [.36, .7], [.64, .7], [.2, .92], [.8, .92]], e: [[0, 1], [0, 2], [1, 3], [2, 4], [3, 4], [3, 5], [4, 6]] },
+  { id: 'vis', name: 'de Vis', pic: '🐟', s: [[.1, .5], [.32, .26], [.6, .3], [.78, .5], [.6, .72], [.32, .74], [.94, .3], [.94, .72]], e: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 0], [3, 6], [3, 7]] },
+  { id: 'kroon', name: 'de Kroon', pic: '👑', s: [[.08, .78], [.16, .3], [.33, .6], [.5, .18], [.67, .6], [.84, .3], [.92, .78]], e: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 0]] },
+  { id: 'zwaan', name: 'de Zwaan', pic: '🦢', s: [[.5, .5], [.5, .08], [.5, .94], [.12, .38], [.88, .38], [.3, .44], [.7, .44]], e: [[1, 0], [0, 2], [3, 5], [5, 0], [0, 6], [6, 4]] },
+  { id: 'mol', name: 'de Supermol', pic: '🦫', s: [[.12, .62], [.3, .36], [.58, .3], [.8, .42], [.94, .54], [.78, .7], [.4, .76], [.2, .9], [.56, .92]], e: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 6], [6, 0], [6, 7], [5, 8]] },
+  { id: 'huis', name: 'het Huisje', pic: '🏠', s: [[.2, .92], [.2, .5], [.5, .12], [.8, .5], [.8, .92]], e: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 0], [1, 3]] },
+  { id: 'hart', name: 'het Hart', pic: '💛', s: [[.5, .9], [.12, .48], [.24, .18], [.5, .34], [.76, .18], [.88, .48]], e: [[0, 1], [1, 2], [2, 3], [3, 4], [4, 5], [5, 0]] },
+];
+const sbKey = (a, b) => a < b ? a + '-' + b : b + '-' + a;
+function sbBuild(seed, n) {
+  const R = mulberry32(seed || 1), idx = SB_SKY.map((_, i) => i); for (let i = idx.length - 1; i > 0; i--) { const j = Math.floor(R() * (i + 1)); [idx[i], idx[j]] = [idx[j], idx[i]]; }
+  const per = n > 1 ? SB.DUO : SB.SOLO, rounds = [];
+  for (let r = 0; r < per; r++) for (let p = 0; p < n; p++) rounds.push({ c: idx[rounds.length % idx.length], who: p, guided: n > 1 ? r === 0 : r < 2 });
+  const st = { n, rounds, r: -1, phase: 'next', t: 0, phT: 0, drawn: {}, mistakes: 0, hint: 0, scores: Array(n).fill(0), done: false, perfect: Array(n).fill(true), log: [] };
+  sbStart(st); return st;
+}
+function sbStart(st) {
+  st.r++; if (st.r >= st.rounds.length) { st.done = true; st.phase = 'done'; return; }
+  const rd = st.rounds[st.r]; st.drawn = {}; st.mistakes = 0; st.t = 0; st.hint = 0; st.phase = rd.guided ? 'play' : 'show'; st.phT = rd.guided ? 0 : SB.SHOW;
+}
+const sbRound = st => st.rounds[Math.min(st.r, st.rounds.length - 1)];
+const sbSky = st => SB_SKY[sbRound(st).c];
+const sbLeft = st => sbSky(st).e.filter(([a, b]) => !st.drawn[sbKey(a, b)]).length;
+// hulp-lijnen zichtbaar? (stippellijn in de oefenronde, tijdens het laten zien, en even na 3 foutjes)
+const sbGuide = st => st.phase === 'show' || st.phase === 'reveal' || (st.phase === 'play' && (sbRound(st).guided || st.hint > 0));
+const sbPts = (t, m) => Math.max(SB.MIN, Math.round(SB.BASE + Math.max(0, SB.TIME_BONUS - t) * 2 - m * SB.MISTAKE));
+// lijn proberen tussen ster a en b: 'ok' | 'dubbel' | 'fout' | 'klaar'
+function sbLink(st, a, b) {
+  if (st.phase !== 'play' || a === b || a == null || b == null) return null; const sky = sbSky(st), k = sbKey(a, b);
+  if (st.drawn[k]) return 'dubbel';
+  if (!sky.e.some(([x, y]) => sbKey(x, y) === k)) { st.mistakes++; st.perfect[sbRound(st).who] = false; if (!sbRound(st).guided && st.mistakes % SB.HINT_AT === 0) st.hint = SB.HINT_T; return 'fout'; }
+  st.drawn[k] = 1;
+  if (!sbLeft(st)) { const p = sbPts(st.t, st.mistakes), w = sbRound(st).who; st.scores[w] += p; st.log.push({ who: w, sky: sky.id, pts: p, t: st.t, m: st.mistakes }); st.phase = 'reveal'; st.phT = SB.REVEAL; return 'klaar'; }
+  return 'ok';
+}
+function sbStep(st, dt) {
+  const ev = []; if (st.done) return ev;
+  if (st.phase === 'show') { st.phT -= dt; if (st.phT <= 0) { st.phase = 'play'; ev.push({ type: 'go' }); } }
+  else if (st.phase === 'play') { st.t += dt; if (st.hint > 0) st.hint = Math.max(0, st.hint - dt); }
+  else if (st.phase === 'reveal') { st.phT -= dt; if (st.phT <= 0) { const prev = sbRound(st).who; sbStart(st); ev.push(st.done ? { type: 'done' } : { type: 'round', who: sbRound(st).who, swap: sbRound(st).who !== prev }); } }
+  return ev;
+}
+// dichtstbijzijnde ster bij (x, y) in 0..1-coördinaten (binnen straal rr), anders null
+function sbNear(st, x, y, rr) { let best = null, bd = rr; sbSky(st).s.forEach(([sx, sy], i) => { const d = Math.hypot(sx - x, sy - y); if (d < bd) { bd = d; best = i; } }); return best; }
+// bot: tekent de volgende ontbrekende lijn (voor tests)
+function sbBot(st) { const e = sbSky(st).e.find(([a, b]) => !st.drawn[sbKey(a, b)]); return e || null; }
+
+/* ===== minigames/sterren.js ===== */
+/* =========================================================
+   STERRENBEELDEN – speelautomaat op het wolkeneiland (logica in sterren_logic.js).
+   Tik een ster en dan een andere ster, of sleep van ster naar ster, om een lijn te trekken. Geen haast: hoe sneller en
+   hoe minder foutjes, hoe meer punten. Eerst met stippellijntjes als hulp, daarna een geheugen-ronde.
+   2 spelers: om de beurt een sterrenbeeld, ieder 3.
+   ========================================================= */
+registerMinigame({
+  id: 'sterrenbeelden', name: 'Sterrenbeelden', emoji: '✨', music: 'sterrenbeelden', twoMode: 'om de beurt, ieder 3 sterrenbeelden',
+  help: 'Verbind de <b>sterren</b>! <b>Tik</b> een ster en dan de volgende ster (of <b>sleep</b> ertussen). Eerst helpen stippellijntjes, daarna moet je het <b>onthouden</b>. Welk plaatje verschijnt er?',
+  coins: s => Math.floor(s / 35) + 2, bonusAt: 480, bonusText: 'Haal 480 punten voor 1 energie (1x per dag)',
+  create: api => new Sterrenbeelden(api),
+});
+class Sterrenbeelden {
+  constructor(api) {
+    this.api = api; this.c = api.ctx; this.n = api.players.length; this.t = 0; this.state = 'intro'; this.ended = false;
+    this.st = sbBuild((Math.random() * 1e9) | 0, this.n); this.sel = null; this.drag = null; this.flash = null; this.pops = []; this.parts = [];
+    this.W = api.W; this.H = api.H; this.layout();
+    this.onDown = e => this.pDown(e); this.onMove = e => this.pMove(e); this.onUp = e => this.pUp(e);
+    api.cv.addEventListener('pointerdown', this.onDown); addEventListener('pointermove', this.onMove); addEventListener('pointerup', this.onUp); addEventListener('pointercancel', this.onUp);
+    const pl = api.players;
+    api.banner(this.n > 1 ? `<h2>✨ Sterrenbeelden</h2><p>Om de beurt een sterrenbeeld. ${esc(pl[0].name)} begint!</p>` : `<h2>✨ Sterrenbeelden</h2><p>Tik een ster en dan de volgende ster. Welk plaatje maken de sterren?</p>`, { ms: 2300 })
+      .then(() => { if (MG.inst === this) this.state = 'play'; });
+  }
+  destroy() { const c = this.api.cv; c.removeEventListener('pointerdown', this.onDown); removeEventListener('pointermove', this.onMove); removeEventListener('pointerup', this.onUp); removeEventListener('pointercancel', this.onUp); }
+  resize(W, H) { this.W = W; this.H = H; this.layout(); }
+  layout() {
+    const W = this.W, H = this.H, top = this.api.top, land = W > H * 1.1; this.land = land;
+    this.hudBox = { x: 8, y: top, w: W - 16, h: 30 };
+    const y0 = top + 38, y1 = H - (land ? 8 : 64), s = Math.max(200, Math.min(W - 16, y1 - y0, 640)); this.size = s;
+    this.field = { x: (W - s) / 2, y: y0 + Math.max(0, (y1 - y0 - s) * .4), w: s, h: s };
+    this.pad = s * .09; this.hitR = Math.max(26, s * .075) / (s - this.pad * 2);
+  }
+  // 0..1 -> scherm
+  sx(x) { return this.field.x + this.pad + x * (this.size - this.pad * 2); }
+  sy(y) { return this.field.y + this.pad + y * (this.size - this.pad * 2); }
+  toU(X, Y) { const s = this.size - this.pad * 2; return [(X - this.field.x - this.pad) / s, (Y - this.field.y - this.pad) / s]; }
+  near(X, Y) { const [x, y] = this.toU(X, Y); return sbNear(this.st, x, y, this.hitR); }
+  active() { return this.state === 'play' && this.st.phase === 'play'; }
+  pDown(e) {
+    e.preventDefault(); if (!this.active()) return; const [X, Y] = this.api.xy(e), i = this.near(X, Y);
+    if (i == null) { this.sel = null; return; }
+    if (this.sel != null && this.sel !== i) { this.link(this.sel, i); this.sel = null; return; }
+    this.sel = i; this.drag = { id: e.pointerId, from: i, X0: X, Y0: Y, X, Y, moved: false }; SFX.click();
+  }
+  pMove(e) { const d = this.drag; if (!d || d.id !== e.pointerId) return; const [X, Y] = this.api.xy(e); if (Math.hypot(X - d.X0, Y - d.Y0) > 10) d.moved = true; d.X = X; d.Y = Y; }
+  pUp(e) {
+    const d = this.drag; if (!d || d.id !== e.pointerId) return; this.drag = null; if (!d.moved) return;
+    const i = this.near(d.X, d.Y); if (i != null && i !== d.from) { this.link(d.from, i); this.sel = null; }
+  }
+  link(a, b) {
+    const r = sbLink(this.st, a, b); if (!r) return r;
+    if (r === 'fout') { SFX.nope(); this.flash = { a, b, t: 0 }; if (navigator.vibrate) try { navigator.vibrate(40); } catch (_) { } }
+    else if (r === 'dubbel') SFX.click();
+    else { SFX.correct(); const s = sbSky(this.st).s; this.burst((s[a][0] + s[b][0]) / 2, (s[a][1] + s[b][1]) / 2, ['#ffd23f', '#fff'], 8); }
+    if (r === 'klaar') { SFX.fanfare(); const L = this.st.log[this.st.log.length - 1], sky = sbSky(this.st); this.pops.push({ x: .5, y: .5, txt: `${sky.pic} Het is ${sky.name}!`, col: '#ffd23f', t: 0, big: 1, life: SB.REVEAL }); this.pops.push({ x: .5, y: .62, txt: `+${L.pts} punten`, col: '#8affb0', t: 0, life: SB.REVEAL }); this.burst(.5, .5, ['#ffd23f', '#7ef0ff', '#ff8ad8', '#fff'], 30); }
+    return r;
+  }
+  burst(x, y, cols, n) { for (let k = 0; k < n; k++) { const a = Math.random() * 7, v = .05 + Math.random() * .2; this.parts.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, t: 0, life: .6 + Math.random() * .5, col: cols[k % cols.length] }); } }
+  tick(dt) {
+    this.t += dt;
+    if (this.state === 'play') for (const e of sbStep(this.st, dt)) this.onEvent(e);
+    if (this.flash && (this.flash.t += dt) > .6) this.flash = null;
+    this.pops = this.pops.filter(p => (p.t += dt) < (p.life || 1)); this.parts = this.parts.filter(p => (p.t += dt) < p.life);
+    for (const p of this.parts) { p.x += p.vx * dt; p.y += p.vy * dt; }
+    this.draw();
+  }
+  onEvent(e) {
+    const pl = this.api.players;
+    if (e.type === 'go') SFX.tick();
+    else if (e.type === 'round') { this.sel = null; if (e.swap && this.n > 1) { this.state = 'wait'; this.api.banner(`<h2>✨ Nu ${esc(pl[e.who].name)}!</h2><p>Sterrenbeeld ${this.st.r + 1} van ${this.st.rounds.length}</p>`, { ms: 1400 }).then(() => { if (MG.inst === this) this.state = 'play'; }); } }
+    else if (e.type === 'done') this.endGame();
+  }
+  endGame() { if (this.ended) return; this.ended = true; this.state = 'end'; achieve('sterren1'); this.st.perfect.forEach(p => { if (p) achieve('sterren0'); }); setTimeout(() => { if (MG.inst === this) this.finish(); }, 500); }
+  finish() {
+    const st = this.st, pl = this.api.players, scores = pl.map((p, i) => ({ name: p.name, score: st.scores[i], text: `${st.scores[i]} punten` }));
+    const lines = pl.map((p, i) => `${this.n > 1 ? esc(p.name) + ': ' : ''}${st.log.filter(l => l.who === i).map(l => SB_SKY.find(s => s.id === l.sky).pic).join(' ')}${st.perfect[i] ? ' · zonder foutjes! 🌟' : ` · ${st.log.filter(l => l.who === i).reduce((a, l) => a + l.m, 0)} foutjes`}`);
+    let winner = null; if (this.n > 1) winner = st.scores[0] !== st.scores[1] ? (st.scores[0] > st.scores[1] ? 0 : 1) : null;
+    this.api.end({ title: this.n === 1 ? '✨ Alle sterrenbeelden gevonden!' : null, scores, winner, best: Math.max(...st.scores), lines, finished: true });
+  }
+  draw() {
+    const c = this.c, W = this.W, H = this.H, dpr = this.api.dpr, t = this.t, st = this.st, F = this.field, pl = this.api.players, sky = sbSky(st), rd = sbRound(st), s = this.size;
+    c.setTransform(dpr, 0, 0, dpr, 0, 0); c.fillStyle = '#0b1028'; c.fillRect(0, 0, W, H);
+    this.api.hud(F.x, F.y, F.w, F.h, 'sky');
+    c.save(); rrect(c, F.x, F.y, F.w, F.h, 18); c.clip();
+    const g = c.createRadialGradient(F.x + s / 2, F.y + s * .4, s * .1, F.x + s / 2, F.y + s / 2, s * .8); g.addColorStop(0, '#26306e'); g.addColorStop(1, '#0d1236'); c.fillStyle = g; c.fillRect(F.x, F.y, s, s);
+    for (let i = 0; i < 70; i++) { c.globalAlpha = .2 + .4 * Math.abs(Math.sin(t * (.4 + hash2(i, 8)) + i)); dot(c, F.x + hash2(i, 4) * s, F.y + hash2(4, i) * s, i % 7 ? .9 : 1.5, '#fff'); }
+    c.globalAlpha = 1;
+    // het plaatje bij het onthullen
+    if (st.phase === 'reveal' || st.done) { const p = Math.min(1, (SB.REVEAL - st.phT) / .6); c.globalAlpha = .35 * p; c.font = `${Math.round(s * .55)}px system-ui, "Apple Color Emoji", sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(sky.pic, F.x + s / 2, F.y + s / 2); c.globalAlpha = 1; }
+    const P = sky.s.map(([x, y]) => [this.sx(x), this.sy(y)]);
+    // hulp-lijnen
+    if (sbGuide(st)) { const a = st.phase === 'show' ? .75 : st.hint > 0 ? .55 : .35; c.strokeStyle = `rgba(160,200,255,${a})`; c.setLineDash([6, 7]); c.lineWidth = 2.5; for (const [a1, b1] of sky.e) { if (st.drawn[sbKey(a1, b1)]) continue; c.beginPath(); c.moveTo(...P[a1]); c.lineTo(...P[b1]); c.stroke(); } c.setLineDash([]); }
+    // getekende lijnen
+    c.lineCap = 'round';
+    for (const [a1, b1] of sky.e) { if (!st.drawn[sbKey(a1, b1)]) continue; c.strokeStyle = 'rgba(255,210,63,.35)'; c.lineWidth = 10; c.beginPath(); c.moveTo(...P[a1]); c.lineTo(...P[b1]); c.stroke(); c.strokeStyle = '#ffe680'; c.lineWidth = 3.5; c.beginPath(); c.moveTo(...P[a1]); c.lineTo(...P[b1]); c.stroke(); }
+    if (this.flash) { c.globalAlpha = 1 - this.flash.t / .6; c.strokeStyle = '#ff5a6e'; c.lineWidth = 4; c.beginPath(); c.moveTo(...P[this.flash.a]); c.lineTo(...P[this.flash.b]); c.stroke(); c.globalAlpha = 1; }
+    if (this.drag && this.drag.moved) { c.strokeStyle = 'rgba(255,255,255,.7)'; c.lineWidth = 3; c.beginPath(); c.moveTo(...P[this.drag.from]); c.lineTo(this.drag.X, this.drag.Y); c.stroke(); }
+    c.lineCap = 'butt';
+    // sterren
+    const r = Math.max(7, s * .022);
+    P.forEach(([X, Y], i) => {
+      const on = this.sel === i, tw = 1 + Math.sin(t * 3 + i) * .12;
+      c.fillStyle = `rgba(255,240,170,${on ? .5 : .22})`; c.beginPath(); c.arc(X, Y, r * (on ? 2.6 : 1.9) * tw, 0, 7); c.fill();
+      this.drawStar(X, Y, r * 1.25 * tw, on ? '#fff' : '#ffe680');
+      if (on) { c.strokeStyle = pl[rd.who].col; c.lineWidth = 3; c.beginPath(); c.arc(X, Y, r * 2.4, 0, 7); c.stroke(); }
+    });
+    for (const p of this.parts) { c.globalAlpha = 1 - p.t / p.life; dot(c, this.sx(p.x), this.sy(p.y), 2.5, p.col); }
+    c.globalAlpha = 1; c.textAlign = 'center'; c.textBaseline = 'middle';
+    for (const p of this.pops) { c.globalAlpha = Math.min(1, ((p.life || 1) - p.t) * 2); const fs = p.big ? clamp(s * .07, 18, 34) : clamp(s * .05, 14, 22); c.font = `800 ${fs}px Fredoka, sans-serif`; c.lineWidth = 5; c.strokeStyle = '#0b1028'; c.fillStyle = p.col; const X = F.x + s / 2, Y = this.sy(p.y); c.strokeText(p.txt, X, Y, s - 20); c.fillText(p.txt, X, Y, s - 20); }
+    c.globalAlpha = 1;
+    if (st.phase === 'show') { c.font = `800 ${clamp(s * .06, 16, 28)}px Fredoka, sans-serif`; c.lineWidth = 5; c.strokeStyle = '#0b1028'; c.fillStyle = '#7ef0ff'; const txt = `👀 Onthoud het! ${Math.ceil(st.phT)}`; c.strokeText(txt, F.x + s / 2, F.y + s - 24, s - 20); c.fillText(txt, F.x + s / 2, F.y + s - 24, s - 20); }
+    c.restore();
+    // HUD
+    const B = this.hudBox; this.api.hud(B.x, B.y, B.w, B.h, 'score'); c.fillStyle = 'rgba(255,255,255,.92)'; rrect(c, B.x, B.y, B.w, B.h, 12); c.fill();
+    const fs = B.w < 360 ? 13 : 15; c.font = `700 ${fs}px Fredoka, sans-serif`; c.fillStyle = '#1f2a44'; c.textBaseline = 'middle'; const yy = B.y + B.h / 2;
+    c.textAlign = 'left'; c.fillText(`✨ ${Math.min(st.r + 1, st.rounds.length)}/${st.rounds.length}${this.n > 1 ? ` · ${pl[rd.who].name}` : ''}`, B.x + 10, yy);
+    c.textAlign = 'right'; c.fillText(this.n > 1 ? pl.map((p, i) => `${p.name} ${st.scores[i]}`).join('  ·  ') : `⭐ ${st.scores[0]}  ·  nog ${sbLeft(st)} lijn${sbLeft(st) === 1 ? '' : 'en'}`, B.x + B.w - 10, yy);
+    // uitleg onder het veld
+    const msg = st.phase === 'show' ? 'Kijk goed, straks moet je het zelf tekenen!' : st.phase === 'reveal' ? '' : rd.guided ? 'Tik een ster en dan de volgende ster langs het stippellijntje' : st.hint > 0 ? 'Even een hulpje…' : 'Weet je het nog? Verbind de sterren!';
+    if (msg) { c.font = '600 14px Fredoka, sans-serif'; c.fillStyle = 'rgba(255,255,255,.8)'; c.textAlign = 'center'; const below = F.y + F.h + 22; if (below < H - 6) c.fillText(msg, W / 2, below, W - 20); else if (this.land && F.x > 120) { c.textAlign = 'left'; this.wrap(msg, 10, F.y + 30, F.x - 20); } }
+    c.textBaseline = 'alphabetic';
+  }
+  wrap(txt, x, y, w) { const c = this.c, words = txt.split(' '); let line = ''; for (const wd of words) { const t2 = line ? line + ' ' + wd : wd; if (c.measureText(t2).width > w && line) { c.fillText(line, x, y); y += 18; line = wd; } else line = t2; } if (line) c.fillText(line, x, y); }
+  drawStar(X, Y, r, col) { const c = this.c; c.fillStyle = col; c.beginPath(); for (let j = 0; j < 10; j++) { const a = -Math.PI / 2 + j * Math.PI / 5, rr = j % 2 ? r * .45 : r; c.lineTo(X + Math.cos(a) * rr, Y + Math.sin(a) * rr); } c.closePath(); c.fill(); }
+}
+
+/* ===== minigames/pong_logic.js ===== */
+/* =========================================================
+   RUIMTEPONG – logica (zonder DOM, getest in tests/unit.js). Pong met een komeet.
+   Veld: x van 0 tot RP.W, y van 0 (boven) tot RP.H (onder). Speler 1 heeft het batje onderin (y = RP.H - RP.PY),
+   speler 2 (of de Ruimtebot) bovenin (y = RP.PY). Raak je de komeet met de rand van je batje, dan gaat hij schuiner.
+   Elke tik iets sneller (tot RP.VMAX). Mis = punt voor de ander; wie het eerst RP.WIN punten heeft, wint.
+   Af en toe zweeft er een ster in het midden: raakt de komeet hem, dan krijgt wie het laatst sloeg een bonusster.
+   inputs[i]: { target: x } (vinger) of { steer: -1|0|1 } (toetsen).
+   ========================================================= */
+const RP = { W: 9, H: 15, PY: 1.1, PW: 2.3, PH: .36, BR: .32, V0: 6.6, VUP: 1.09, VMAX: 13.5, PV: 15, WIN: 5, SERVE: 1.1, BOT_V: 5.4, BOT_ERR: .8, BOT_ERRUP: .26, BOT_ERRMAX: 2.4, STAR_GAP: 7, GOAL: 100, HIT: 5, STARP: 20, WINP: 300 };
+function rpBuild(seed, n) {
+  const st = { seed: seed || 1, R: mulberry32(seed || 1), n, bot: n < 2, t: 0, pads: [{ x: RP.W / 2 }, { x: RP.W / 2 }], score: [0, 0], hits: [0, 0], stars: [0, 0], ball: { x: RP.W / 2, y: RP.H / 2, vx: 0, vy: 0 },
+    serve: RP.SERVE, toward: 0, last: -1, rally: 0, best: 0, star: null, nextStar: RP.STAR_GAP, done: false, winner: null, botAim: 0, botErr: 0 };
+  return st;
+}
+const rpPadY = i => i ? RP.PY : RP.H - RP.PY;
+function rpServe(st) { const b = st.ball, R = st.R, dir = st.toward ? -1 : 1, a = (R() - .5) * .9; b.x = RP.W / 2; b.y = RP.H / 2; b.vx = Math.sin(a) * RP.V0; b.vy = Math.cos(a) * RP.V0 * dir; st.rally = 0; st.last = -1; }
+// waar komt de komeet uit op hoogte y (met stuiteren tegen de zijkanten)?
+function rpPredict(b, y) {
+  if (!b.vy || (y - b.y) / b.vy < 0) return RP.W / 2; const t = (y - b.y) / b.vy, w = RP.W - 2 * RP.BR; let x = b.x - RP.BR + b.vx * t;
+  x = ((x % (2 * w)) + 2 * w) % (2 * w); if (x > w) x = 2 * w - x; return x + RP.BR;
+}
+// de Ruimtebot: volgt de komeet als die zijn kant op komt (niet perfect), anders terug naar het midden
+function rpBotInput(st) {
+  const b = st.ball, p = st.pads[1];
+  if (st.serve > 0 || b.vy >= 0) return { target: RP.W / 2 };
+  if (st.botAim !== st.rally) { st.botAim = st.rally; st.botErr = (st.R() - .5) * 2 * Math.min(RP.BOT_ERRMAX, RP.BOT_ERR + st.rally * RP.BOT_ERRUP); }
+  return { target: rpPredict(b, RP.PY + RP.PH) + st.botErr, max: RP.BOT_V + st.rally * .08 };
+}
+function rpStep(st, inputs, dt) {
+  const ev = []; if (st.done) return ev; st.t += dt;
+  const ins = st.bot ? [inputs[0] || {}, rpBotInput(st)] : [inputs[0] || {}, inputs[1] || {}];
+  st.pads.forEach((p, i) => {
+    const inp = ins[i], mv = (inp.max || RP.PV) * dt;
+    if (inp.steer) p.x += inp.steer * RP.PV * dt; else if (inp.target != null) { const d = inp.target - p.x; p.x += Math.abs(d) < mv ? d : Math.sign(d) * mv; }
+    p.x = Math.max(RP.PW / 2, Math.min(RP.W - RP.PW / 2, p.x));
+  });
+  if (st.serve > 0) { st.serve -= dt; if (st.serve <= 0) { rpServe(st); ev.push({ type: 'serve' }); } return ev; }
+  const b = st.ball; b.x += b.vx * dt; b.y += b.vy * dt;
+  if (b.x < RP.BR) { b.x = RP.BR; b.vx = Math.abs(b.vx); ev.push({ type: 'wall' }); }
+  if (b.x > RP.W - RP.BR) { b.x = RP.W - RP.BR; b.vx = -Math.abs(b.vx); ev.push({ type: 'wall' }); }
+  for (let i = 0; i < 2; i++) {
+    const py = rpPadY(i), p = st.pads[i], toward = i ? b.vy < 0 : b.vy > 0, edge = i ? py + RP.PH / 2 + RP.BR : py - RP.PH / 2 - RP.BR;
+    if (!toward) continue;
+    if (i ? (b.y <= edge && b.y > py - .6) : (b.y >= edge && b.y < py + .6)) {
+      const off = (b.x - p.x) / (RP.PW / 2 + RP.BR);
+      if (Math.abs(off) <= 1) {
+        const v = Math.min(RP.VMAX, Math.hypot(b.vx, b.vy) * RP.VUP), a = off * 1.0; b.vx = Math.sin(a) * v; b.vy = Math.cos(a) * v * (i ? 1 : -1); b.y = edge;
+        st.hits[i]++; st.rally++; st.best = Math.max(st.best, st.rally); st.last = i; ev.push({ type: 'hit', i, x: b.x, y: b.y });
+      }
+    }
+  }
+  if (st.star) { if (Math.hypot(b.x - st.star.x, b.y - st.star.y) < RP.BR + .45) { if (st.last >= 0) { st.stars[st.last]++; ev.push({ type: 'star', i: st.last, x: st.star.x, y: st.star.y }); } st.star = null; st.nextStar = RP.STAR_GAP; } }
+  else { st.nextStar -= dt; if (st.nextStar <= 0) { st.star = { x: 1.6 + st.R() * (RP.W - 3.2), y: RP.H / 2 + (st.R() - .5) * 3 }; st.nextStar = 1e9; } }
+  const goal = b.y > RP.H + .6 ? 1 : b.y < -.6 ? 0 : -1;
+  if (goal >= 0) {
+    st.score[goal]++; ev.push({ type: 'goal', i: goal }); st.toward = 1 - goal; st.serve = RP.SERVE; b.x = RP.W / 2; b.y = RP.H / 2; b.vx = b.vy = 0;
+    if (st.score[goal] >= RP.WIN) { st.done = true; st.winner = goal; ev.push({ type: 'win', i: goal }); }
+  }
+  return ev;
+}
+const rpPoints = (st, i) => st.score[i] * RP.GOAL + st.hits[i] * RP.HIT + st.stars[i] * RP.STARP + (st.winner === i ? RP.WINP : 0);
+// testspeler: volgt de voorspelde plek met een reactietijd en een eigen snelheid
+function rpTracker(st, i, react, speed, err) {
+  const b = st.ball, toward = i ? b.vy < 0 : b.vy > 0, py = rpPadY(i);
+  if (!toward || st.serve > 0) return { target: RP.W / 2, max: speed };
+  const far = i ? b.y - py : py - b.y; if (far / Math.abs(b.vy || 1) > 10 - react) return {};
+  return { target: rpPredict(b, py) + (err || 0), max: speed };
+}
+
+/* ===== minigames/pong.js ===== */
+/* =========================================================
+   RUIMTEPONG – speelautomaat op het wolkeneiland (logica in pong_logic.js).
+   Solo tegen de Ruimtebot, met z'n tweeën tegen elkaar. Wie het eerst 5 punten heeft, wint.
+   Staand: speler 1 onderin, speler 2 (of de Ruimtebot) bovenin; ga tegenover elkaar zitten. Liggend draait het veld:
+   speler 1 links, speler 2 rechts. Sturen: vinger op je eigen helft, het batje volgt je vinger.
+   Toetsen: A/D (speler 1, solo ook pijltjes) en pijltjes (speler 2).
+   ========================================================= */
+registerMinigame({
+  id: 'ruimtepong', name: 'Ruimtepong', emoji: '🏓', music: 'ruimtepong', twoMode: 'tegen elkaar, ga tegenover elkaar zitten',
+  help: 'Pong met een <b>komeet</b>! Schuif je <b>batje</b> met je vinger en kaats de komeet terug. Raak je hem met de rand, dan gaat hij schuin. Wie het eerst <b>5 punten</b> heeft, wint. Solo speel je tegen de <b>Ruimtebot</b>.',
+  coins: s => Math.floor(s / 40) + 2, bonusAt: 600, bonusText: 'Haal 600 punten voor 1 energie (1x per dag)',
+  create: api => new RuimtePong(api),
+});
+const RPV_DT = 1 / 120;
+const RP_KEYS = { a: [0, -1], d: [0, 1], arrowleft: [1, -1], arrowright: [1, 1] };
+class RuimtePong {
+  constructor(api) {
+    this.api = api; this.c = api.ctx; this.n = api.players.length; this.t = 0; this.acc = 0; this.state = 'intro'; this.ended = false;
+    this.st = rpBuild((Math.random() * 1e9) | 0, this.n); this.tgt = [null, null]; this.keys = {}; this.ptrs = {}; this.pops = []; this.parts = []; this.trail = []; this.shake = 0;
+    this.W = api.W; this.H = api.H; this.layout();
+    this.onDown = e => this.pDown(e); this.onMove = e => this.pMove(e); this.onUp = e => this.pUp(e);
+    api.cv.addEventListener('pointerdown', this.onDown); addEventListener('pointermove', this.onMove); addEventListener('pointerup', this.onUp); addEventListener('pointercancel', this.onUp);
+    const pl = api.players;
+    api.banner(this.n > 1 ? `<h2>🏓 Ruimtepong</h2><p>${esc(pl[0].name)} tegen ${esc(pl[1].name)}! Ga tegenover elkaar zitten. Wie het eerst 5 punten heeft, wint.</p>` : `<h2>🏓 Ruimtepong</h2><p>Speel tegen de Ruimtebot! Schuif je batje met je vinger. Wie het eerst 5 punten heeft, wint.</p>`, { ms: 2400 })
+      .then(() => { if (MG.inst === this) { this.state = 'play'; this.st.serve = 1.4; } });
+  }
+  destroy() { const c = this.api.cv; c.removeEventListener('pointerdown', this.onDown); removeEventListener('pointermove', this.onMove); removeEventListener('pointerup', this.onUp); removeEventListener('pointercancel', this.onUp); }
+  resize(W, H) { this.W = W; this.H = H; this.layout(); }
+  layout() {
+    const W = this.W, H = this.H, top = this.api.top, land = W > H * 1.1; this.land = land;
+    this.hudBox = { x: 8, y: top, w: W - 16, h: 30 };
+    const y0 = top + 38, y1 = H - (land ? 6 : 14), aw = W - 16, ah = y1 - y0;
+    const k = Math.max(14, land ? Math.min(aw / RP.H, ah / RP.W) : Math.min(aw / RP.W, ah / RP.H)); this.k = k;
+    const fw = k * (land ? RP.H : RP.W), fh = k * (land ? RP.W : RP.H); this.field = { x: (W - fw) / 2, y: y0 + Math.max(0, (ah - fh) / 2), w: fw, h: fh };
+  }
+  // logica (x langs het batje, y van boven naar onder) -> scherm. Liggend: speler 1 (y = RP.H) links.
+  S(x, y) { const F = this.field, k = this.k; return this.land ? [F.x + (RP.H - y) * k, F.y + x * k] : [F.x + x * k, F.y + y * k]; }
+  toX(X, Y) { const F = this.field; return this.land ? (Y - F.y) / this.k : (X - F.x) / this.k; }
+  who(X, Y) { if (this.n < 2) return 0; return this.land ? (X < this.W / 2 ? 0 : 1) : (Y > this.field.y + this.field.h / 2 ? 0 : 1); }
+  pDown(e) { e.preventDefault(); const [X, Y] = this.api.xy(e), i = this.who(X, Y); this.ptrs[e.pointerId] = i; this.tgt[i] = this.toX(X, Y); }
+  pMove(e) { const i = this.ptrs[e.pointerId]; if (i == null) return; const [X, Y] = this.api.xy(e); this.tgt[i] = this.toX(X, Y); }
+  pUp(e) { if (e.pointerId in this.ptrs) delete this.ptrs[e.pointerId]; }
+  key(k, down) { const m = RP_KEYS[k]; if (!m) return false; const i = this.n > 1 ? m[0] : 0; this.keys[i + ':' + m[1]] = down ? 1 : 0; if (down) this.tgt[i] = null; return true; }
+  input() { return [0, 1].map(i => { const d = (this.keys[i + ':1'] || 0) - (this.keys[i + ':-1'] || 0); if (d) return { steer: d }; return this.tgt[i] != null ? { target: this.tgt[i] } : {}; }); }
+  tick(dt) {
+    this.t += dt;
+    if (this.state === 'play') {
+      this.acc = Math.min(this.acc + dt, .25);
+      while (this.acc >= RPV_DT) { this.acc -= RPV_DT; for (const e of rpStep(this.st, this.input(), RPV_DT)) this.onEvent(e); }
+      const b = this.st.ball; if (this.st.serve <= 0) this.trail.push([b.x, b.y]); if (this.trail.length > 14) this.trail.shift();
+      if (this.st.done && !this.ended) { this.ended = true; this.state = 'end'; setTimeout(() => { if (MG.inst === this) this.finish(); }, 1700); }
+    }
+    this.pops = this.pops.filter(p => (p.t += dt) < 1.2); this.parts = this.parts.filter(p => (p.t += dt) < p.life);
+    for (const p of this.parts) { p.x += p.vx * dt; p.y += p.vy * dt; }
+    this.shake = Math.max(0, this.shake - dt);
+    this.draw();
+  }
+  burst(x, y, cols, n) { for (let k = 0; k < n; k++) { const a = Math.random() * 7, v = 1 + Math.random() * 3; this.parts.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, t: 0, life: .4 + Math.random() * .4, col: cols[k % cols.length] }); } }
+  name(i) { return i === 1 && this.n < 2 ? 'Ruimtebot' : this.api.players[i].name; }
+  onEvent(e) {
+    if (e.type === 'hit') { SFX.bumper(); this.burst(e.x, e.y, ['#7ef0ff', '#fff'], 8); }
+    else if (e.type === 'wall') SFX.click();
+    else if (e.type === 'star') { SFX.pickup(); this.pops.push({ x: e.x, y: e.y, txt: `⭐ ${this.name(e.i)}`, col: '#ffd23f', t: 0 }); }
+    else if (e.type === 'goal') { this.trail = []; this.shake = .35; const mine = e.i === 0 || this.n > 1; (mine ? SFX.correct : SFX.aww)(); this.pops.push({ x: RP.W / 2, y: RP.H / 2, txt: `Punt voor ${this.name(e.i)}!`, col: e.i ? (this.n > 1 ? this.api.players[1].col : '#c7d3ea') : this.api.players[0].col, t: 0, big: 1 }); if (navigator.vibrate) try { navigator.vibrate(60); } catch (_) { } }
+    else if (e.type === 'win') { SFX.fanfare(); if (this.n < 2 && e.i === 0) { achieve('pong1'); if (this.st.score[1] === 0) achieve('pong0'); } }
+  }
+  finish() {
+    const st = this.st, pl = this.api.players, n = this.n;
+    const scores = n > 1 ? pl.map((p, i) => ({ name: p.name, score: rpPoints(st, i), text: `${st.score[i]} punten in de wedstrijd` })) : [{ name: pl[0].name, score: rpPoints(st, 0), text: `${rpPoints(st, 0)} punten` }];
+    const lines = [`Uitslag: ${this.name(0)} ${st.score[0]} – ${st.score[1]} ${this.name(1)}`, `Langste rally: ${st.best} tikken · ⭐ ${n > 1 ? `${st.stars[0]} / ${st.stars[1]}` : st.stars[0]}`];
+    if (n < 2 && st.winner === 1) lines.push('Tip: probeer de komeet met de rand van je batje te raken, dan gaat hij schuin en kan de Ruimtebot er niet bij!');
+    const winner = n > 1 ? st.winner : null;
+    this.api.end({ title: n < 2 ? (st.winner === 0 ? '🏓 Gewonnen van de Ruimtebot!' : '🤖 De Ruimtebot wint… nog een keer?') : null, scores, winner, best: Math.max(...scores.map(s => s.score)), lines, finished: n > 1 || st.winner === 0 });
+  }
+  draw() {
+    const c = this.c, W = this.W, H = this.H, dpr = this.api.dpr, t = this.t, st = this.st, F = this.field, k = this.k, pl = this.api.players;
+    c.setTransform(dpr, 0, 0, dpr, 0, 0); c.fillStyle = '#0b1028'; c.fillRect(0, 0, W, H);
+    this.api.hud(F.x, F.y, F.w, F.h, 'pong');
+    c.save(); rrect(c, F.x, F.y, F.w, F.h, 16); c.clip(); c.translate(this.shake > 0 ? Math.sin(t * 70) * 5 * this.shake : 0, 0);
+    const g = this.land ? c.createLinearGradient(F.x, 0, F.x + F.w, 0) : c.createLinearGradient(0, F.y + F.h, 0, F.y); g.addColorStop(0, '#1b2c6e'); g.addColorStop(.5, '#120f3a'); g.addColorStop(1, '#3a1b5e'); c.fillStyle = g; c.fillRect(F.x - 8, F.y, F.w + 16, F.h);
+    for (let i = 0; i < 50; i++) { c.globalAlpha = .25 + .5 * hash2(i, 6); dot(c, F.x + hash2(i, 1) * F.w, F.y + hash2(1, i) * F.h, i % 6 ? 1 : 1.7, '#fff'); }
+    c.globalAlpha = 1;
+    // middenlijn
+    const [m0x, m0y] = this.S(0, RP.H / 2), [m1x, m1y] = this.S(RP.W, RP.H / 2); c.strokeStyle = 'rgba(255,255,255,.25)'; c.setLineDash([8, 10]); c.lineWidth = 3; c.beginPath(); c.moveTo(m0x, m0y); c.lineTo(m1x, m1y); c.stroke(); c.setLineDash([]);
+    // grote stand op de achtergrond (bovenste speler leest hem ondersteboven)
+    c.font = `800 ${Math.round(k * 2.6)}px Fredoka, sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = 'rgba(255,255,255,.12)';
+    for (let i = 0; i < 2; i++) { const [X, Y] = this.S(RP.W / 2, i ? RP.H * .27 : RP.H * .73); c.save(); c.translate(X, Y); if (!this.land && i && this.n > 1) c.rotate(Math.PI); c.fillText(st.score[i], 0, 0); c.restore(); }
+    if (st.star) { const [X, Y] = this.S(st.star.x, st.star.y); this.drawStar(X, Y, k * .45, t); }
+    // komeet + staart
+    this.trail.forEach(([x, y], i) => { const [X, Y] = this.S(x, y); c.globalAlpha = i / this.trail.length * .6; dot(c, X, Y, k * RP.BR * (.4 + .6 * i / this.trail.length), '#7ef0ff'); });
+    c.globalAlpha = 1;
+    if (st.serve <= 0 || st.done) { const [X, Y] = this.S(st.ball.x, st.ball.y), r = k * RP.BR; const gg = c.createRadialGradient(X, Y, 1, X, Y, r * 2.2); gg.addColorStop(0, 'rgba(255,255,255,1)'); gg.addColorStop(.4, 'rgba(126,240,255,.8)'); gg.addColorStop(1, 'rgba(126,240,255,0)'); c.fillStyle = gg; c.beginPath(); c.arc(X, Y, r * 2.2, 0, 7); c.fill(); dot(c, X, Y, r, '#fff'); }
+    else if (this.state === 'play') { const [X, Y] = this.S(RP.W / 2, RP.H / 2); c.globalAlpha = .4 + .4 * Math.sin(t * 10); dot(c, X, Y, k * RP.BR, '#fff'); c.globalAlpha = 1; }
+    for (let i = 0; i < 2; i++) this.drawPad(i);
+    for (const p of this.parts) { const [X, Y] = this.S(p.x, p.y); c.globalAlpha = 1 - p.t / p.life; dot(c, X, Y, Math.max(2, k * .08), p.col); }
+    c.globalAlpha = 1;
+    for (const p of this.pops) { const [X, Y] = this.S(p.x, p.y); c.globalAlpha = Math.min(1, 1.2 - p.t); const fs = p.big ? clamp(k * .75, 16, 30) : clamp(k * .5, 13, 20); c.font = `800 ${fs}px Fredoka, sans-serif`; c.lineWidth = 4; c.strokeStyle = '#0b1028'; c.fillStyle = p.col; c.strokeText(p.txt, X, Y - p.t * 16, F.w - 16); c.fillText(p.txt, X, Y - p.t * 16, F.w - 16); }
+    c.globalAlpha = 1; c.restore();
+    // HUD
+    const B = this.hudBox; this.api.hud(B.x, B.y, B.w, B.h, 'score'); c.fillStyle = 'rgba(255,255,255,.92)'; rrect(c, B.x, B.y, B.w, B.h, 12); c.fill();
+    const fs = B.w < 360 ? 13 : 15; c.font = `700 ${fs}px Fredoka, sans-serif`; c.fillStyle = '#1f2a44'; c.textBaseline = 'middle'; const yy = B.y + B.h / 2;
+    const lbl = i => `${this.name(i)}: ${st.score[i]}`;
+    if (this.land) { c.textAlign = 'left'; c.fillText(`◀ ${lbl(0)}`, B.x + 10, yy); c.textAlign = 'right'; c.fillText(`${lbl(1)} ▶`, B.x + B.w - 10, yy); c.textAlign = 'center'; c.fillText(`🏓 tot ${RP.WIN}`, B.x + B.w / 2, yy); }
+    else { c.textAlign = 'left'; c.fillText(`🏓 ${lbl(0)} – ${st.score[1]} ${this.name(1)}`, B.x + 10, yy); c.textAlign = 'right'; c.fillText(`tot ${RP.WIN} · ⭐ ${st.stars[0]}`, B.x + B.w - 10, yy); }
+    c.textBaseline = 'alphabetic';
+  }
+  drawStar(X, Y, r, t) { const c = this.c; c.save(); c.translate(X, Y); c.rotate(t); c.fillStyle = '#ffd23f'; c.strokeStyle = '#b8860b'; c.lineWidth = 1.5; c.beginPath(); for (let j = 0; j < 10; j++) { const a = -Math.PI / 2 + j * Math.PI / 5, rr = j % 2 ? r * .45 : r; c.lineTo(Math.cos(a) * rr, Math.sin(a) * rr); } c.closePath(); c.fill(); c.stroke(); c.restore(); }
+  drawPad(i) {
+    const c = this.c, k = this.k, p = this.st.pads[i], py = rpPadY(i), bot = i === 1 && this.n < 2, col = bot ? '#c7d3ea' : this.api.players[i].col;
+    const [ax, ay] = this.S(p.x - RP.PW / 2, py - RP.PH / 2), [bx, by] = this.S(p.x + RP.PW / 2, py + RP.PH / 2), x = Math.min(ax, bx), y = Math.min(ay, by), w = Math.abs(bx - ax), h = Math.abs(by - ay);
+    c.fillStyle = col; c.strokeStyle = '#0b1028'; c.lineWidth = 2; rrect(c, x, y, w, h, Math.min(w, h) / 2); c.fill(); c.stroke();
+    c.fillStyle = 'rgba(255,255,255,.45)'; rrect(c, x + 3, y + 3, Math.max(2, w - 6), Math.max(2, Math.min(h, w) * .3), 3); c.fill();
+    if (bot) {
+      const [fx, fy] = this.S(p.x, py - RP.PH / 2 - .55), r = k * .42; dot(c, fx, fy, r, '#e6ecf5'); c.strokeStyle = '#1f2a44'; c.lineWidth = 2; c.beginPath(); c.arc(fx, fy, r, 0, 7); c.stroke();
+      c.fillStyle = '#9fdcff'; rrect(c, fx - r * .7, fy - r * .45, r * 1.4, r * .8, r * .3); c.fill(); dot(c, fx - r * .3, fy - r * .05, r * .14, '#1f2a44'); dot(c, fx + r * .3, fy - r * .05, r * .14, '#1f2a44');
+    }
+  }
+}
+
 /* ===== minigames/klusje.js ===== */
 /* =========================================================
    KLUSJE VOOR MAMA – de 'tenzij' als de pogingen van vandaag op zijn (1x per dag: +1 poging).
@@ -10251,7 +10905,7 @@ window.__gb = {
   ECON, econCardLine, canDigNow, ECON_FULL_TXT, econDigsLeft, econEnergyLeft,
   BUUR, PRANKS, buurGateOn, buurWaiting, buurLeft, buurLevel, buurCutscene, buurSkip, openBuurPlan, renderBuurPlan, buurRequestNow, buurDigAfterWin, buurKlusDone, buurLocked, drawBrom, drawGnome, buurNews,
   buurFinish, BOOR_PARTS, boorHave, buildBoorbeestNow, digDeepStart, buildDeepMap, buildBaseMap, roomList, roomLevel, partNotNeeded, gjBuild, GJ, GJ_LEVELS, MK, mkBuild, mkCart, mkStep, mkScore, KM, kmBuild, kmFindMove, kmSwap, RV, rvBuild, rvState, rvStep, rvScore, rvBoatY, rvCenter, rvHalf, RUIMTE_PARTS, ruimteHave, spotsOn, WP, wpBuild, wpStep, wpTap, wpOwner, CM, cmBuild, cmStep, cmSees, cmAngle, SD, sdBuild, sdStep, sdSock, sdTol,
-  CINE, cinema, buildIslandMap, digIslandStart, buildRuimtebotNow, tuinRuimtePark, ruimtebotBuiltScene, FLY_SCENES, recipeHere, MT, mtBuild, mtStep, mtScore, mtLane, ZK, zkBuild, zkState, zkStep, zkPos, zkSim, zkScore, zkBot,
+  CINE, cinema, buildIslandMap, digIslandStart, buildRuimtebotNow, tuinRuimtePark, ruimtebotBuiltScene, FLY_SCENES, recipeHere, MT, mtBuild, mtStep, mtScore, mtLane, ZK, zkBuild, zkState, zkStep, zkPos, zkSim, zkScore, zkBot, PG, PG_HOLES, pgState, pgStep, pgSim, pgBot, pgNextHole, pgScore, pgTotal, SB, SB_SKY, sbBuild, sbStep, sbLink, sbBot, sbSky, sbKey, sbRound, RP, rpBuild, rpStep, rpPredict, rpPoints, rpPadY,
 };
 
 </script>
