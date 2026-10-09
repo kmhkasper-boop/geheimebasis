@@ -664,7 +664,7 @@ h1,h2,h3{margin:0}
     <div><h3>🦫 Zo werkt de graafdag</h3>
       <p>Als de Supermol gebouwd is, graaft hij meteen het <b>Hoofdkwartier</b> en de <b>Bowlingbaan</b>. Daarna graaft hij <b>elke echte kalenderdag één nieuwe kamer</b> (om middernacht, op de klok van dit apparaat). Was je kind een paar dagen weg, dan staan die kamers er bij terugkomst allemaal. Volgorde: Blokkenkamer, Flipperkastkamer, Minigolf, Racebaan, Escaperoom.</p>
       <p>⛏️ <b>De diepe kelder</b> (aflevering 4): als de basis af is, ligt in de Escaperoom de tekening van het <b>Boorbeest</b>. Met 5 onderdelen (het gouden tandwiel uit de eik, de Flipperkast, de ketel in de kelder en twee gewonnen streken bij buurman Brom) bouwen de kinderen het aan de werkbank. Dan komt er een <b>lift</b> in het Hoofdkwartier naar een tweede verdieping met een kristalgrot en nieuwe spelkamers (de <b>Grottenjacht</b>, het <b>Mijnkarretje</b>, <b>Kristallen matchen</b> en de <b>Ondergrondse rivier</b>); die worden op dezelfde manier gegraven. Bij de rivier dobbert flessenpost met een half afgescheurde tekening van de <b>Ruimtebot</b>: de 4 onderdelen (raketmotor: de rivier uitvaren, zonnepanelen: Kristallen matchen, maanwielen: de finish van het Mijnkarretje, antenne: met de Vliegbot bovenop de kristalpilaar) kun je al verzamelen, bouwen kan pas in een volgende aflevering. Elk spel kan alleen of met z'n tweeën op één apparaat, en de dagelijkse grens voor munten en energie geldt ook hier.</p>
-      <p>Sneller graven kan met <b>⚡ energie-batterijen</b>: met 3 stuks graaft de Supermol meteen een extra kamer (knop <b>Graaf nu</b> op de monitor). Energie vind je verstopt in huis en tuin, krijg je van mol-brandstof (wortel + appel, die groeien elke dag opnieuw), één keer per dag per spel bij een goede score, en in de energie-automaat (50 munten). Munten verdien je met de spelletjes.</p>
+      <p>Sneller graven kan met <b>⚡ energie-batterijen</b>: met 3 stuks graaft de Supermol meteen een extra kamer (knop <b>Graaf nu</b> op de monitor). Energie vind je verstopt in huis en tuin, krijg je van mol-brandstof (wortel + appel, die groeien elke dag opnieuw), één keer per dag per spel bij een goede score, en in de energie-automaat (50 munten per ⚡, altijd te koop, zonder daglimiet). Munten verdien je met de spelletjes (per spel per dag een maximum).</p>
       <div class="orow"><span id="oudStatus" class="small-note"></span></div>
       <p id="oudEcon" class="small-note"></p>
       <div class="orow"><button class="btn green small" id="oudUnlock">🔓 Alle kamers openen (+ Vliegbot en Boorbeest)</button><button class="btn small" id="oudEnergy">⚡ +3 energie geven</button></div>
@@ -841,12 +841,13 @@ const robotBuilt = id => !!(S.robots[id] && S.robots[id].built);
    ECONOMIE – daglimieten zodat munten en energie niet eindeloos te verdienen zijn (wens van Lucas, fase 3).
    - Munten per spel per dag: de eerste ECON.FULL_PLAYS potjes geven volle munten, daarna ECON.TRICKLE_PLAYS potjes
      1 muntje, daarna niks meer (tot morgen). Het eten telt als 'spel' met id 'eten'.
-   - Energie: alles bij elkaar (spelbonus, eten, automaat, mol-brandstof, dagelijkse vondsten) max ECON.E_DAY per dag.
-     De energie-automaat verkoopt max ECON.BUY_MAX per dag. 'Graaf nu' kan max ECON.DIG_NOW_MAX keer per dag.
+   - Energie: gratis energie (spelbonus, eten, mol-brandstof, dagelijkse vondsten) max ECON.E_DAY per dag.
+     De energie-automaat (munten) heeft GEEN daglimiet en telt niet mee voor E_DAY (wens van Lucas, aflevering 5):
+     zo kunnen de kinderen altijd genoeg batterijen kopen om te graven. 'Graaf nu' kan max ECON.DIG_NOW_MAX keer per dag.
    - Niet onder de limiet: eenmalige vondsten (vliegbot, eerste vondsten) en de knop van papa/mama.
    Pure functies (e = S.econ) worden getest in tests/unit.js.
    ========================================================= */
-const ECON = { FULL_PLAYS: 3, TRICKLE_PLAYS: 5, TRICKLE: 1, E_DAY: 5, BUY_MAX: 2, BUY_PRICE: 50, DIG_NOW_MAX: 2 };
+const ECON = { FULL_PLAYS: 3, TRICKLE_PLAYS: 5, TRICKLE: 1, E_DAY: 5, BUY_PRICE: 50, DIG_NOW_MAX: 2 };
 const ECON_VERB = { bowling: 'bowlen', blokken: 'de blokkenkamer', flipper: 'flipperen', minigolf: 'minigolf', racebaan: 'racen', escaperoom: 'de escaperoom', mollenrace: 'de mollenrace', kabouters: 'tuinkabouters', belletje: 'belletje lellen', klusje: 'klusjes', eten: 'eten' };
 function econDay(e, today) { if (e.day !== today) { e.day = today; e.plays = {}; e.e = 0; e.buy = 0; e.digs = 0; } return e; }
 // hoeveel munten levert dit potje op? (telt het potje mee)
@@ -859,8 +860,9 @@ function econCoins(e, today, id, full) {
 function econCoinsLeft(e, today, id) { const n = e.day === today ? (e.plays[id] || 0) : 0; return { full: Math.max(0, ECON.FULL_PLAYS - n), trickle: Math.max(0, ECON.FULL_PLAYS + ECON.TRICKLE_PLAYS - Math.max(n, ECON.FULL_PLAYS)) }; }
 function econEnergyLeft(e, today) { return e.day === today ? Math.max(0, ECON.E_DAY - e.e) : ECON.E_DAY; }
 function econEnergy(e, today, n) { econDay(e, today); const g = Math.max(0, Math.min(n, ECON.E_DAY - e.e)); e.e += g; return g; }
-function econCanBuy(e, today) { return (e.day === today ? e.buy : 0) < ECON.BUY_MAX && econEnergyLeft(e, today) > 0; }
-function econBuy(e, today) { if (!econCanBuy(e, today)) return false; econDay(e, today); e.buy++; e.e++; return true; }
+// kopen met munten mag altijd (alleen genoeg munten nodig, dat checkt de automaat); e.buy telt alleen voor de ouders
+function econCanBuy(e, today) { return true; }
+function econBuy(e, today) { econDay(e, today); e.buy++; return true; }
 function econDigsLeft(e, today) { return Math.max(0, ECON.DIG_NOW_MAX - (e.day === today ? e.digs : 0)); }
 function econDig(e, today) { econDay(e, today); e.digs++; }
 // ---- met het echte spel (S)
@@ -3110,11 +3112,17 @@ GB.ACTIONS.barrier = async o => {
   await talk([['f', `Achter deze planken graaft de Supermol de ${r.emoji} ${r.name}! Dat gebeurt ${when}.`]]);
 };
 GB.ACTIONS.automaat = async () => {
-  const td = dayKey();
-  if (!econCanBuy(S.econ, td)) { await talk([['', econEnergyFull() ? `Energie-automaat: 😴 De Supermol heeft vandaag al genoeg energie gekregen (${ECON.E_DAY} ⚡ per dag). Morgen weer!` : `Energie-automaat: 🔒 Vandaag al ${ECON.BUY_MAX}× gekocht. De automaat wordt vannacht weer bijgevuld!`]]); return; }
-  if (S.munten < 50) { await talk([['', `Energie-automaat: 50 🪙 munten = 1 ⚡ energie. Je hebt ${S.munten} munten. Speel spelletjes om munten te verdienen!`]]); return; }
-  const a = await ask('', `Energie-automaat: 50 🪙 munten = 1 ⚡ energie. Je hebt ${S.munten} munten. (Vandaag nog ${ECON.BUY_MAX - (S.econ.day === td ? S.econ.buy : 0)}× te koop.)`, ['🪙 Kopen!', 'Nee, bewaren']);
-  if (a === 0 && econBuy(S.econ, td)) { addMunten(-50); addEnergie(1); SFX.energie(); toast('⚡ +1 energie!', 'gold'); burst(WORLD.p.x, WORLD.p.y - 30, 16, ['#ffd23f', '#4cd964', '#fff']); }
+  const td = dayKey(), P = ECON.BUY_PRICE;
+  if (S.munten < P) { await talk([['', `Energie-automaat: ${P} 🪙 munten = 1 ⚡ energie. Je hebt ${S.munten} munten. Speel spelletjes om munten te verdienen!`]]); return; }
+  const need = Math.max(0, DIG_COST - S.energie), canN = Math.floor(S.munten / P), opts = [['1', 1]];
+  if (need > 1 && canN >= need) opts.push([String(need), need]);
+  const labels = opts.map(([t, n]) => n === need && n > 1 ? `🪙 ${t} ⚡ kopen (${n * P}), genoeg om te graven!` : `🪙 ${t} ⚡ kopen (${n * P})`).concat(['Nee, bewaren']);
+  const a = await ask('', `Energie-automaat: ${P} 🪙 munten = 1 ⚡ energie. Je hebt ${S.munten} munten en ${S.energie} ⚡.${need ? ` Met ${DIG_COST} ⚡ graaft de Supermol meteen een kamer.` : ''}`, labels);
+  if (a == null || a >= opts.length) return;
+  const n = opts[a][1];
+  if (S.munten < n * P) return;
+  for (let k = 0; k < n; k++) econBuy(S.econ, td);
+  addMunten(-n * P); addEnergie(n); SFX.energie(); toast(`⚡ +${n} energie!`, 'gold'); burst(WORLD.p.x, WORLD.p.y - 30, 16, ['#ffd23f', '#4cd964', '#fff']);
 };
 GB.ACTIONS.deco = async o => {
   const cur = S.base.deco[o.id];
@@ -3894,7 +3902,7 @@ function renderOuders() {
   const rb = $('#oudReset'); rb.dataset.armed = ''; rb.textContent = '🗑️ Spel wissen';
   mealRenderOuders(); buurRenderOuders();
   const ee = S.econ, td = dayKey(), today = ee.day === td;
-  $('#oudEcon').innerHTML = `<b>Daglimieten</b> (zodat munten en energie niet eindeloos zijn): per spel per dag ${ECON.FULL_PLAYS} potjes met volle munten, daarna ${ECON.TRICKLE_PLAYS} potjes ${ECON.TRICKLE} muntje, daarna 0. Energie uit alles samen max ${ECON.E_DAY} ⚡ per dag (vandaag ${today ? ee.e : 0}); de automaat verkoopt max ${ECON.BUY_MAX} ⚡ per dag (vandaag ${today ? ee.buy : 0}); 'Graaf nu' max ${ECON.DIG_NOW_MAX}× per dag (vandaag ${today ? ee.digs : 0}). De knop hieronder (+3 energie) telt niet mee.`;
+  $('#oudEcon').innerHTML = `<b>Daglimieten</b> (zodat munten en energie niet eindeloos zijn): per spel per dag ${ECON.FULL_PLAYS} potjes met volle munten, daarna ${ECON.TRICKLE_PLAYS} potjes ${ECON.TRICKLE} muntje, daarna 0. Gratis energie (spelbonus, eten, vondsten, mol-brandstof) max ${ECON.E_DAY} ⚡ per dag (vandaag ${today ? ee.e : 0}); energie kopen in de automaat (${ECON.BUY_PRICE} munten per ⚡) kan altijd, zonder daglimiet (vandaag ${today ? ee.buy : 0} gekocht); 'Graaf nu' max ${ECON.DIG_NOW_MAX}× per dag (vandaag ${today ? ee.digs : 0}). De knop hieronder (+3 energie) telt niet mee.`;
 }
 function buurRenderOuders() {
   const b = S.buur;
@@ -4066,7 +4074,7 @@ function renderHQStatus() {
   $('#hqEnergy').innerHTML = `<h3>⚡ Energie</h3><div class="energybar">${Array.from({ length: DIG_COST }, (_, i) => `<span class="eb ${i < S.energie ? 'on' : ''}"></span>`).join('')}<b style="margin-left:6px">${S.energie}</b></div>
     <p style="margin:.4em 0;font-size:.85em">${dl ? `Met ${DIG_COST} energie graaft de Supermol <b>meteen</b> een extra kamer (vandaag nog ${dl}×).` : `⏸️ ${ECON_DIG_TXT}`}</p>
     <button class="btn ${can ? 'green' : ''}" id="hqDig" ${can ? '' : 'disabled'}>⛏️ Graaf nu!</button>${gate && r && flag('baseOpen') ? ' <button class="btn orange" id="hqPlan">🤫 Streek = graven!</button>' : ''}
-    <p style="margin:.5em 0 0;font-size:.8em">🪙 ${S.munten} munten · energie-automaat: 50 munten = 1 ⚡ (max ${ECON.BUY_MAX}× per dag) · ⚡ verdienen vandaag: nog ${econEnergyLeft(S.econ, dayKey())} van ${ECON.E_DAY}</p>`;
+    <p style="margin:.5em 0 0;font-size:.8em">🪙 ${S.munten} munten · energie-automaat: ${ECON.BUY_PRICE} munten = 1 ⚡ (altijd te koop) · ⚡ gratis verdienen vandaag: nog ${econEnergyLeft(S.econ, dayKey())} van ${ECON.E_DAY}</p>`;
   const b = $('#hqDig'); if (b) b.onclick = async () => { closeOv('scrHQ'); await digNowCutscene(); };
   const hp = $('#hqPlan'); if (hp) hp.onclick = () => { closeOv('scrHQ'); openBuurPlan(); };
   const bc = $('#hqBuur'); bc.style.display = S.buur.met ? '' : 'none';
