@@ -666,7 +666,7 @@ h1,h2,h3{margin:0}
       <p>⛏️ <b>De diepe kelder</b> (aflevering 4): als de basis af is, ligt in de Escaperoom de tekening van het <b>Boorbeest</b>. Met 5 onderdelen (het gouden tandwiel uit de eik, de Flipperkast, de ketel in de kelder en twee gewonnen streken bij buurman Brom) bouwen de kinderen het aan de werkbank. Dan komt er een <b>lift</b> in het Hoofdkwartier naar een tweede verdieping met een kristalgrot en nieuwe spelkamers (de <b>Grottenjacht</b>, het <b>Mijnkarretje</b>, <b>Kristallen matchen</b> en de <b>Ondergrondse rivier</b>); die worden op dezelfde manier gegraven. Bij de rivier dobbert flessenpost met een half afgescheurde tekening van de <b>Ruimtebot</b>: de 4 onderdelen (raketmotor: de rivier uitvaren, zonnepanelen: Kristallen matchen, maanwielen: de finish van het Mijnkarretje, antenne: met de Vliegbot bovenop de kristalpilaar) kun je al verzamelen. Elk spel kan alleen of met z'n tweeën op één apparaat, en de dagelijkse grens voor munten en energie geldt ook hier.</p>
       <p>☁️ <b>Tussen hemel en aarde</b> (aflevering 5, de laatste): de andere helft van de Ruimtebot-tekening hangt op het prikbord in het <b>tuinhuisje</b>. De Ruimtebot is te groot voor de werkbank in de speelkamer en wordt op de bouwplek in het tuinhuisje gebouwd. Na een filmpje vliegt hij de kinderen naar een <b>zwevend wolkeneiland</b> met een Wolken-HQ en een telescoop (derde verdieping op de monitor). De Supermol graaft daar op dezelfde manier 5 nieuwe spelkamers: <b>Meteorietenregen</b>, <b>Zwaartekracht-springen</b>, <b>Planeetgolf</b>, <b>Sterrenbeelden</b> en <b>Ruimtepong</b> (solo tegen de Ruimtebot of met z'n tweeën tegen elkaar). Heen en terug vliegen kan altijd met de Ruimtebot in de tuin.</p>
       <p>🤖 <b>Het slot: de Maai-o-Matic.</b> Zijn alle kamers gegraven, dan slaat de robot-grasmaaier van buurman Brom op hol (filmpje). Hij is alleen te stoppen met een volle <b>Superlader</b> in het Wolken-HQ: daar brengen de kinderen <b>30 energie</b> naartoe. De lading blijft bewaard, ook over dagen heen; met de daglimieten (max. 5 gratis energie per dag + 2 van het eten, plus energie kopen met munten) kost dat meestal een paar dagen flink spelen. Is hij vol, dan start bij de maaier in de tuin het gevecht (alleen of met z'n tweeën): de <b>Supermol</b> graaft kuilen, de <b>Vliegbot</b> trekt antennes eraf, het <b>Boorbeest</b> boort (snel tikken) en de <b>Ruimtebot</b> tilt hem op met een trekstraal (vinger erop houden). Elke actie kost energie uit de batterij van het gevecht; is die op, dan gewoon opnieuw (met 5 tot 10 energie extra per verloren poging). De Superlader-lading gaat daarbij niet verloren. Na de overwinning: een filmpje met Brom, de zolder (“wat een fantasie!”), de mama van de vriend die hem ophaalt, en de aftiteling. Daarna kan gewoon verder gespeeld worden; de maaier blijft in de tuin om te oefenen, en via de Superlader kun je het einde nog eens zien.</p>
-      <p>Sneller graven kan met <b>⚡ energie-batterijen</b>: met 3 stuks graaft de Supermol meteen een extra kamer (knop <b>Graaf nu</b> op de monitor). Energie vind je verstopt in huis en tuin, krijg je van mol-brandstof (wortel + appel, die groeien elke dag opnieuw), één keer per dag per spel bij een goede score, en in de energie-automaat (50 munten per ⚡, altijd te koop, zonder daglimiet). Munten verdien je met de spelletjes (per spel per dag een maximum).</p>
+      <p>Sneller graven kan met <b>⚡ energie-batterijen</b>: met 3 stuks graaft de Supermol meteen een extra kamer (knop <b>Graaf nu</b> op de monitor). Energie vind je verstopt in huis en tuin, krijg je van mol-brandstof aan de werkbank (wortel + appel, die groeien elke dag opnieuw; mol-brandstof maken kan altijd, het telt niet mee voor de daglimiet van gratis energie), één keer per dag per spel bij een goede score, en in de energie-automaat (50 munten per ⚡, altijd te koop, zonder daglimiet). Munten verdien je met de spelletjes (per spel per dag een maximum).</p>
       <div class="orow"><span id="oudStatus" class="small-note"></span></div>
       <p id="oudEcon" class="small-note"></p>
       <div class="orow"><button class="btn green small" id="oudUnlock">🔓 Alle kamers openen (+ Vliegbot, Boorbeest en Ruimtebot)</button><button class="btn small" id="oudEnergy">⚡ +3 energie geven</button></div>
@@ -850,7 +850,7 @@ const robotBuilt = id => !!(S.robots[id] && S.robots[id].built);
    ECONOMIE – daglimieten zodat munten en energie niet eindeloos te verdienen zijn (wens van Lucas, fase 3).
    - Munten per spel per dag: de eerste ECON.FULL_PLAYS potjes geven volle munten, daarna ECON.TRICKLE_PLAYS potjes
      1 muntje, daarna niks meer (tot morgen). Het eten telt als 'spel' met id 'eten'.
-   - Energie: gratis energie (spelbonus, eten, mol-brandstof, dagelijkse vondsten) max ECON.E_DAY per dag.
+   - Energie: gratis energie (spelbonus, eten, dagelijkse vondsten) max ECON.E_DAY per dag. Mol-brandstof (werkbank) telt niet mee: altijd +1 ⚡.
      De energie-automaat (munten) heeft GEEN daglimiet en telt niet mee voor E_DAY (wens van Lucas, aflevering 5):
      zo kunnen de kinderen altijd genoeg batterijen kopen om te graven. 'Graaf nu' kan max ECON.DIG_NOW_MAX keer per dag.
    - Niet onder de limiet: eenmalige vondsten (vliegbot, eerste vondsten) en de knop van papa/mama.
@@ -1812,7 +1812,7 @@ registerRecipe({ id: 'zaklamp', name: 'Zaklamp', icon: 'zaklamp', needs: ['lampj
 registerRecipe({ id: 'ladder', name: 'Ladder', icon: 'ladder', needs: ['planken', 'touw'], gives: { item: 'ladder' }, once: true,
   hint: 'Planken + touw. Om bij het zolderluik te komen.' });
 registerRecipe({ id: 'molbrandstof', name: 'Mol-brandstof', icon: 'molbrandstof', needs: ['wortel', 'appel'], gives: { energie: 1 }, once: false,
-  hint: 'Wortel + appel = 1 ⚡ energie. Elke dag opnieuw!' });
+  hint: 'Wortel + appel = 1 ⚡ energie. Zo vaak als je wilt, ook als je vandaag al veel energie hebt!' });
 registerRecipe({ id: 'koekjestrommel', name: 'Appelkoekjes', icon: 'koekjestrommel', needs: ['koekje', 'appel'], gives: { item: 'koekjestrommel' }, once: false,
   hint: 'Koekje van mama + appel uit de boom. Om buurman Brom blij te maken!', when: () => S.buur && S.buur.met });
 registerRecipe({ id: 'boorbeest', name: 'Boorbeest', icon: 'robot', needs: ['tandwiel', 'reuzenboor', 'rupsbanden', 'koplampen', 'turbomotor'], gives: { robot: 'boorbeest' }, blueprint: 'boortekening', once: true,
@@ -4309,7 +4309,7 @@ function renderOuders() {
   const rb = $('#oudReset'); rb.dataset.armed = ''; rb.textContent = '🗑️ Spel wissen';
   mealRenderOuders(); buurRenderOuders();
   const ee = S.econ, td = dayKey(), today = ee.day === td;
-  $('#oudEcon').innerHTML = `<b>Daglimieten</b> (zodat munten en energie niet eindeloos zijn): per spel per dag ${ECON.FULL_PLAYS} potjes met volle munten, daarna ${ECON.TRICKLE_PLAYS} potjes ${ECON.TRICKLE} muntje, daarna 0. Gratis energie (spelbonus, eten, vondsten, mol-brandstof) max ${ECON.E_DAY} ⚡ per dag (vandaag ${today ? ee.e : 0}); energie kopen in de automaat (${ECON.BUY_PRICE} munten per ⚡) kan altijd, zonder daglimiet (vandaag ${today ? ee.buy : 0} gekocht); 'Graaf nu' max ${ECON.DIG_NOW_MAX}× per dag (vandaag ${today ? ee.digs : 0}). De knop hieronder (+3 energie) telt niet mee.`;
+  $('#oudEcon').innerHTML = `<b>Daglimieten</b> (zodat munten en energie niet eindeloos zijn): per spel per dag ${ECON.FULL_PLAYS} potjes met volle munten, daarna ${ECON.TRICKLE_PLAYS} potjes ${ECON.TRICKLE} muntje, daarna 0. Gratis energie (spelbonus, eten, vondsten) max ${ECON.E_DAY} ⚡ per dag; mol-brandstof (wortel + appel aan de werkbank) telt niet mee en kan altijd (vandaag ${today ? ee.e : 0}); energie kopen in de automaat (${ECON.BUY_PRICE} munten per ⚡) kan altijd, zonder daglimiet (vandaag ${today ? ee.buy : 0} gekocht); 'Graaf nu' max ${ECON.DIG_NOW_MAX}× per dag (vandaag ${today ? ee.digs : 0}). De knop hieronder (+3 energie) telt niet mee.`;
 }
 function buurRenderOuders() {
   const b = S.buur;
@@ -4432,7 +4432,6 @@ function sparks(el, n) { if (!el) return; const host = $('#bp'), r = el.getBound
 })();
 $('#wbBuild').addEventListener('click', async () => {
   const r = GB.RECIPES[WB.rid]; if (!recipeReady(r) || WB.placed.size !== r.needs.length || WB.busy) return;
-  if (r.gives.energie && econEnergyFull()) { SFX.nope(); $('#wbMsg').textContent = `De Supermol zit vandaag al vol energie (${ECON.E_DAY} ⚡ per dag). Bewaar je spullen tot morgen!`; return; }
   WB.busy = true; $('#wbBuild').disabled = true; $('#wbBuild').style.animation = '';
   const bp = $('#bp'), slots = $$('#bp .bslot[data-slot]');
   SFX.hammer(); bp.style.animation = 'shake .5s'; slots.forEach(s => { s.style.transition = 'all .6s ease-in'; s.style.left = '50%'; s.style.top = '50%'; s.style.transform = 'translate(-50%,-50%) scale(.4) rotate(540deg)'; s.style.opacity = '.2'; });
@@ -4441,7 +4440,8 @@ $('#wbBuild').addEventListener('click', async () => {
   let label = '';
   if (r.gives.robot) { S.robots[r.gives.robot] = { built: dayKey() }; label = `${GB.ROBOTS[r.gives.robot].name} is klaar!`; achieve(r.gives.robot); }
   if (r.gives.item) { giveItem(r.gives.item); label = `${itemName(r.gives.item)} gemaakt!`; }
-  if (r.gives.energie) { earnEnergie(r.gives.energie); label = `+${r.gives.energie} ⚡ energie voor de Supermol!`; }
+  // mol-brandstof telt niet mee voor de daglimiet van gratis energie: altijd +1 ⚡ (Lucas: om de Superlader te vullen)
+  if (r.gives.energie) { addEnergie(r.gives.energie); label = `+${r.gives.energie} ⚡ energie voor de Supermol!`; }
   save();
   bp.style.animation = ''; const res = $('#bpRes'); res.classList.add('show');
   res.innerHTML = `<div style="position:absolute;inset:0;background:#fff;animation:fadein .15s reverse forwards;opacity:0"></div><div style="width:${r.gives.robot ? 'min(62%,420px)' : '130px'};animation:popin .6s">${r.gives.robot ? GB.ROBOTS[r.gives.robot].svg() : iconHTML(r.gives.energie ? 'energie' : r.gives.item)}</div><div style="font-size:1.5em;font-weight:700;text-shadow:0 3px 0 rgba(0,0,0,.3);animation:popin .7s">${label}</div>`;
