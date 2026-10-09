@@ -58,7 +58,10 @@ h1,h2,h3{margin:0}
 .screen.show{display:block}
 .overlay{position:fixed;inset:0;z-index:30;display:none;overflow-y:auto;overflow-x:hidden;touch-action:pan-y;-webkit-overflow-scrolling:touch}
 .overlay.show{display:block;animation:fadein .25s ease}
-.overlay.dim{background:rgba(20,26,48,.6);align-items:center;justify-content:center;padding:16px;z-index:45}
+.overlay.dim{background:rgba(20,26,48,.6);align-items:center;justify-content:center;padding:calc(16px + var(--safe-t)) calc(16px + var(--safe-r)) calc(16px + var(--safe-b)) calc(16px + var(--safe-l));z-index:45}
+/* kaarten nooit onder de notch / thuisbalk / ronde hoeken */
+.buurdig{display:block;background:#fff3c4;border:2px solid #ffd23f;border-radius:14px;padding:6px 10px;font-size:1.05em}
+.overlay.dim > .mcard{max-width:calc(100vw - 32px - var(--safe-l) - var(--safe-r));max-height:calc(100vh - 32px - var(--safe-t) - var(--safe-b));max-height:calc(100dvh - 32px - var(--safe-t) - var(--safe-b))}
 .overlay.dim.show{display:flex}
 .sky{background:linear-gradient(180deg,var(--bg1) 0%,#e3f6ff 45%,var(--bg2) 100%)}
 @keyframes fadein{from{opacity:0}to{opacity:1}}
@@ -253,7 +256,8 @@ h1,h2,h3{margin:0}
 .pranks{display:grid;grid-template-columns:repeat(auto-fill,minmax(210px,1fr));gap:10px;width:100%}
 .prank{background:#f6e7c8;border-radius:18px;padding:10px 12px;box-shadow:0 0 0 3px #7a5a2a,0 5px 0 rgba(0,0,0,.25);display:flex;gap:10px;align-items:center;text-align:left}
 .prank .pe{font-size:34px}
-.prank .pt{flex:1;display:flex;flex-direction:column}
+.prank .pt{flex:1;min-width:0;display:flex;flex-direction:column;overflow-wrap:break-word;hyphens:auto}
+.prank > .btn{flex:none}
 .prank.soon{opacity:.6;filter:grayscale(.6)}
 .ps .off{opacity:.25}
 .lvlrow{display:flex;gap:8px;justify-content:center;flex-wrap:wrap;margin-top:8px}
@@ -293,19 +297,20 @@ h1,h2,h3{margin:0}
 
 /* ---------- minigames ---------- */
 #scrMG{background:#111}
-#cvMG{position:absolute;inset:0;width:100%;height:100%;display:block;touch-action:none}
-.mgtop{position:absolute;left:0;right:0;top:0;display:flex;gap:8px;align-items:center;padding:max(8px,var(--safe-t)) max(10px,var(--safe-r)) 0 max(10px,var(--safe-l));z-index:5;pointer-events:none}
+/* minigames: canvas + knoppenlaag binnen de veilige zone (notch, ronde hoeken, thuisbalk); de randen eromheen blijven donker */
+#cvMG{position:absolute;left:var(--safe-l);top:var(--safe-t);right:var(--safe-r);bottom:var(--safe-b);width:calc(100% - var(--safe-l) - var(--safe-r));height:calc(100% - var(--safe-t) - var(--safe-b));display:block;touch-action:none}
+.mgtop{position:absolute;left:0;right:0;top:0;display:flex;gap:8px;align-items:center;padding:calc(8px + var(--safe-t)) calc(10px + var(--safe-r)) 0 calc(10px + var(--safe-l));z-index:5;pointer-events:none}
 .mgtop > *{pointer-events:auto}
 .mgtop .title{flex:1;text-align:center;pointer-events:none}
 .mgtop .title span{background:rgba(255,255,255,.92);border-radius:999px;padding:.2em .8em;font-weight:700;box-shadow:var(--shadow);font-size:.9em}
-#mgCtl{position:absolute;inset:0;pointer-events:none;z-index:4}
+#mgCtl{position:absolute;left:var(--safe-l);top:var(--safe-t);right:var(--safe-r);bottom:var(--safe-b);pointer-events:none;z-index:4}
 #mgCtl .tb{position:absolute;pointer-events:auto;border-radius:20px;background:rgba(255,255,255,.92);box-shadow:0 5px 0 rgba(0,0,0,.35);font-size:30px;font-weight:700;display:flex;align-items:center;justify-content:center;touch-action:none;color:var(--ink)}
 #mgCtl .tb.down{transform:translateY(4px);box-shadow:0 1px 0 rgba(0,0,0,.35);background:#ffe27a}
 #mgCtl .tb small{font-size:12px;position:absolute;bottom:3px;left:0;right:0;text-align:center;font-weight:600}
-.mgbanner{position:absolute;left:50%;top:50%;transform:translate(-50%,-50%);z-index:6;background:#fff;border-radius:28px;padding:18px 26px;box-shadow:0 8px 0 rgba(0,0,0,.3);text-align:center;display:none;max-width:90vw;pointer-events:auto}
+.mgbanner{position:absolute;left:50%;top:calc(50% + (var(--safe-t) - var(--safe-b)) / 2);transform:translate(-50%,-50%);z-index:6;background:#fff;border-radius:28px;padding:18px 26px;box-shadow:0 8px 0 rgba(0,0,0,.3);text-align:center;display:none;max-width:min(90vw,calc(100vw - 24px - var(--safe-l) - var(--safe-r)));max-height:calc(100% - 16px - var(--safe-t) - var(--safe-b));overflow-y:auto;pointer-events:auto}
 .mgbanner.show{display:block;animation:popin .3s}
 /* ---------- escaperoom ---------- */
-#er{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;pointer-events:none;padding:calc(66px + var(--safe-t)) 12px calc(14px + var(--safe-b))}
+#er{position:absolute;inset:0;z-index:4;display:flex;align-items:center;justify-content:center;pointer-events:none;padding:calc(var(--mgtop, 66px) + var(--safe-t)) calc(12px + var(--safe-r)) calc(14px + var(--safe-b)) calc(12px + var(--safe-l))}
 .erpanel{pointer-events:auto;background:rgba(255,255,255,.96);border-radius:26px;box-shadow:0 8px 0 rgba(0,0,0,.3);padding:12px 14px;width:min(640px,96vw);max-height:100%;overflow:auto;text-align:center;display:flex;flex-direction:column;gap:6px}
 .erhead{display:flex;align-items:center;gap:8px;justify-content:space-between;font-weight:700}
 .erhead b{flex:1;text-align:center}
@@ -371,7 +376,7 @@ h1,h2,h3{margin:0}
 .erkeys2{display:flex;gap:16px;justify-content:center}
 .erbar{height:16px;border-radius:999px;background:#e6e9f2;overflow:hidden;margin-top:8px}
 .erbar i{display:block;height:100%;width:0;background:linear-gradient(90deg,#ffd23f,#2fb35a)}
-@media (max-height:500px){ #er{padding-top:calc(58px + var(--safe-t));padding-bottom:6px} .erpanel{padding:8px 12px;gap:3px;width:min(780px,96vw)} .erbig{font-size:1.45em} .erkeys{grid-template-columns:repeat(6,50px)} .erkeys button{height:40px}
+@media (max-height:500px){ #er{padding-top:calc(var(--mgtop, 58px) + var(--safe-t));padding-bottom:calc(6px + var(--safe-b))} .erpanel{padding:8px 12px;gap:3px;width:min(780px,96vw)} .erbig{font-size:1.45em} .erkeys{grid-template-columns:repeat(6,50px)} .erkeys button{height:40px}
   .erword{font-size:1.5em} .erchoices.col{flex-direction:row} .erst{min-height:68px;padding:4px} .erroom{height:42vh} .erkey{min-height:78px} .erslot{height:36px} .erlet{height:40px} .erfield{height:40px;min-width:42px} .erq{font-size:.95em} }
 @media (max-width:460px){ .erkeys{grid-template-columns:repeat(3,56px)} .erkeys button{height:46px} .erroom{height:30vh} .erlet{min-width:36px;height:42px} .erslot{width:30px;height:40px} }
 .mgbanner h2{font-size:1.6em}
@@ -657,7 +662,7 @@ h1,h2,h3{margin:0}
       <div class="orow"><button class="btn green small" id="oudUnlock">🔓 Alle kamers openen</button><button class="btn small" id="oudEnergy">⚡ +3 energie geven</button></div>
     </div>
     <div><h3>🤫 Buurman Brom</h3>
-      <p>Na de eerste kamers belt <b>buurman Brom</b> (de mopperende buurman) aan en klaagt bij mama over het lawaai. Daarna moeten de kinderen hem <b>eerst te slim af zijn</b> voordat de Supermol een nieuwe kamer graaft: een onschuldige kwajongensstreek als spelletje (Mollenrace, Tuinkabouters, Belletje lellen). Lukt het? Dan graaft de mol meteen. Gegraven kamers en alle spellen blijven altijd open.</p>
+      <p>Na de eerste kamers belt <b>buurman Brom</b> (de mopperende buurman) aan en klaagt bij mama over het lawaai. Daarna graaft de Supermol nieuwe kamers als de kinderen hem <b>te slim af zijn</b>: een onschuldige kwajongensstreek als spelletje (Mollenrace, Tuinkabouters, Belletje lellen). <b>Elke gewonnen streek = de Supermol graaft meteen de volgende kamer</b>, zonder limiet: de hele basis kan dus in één keer worden uitgespeeld. Daarnaast staat er nog steeds elke dag een kamer klaar (die wacht ook op een streek), en met <b>Graaf nu</b> (3 ⚡) graaft de mol meteen, ook zonder streek. Verloren streken kosten alleen een poging terwijl er een dag-kamer wacht. Gegraven kamers en alle spellen blijven altijd open.</p>
       <p>Per dag zijn er een paar <b>pogingen</b>. Op? Dan roept mama "Genoeg gespeeld voor vandaag, morgen weer verder!". <b>Tenzij</b> ze 1x per dag een <b>klusje voor mama</b> doen (+1 poging) of de buurman <b>appelkoekjes</b> geven (koekje van mama + appel, aan de werkbank): dan graaft de mol toch. De streken kunnen ook altijd voor de lol via het <b>Buurman-plan</b> in het Hoofdkwartier (munten, 1x per dag energie, prestaties).</p>
       <div class="orow"><span class="sk">🚪 Buurman-poort</span><div class="seg" id="oudBuur"><button data-v="0">Uit</button><button data-v="1">Aan</button></div><span class="small-note">Uit = de mol graaft zonder streek</span></div>
       <div class="orow"><span class="sk">🎯 Pogingen per dag</span><div class="seg" id="oudBuurTries"><button data-v="2">2</button><button data-v="3">3</button><button data-v="5">5</button><button data-v="0">Onbeperkt</button></div></div>
@@ -2779,9 +2784,9 @@ GB.TALKS.mol = async () => {
     if (a === 0) openBuurPlan(); return;
   }
   if (S.energie >= DIG_COST && !canDigNow()) { await talk([['mol', `Piep! Vannacht graaf ik de ${r.name}. ${ECON_DIG_TXT}`]]); return; }
-  if (buurGateOn() && S.energie >= DIG_COST) {
-    const a = await ask('mol', `Piep! Vannacht wil ik de ${r.name} graven. Maar ik heb ${S.energie} ⚡ energie… Zal ik nu meteen graven? Dan moeten we wel eerst buurman Brom te slim af zijn!`, ['⛏️ Ja! Eerst een streek', 'Nee, later']);
-    if (a === 0 && buurRequestNow()) openBuurPlan(); return;
+  if (buurGateOn() && !(S.energie >= DIG_COST)) {
+    const a = await ask('mol', `Piep! Haal een streek uit bij buurman Brom, dan graaf ik meteen de ${r.name}! Zo vaak als jullie willen.`, ['🤫 Naar het Buurman-plan', 'Straks']);
+    if (a === 0) openBuurPlan(); return;
   }
   if (S.energie >= DIG_COST) {
     const a = await ask('mol', `Piep! Vannacht graaf ik de ${r.name}. Maar ik heb ${S.energie} ⚡ energie… Zal ik nu meteen graven?`, ['⛏️ Ja, graaf nu! (3 ⚡)', 'Nee, later']);
@@ -3026,9 +3031,12 @@ function buildVliegbotNow() {
 /* =========================================================
    BUURMAN BROM (fase 3)
    - Filmpje: na de eerste kamer(s) belt buurman Brom aan en klaagt bij mama over het lawaai. Oude saves: de volgende keer in huis.
-   - Graaf-poort: als de Supermol een nieuwe kamer wil graven (dag-kamer of 'Graaf nu'), moet eerst een streek lukken.
-     Gegraven kamers blijven altijd open. Per dag S.buur.tries mislukte pogingen (0 = onbeperkt); daarna wacht de kamer tot morgen,
-     TENZIJ: 1x per dag een klusje voor mama (+1 poging) of appelkoekjes voor de buurman (dan graaft de mol toch).
+   - Graaf-poort (fase 3.4, op verzoek van Lucas): ELKE gelukte streek laat de Supermol meteen de volgende kamer graven, zonder limiet
+     (de hele basis kan in één keer worden uitgespeeld). Wacht er een dag-kamer, dan is het die; anders een extra 'streek-kamer'.
+     De dag-kamer blijft: elke nieuwe dag staat er 1 kamer klaar (die wacht op een streek). 'Graaf nu' (3 ⚡, max per dag) graaft meteen,
+     ook zonder streek. Gegraven kamers blijven altijd open.
+     Pogingen: alleen terwijl er een dag-kamer wacht kost een verloren streek een poging (S.buur.tries per dag, 0 = onbeperkt);
+     op = die kamer wacht tot morgen, TENZIJ: 1x per dag een klusje voor mama (+1 poging) of appelkoekjes (dan graaft de mol toch).
    - Buurman-plan (bord in het HQ + knop op de monitor): alle streken, ook voor de lol (munten, 1x per dag ⚡, prestaties).
    Nieuwe streek? Entry in PRANKS + registerMinigame({ id, prank: true, ... }) die buurFinish() aanroept.
    ========================================================= */
@@ -3050,20 +3058,23 @@ const buurRemaining = () => roomList().filter(r => !r.soon && !isDug(r.id)).leng
 function buurWaiting() {
   const b = S.buur;
   if (!buurGateOn() || !nextRoom()) { if (b.due || b.nowReq) { b.due = 0; b.nowReq = 0; save(); } return false; }
-  if (b.nowReq && !b.due && !canDigNow()) { b.nowReq = 0; save(); }
-  return b.due > 0 || b.nowReq > 0;
+  if (b.nowReq) { b.nowReq = 0; save(); }          // oude saves: 'Graaf nu'-verzoek bestaat niet meer (Graaf nu graaft nu meteen)
+  if (b.due > buurRemaining()) { b.due = buurRemaining(); save(); }
+  return b.due > 0;
 }
 const buurLocked = () => buurWaiting() && buurLeft() <= 0;       // pogingen op voor vandaag
 const buurLevel = id => { const w = S.buur.wins[id] || 0; return w >= 5 ? 3 : w >= 2 ? 2 : 1; };
 const buurStars = n => '⭐'.repeat(n);
 // Met welke inzet start een streek? (test vanuit het ouderpaneel telt nooit mee)
-function buurCtx() { return { dig: !BUUR.test && buurWaiting() && buurLeft() > 0 }; }
+// dig: winnen = de Supermol graaft meteen de volgende kamer. stake: er wacht een dag-kamer (alleen dan kost verliezen een poging).
+function buurCtx() { const on = !BUUR.test && buurGateOn() && !!nextRoom() && !buurLocked(); return { dig: on, stake: on && buurWaiting() }; }
+const BUUR_WIN_DIG = 'Gewonnen! Nu kan de Supermol verder graven! ⛏️';
 // Dag-kamers worden 'wachtend' in plaats van meteen gegraven (aangeroepen vanuit checkDailyDig)
 function buurQueueDays(n) {
   const b = S.buur, before = b.due; b.due = Math.min(buurRemaining(), b.due + n); save();
   if (b.due > before) BUUR.news = true;
 }
-function buurRequestNow() { if (!buurGateOn() || !nextRoom() || !canDigNow()) return false; S.buur.nowReq = 1; save(); return true; }
+function buurRequestNow() { return false; }   // vervallen (fase 3.4): 'Graaf nu' graaft meteen, ook als buurman Brom oplet
 
 /* ---------- na een streek: uitslag + gevolgen ---------- */
 // o: { won, level, lines: [], scores?: [{name, text}] , perfect }
@@ -3077,11 +3088,17 @@ function buurFinish(api, id, o) {
     if (o.level >= 3) achieve({ mollenrace: 'mollenrace3', belletje: 'belletje' }[id] || '_');
     const nl = buurLevel(id); if (nl > oldLvl) lines.push(`🔓 Nieuw niveau vrij: <b>${buurStars(nl)}</b>!`);
     title = '😎 Te slim af!';
-    if (ctx.dig) { lines.push('⛏️ Buurman Brom heeft niks door. Nu kan de Supermol graven!'); after = async () => { await buurDigAfterWin(); await buurBijna(); }; noAgain = true; backLabel = '⛏️ Laat de mol graven!'; }
-    else { if (!BUUR.test) after = () => buurBijna(); }
+    if (ctx.dig && nextRoom()) {
+      const r = nextRoom();
+      lines.unshift(`<span class="buurdig"><b>${BUUR_WIN_DIG}</b><br>Buurman Brom heeft niks door. Volgende kamer: <b>${r.emoji} ${r.name}</b></span>`);
+      after = async () => { await buurDigAfterWin(true); await buurBijna(); }; noAgain = true; backLabel = '⛏️ Laat de mol graven!';
+    } else {
+      if (!BUUR.test && buurGateOn() && !nextRoom()) lines.push(`🎉 Alle kamers zijn al gegraven! Je krijgt gewoon je munten. Later komen er nog meer kamers bij!`);
+      if (!BUUR.test) after = () => buurBijna();
+    }
   } else {
     title = '😬 Betrapt!';
-    if (ctx.dig && S.buur.tries) {
+    if (ctx.stake && S.buur.tries) {
       b.lost++; const left = buurLeft();
       lines.push(left ? `Nog <b>${left}</b> ${left === 1 ? 'poging' : 'pogingen'} vandaag om buurman Brom te slim af te zijn.` : 'Dat was de laatste poging van vandaag…');
       if (!left) { noAgain = true; after = () => buurOutScene(); }
@@ -3093,11 +3110,11 @@ function buurFinish(api, id, o) {
   api.end({ scores: sc.map(s => ({ name: s.name, score: o.won ? o.level : 0, text: s.text })), winner: null, best: o.won ? o.level : 0, noRecord: true, title, lines,
     coins: o.won ? BUUR_COINS[o.level - 1] : 3, bonus: !!o.won, after, noAgain, backLabel });
 }
-// De mol graaft (na een gelukte streek of koekjes)
-async function buurDigAfterWin() {
-  const b = S.buur; let how = null;
-  if (!nextRoom()) { b.due = 0; b.nowReq = 0; save(); return; }
-  if (b.due > 0) { b.due--; how = 'dag'; } else if (b.nowReq && canDigNow()) { b.nowReq = 0; econDig(S.econ, dayKey()); addEnergie(-DIG_COST); S.stats.dugByEnergy++; how = 'energie'; } else return;
+// De mol graaft (na een gelukte streek of koekjes): eerst een wachtende dag-kamer, anders een extra 'streek-kamer' (geen limiet)
+async function buurDigAfterWin(won) {
+  const b = S.buur; let how = null; b.nowReq = 0;
+  if (!nextRoom()) { b.due = 0; save(); return; }
+  if (b.due > 0) { b.due--; how = 'dag'; } else if (won) { how = 'streek'; S.stats.dugByPrank = (S.stats.dugByPrank || 0) + 1; } else return;
   save(); const r = nextRoom();
   if (!(WORLD.active && WORLD.map)) { digRoom(r.id, how); if (how === 'energie') achieve('graafnu'); return; }
   WORLD.busy++;
@@ -3152,7 +3169,7 @@ async function buurKoekjes() {
     SFX.doorbell(); await wait(700);
     await talk([['', 'Jullie zetten een trommel appelkoekjes op de stoep bij buurman Brom en bellen aan…'], ['brom', 'Hm? Wat is dit nou? Appelkoekjes? Voor mij?'], ['brom', '…Hmpf. Nou… Dank je wel dan. Mmm. Lekker!'], ['f', '(fluistert) Hij is helemaal blij! Snel, Supermol, nu kun je graven!']]);
   } finally { WORLD.busy--; }
-  await buurDigAfterWin();
+  await buurDigAfterWin(true);
 }
 function buurKlusje() { if (!buurLocked() || S.buur.klus === dayKey()) return; closeOv('scrBuur'); openSetup('klusje'); }
 // klusje gedaan (aangeroepen door het klusjes-spel)
@@ -3165,11 +3182,10 @@ function renderBuurPlan() {
   let st;
   if (!buurGateOn() && !b.met) st = '<p>Nog niks aan de hand…</p>';
   else if (locked) st = `<h3>😴 Genoeg voor vandaag!</h3><p>Morgen mag de Supermol de <b>${r.emoji} ${r.name}</b> weer proberen te graven. Alle kamers en spellen blijven gewoon open.</p><p><b>TENZIJ…</b> 👇</p>`;
-  else if (waiting) st = `<h3>⛏️ De Supermol wil graven!</h3><p>Hij wil de <b>${r.emoji} ${r.name}</b> graven${b.nowReq && !b.due ? ' (met 3 ⚡)' : ''}. Maar buurman Brom luistert mee… <b>Haal eerst een streek uit!</b> Lukt het? Dan graaft de Supermol meteen.</p>
-      ${b.tries ? `<div class="tries">Pogingen vandaag: ${Array.from({ length: b.tries + b.extra }, (_, i) => `<span class="${i < b.lost ? 'used' : ''}"></span>`).join('')} <b>nog ${left}</b></div>` : '<div class="tries">Pogingen: <b>onbeperkt</b></div>'}`;
   else if (!b.on) st = '<h3>😎 Streken voor de lol</h3><p>Papa of mama heeft de buurman-poort uitgezet: de Supermol graaft zonder streek. Streken uithalen kan nog steeds!</p>';
-  else if (r) st = `<h3>👀 Buurman Brom let op</h3><p>Morgen wil de Supermol de <b>${r.emoji} ${r.name}</b> graven: dan moeten jullie buurman Brom eerst te slim af zijn. Nu spelen is voor de lol: 🪙 munten, ⚡ 1x per dag per streek en prestaties.</p>`;
-  else st = '<h3>🎉 Alle kamers zijn gegraven!</h3><p>Streken uithalen kan altijd: 🪙 munten, ⚡ 1x per dag per streek en prestaties. En wie weet krijgt de Supermol ooit nieuwe bouwtekeningen…</p>';
+  else if (r) st = `<h3>⛏️ Win een streek, dan graaft de Supermol!</h3><p>Elke streek die lukt: de Supermol graaft <b>meteen</b> de volgende kamer. Nu: <b>${r.emoji} ${r.name}</b>.${waiting ? ' (Die kamer staat al klaar voor vandaag!)' : ''} Zo vaak als je wilt!</p>
+      ${waiting ? (b.tries ? `<div class="tries">Pogingen vandaag: ${Array.from({ length: b.tries + b.extra }, (_, i) => `<span class="${i < b.lost ? 'used' : ''}"></span>`).join('')} <b>nog ${left}</b></div>` : '<div class="tries">Pogingen: <b>onbeperkt</b></div>') : ''}`;
+  else st = `<h3>🎉 Alle kamers zijn gegraven!</h3><p>Wat een geheime basis! Streken uithalen kan altijd: 🪙 munten, ⚡ 1x per dag per streek en prestaties. Later komen er nog meer kamers bij!</p>`;
   const tz = locked ? `<div class="hqcard tenzij"><h3>🤞 Tenzij…</h3><div class="tzrow">
       <button class="btn small ${b.klus === dayKey() ? '' : 'green'}" id="bzKlus" ${b.klus === dayKey() ? 'disabled' : ''}>🧹 Klusje voor mama${b.klus === dayKey() ? ': vandaag al gedaan' : ' (+1 poging)'}</button>
       <button class="btn small ${has('koekjestrommel') ? 'orange' : ''}" id="bzKoek" ${has('koekjestrommel') ? '' : 'disabled'}>🍪 Appelkoekjes geven${has('koekjestrommel') ? ' (dan graaft hij toch)' : ''}</button></div>
@@ -3678,16 +3694,17 @@ const hqKey = () => [S.energie, S.munten, buurWaiting(), buurLeft(), S.buur.tota
 function renderHQStatus() {
   const st = molStatus(), r = st.next; $('#hqMol').dataset.k = hqKey();
   const frac = st.ms ? 1 - st.ms / 86400000 : 1;
-  $('#hqMol').innerHTML = `<h3>🦫 Supermol</h3><div style="display:flex;gap:10px;align-items:center"><div style="width:90px;flex:none">${SUPERMOL_SVG}</div><div>${buurWaiting() ? `<b>Supermol staat klaar!</b><br>Wil graven: <b>${r.emoji} ${r.name}</b><br>👀 Maar buurman Brom luistert mee…` : r && flag('baseOpen') ? `<b>Supermol graaft…</b><br>Volgende kamer: <b>${r.emoji} ${r.name}</b><br>Klaar: morgen${buurGateOn() ? ' (na een streek 🤫)' : ''}` : st.text}</div></div>
+  $('#hqMol').innerHTML = `<h3>🦫 Supermol</h3><div style="display:flex;gap:10px;align-items:center"><div style="width:90px;flex:none">${SUPERMOL_SVG}</div><div>${buurWaiting() ? `<b>Supermol staat klaar!</b><br>Wil graven: <b>${r.emoji} ${r.name}</b><br>👀 Maar buurman Brom luistert mee…` : r && flag('baseOpen') ? `<b>Supermol graaft…</b><br>Volgende kamer: <b>${r.emoji} ${r.name}</b><br>Klaar: morgen${buurGateOn() ? ' (na een streek 🤫)<br>⛏️ Of meteen: win een streek op het Buurman-plan!' : ''}` : st.text}</div></div>
     ${st.ms ? `<div class="hqbar"><i style="width:${(frac * 100).toFixed(1)}%"></i></div><div>Nog <span class="cd" id="hqCd">${fmtDur(st.ms)}</span></div>` : ''}
     ${robotBuilt('vliegbot') ? `<div style="display:flex;gap:10px;align-items:center;margin-top:6px"><div style="width:60px;flex:none">${VLIEGBOT_SVG}</div><div style="font-size:.9em">🚁 <b>Vliegbot</b>: hoge plekken ${flyCount()}/${allFlySpots().length}</div></div>`
       : S.seenItems.vliegtekening ? `<div style="font-size:.9em;margin-top:6px">🚁 Vliegbot-onderdelen: <b>${vliegHave()}/${VLIEG_PARTS.length}</b></div>` : ''}`;
   const can = canDigNow() && !!r && flag('baseOpen'), dl = econDigsLeft(S.econ, dayKey()), gate = buurGateOn(), waiting = buurWaiting();
   $('#hqEnergy').innerHTML = `<h3>⚡ Energie</h3><div class="energybar">${Array.from({ length: DIG_COST }, (_, i) => `<span class="eb ${i < S.energie ? 'on' : ''}"></span>`).join('')}<b style="margin-left:6px">${S.energie}</b></div>
     <p style="margin:.4em 0;font-size:.85em">${dl ? `Met ${DIG_COST} energie graaft de Supermol <b>meteen</b> een extra kamer (vandaag nog ${dl}×).` : `⏸️ ${ECON_DIG_TXT}`}</p>
-    ${waiting ? '<button class="btn orange" id="hqDig">🤫 Eerst een streek!</button>' : `<button class="btn ${can ? 'green' : ''}" id="hqDig" ${can ? '' : 'disabled'}>⛏️ Graaf nu!</button>`}
+    <button class="btn ${can ? 'green' : ''}" id="hqDig" ${can ? '' : 'disabled'}>⛏️ Graaf nu!</button>${gate && r && flag('baseOpen') ? ' <button class="btn orange" id="hqPlan">🤫 Streek = graven!</button>' : ''}
     <p style="margin:.5em 0 0;font-size:.8em">🪙 ${S.munten} munten · energie-automaat: 50 munten = 1 ⚡ (max ${ECON.BUY_MAX}× per dag) · ⚡ verdienen vandaag: nog ${econEnergyLeft(S.econ, dayKey())} van ${ECON.E_DAY}</p>`;
-  const b = $('#hqDig'); if (b) b.onclick = async () => { closeOv('scrHQ'); if (gate) { if (!waiting) buurRequestNow(); openBuurPlan(); return; } await digNowCutscene(); };
+  const b = $('#hqDig'); if (b) b.onclick = async () => { closeOv('scrHQ'); await digNowCutscene(); };
+  const hp = $('#hqPlan'); if (hp) hp.onclick = () => { closeOv('scrHQ'); openBuurPlan(); };
   const bc = $('#hqBuur'); bc.style.display = S.buur.met ? '' : 'none';
   if (S.buur.met) {
     const L = buurLeft(), lk = waiting && L <= 0;
@@ -3770,19 +3787,29 @@ function openSetup(id) {
   openOv('mdSetup');
 }
 /* ---------- starten / stoppen ---------- */
+/* Het speelveld = de canvas binnen de veilige zone (zie #cvMG in de CSS). top = eerste vrije y (canvas-px) onder de
+   knoppen bovenin (terug / titel / pauze / geluid): daar mag de HUD van een spel beginnen, zodat niets eronder valt. */
 function mgSize() {
-  const dpr = Math.min(2, devicePixelRatio || 1), W = innerWidth, H = innerHeight;
+  const dpr = Math.min(2, devicePixelRatio || 1), r = mgCv.getBoundingClientRect();
+  const W = Math.max(1, Math.round(r.width || innerWidth)), H = Math.max(1, Math.round(r.height || innerHeight));
+  let bar = 0; $$('#scrMG .mgtop .iconbtn, #scrMG .mgtop .title span').forEach(b => { const q = b.getBoundingClientRect(); if (q.height) bar = Math.max(bar, q.bottom); });
+  const top = Math.max(0, Math.round((bar || r.top + 62) - r.top + 6));
   mgCv.width = Math.round(W * dpr); mgCv.height = Math.round(H * dpr);
-  if (MG.api) { MG.api.W = W; MG.api.H = H; MG.api.dpr = dpr; }
-  return { W, H, dpr };
+  $('#scrMG').style.setProperty('--mgtop', top + 'px');
+  if (MG.api) Object.assign(MG.api, { W, H, dpr, top, ox: r.left, oy: r.top });
+  return { W, H, dpr, top, ox: r.left, oy: r.top };
 }
+// HUD-vakjes van dit frame (voor de automatische overlap-test in tests/viewports*.js)
+MG.hud = [];
+function mgHud(x, y, w, h, name) { if (MG.hud.length < 60) MG.hud.push({ x, y, w, h, name: name || '' }); }
 function mgStart(id, n) {
   const g = GB.MINIGAMES[id]; mgStop(true);
   MG.id = id; MG.n = n; MG.paused = false; MG.t = 0; MG.prevMusic = MUS.want;
-  show('scrMG'); $('#mgTitle').textContent = `${g.emoji} ${g.name}`; $('#mgCtl').innerHTML = ''; $('#mgBanner').classList.remove('show');
+  show('scrMG'); $('#mgTitle').textContent = `${g.emoji} ${g.name}`; $('#mgCtl').innerHTML = ''; mgBannerClaim(); $('#mgBanner').classList.remove('show');
   const sz = mgSize();
   const api = MG.api = {
-    cv: mgCv, ctx: mgCtx, ctl: $('#mgCtl'), W: sz.W, H: sz.H, dpr: sz.dpr, players: mgPlayers(n), n,
+    cv: mgCv, ctx: mgCtx, ctl: $('#mgCtl'), W: sz.W, H: sz.H, dpr: sz.dpr, top: sz.top, ox: sz.ox, oy: sz.oy, players: mgPlayers(n), n,
+    hud: mgHud, xy: e => { const r = mgCv.getBoundingClientRect(); return [e.clientX - r.left, e.clientY - r.top]; },
     banner: mgBanner, button: mgButton, place: mgPlace, end: res => mgFinish(res), get paused() { return MG.paused; },
   };
   MG.inst = g.create(api); MG.active = true; musicWant(g.music);
@@ -3790,18 +3817,21 @@ function mgStart(id, n) {
 }
 function mgStop(quiet) {
   if (MG.inst && MG.inst.destroy) try { MG.inst.destroy(); } catch (e) { console.warn(e); }
-  MG.inst = null; MG.active = false; MG.api = null; $('#mgCtl').innerHTML = ''; $('#mgBanner').classList.remove('show');
+  MG.inst = null; MG.active = false; MG.api = null; $('#mgCtl').innerHTML = ''; mgBannerClaim(); $('#mgBanner').classList.remove('show');
   if (!quiet) { const w = WORLD.map && WORLD.active; show(w ? 'scrWorld' : 'scrTitle'); musicWant(w ? WORLD.map.music : 'titel'); if (!w) renderTitle(); save(); }
 }
-MG.tick = dt => { if (MG.paused || !MG.inst) return; MG.t += dt; MG.inst.tick(Math.min(dt, 1 / 20)); };
+MG.tick = dt => { if (MG.paused || !MG.inst) return; MG.t += dt; MG.hud = []; MG.inst.tick(Math.min(dt, 1 / 20)); };
 addEventListener('resize', () => { if (MG.active && MG.inst) { const s = mgSize(); if (MG.inst.resize) MG.inst.resize(s.W, s.H); } });
 /* ---------- banner in het midden (tik om verder te gaan) ---------- */
+/* Elke banner (en elke start/stop van een spel) 'claimt' #mgBanner. Een oude banner-timer (bv. 'Hole 1' van minigolf als je snel
+   wisselt) mag dan niet meer de banner van het volgende spel verbergen of zijn klik-handler wissen. */
+function mgBannerClaim() { const el = $('#mgBanner'); el.onclick = null; return el._tok = (el._tok || 0) + 1; }
 function mgBanner(html, opt) {
-  opt = opt || {}; const el = $('#mgBanner');
+  opt = opt || {}; const el = $('#mgBanner'), tok = mgBannerClaim();
   return new Promise(res => {
     el.innerHTML = html + (opt.button ? `<div class="btnrow" style="margin-top:10px"><button class="btn big green">${opt.button}</button></div>` : '');
     el.classList.add('show'); let done = false;
-    const fin = () => { if (done) return; done = true; el.classList.remove('show'); el.onclick = null; res(); };
+    const fin = () => { if (done) return; done = true; if (el._tok === tok) { el.classList.remove('show'); el.onclick = null; } res(); };
     if (opt.button) el.querySelector('button').onclick = () => { SFX.click(); fin(); };
     else { el.onclick = fin; setTimeout(fin, opt.ms || 1400); }
   });
@@ -4232,7 +4262,7 @@ class BowlingGame {
   newRack(standing) { this.sim = new BowlSim(standing); this.rackT = standing.length === 10 ? 0 : 1; }
   /* ---------- camera / projectie ---------- */
   layout() {
-    const W = this.W, H = this.H, top = Math.min(150, 64 + this.players.length * 44);
+    const W = this.W, H = this.H, y0 = this.api.top + 4, top = y0 + Math.min(92, 6 + this.players.length * 44);   // scorebord onder de knoppen bovenin
     this.hor = top + (H - top) * .16;
     this.F = Math.min((H * .86 - this.hor) * 2 / 1.15, .92 * W * 2 / 1.054);
     this.top = top;
@@ -4418,12 +4448,12 @@ class BowlingGame {
     if (!nx.done) {
       const txt = `${this.players.length > 1 ? pl.name + ' · ' : ''}Frame ${nx.frame + 1} · Bal ${nx.ball + 1}`;
       g.font = `700 ${W < 500 ? 15 : 18}px Fredoka, sans-serif`; const tw = g.measureText(txt).width + 34;
-      g.fillStyle = 'rgba(255,255,255,.92)'; rrect(g, W / 2 - tw / 2, H - 46, tw, 34, 17); g.fill(); g.fillStyle = pl.col; g.beginPath(); g.arc(W / 2 - tw / 2 + 16, H - 29, 7, 0, 7); g.fill();
+      g.fillStyle = 'rgba(255,255,255,.92)'; rrect(g, W / 2 - tw / 2, H - 46, tw, 34, 17); g.fill(); this.api.hud(W / 2 - tw / 2, H - 46, tw, 34, 'beurt'); g.fillStyle = pl.col; g.beginPath(); g.arc(W / 2 - tw / 2 + 16, H - 29, 7, 0, 7); g.fill();
       g.fillStyle = '#1f2a44'; g.textAlign = 'center'; g.textBaseline = 'middle'; g.fillText(txt, W / 2 + 8, H - 28);
     }
     if (st === 'aim') {
       const t = this.msgT > 0 ? this.msg : this.charge >= 0 ? 'Laat los om te gooien!' : (W > 700 ? '👉 Sleep opzij om te mikken · 👆 veeg snel omhoog om te gooien' : '👆 Veeg omhoog om te gooien');
-      g.font = `600 ${W < 500 ? 14 : 17}px Fredoka, sans-serif`; g.textAlign = 'center'; g.fillStyle = 'rgba(255,255,255,.95)'; g.fillText(t, W / 2, H - 62);
+      g.font = `600 ${W < 500 ? 14 : 17}px Fredoka, sans-serif`; g.textAlign = 'center'; g.fillStyle = 'rgba(255,255,255,.95)'; g.fillText(t, W / 2, H - 62); { const mw = g.measureText(t).width; this.api.hud(W / 2 - mw / 2, H - 74, mw, 20, 'uitleg'); }
       if (this.charge >= 0) { const pw = .5 - .5 * Math.cos(this.charge * 3); g.fillStyle = 'rgba(0,0,0,.4)'; g.fillRect(W / 2 - 100, H - 100, 200, 16); g.fillStyle = pw > .75 ? '#e8403a' : pw > .4 ? '#ffd23f' : '#4cd964'; g.fillRect(W / 2 - 100, H - 100, 200 * pw, 16); }
       if (this.spin) { g.fillText(`Effect: ${this.spin < 0 ? '↶' : '↷'} ${Math.round(Math.abs(this.spin) * 100)}%`, W / 2, H - 82); }
     }
@@ -4455,10 +4485,10 @@ class BowlingGame {
     g.restore();
   }
   drawCard() {
-    const g = this.ctx, W = this.W, pls = this.players, nameW = W < 500 ? 58 : 96, x0 = 10, y0 = 58;
+    const g = this.ctx, W = this.W, pls = this.players, nameW = W < 500 ? 58 : 96, x0 = 10, y0 = this.api.top + 4;
     const cw = Math.min(54, (W - 20 - nameW - 46) / 10.5), rowH = W < 500 ? 38 : 42, tot = 46;
     const wTot = nameW + cw * 10.5 + tot, xs = (W - wTot) / 2;
-    g.fillStyle = 'rgba(255,255,255,.94)'; rrect(g, xs - 4, y0 - 4, wTot + 8, rowH * pls.length + 8, 12); g.fill();
+    g.fillStyle = 'rgba(255,255,255,.94)'; rrect(g, xs - 4, y0 - 4, wTot + 8, rowH * pls.length + 8, 12); g.fill(); this.api.hud(xs - 4, y0 - 4, wTot + 8, rowH * pls.length + 8, 'scorebord');
     pls.forEach((pl, r) => {
       const y = y0 + r * rowH, sc = bowlingScore(pl.rolls), nx = bowlingNext(pl.rolls), active = r === this.cp && !nx.done;
       if (active) { g.fillStyle = 'rgba(255,210,63,.35)'; g.fillRect(xs, y, wTot, rowH); }
@@ -4633,7 +4663,7 @@ class BlokkenGame {
   }
   /* ---------- vegen op het bord ---------- */
   whose(x, y) { if (!this.vs) return this.P[0]; if (this.layoutMode === 'vsp') return y < this.P[1].by - 8 ? this.P[0] : this.P[1]; return x < this.W / 2 ? this.P[0] : this.P[1]; }
-  pDown(e) { audioUnlock(); if (this.api.paused) return; const P = this.whose(e.clientX, e.clientY); this.ptrs[e.pointerId] = { P, x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY, t0: performance.now(), mx: 0, my: 0, moved: false }; }
+  pDown(e) { audioUnlock(); if (this.api.paused) return; const P = this.whose(...this.api.xy(e)); this.ptrs[e.pointerId] = { P, x0: e.clientX, y0: e.clientY, x: e.clientX, y: e.clientY, t0: performance.now(), mx: 0, my: 0, moved: false }; }
   pMove(e) {
     const q = this.ptrs[e.pointerId]; if (!q || !this.started) return; const cs = q.P.cs || 30;
     while (e.clientX - q.x0 - q.mx * cs * .9 > cs * .9) { q.mx++; if (q.P.g.move(1)) SFX.move(); q.moved = true; }
@@ -4650,7 +4680,7 @@ class BlokkenGame {
   }
   /* ---------- indeling ---------- */
   resize(W, H) {
-    this.W = W; this.H = H; const top = 62, land = W > H * 1.1;
+    this.W = W; this.H = H; const top = this.api.top, land = W > H * 1.1;   // onder de knoppen bovenin
     this.layoutMode = this.vs ? 'vs' : land ? 'land' : 'port';
     if (this.vs && !land) { // staand: boven elkaar, ieder bord links met knoppen ernaast
       this.layoutMode = 'vsp'; const hh = (H - top) / 2;
@@ -4674,7 +4704,7 @@ class BlokkenGame {
       this.api.place(P.btn.left, 14, yb, b, b); this.api.place(P.btn.right, 26 + b, yb, b, b); this.api.place(P.btn.soft, 20 + b * .5, ya, b, b * .85);
       this.api.place(P.btn.rot, W - 14 - b, yb, b, b); this.api.place(P.btn.hard, W - 26 - 2 * b, yb, b, b); this.api.place(P.btn.hold, W - 20 - b * 1.5, ya, b, b * .85);
     } else {
-      const P = this.P[0], bh = clamp(W / 6.6, 54, 110), avail = H - top - bh - 28, cs = Math.floor(Math.min(avail / 20, (W - 16) / 15.2)); P.cs = cs; P.bx = (W - cs * 10) / 2; P.by = top + 4; P.side = cs * 2.6;
+      const P = this.P[0], bh = clamp(W / 6.6, 54, 110), avail = H - top - bh - 28, cs = Math.floor(Math.min(avail / 20, (W - 40) / 15.2));   // bord 10 + 2 panelen van 2.6 + 2x12px tussenruimte + rand P.cs = cs; P.bx = (W - cs * 10) / 2; P.by = top + 4; P.side = cs * 2.6;
       const n = 6, gap = 8, bw = (W - 20 - gap * (n - 1)) / n;
       ['left', 'right', 'soft', 'hold', 'rot', 'hard'].forEach((k, j) => this.api.place(P.btn[k], 10 + j * (bw + gap), H - bh - 12, bw, bh));
     }
@@ -4745,7 +4775,7 @@ class BlokkenGame {
     if (this.vs && G.garbageIn > 0) { const h = Math.min(20, G.garbageIn) * cs; g.fillStyle = (this.t * 4 | 0) % 2 ? '#e8403a' : '#ff8a7a'; g.fillRect(bx - 14, by + bh - h, 6, h); }
     // zijpanelen: bewaren + volgende
     const side = P.side, ms = Math.max(8, Math.min(cs * .62, side / 4.6)), lab = `700 ${Math.max(11, Math.min(16, cs * .45))}px Fredoka, sans-serif`;
-    const panel = (x, y, w, h, title) => { g.fillStyle = 'rgba(255,255,255,.9)'; rrect(g, x, y, w, h, 10); g.fill(); g.fillStyle = '#1f2a44'; g.font = lab; g.textAlign = 'center'; g.textBaseline = 'top'; g.fillText(title, x + w / 2, y + 4); };
+    const panel = (x, y, w, h, title) => { this.api.hud(x, y, w, h, title); g.fillStyle = 'rgba(255,255,255,.9)'; rrect(g, x, y, w, h, 10); g.fill(); g.fillStyle = '#1f2a44'; g.font = lab; g.textAlign = 'center'; g.textBaseline = 'top'; g.fillText(title, x + w / 2, y + 4); };
     const right = P.panels === 'right', lx = right ? bx + bw + 12 : bx - 12 - side, rx = bx + bw + 12, pw = side;
     const hy = by, ny = right ? by + ms * 3.6 + 26 : by;
     panel(lx, hy, pw, ms * 3.6 + 18, 'Bewaard'); g.globalAlpha = G.canHold ? 1 : .4; this.mini(g, G.hold, lx + pw / 2, hy + 18 + ms * 1.7, ms); g.globalAlpha = 1;
@@ -4821,7 +4851,7 @@ class FlipperGame {
   /* ---------- invoer ---------- */
   pDown(e) {
     audioUnlock(); if (this.api.paused) return; e.preventDefault();
-    const left = e.clientX < this.W / 2; this.touches[e.pointerId] = left;
+    const left = this.api.xy(e)[0] < this.W / 2; this.touches[e.pointerId] = left;
     if (this.state === 'plunger') { if (this.charge < 0) this.charge = 0; }
     this.flip(left ? 0 : 1, true);
   }
@@ -4845,7 +4875,7 @@ class FlipperGame {
   }
   onPause() { this.fl.forEach(f => f.up = false); this.touches = {}; this.charge = -1; }
   resize(W, H) {
-    this.W = W; this.H = H; const land = W > H * 1.05, topBar = land ? 56 : 110;
+    this.W = W; this.H = H; const land = W > H * 1.05, topBar = land ? this.api.top - 4 : this.api.top + 48;   // onder de knoppen (en de scorebalk) bovenin
     this.sc = Math.min((H - topBar - 8) / 712, (W - 8) / 404); this.ox = (W - FL.W * this.sc) / 2; this.oy = topBar + (H - topBar - 712 * this.sc) / 2 + 6;
     this.land = land; this.static = null;
   }
@@ -4974,16 +5004,16 @@ class FlipperGame {
     g.textBaseline = 'middle';
     if (this.land) {
       const pw = Math.min(260, this.ox - 24); if (pw > 120) {
-        pls.forEach((p, i) => { const x = 12, y = 70 + i * 120, act = i === this.cp; g.fillStyle = act ? 'rgba(255,255,255,.95)' : 'rgba(255,255,255,.6)'; rrect(g, x, y, pw, 104, 16); g.fill(); g.fillStyle = p.col; g.fillRect(x, y + 10, 6, 84); g.fillStyle = '#1f2a44'; g.textAlign = 'left'; g.font = '700 18px Fredoka, sans-serif'; g.fillText(p.name, x + 16, y + 22); g.font = '700 30px Fredoka, sans-serif'; g.fillStyle = '#3f6fe0'; g.fillText(fmtNum(p.score), x + 16, y + 56); g.font = '600 15px Fredoka, sans-serif'; g.fillStyle = '#1f2a44'; g.fillText('●'.repeat(Math.max(0, p.ballsLeft)) + '○'.repeat(3 - Math.max(0, p.ballsLeft)) + ' ballen', x + 16, y + 86); });
-        const x = W - pw - 12; g.fillStyle = 'rgba(255,255,255,.9)'; rrect(g, x, 70, pw, 104, 16); g.fill(); g.fillStyle = '#1f2a44'; g.textAlign = 'left'; g.font = '700 16px Fredoka, sans-serif'; g.fillText(`🏆 Record: ${fmtNum(Math.max(S.hi.flipper || 0, ...pls.map(p => p.score)))}`, x + 14, 94); g.fillText(`✖️ Punten x${this.mult}`, x + 14, 122); g.fillText(this.hole.lit ? '🕳️ Mollenhol open!' : `⭐ Rondjes ${this.orbits}/3`, x + 14, 150);
+        pls.forEach((p, i) => { const x = 12, y = this.api.top + 8 + i * 120, act = i === this.cp; this.api.hud(x, y, pw, 104, 'speler'); g.fillStyle = act ? 'rgba(255,255,255,.95)' : 'rgba(255,255,255,.6)'; rrect(g, x, y, pw, 104, 16); g.fill(); g.fillStyle = p.col; g.fillRect(x, y + 10, 6, 84); g.fillStyle = '#1f2a44'; g.textAlign = 'left'; g.font = '700 18px Fredoka, sans-serif'; g.fillText(p.name, x + 16, y + 22); g.font = '700 30px Fredoka, sans-serif'; g.fillStyle = '#3f6fe0'; g.fillText(fmtNum(p.score), x + 16, y + 56); g.font = '600 15px Fredoka, sans-serif'; g.fillStyle = '#1f2a44'; g.fillText('●'.repeat(Math.max(0, p.ballsLeft)) + '○'.repeat(3 - Math.max(0, p.ballsLeft)) + ' ballen', x + 16, y + 86); });
+        const x = W - pw - 12, y0 = this.api.top + 8; this.api.hud(x, y0, pw, 104, 'record'); g.fillStyle = 'rgba(255,255,255,.9)'; rrect(g, x, y0, pw, 104, 16); g.fill(); g.fillStyle = '#1f2a44'; g.textAlign = 'left'; g.font = '700 16px Fredoka, sans-serif'; g.fillText(`🏆 Record: ${fmtNum(Math.max(S.hi.flipper || 0, ...pls.map(p => p.score)))}`, x + 14, y0 + 24); g.fillText(`✖️ Punten x${this.mult}`, x + 14, y0 + 52); g.fillText(this.hole.lit ? '🕳️ Mollenhol open!' : `⭐ Rondjes ${this.orbits}/3`, x + 14, y0 + 80);
       }
     } else {
-      const y = 62, w = W - 20; g.fillStyle = 'rgba(255,255,255,.93)'; rrect(g, 10, y, w, 44, 14); g.fill(); g.textAlign = 'center'; g.font = `700 ${W < 450 ? 14 : 17}px Fredoka, sans-serif`;
+      const y = this.api.top, w = W - 20; this.api.hud(10, y, w, 44, 'score'); g.fillStyle = 'rgba(255,255,255,.93)'; rrect(g, 10, y, w, 44, 14); g.fill(); g.textAlign = 'center'; g.font = `700 ${W < 450 ? 14 : 17}px Fredoka, sans-serif`;
       pls.forEach((p, i) => { const cx = 10 + w * (pls.length > 1 ? (i + .5) / 2 : .35); g.fillStyle = i === this.cp ? p.col : '#8a93a8'; g.fillText(`${p.name}: ${fmtNum(p.score)}  ${'●'.repeat(Math.max(0, p.ballsLeft))}`, cx, y + 22); });
       if (pls.length === 1) { g.fillStyle = '#1f2a44'; g.fillText(`x${this.mult} · 🏆 ${fmtNum(Math.max(S.hi.flipper || 0, pls[0].score))}`, 10 + w * .8, y + 22); }
     }
     const tip = this.msgT > 0 ? this.msg : this.state === 'plunger' ? (this.charge >= 0 ? 'Laat los om te schieten! 🚀' : 'Houd vast en laat los om te schieten!') : '';
-    if (tip) { g.font = `700 ${W < 450 ? 15 : 19}px Fredoka, sans-serif`; g.textAlign = 'center'; const tw = g.measureText(tip).width + 30; g.fillStyle = 'rgba(31,42,68,.85)'; rrect(g, W / 2 - tw / 2, H - 54, tw, 38, 19); g.fill(); g.fillStyle = '#fff'; g.fillText(tip, W / 2, H - 35); }
+    if (tip) { g.font = `700 ${W < 450 ? 15 : 19}px Fredoka, sans-serif`; g.textAlign = 'center'; const tw = g.measureText(tip).width + 30; this.api.hud(W / 2 - tw / 2, H - 54, tw, 38, 'tip'); g.fillStyle = 'rgba(31,42,68,.85)'; rrect(g, W / 2 - tw / 2, H - 54, tw, 38, 19); g.fill(); g.fillStyle = '#fff'; g.fillText(tip, W / 2, H - 35); }
     if (this.state === 'plunger' && this.charge >= 0) { const x = this.ox + (FL.LANE_X + 22) * this.sc, y = this.oy + 560 * this.sc, h = 90 * this.sc; g.fillStyle = 'rgba(0,0,0,.5)'; g.fillRect(x, y, 10, h); g.fillStyle = this.charge > .8 ? '#e8403a' : '#ffd23f'; g.fillRect(x, y + h * (1 - this.charge), 10, h * this.charge); }
     g.textBaseline = 'alphabetic';
   }
@@ -5161,7 +5191,7 @@ class GolfGame {
   layout() {
     const h = this.hole, W = this.W, H = this.H, xs = h.walls[0].map(p => p[0]), ys = h.walls[0].map(p => p[1]);
     const bx0 = Math.min(...xs) - .5, bx1 = Math.max(...xs) + .5, by0 = Math.min(...ys) - .5, by1 = Math.max(...ys) + .5, bw = bx1 - bx0, bh = by1 - by0;
-    const top = 66, bot = 44, aw = W - 16, ah = H - top - bot;
+    const top = this.api.top + 4, bot = 44, aw = W - 16, ah = H - top - bot;   // onder de knoppen bovenin
     const rot = H > W * 1.05; let k, ox, oy;
     if (!rot) { k = Math.min(aw / bw, ah / bh); ox = (W - bw * k) / 2 - bx0 * k; oy = top + (ah - bh * k) / 2 - by0 * k; this.M = [k, 0, 0, k, ox, oy]; }
     else { k = Math.min(aw / bh, ah / bw); const ex = (W - bh * k) / 2, ey = top + (ah - bw * k) / 2; this.M = [0, -k, k, 0, ex - by0 * k, ey + bx1 * k]; }
@@ -5283,7 +5313,7 @@ class GolfGame {
         const ex = bx + sdx * len, ey = by + sdy * len; c.fillStyle = col; c.beginPath(); c.moveTo(ex + sdx * 12, ey + sdy * 12); c.lineTo(ex - sdy * 8, ey + sdx * 8); c.lineTo(ex + sdy * 8, ey - sdx * 8); c.fill();
         if (this.drag) { c.strokeStyle = 'rgba(255,255,255,.6)'; c.lineWidth = 2; c.beginPath(); c.moveTo(this.drag.sx, this.drag.sy); c.lineTo(this.drag.x, this.drag.y); c.stroke(); dot(c, this.drag.x, this.drag.y, 9, 'rgba(255,255,255,.5)'); }
         // krachtmeter
-        const mw = 90, mx = clamp(bx - mw / 2, 8, W - mw - 8), my = clamp(by + 22, 70, H - 60); c.fillStyle = 'rgba(0,0,0,.5)'; rrect(c, mx - 3, my - 3, mw + 6, 14, 7); c.fill(); c.fillStyle = col; rrect(c, mx, my, Math.max(8, mw * aim.p), 8, 4); c.fill();
+        const mw = 90, mx = clamp(bx - mw / 2, 8, W - mw - 8), my = clamp(by + 22, this.api.top + 8, H - 60); c.fillStyle = 'rgba(0,0,0,.5)'; rrect(c, mx - 3, my - 3, mw + 6, 14, 7); c.fill(); c.fillStyle = col; rrect(c, mx, my, Math.max(8, mw * aim.p), 8, 4); c.fill();
       } else { const p = .5 + .5 * Math.sin(this.t * 5); c.strokeStyle = `rgba(255,255,255,${.4 + p * .4})`; c.lineWidth = 2.5; c.beginPath(); c.arc(bx, by, GOLF.R * this.k + 6 + p * 4, 0, 7); c.stroke(); }
     }
     // vlag (staat altijd rechtop op het scherm)
@@ -5300,7 +5330,7 @@ class GolfGame {
     ps.forEach((p, i) => {
       const x = W / 2 - (ps.length * (cw + 8) - 8) / 2 + i * (cw + 8), act = i === this.cp && this.state !== 'done';
       const tot = p.holes.reduce((a, b) => a + (b || 0), 0), cur = act && this.state !== 'wait' && this.state !== 'intro' && p.holes[this.hi] == null ? this.strokes : null;
-      c.fillStyle = act ? 'rgba(255,255,255,.95)' : 'rgba(255,255,255,.55)'; rrect(c, x, y, cw, 30, 15); c.fill(); if (act) { c.strokeStyle = p.col; c.lineWidth = 3; c.stroke(); }
+      this.api.hud(x, y, cw, 30, 'speler'); c.fillStyle = act ? 'rgba(255,255,255,.95)' : 'rgba(255,255,255,.55)'; rrect(c, x, y, cw, 30, 15); c.fill(); if (act) { c.strokeStyle = p.col; c.lineWidth = 3; c.stroke(); }
       dot(c, x + 15, y + 15, 8, p.col); c.fillStyle = '#1f2a44'; c.textAlign = 'left'; c.font = '700 13px system-ui, sans-serif';
       c.fillText(`${p.name.slice(0, 10)}`, x + 28, y + 19); c.textAlign = 'right'; c.font = '600 12px system-ui, sans-serif';
       c.fillText(cur != null ? `slag ${cur} · tot ${tot}` : `totaal ${tot}`, x + cw - 10, y + 19);
@@ -5439,7 +5469,7 @@ class RaceGame {
   resize(W, H) { this.W = W; this.H = H; this.layout(); this.placeButtons(); }
   /* ---------- baan kiezen ---------- */
   choose() {
-    const el = $('#mgBanner'), many = this.players.length > 1;
+    const el = $('#mgBanner'), many = this.players.length > 1; mgBannerClaim();
     const aiOpts = many ? [0, 1] : [1, 2];
     const render = () => {
       el.innerHTML = `<h2 style="margin:0 0 6px">🏎️ Kies een baan</h2><div style="display:flex;gap:8px;justify-content:center;flex-wrap:nowrap">${RACE_TRACKS.map((t, i) => `<button class="btn white" data-t="${i}" style="display:flex;flex-direction:column;align-items:center;padding:6px 8px;gap:2px;min-width:0"><canvas width="132" height="82" style="width:min(110px,24vw);aspect-ratio:132/82;height:auto;border-radius:10px"></canvas><b style="font-size:.85em">${t.emoji} ${t.name}</b><small style="font-size:.7em;font-weight:600">🏆 ${raceFmt(S.hi['racebaan_' + t.id])}</small></button>`).join('')}</div>
@@ -5494,14 +5524,14 @@ class RaceGame {
     if (!many) { P(L1, g, H - bw - g); P(R1, W - bw - g, H - bw - g); return; }
     const [L2, R2] = this.btns[1];
     if (!rot) { P(L1, g, H - bw - g); P(R1, g * 2 + bw, H - bw - g); P(L2, W - 2 * bw - g * 2, H - bw - g); P(R2, W - bw - g, H - bw - g); }
-    else { P(L1, g, H - bw - g); P(R1, W - bw - g, H - bw - g); const ty = 66; P(L2, W - bw - g, ty, true); P(R2, g, ty, true); } // speler 2 zit tegenover: zijn links = scherm-rechts
+    else { P(L1, g, H - bw - g); P(R1, W - bw - g, H - bw - g); const ty = this.api.top + 4; P(L2, W - bw - g, ty, true); P(R2, g, ty, true); } // speler 2 zit tegenover: zijn links = scherm-rechts
   }
   /* ---------- schermindeling ---------- */
   layout() {
     const W = this.W, H = this.H, many = this.players.length > 1, rot = H > W * 1.05;
     this.bw = Math.round(clamp(Math.min(W, H) * .2, 64, 104));
-    let top = 60, bot = 8, side = 8;
-    if (rot) { bot = this.bw + 20; if (many) top = 66 + this.bw + 10; }
+    const T = this.api.top + 4; let top = T - 6, bot = 8, side = 8;   // onder de knoppen bovenin
+    if (rot) { bot = this.bw + 20; if (many) top = T + this.bw + 10; }
     else side = many ? this.bw * 2 + 30 : this.bw + 20;
     const aw = W - side * 2, ah = H - top - bot; let k;
     if (!rot) { k = Math.min(aw / 16, ah / 10); const ox = (W - 16 * k) / 2, oy = top + (ah - 10 * k) / 2; this.M = [k, 0, 0, k, ox, oy]; }
@@ -5627,8 +5657,10 @@ class RaceGame {
       const i = car.human, lap = clamp(car.lap, 1, RACE.LAPS), pl = places[this.cars.indexOf(car)];
       const txt = car.done ? `🏁 ${pl}e` : `Ronde ${lap}/${RACE.LAPS} · ${pl}e`, w = 150, h = 30;
       let x, y, flip = false;
-      if (!this.rot) { x = many ? (i === 0 ? 12 : W - w - 12) : 12; y = 66; }
-      else { x = W / 2 - w / 2; y = i === 0 ? H - this.bw - 12 - h - 4 : 66 + this.bw + 8; flip = i === 1; if (!many) y = H - this.bw - h - 16; }
+      const T = this.api.top + 4;
+      if (!this.rot) { x = many ? (i === 0 ? 12 : W - w - 12) : 12; y = T; }
+      else { x = W / 2 - w / 2; y = i === 0 ? H - this.bw - 12 - h - 4 : T + this.bw + 8; flip = i === 1; if (!many) y = H - this.bw - h - 16; }
+      this.api.hud(x, y, w, h, 'ronde');
       c.save(); c.translate(x + w / 2, y + h / 2); if (flip) c.rotate(Math.PI);
       c.fillStyle = 'rgba(255,255,255,.93)'; rrect(c, -w / 2, -h / 2, w, h, 15); c.fill(); c.strokeStyle = car.col; c.lineWidth = 3; c.stroke();
       c.fillStyle = '#1f2a44'; c.font = '800 14px system-ui, sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(txt, 0, 1); c.restore();
@@ -5888,7 +5920,7 @@ class EscapeGame {
   who() { return this.players[this.turns % this.players.length]; }
   /* ---------- begin: met of zonder tijd ---------- */
   intro() {
-    const el = $('#mgBanner');
+    const el = $('#mgBanner'); mgBannerClaim();
     el.innerHTML = `<h2>🔐 Opgesloten!</h2><p style="margin:6px 0 4px">${this.coop ? 'Jullie zitten' : 'Je zit'} opgesloten in de geheime kamer van de uitvinder.<br>Los <b>4 puzzels</b> op: elke puzzel geeft een cijfer voor de deur.</p>
       <p style="margin:0 0 8px;font-size:.9em">Er is <b>geen haast</b>. Wil je een record? Kies dan ‘met tijd’.</p>
       <div class="btnrow"><button class="btn ${this.timer ? 'white' : 'green'}" data-tm="0">🐢 Zonder tijd</button><button class="btn ${this.timer ? 'green' : 'white'}" data-tm="1">⏱️ Met tijd</button></div>`;
@@ -6094,8 +6126,8 @@ class EscapeGame {
    ========================================================= */
 const BUUR_LVL_NAMES = ['Makkelijk', 'Gemiddeld', 'Moeilijk'], BUUR_LVL_NEED = [0, 2, 5];
 function buurChoose(id, intro) {
-  const el = $('#mgBanner'), unlocked = buurLevel(id), ctx = buurCtx(), r = nextRoom(), wins = S.buur.wins[id] || 0;
-  const stake = ctx.dig ? `<p style="margin:.3em 0;font-weight:700;color:#b5452b">⛏️ Lukt het? Dan graaft de Supermol de ${r ? r.emoji + ' ' + r.name : 'nieuwe kamer'}!${S.buur.tries ? ` <span style="font-weight:600">(nog ${buurLeft()} ${buurLeft() === 1 ? 'poging' : 'pogingen'} vandaag)</span>` : ''}</p>` : BUUR.test ? '<p style="margin:.3em 0;font-size:.85em">🧪 Uitproberen (telt niet mee voor het graven)</p>' : '<p style="margin:.3em 0;font-size:.85em">Voor de lol: 🪙 munten en 1x per dag ⚡</p>';
+  mgBannerClaim(); const el = $('#mgBanner'), unlocked = buurLevel(id), ctx = buurCtx(), r = nextRoom(), wins = S.buur.wins[id] || 0;
+  const stake = ctx.dig ? `<p style="margin:.3em 0;font-weight:700;color:#b5452b">⛏️ Lukt het? Dan graaft de Supermol de ${r ? r.emoji + ' ' + r.name : 'nieuwe kamer'}!${ctx.stake && S.buur.tries ? ` <span style="font-weight:600">(nog ${buurLeft()} ${buurLeft() === 1 ? 'poging' : 'pogingen'} vandaag)</span>` : ''}</p>` : BUUR.test ? '<p style="margin:.3em 0;font-size:.85em">🧪 Uitproberen (telt niet mee voor het graven)</p>' : '<p style="margin:.3em 0;font-size:.85em">Voor de lol: 🪙 munten en 1x per dag ⚡</p>';
   el.innerHTML = `<h2 style="margin:0 0 4px">${intro.title}</h2><p style="margin:0 0 6px;font-size:.9em;max-width:520px">${intro.text}</p>${stake}
     <div class="lvlrow">${[1, 2, 3].map(l => { const lock = l > unlocked; return `<button class="btn ${lock ? 'white' : l === unlocked ? 'green' : 'white'} lvl" data-l="${l}" ${lock ? 'disabled' : ''}><span>${lock ? '🔒' : buurStars(l)}</span><small>${BUUR_LVL_NAMES[l - 1]}${lock ? ` · nog ${BUUR_LVL_NEED[l - 1] - wins}× winnen` : ''}</small></button>`; }).join('')}</div>`;
   el.classList.add('show'); el.onclick = null;
@@ -6106,7 +6138,7 @@ function buurPopDraw(c, pops, W, H) {
   for (const p of pops) {
     const k = Math.min(1, p.t * 5); c.save(); c.globalAlpha = Math.min(1, (p.life - p.t) * 2.5);
     c.font = `900 ${p.size || 24}px Fredoka, system-ui, sans-serif`; const tw = c.measureText(p.txt).width / 2 + 8;
-    c.translate(clamp(p.x, tw, W - tw), clamp(p.y - p.t * 18, 70, H - 20)); c.scale(k, k); c.textAlign = 'center'; c.textBaseline = 'middle';
+    c.translate(clamp(p.x, tw, W - tw), clamp(p.y - p.t * 18, (MG.api ? MG.api.top : 62) + 12, H - 20)); c.scale(k, k); c.textAlign = 'center'; c.textBaseline = 'middle';
     c.lineWidth = 6; c.strokeStyle = 'rgba(31,42,68,.75)'; c.strokeText(p.txt, 0, 0); c.fillStyle = p.col || '#ffd23f'; c.fillText(p.txt, 0, 0); c.restore();
   }
 }
@@ -6114,6 +6146,7 @@ function buurPopTick(pops, dt) { for (let i = pops.length - 1; i >= 0; i--) if (
 // Brom in een tekstwolkje bovenin (tijdens een streek)
 function buurSay(c, txt, x, y, W, mood, t) {
   c.save(); c.font = '700 15px Fredoka, system-ui, sans-serif'; const w = Math.min(W - 20, c.measureText(txt).width + 64), h = 46, bx = clamp(x - w / 2, 10, W - w - 10);
+  if (MG.api) MG.api.hud(bx, y, w, h, 'brom');
   c.fillStyle = 'rgba(0,0,0,.18)'; rrect(c, bx + 2, y + 3, w, h, 16); c.fill(); c.fillStyle = '#fff'; rrect(c, bx, y, w, h, 16); c.fill(); c.strokeStyle = '#7a5a2a'; c.lineWidth = 3; c.stroke();
   drawBrom(c, bx + 26, y + 52, 'down', 0, false, { scale: .95, noShadow: true, mood: mood || 'roep', t });
   c.save(); rrect(c, bx, y, w, h, 16); c.clip(); c.restore();
@@ -6138,7 +6171,7 @@ class BuurJoy {
   draw(c) { // zones + knopje
     const zs = this.zones();
     this.st.forEach((s, i) => { const z = zs[i], hm = this.home ? this.home(i) : [z.x + z.w / 2, z.y + z.h / 2], cx = s.id !== null ? s.ox : hm[0], cy = s.id !== null ? s.oy : hm[1];
-      c.globalAlpha = s.id !== null ? 1 : .75;
+      c.globalAlpha = s.id !== null ? 1 : .75; if (MG.api) MG.api.hud(cx - 52, cy - 52, 104, 104, 'joystick');
       c.fillStyle = 'rgba(255,255,255,.18)'; c.beginPath(); c.arc(cx, cy, 52, 0, 7); c.fill(); c.strokeStyle = 'rgba(255,255,255,.55)'; c.lineWidth = 3; c.stroke();
       c.fillStyle = i ? 'rgba(255,138,31,.9)' : 'rgba(63,140,255,.9)'; c.beginPath(); c.arc(cx + s.x * 40, cy + s.y * 40, 24, 0, 7); c.fill(); c.strokeStyle = '#fff'; c.lineWidth = 3; c.stroke(); c.globalAlpha = 1; });
   }
@@ -6250,14 +6283,14 @@ class MolRace {
   resize(W, H) { this.W = W; this.H = H; this.layout(); this.placeButtons(); }
   layout() {
     const W = this.W, H = this.H, land = W > H * 1.1, bw = clamp(Math.min(W, H) * .15, 56, 86); this.bw = bw; this.land = land;
-    const nl = this.n + 1, top = 96;
+    const nl = this.n + 1, top = this.api.top + 34;   // onder de voortgangsbalk (die onder de knoppen bovenin staat)
     let x0 = 8, x1 = W - 8, y1 = H - 10;
     if (land) { x0 = bw + 26; x1 = W - bw - 26; } else y1 = H - (bw * 2 + 30);
     const lh = Math.min((y1 - top - (nl - 1) * 8) / nl, 200), lw = x1 - x0;
     const k = Math.max(16, Math.min((lh - 14) / 3, lw / 9)), h = k * 3 + 14;
     const used = nl * h + (nl - 1) * 10, y0 = top + Math.max(0, (y1 - top - used) / 2);
     this.k = k; this.lanes = []; for (let i = 0; i < nl; i++) this.lanes.push({ x: x0, y: y0 + i * (h + 10), w: lw, h });
-    this.bar = { x: x0, y: 62, w: lw, h: 24 };
+    this.bar = { x: x0, y: this.api.top, w: lw, h: 24 };
   }
   makeButtons() {
     $('#mgCtl').innerHTML = ''; this.btns = [];
@@ -6339,7 +6372,7 @@ class MolRace {
     if (this.state === 'choose') { c.fillStyle = 'rgba(0,0,0,.25)'; c.fillRect(0, 0, W, H); }
   }
   drawBar(c) {
-    const B = this.bar; box(c, B.x, B.y, B.w, B.h, 12, 'rgba(255,255,255,.88)', 2);
+    const B = this.bar; this.api.hud(B.x, B.y, B.w, B.h, 'voortgang'); box(c, B.x, B.y, B.w, B.h, 12, 'rgba(255,255,255,.88)', 2);
     const px = x => B.x + 18 + (B.w - 44) * clamp(x / MR.LEN, 0, 1);
     c.fillStyle = '#c9b49a'; rrect(c, B.x + 16, B.y + B.h / 2 - 3, B.w - 40, 6, 3); c.fill();
     c.font = '18px system-ui, "Apple Color Emoji", "Segoe UI Emoji"'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('🎁', B.x + B.w - 14, B.y + B.h / 2 + 1);
@@ -6510,7 +6543,7 @@ class Kabouters {
   destroy() { this.joy.destroy(); $('#mgBanner').classList.remove('show'); }
   resize(W, H) { this.W = W; this.H = H; this.layout(); }
   layout() {
-    const W = this.W, H = this.H, port = H > W * 1.05, top = 92, below = port ? Math.min(220, H * .26) : 8;
+    const W = this.W, H = this.H, port = H > W * 1.05, top = this.api.top + 34,   /* HUD-balk op api.top, veld eronder */ below = port ? Math.min(220, H * .26) : 8;
     const k = Math.max(14, Math.min((W - 16) / TK.W, (H - top - below) / TK.H)); this.k = k; this.port = port;
     this.ox = (W - k * TK.W) / 2; this.oy = top + (port ? 6 : Math.max(0, (H - top - below - k * TK.H) / 2));
   }
@@ -6638,7 +6671,7 @@ class Kabouters {
     const st = this.st, W = this.W, done = st.gnomes.filter(g => g.turned).length, left = Math.max(0, st.L.time - st.time);
     const txt = `🍄 ${done}/${st.gnomes.length}   ${'❤️'.repeat(Math.max(0, st.lives))}${'🤍'.repeat(Math.max(0, st.L.lives - st.lives))}   ⏱️ ${Math.floor(left / 60)}:${String(Math.floor(left % 60)).padStart(2, '0')}`;
     c.font = '700 16px Fredoka, system-ui, "Apple Color Emoji", "Segoe UI Emoji"'; const tw = c.measureText(txt).width + 26;
-    box(c, W / 2 - tw / 2, 58, tw, 28, 14, 'rgba(255,255,255,.92)', 0); c.fillStyle = '#1f2a44'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(txt, W / 2, 73);
+    const hy = this.api.top; this.api.hud(W / 2 - tw / 2, hy, tw, 28, 'hud'); box(c, W / 2 - tw / 2, hy, tw, 28, 14, 'rgba(255,255,255,.92)', 0); c.fillStyle = '#1f2a44'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(txt, W / 2, hy + 15);
     if (this.state === 'play' && ws !== 'closed') {
       const look = ws === 'look', s = look ? '👀 STILSTAAN!' : '😳 Het gordijn beweegt…'; c.font = `900 ${look ? 30 : 22}px Fredoka, system-ui, "Apple Color Emoji", "Segoe UI Emoji"`;
       const y = this.Y(TK.HOUSE_H) + this.k * 1.3; c.lineWidth = 7; c.strokeStyle = '#1f2a44'; c.strokeText(s, W / 2, y); c.fillStyle = look ? '#ff6b6b' : '#ffb347'; c.fillText(s, W / 2, y);
@@ -6868,7 +6901,7 @@ class Belletje {
   destroy() { this.joy.destroy(); $('#mgBanner').classList.remove('show'); }
   resize(W, H) { this.W = W; this.H = H; this.layout(); }
   layout() {
-    const W = this.W, H = this.H, port = H > W * 1.05, top = 92, below = port ? Math.min(220, H * .26) : 8;
+    const W = this.W, H = this.H, port = H > W * 1.05, top = this.api.top + 34,   /* HUD-balk op api.top, veld eronder */ below = port ? Math.min(220, H * .26) : 8;
     const k = Math.max(14, Math.min((W - 16) / BL.W, (H - top - below) / BL.H)); this.k = k; this.port = port;
     this.ox = (W - k * BL.W) / 2; this.oy = top + (port ? 6 : Math.max(0, (H - top - below - k * BL.H) / 2));
   }
@@ -7058,7 +7091,7 @@ class Belletje {
     const st = this.st, W = this.W, left = Math.max(0, st.L.time - st.time), ph = st.ph;
     const txt = `🔔 ${st.rounds}/${st.L.rings}   ${'❤️'.repeat(Math.max(0, st.lives))}${'🤍'.repeat(Math.max(0, st.L.lives - st.lives))}   ⏱️ ${Math.floor(left / 60)}:${String(Math.floor(left % 60)).padStart(2, '0')}`;
     c.font = '700 16px Fredoka, system-ui, "Apple Color Emoji", "Segoe UI Emoji"'; const tw = c.measureText(txt).width + 26;
-    box(c, W / 2 - tw / 2, 58, tw, 28, 14, 'rgba(255,255,255,.92)', 0); c.fillStyle = '#1f2a44'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(txt, W / 2, 73);
+    const hy = this.api.top; this.api.hud(W / 2 - tw / 2, hy, tw, 28, 'hud'); box(c, W / 2 - tw / 2, hy, tw, 28, 14, 'rgba(255,255,255,.92)', 0); c.fillStyle = '#1f2a44'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(txt, W / 2, hy + 15);
     if (this.state !== 'play') return;
     const all = st.players.every(p => p.hidden >= 0 || p.caught > 0);
     const s = ph === 'sneak' ? '🔔 Sluip naar de deurmat…' : ph === 'ring' ? (all ? (this.n > 1 ? '🤫 Allebei verstopt!' : '🤫 Verstopt!') : '🏃 Snel verstoppen!') : ph === 'open' || ph === 'search' ? '🔦 Muisstil blijven zitten…' : '';
@@ -7098,7 +7131,7 @@ class Klusje {
   resize(W, H) { this.W = W; this.H = H; this.layout(); }
   layout() {
     const W = this.W, H = this.H, bh = clamp(H * .2, 90, 150), bw = Math.min(W * .36, bh * 1.6);
-    this.floor = { x: 14, y: 96, w: W - 28, h: H - 96 - bh - 26 };
+    const top = this.api.top + 34; this.floor = { x: 14, y: top, w: W - 28, h: H - top - bh - 26 };   // onder de HUD-balk
     this.bins = { kist: { x: W / 2 - bw - 12, y: H - bh - 14, w: bw, h: bh }, was: { x: W / 2 + 12, y: H - bh - 14, w: bw, h: bh } };
     this.sz = clamp(Math.min(W, H) * .1, 40, 66);
   }
@@ -7149,7 +7182,7 @@ class Klusje {
       c.font = `${Math.round(s * .82)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.fillStyle = '#1f2a44'; c.fillText(it.e, 0, 0); c.restore();
     }
     const left = this.items.length - this.done; c.font = '700 16px Fredoka, system-ui'; const txt = left ? `Nog ${left} ${left === 1 ? 'ding' : 'dingen'} opruimen` : '✨ Klaar!'; const tw = c.measureText(txt).width + 24;
-    box(c, W / 2 - tw / 2, 62, tw, 28, 14, 'rgba(255,255,255,.92)', 0); c.fillStyle = '#1f2a44'; c.fillText(txt, W / 2, 77);
+    const hy = this.api.top; this.api.hud(W / 2 - tw / 2, hy, tw, 28, 'hud'); box(c, W / 2 - tw / 2, hy, tw, 28, 14, 'rgba(255,255,255,.92)', 0); c.fillStyle = '#1f2a44'; c.fillText(txt, W / 2, hy + 15);
     buurPopDraw(c, this.pops, W, H);
   }
 }
