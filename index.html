@@ -664,7 +664,8 @@ h1,h2,h3{margin:0}
     <div><h3>🦫 Zo werkt de graafdag</h3>
       <p>Als de Supermol gebouwd is, graaft hij meteen het <b>Hoofdkwartier</b> en de <b>Bowlingbaan</b>. Daarna graaft hij <b>elke echte kalenderdag één nieuwe kamer</b> (om middernacht, op de klok van dit apparaat). Was je kind een paar dagen weg, dan staan die kamers er bij terugkomst allemaal. Volgorde: Blokkenkamer, Flipperkastkamer, Minigolf, Racebaan, Escaperoom.</p>
       <p>⛏️ <b>De diepe kelder</b> (aflevering 4): als de basis af is, ligt in de Escaperoom de tekening van het <b>Boorbeest</b>. Met 5 onderdelen (het gouden tandwiel uit de eik, de Flipperkast, de ketel in de kelder en twee gewonnen streken bij buurman Brom) bouwen de kinderen het aan de werkbank. Dan komt er een <b>lift</b> in het Hoofdkwartier naar een tweede verdieping met een kristalgrot en nieuwe spelkamers (de <b>Grottenjacht</b>, het <b>Mijnkarretje</b>, <b>Kristallen matchen</b> en de <b>Ondergrondse rivier</b>); die worden op dezelfde manier gegraven. Bij de rivier dobbert flessenpost met een half afgescheurde tekening van de <b>Ruimtebot</b>: de 4 onderdelen (raketmotor: de rivier uitvaren, zonnepanelen: Kristallen matchen, maanwielen: de finish van het Mijnkarretje, antenne: met de Vliegbot bovenop de kristalpilaar) kun je al verzamelen. Elk spel kan alleen of met z'n tweeën op één apparaat, en de dagelijkse grens voor munten en energie geldt ook hier.</p>
-      <p>☁️ <b>Tussen hemel en aarde</b> (aflevering 5, de laatste): de andere helft van de Ruimtebot-tekening hangt op het prikbord in het <b>tuinhuisje</b>. De Ruimtebot is te groot voor de werkbank in de speelkamer en wordt op de bouwplek in het tuinhuisje gebouwd. Na een filmpje vliegt hij de kinderen naar een <b>zwevend wolkeneiland</b> met een Wolken-HQ en een telescoop (derde verdieping op de monitor). De Supermol graaft daar op dezelfde manier 5 nieuwe spelkamers: <b>Meteorietenregen</b>, <b>Zwaartekracht-springen</b>, <b>Planeetgolf</b>, <b>Sterrenbeelden</b> en <b>Ruimtepong</b> (solo tegen de Ruimtebot of met z'n tweeën tegen elkaar). Het spannende slot volgt nog. Heen en terug vliegen kan altijd met de Ruimtebot in de tuin.</p>
+      <p>☁️ <b>Tussen hemel en aarde</b> (aflevering 5, de laatste): de andere helft van de Ruimtebot-tekening hangt op het prikbord in het <b>tuinhuisje</b>. De Ruimtebot is te groot voor de werkbank in de speelkamer en wordt op de bouwplek in het tuinhuisje gebouwd. Na een filmpje vliegt hij de kinderen naar een <b>zwevend wolkeneiland</b> met een Wolken-HQ en een telescoop (derde verdieping op de monitor). De Supermol graaft daar op dezelfde manier 5 nieuwe spelkamers: <b>Meteorietenregen</b>, <b>Zwaartekracht-springen</b>, <b>Planeetgolf</b>, <b>Sterrenbeelden</b> en <b>Ruimtepong</b> (solo tegen de Ruimtebot of met z'n tweeën tegen elkaar). Heen en terug vliegen kan altijd met de Ruimtebot in de tuin.</p>
+      <p>🤖 <b>Het slot: de Maai-o-Matic.</b> Zijn alle kamers gegraven, dan slaat de robot-grasmaaier van buurman Brom op hol (filmpje). Hij is alleen te stoppen met een volle <b>Superlader</b> in het Wolken-HQ: daar brengen de kinderen <b>30 energie</b> naartoe. De lading blijft bewaard, ook over dagen heen; met de daglimieten (max. 5 gratis energie per dag + 2 van het eten, plus energie kopen met munten) kost dat meestal een paar dagen flink spelen. Is hij vol, dan start bij de maaier in de tuin het gevecht (alleen of met z'n tweeën): de <b>Supermol</b> graaft kuilen, de <b>Vliegbot</b> trekt antennes eraf, het <b>Boorbeest</b> boort (snel tikken) en de <b>Ruimtebot</b> tilt hem op met een trekstraal (vinger erop houden). Elke actie kost energie uit de batterij van het gevecht; is die op, dan gewoon opnieuw (met 5 tot 10 energie extra per verloren poging). De Superlader-lading gaat daarbij niet verloren. Na de overwinning: een filmpje met Brom, de zolder (“wat een fantasie!”), de mama van de vriend die hem ophaalt, en de aftiteling. Daarna kan gewoon verder gespeeld worden; de maaier blijft in de tuin om te oefenen, en via de Superlader kun je het einde nog eens zien.</p>
       <p>Sneller graven kan met <b>⚡ energie-batterijen</b>: met 3 stuks graaft de Supermol meteen een extra kamer (knop <b>Graaf nu</b> op de monitor). Energie vind je verstopt in huis en tuin, krijg je van mol-brandstof (wortel + appel, die groeien elke dag opnieuw), één keer per dag per spel bij een goede score, en in de energie-automaat (50 munten per ⚡, altijd te koop, zonder daglimiet). Munten verdien je met de spelletjes (per spel per dag een maximum).</p>
       <div class="orow"><span id="oudStatus" class="small-note"></span></div>
       <p id="oudEcon" class="small-note"></p>
@@ -771,6 +772,7 @@ function defaultSave() {
     meals: defaultMeals(),                       // eet- en drinkmomenten (instellingen van de ouders + teller)
     econ: defaultEcon(),                         // daglimieten: munten per spel, energie per dag, automaat, graaf nu (economy.js)
     buur: defaultBuur(),                         // buurman Brom: filmpje gezien, graaf-poort, pogingen per dag, streken
+    boss: defaultBoss(),
     music: true, sfx: true, musicVol: 40, sfxVol: 80,
   };
 }
@@ -781,6 +783,9 @@ function defaultMeals() { return { on: true, freq: 'normaal', left: null, day: n
 // day/lost/extra: vandaag verloren pogingen en extra pogingen (klusje). klus: dag van het klusje. wins/plays per streek.
 function defaultEcon() { return { day: null, plays: {}, e: 0, buy: 0, digs: 0 }; }
 function defaultBuur() { return { on: true, tries: 3, met: false, metDay: null, due: 0, nowReq: 0, day: null, lost: 0, extra: 0, klus: null, koek: null, bijna: null, wins: {}, plays: {}, total: 0, lvl: {}, fresh: 0 }; }
+// Eindbaas (aflevering 5C). charge: ⚡ in de Superlader (blijft bewaard, max BOSS_E). lost: verloren pogingen op rij (extra ⚡ in het gevecht).
+// wins/tries: gewonnen en gespeelde gevechten. day: dag van het laatste gevecht.
+function defaultBoss() { return { charge: 0, lost: 0, wins: 0, tries: 0, day: null }; }
 const MIGRATIONS = {
   2: o => { if (!o.meals || typeof o.meals !== 'object') o.meals = defaultMeals(); return o; },   // v2: eet- en drinkmomenten
   3: o => { if (!o.buur || typeof o.buur !== 'object') o.buur = defaultBuur(); if (!o.econ || typeof o.econ !== 'object') o.econ = defaultEcon(); return o; },        // v3: buurman Brom (filmpje speelt de volgende keer in huis)
@@ -809,6 +814,9 @@ function migrate(o) {
   b.due = Math.min(b.due, 9); b.nowReq = b.nowReq ? 1 : 0;
   for (const k of ['wins', 'plays', 'lvl']) if (!b[k] || typeof b[k] !== 'object' || Array.isArray(b[k])) b[k] = {};
   for (const k of ['day', 'klus', 'koek', 'bijna', 'metDay']) if (typeof b[k] !== 'string') b[k] = null;
+  { const o2 = s.boss = Object.assign(defaultBoss(), (o.boss && typeof o.boss === 'object' && !Array.isArray(o.boss)) ? o.boss : {});
+    for (const k of ['charge', 'lost', 'wins', 'tries']) o2[k] = Math.max(0, Math.min(9999, Math.floor(+o2[k]) || 0));
+    o2.charge = Math.min(o2.charge, 30); o2.lost = Math.min(o2.lost, 99); if (typeof o2.day !== 'string') o2.day = null; }
   const vol = (x, def) => (typeof x === 'number' && x >= 0 && x <= 100) ? Math.round(x) : def;
   s.musicVol = vol(s.musicVol, 40); s.sfxVol = vol(s.sfxVol, 80);
   s.energie = Math.max(0, s.energie | 0); s.munten = Math.max(0, s.munten | 0);
@@ -1058,6 +1066,12 @@ const TRACKS = {
   ruimtepong: { naam: 'Ruimtepong', bpm: 132, root: 311.13, scale: MINOR, swing: 0, lead: 'chip', lv: .12, bv: .21, pad: 0, stab: .02,
     bass: 'r o r o r o f o', stabs: 'x . . x . . x .', drums: { k: 'x . . . x . x .', h: 'x x x x x x x x', c: '. . . . x . . .' }, prog: 'I iv V I vi iv V V',
     mel: ['0 . 3 . 7 . 3 .', '5 . 3 . 2 - . .', '0 . 3 . 7 . 10 .', '8 - - - . . . .', '7 . 8 . 10 . 12 .', '10 . 8 . 7 - . .', '5 . 3 . 2 . 3 .', '0 - - - . . . .'] },
+  baas: { naam: 'De Maai-o-Matic', bpm: 150, root: 220, scale: MINOR, swing: 0, lead: 'chip', lv: .13, bv: .24, pad: .01, stab: .03,
+    bass: 'r r o r f r o r', stabs: 'x . . x . . x .', drums: { k: 'x . x . x . x .', h: 'x x x x x x x x', c: 'x . . . . . . .', t: '. . . . . . x x' }, prog: 'I vi v I I iv V V',
+    mel: ['7 . 7 . 10 . 7 .', '12 . 10 . 7 - . .', '5 . 5 . 8 . 5 .', '7 - - - . . . .', '7 . 10 . 12 . 14 .', '15 . 14 . 12 - . .', '10 . 12 . 14 . 11 .', '12 - - - . . . .'] },
+  einde: { naam: 'Tot de volgende keer', bpm: 84, root: 293.66, scale: MAJOR, swing: .15, lead: 'bell', lv: .14, bv: .15, pad: .05, stab: 0,
+    bass: 'r - . o f - . o', drums: { k: 'x . . . . . . .', h: '. . x . . . x .' }, prog: 'I V vi IV I IV V I',
+    mel: ['4 . 5 . 7 - . .', '9 . 7 . 4 - . .', '2 . 4 . 5 - 4 .', '2 - - - . . . .', '4 . 5 . 7 - 9 .', '12 - 11 . 9 - . .', '7 . 9 . 7 . 5 .', '4 - - - . . . .'] },
 };
 const tok = s => s.trim().split(/\s+/);
 function scheduleBar(ctx, out, tr, bar, t0) {
@@ -1957,6 +1971,10 @@ function registerAch(o) { GB.ACHIEVEMENTS[o.id] = o; }
   { id: 'pong1', icon: '🏓', name: 'Komeetkaatser', desc: 'De Ruimtebot verslagen bij Ruimtepong.' },
   { id: 'pong0', icon: '🤖', name: 'Bliep bloep… au!', desc: 'De Ruimtebot met 5-0 verslagen bij Ruimtepong.' },
   { id: 'zwaar0', icon: '🌠', name: 'Sterrenvanger', desc: 'Alle sterren van een toren gepakt bij Zwaartekracht-springen.' },
+  { id: 'superlader', icon: '🔋', name: 'Vol geladen', desc: 'De Superlader helemaal opgeladen met 30 energie.' },
+  { id: 'baas', icon: '🏆', name: 'Maaier gestopt', desc: 'De Maai-o-Matic verslagen met alle 4 robots samen.' },
+  { id: 'baas0', icon: '🔋', name: 'Zuinig', desc: 'De Maai-o-Matic verslagen met nog minstens de helft van de energie over.' },
+  { id: 'einde', icon: '🎬', name: 'Tot de volgende keer!', desc: 'Het hele verhaal uitgespeeld. Wat een fantasie!' },
   { id: 'samen', icon: '👫', name: 'Samen spelen', desc: 'Een spel met 2 spelers gespeeld.' },
 ].forEach(registerAch);
 
@@ -2778,6 +2796,7 @@ function buildIslandMap() {
       ...[[16, 17], [25, 17]].map(([x, y], i) => ({ id: 'deco_wolk' + i, kind: 'decoSpot', dyn: 'decoSpotDyn', x, y, solid: false, use: { label: 'Versier', icon: '🎨', action: 'deco' } })),
     );
     areas.unshift({ name: '☁️ Wolken-HQ', x: 15, y: 11, w: 12, h: 8 });
+    if (typeof islandBossObjects === 'function') islandBossObjects(objs);
   }
   return registerMap({ id: 'eiland', name: 'Wolkeneiland', music: 'eiland', sky: true, rows: g.map(r => r.join('')), objects: objs, areas, spawns, doors: [] });
 }
@@ -3311,6 +3330,12 @@ function goalKey() {
   if (S.seenItems.ruimtetekening && ruimteHave() >= RUIMTE_PARTS.length && !robotBuilt('ruimtebot')) return S.seenItems.tekeninghelft ? 'ruimtebouwen' : 'tekeninghelft';
   if (robotBuilt('ruimtebot') && !flag('eilandSeen')) return 'eiland';
   if (nextRoom()) return 'wachten';
+  if (robotBuilt('ruimtebot') && flag('eilandSeen')) {
+    // aflevering 5C: de Maai-o-Matic (world/einde.js)
+    if (!flag('maaierAlarm')) return 'eilandvervolg';
+    if (!flag('baasVerslagen')) return bossFull() ? 'baas' : 'superlader';
+    return 'vrij';
+  }
   return robotBuilt('ruimtebot') ? 'eilandvervolg' : 'klaar';
 }
 function nextGoal() {
@@ -3343,6 +3368,9 @@ function nextGoal() {
     ruimtebouwen: '🛠️ Bouw de Ruimtebot op de bouwplek in het tuinhuisje',
     eiland: '🚀 Vlieg met de Ruimtebot (in de tuin) naar het zwevende eiland',
     eilandvervolg: '🔭 Alle kamers op het eiland zijn klaar! Kijk eens door de telescoop…',
+    superlader: `🔋 Laad de Superlader op in het Wolken-HQ (${bossCharge()}/${BOSS_E} ⚡)`,
+    baas: '🤖 De Superlader is vol! Stop de Maai-o-Matic in de tuin, met alle 4 robots!',
+    vrij: '🎉 Het verhaal is uit! Speel verder en haal alle prestaties.',
   }[k];
 }
 function hint() {
@@ -3361,6 +3389,9 @@ function hint() {
   if (k === 'ruimtebouwen') return 'De tekening is compleet! De Ruimtebot is te groot voor de werkbank. In het tuinhuisje is een grote bouwplek!';
   if (k === 'eiland') return 'De Ruimtebot staat in de tuin, naast het tuinhuisje. Op naar het zwevende eiland!';
   if (k === 'eilandvervolg') return 'Buurman Brom is in zijn schuur aan het knutselen aan zijn grasmaaier… Wat zou hij van plan zijn? Wordt vervolgd!';
+  if (k === 'superlader') return pick([`De Superlader heeft ${bossCharge()} van de ${BOSS_E} ⚡. Elke ⚡ telt! Speel goed in de spelletjes, eet mee met mama en papa en koop energie met munten in het Hoofdkwartier.`, 'Hebben we energie? Breng hem naar de Superlader in het Wolken-HQ op het eiland!', 'Hoe meer spelletjes we spelen, hoe meer energie. Dan is de Superlader zo vol!']);
+  if (k === 'baas') return 'De Maai-o-Matic staat in de tuin. Supermol, Vliegbot, Boorbeest en Ruimtebot: met z’n allen stoppen we hem! Lukt het niet? Gewoon nog een keer!';
+  if (k === 'vrij') return pick(['We hebben de Maai-o-Matic verslagen! Zullen we nog een potje oefenen? Hij staat in de tuin bij buurman Brom.', 'Welke prestaties hebben we nog niet? Kijk in het Basisboek!', 'Zullen we een potje Ruimtepong doen? Of bowlen?']);
   if (k === 'lift') return 'In het Hoofdkwartier zit nu een lift. Daarmee gaan we naar beneden!';
   if (k === 'boordelen') {
     const m = BOOR_PARTS.find(p => !S.seenItems[p]);
@@ -3606,6 +3637,7 @@ function storyTick(dt) {
   if (chatterT <= 0 && !WORLD.busy && !DLG.open && !WORLD.bubble) { chatterT = rnd(40, 70); friendSays(Math.random() < .6 ? hint() : pick(CHATTER), 5); }
   if (digCheckT <= 0) { digCheckT = 20; const d = checkDailyDig(); if (d.length) showDigNews(d); }
   buurTick(dt); if (BUUR.news) buurNews();
+  if (typeof eindeTick === 'function') eindeTick(dt);
 }
 
 /* ===== world/vliegbot.js ===== */
@@ -10798,6 +10830,632 @@ class RuimtePong {
   }
 }
 
+/* ===== minigames/baas_logic.js ===== */
+/* =========================================================
+   EINDBAAS: DE GRASMAAIER-ROBOT – logica (zonder DOM, getest in tests/unit.js).
+   Buurman Brom bouwde een robot-grasmaaier die op hol is geslagen. Alleen met een volle Superlader (BAAS.E ⚡) en alle
+   4 robots samen is hij te stoppen. Het gevecht heeft 4 fases, elke robot breekt één ding:
+   1. Supermol: de maaier rijdt een baan omlaag. Tik een baan om daar een kuil te graven (BAAS.HOLE ⚡). Rijdt hij erin: raak.
+   2. Vliegbot: er lichten antennes op. Tik de oplichtende antenne (BAAS.GRAB ⚡ per poging) om hem eraf te trekken.
+   3. Boorbeest: tik zo snel je kan om door het pantser te boren (BAAS.BOOR ⚡ per poging), voor de tijd op is.
+   4. Ruimtebot: houd je vinger op de vluchtende maaier; de trekstraal tilt hem op (kost ⚡ zolang de straal aan is).
+   De batterij van het gevecht = BAAS.E. Leeg = verloren, maar je kunt meteen opnieuw (de Superlader blijft vol).
+   2 spelers: speler 1 bestuurt de Supermol, speler 2 de Vliegbot; samen boren (ieder een eigen boor op een eigen helft)
+   en samen stralen (met z'n tweeën gaat het sneller).
+   Veld: x van 0 tot BAAS.W, y van 0 (boven) tot BAAS.H (onder).
+   ========================================================= */
+const BAAS = { W: 9, H: 14, E: 30, LANES: [1.5, 4.5, 7.5], MY: 2.6, HOLE_Y: 9.2, ROW_END: 12.4, DRIVE_V: 2.9, DRIVE_UP: .35, TELE: 1.6, IDLE: .9,
+  HOLE: 2, HOLE_DIG: .35, MOWED: 2, MOL_HITS: 2, GRAB: 2, VLIEG_HITS: 2, WIN0: 1.7, WIN1: 1.2, GAP: .8,
+  BOOR: 3, BOOR_T: 7, BOOR_WAIT: 1.6, TAP1: .07, TAP2: .1, DECAY: .12, BEAM_DRAIN: .8, BEAM_NEED: 3.5, BEAM_R: 1.8, BEAM_DECAY: .35, BEAM_DUO: 1.6, PAUSE: 2.2,
+  SPOTS: [[1.4, 2.4], [7.6, 2.4], [1.8, 6.4], [7.2, 6.4]] };
+const BAAS_PHASES = ['mol', 'vlieg', 'boor', 'ruimte'];
+function bsBuild(seed, n, bonus) {
+  return { R: mulberry32(seed || 1), n, t: 0, phase: 'mol', pi: 0, wait: 0, energy: BAAS.E + (bonus || 0), max: BAAS.E + (bonus || 0), hits: 0, done: false, won: false, used: 0,
+    mower: { x: 4.5, y: BAAS.MY, mode: 'idle', lane: 1, t: BAAS.IDLE, spin: 0 }, hole: null,
+    lit: -1, litT: 0, gap: BAAS.GAP, lastLit: -1, drill: Array(n).fill(0), boorT: 0, boorMode: 'wait', beam: 0, locks: [], stats: { mowed: 0, miss: 0, tries: 0 } };
+}
+// wie mag nu iets doen? (2 spelers: Supermol = speler 1, Vliegbot = speler 2, boren en stralen samen)
+const bsOwner = (st, i) => st.n < 2 || st.phase === 'boor' || st.phase === 'ruimte' || (st.phase === 'mol' ? i === 0 : i === 1);
+function bsSpend(st, e, k, ev) { st.energy = Math.max(0, st.energy - k); st.used += k; if (st.energy <= 0 && !st.done) { st.done = true; st.won = false; ev.push({ type: 'empty' }); } }
+function bsNext(st, ev) {
+  st.pi++; st.hits = 0;
+  if (st.pi >= BAAS_PHASES.length) { st.done = true; st.won = true; st.phase = 'win'; ev.push({ type: 'win' }); return; }
+  st.phase = BAAS_PHASES[st.pi]; st.wait = BAAS.PAUSE; const m = st.mower; m.mode = 'idle'; m.t = BAAS.IDLE; st.hole = null; st.lit = -1; st.gap = BAAS.GAP; st.drill = st.drill.map(() => 0); st.boorMode = 'wait'; st.boorT = BAAS.BOOR_WAIT; st.beam = 0;
+  ev.push({ type: 'phase', phase: st.phase });
+}
+function bsHit(st, ev, need) { st.hits++; ev.push({ type: 'hit', phase: st.phase, n: st.hits, need }); if (st.hits >= need) { ev.push({ type: 'phaseDone', phase: st.phase }); bsNext(st, ev); } }
+// ruimte-fase: waar vlucht de maaier heen?
+const bsFlee = t => ({ x: 4.5 + Math.sin(t * .8) * 2.6 + Math.sin(t * 2.1) * .6, y: 4.2 + Math.sin(t * 1.25) * 1.6 });
+// acts: [{ type: 'lane', lane, i } | { type: 'spot', k, i } | { type: 'tap', i }]; holds[i]: { x, y } of null (vinger op het scherm)
+function bsStep(st, acts, holds, dt) {
+  const ev = []; if (st.done) return ev; st.t += dt; const m = st.mower; m.spin += dt * (st.phase === 'vlieg' ? 9 : 4);
+  if (st.wait > 0) { st.wait -= dt; if (st.phase === 'boor' || st.phase === 'vlieg') { m.x += (4.5 - m.x) * Math.min(1, dt * 3); m.y += ((st.phase === 'boor' ? 6.4 : 4.2) - m.y) * Math.min(1, dt * 3); } return ev; }
+  for (const a of acts || []) {
+    if (!bsOwner(st, a.i || 0)) { ev.push({ type: 'notYou', i: a.i || 0 }); continue; }
+    if (st.phase === 'mol' && a.type === 'lane') { if (st.hole && st.hole.lane === a.lane) continue; bsSpend(st, ev, BAAS.HOLE, ev); st.hole = { lane: a.lane, dig: 0 }; ev.push({ type: 'dig', lane: a.lane, i: a.i || 0 }); if (st.done) return ev; }
+    else if (st.phase === 'vlieg' && a.type === 'spot') {
+      bsSpend(st, ev, BAAS.GRAB, ev); st.stats.tries++;
+      if (st.lit === a.k) { st.lit = -1; st.gap = BAAS.GAP; ev.push({ type: 'grab', k: a.k, i: a.i || 0 }); bsHit(st, ev, BAAS.VLIEG_HITS); }
+      else { st.stats.miss++; ev.push({ type: 'miss', k: a.k, i: a.i || 0 }); }
+      if (st.done) return ev;
+    }
+    else if (st.phase === 'boor' && a.type === 'tap' && st.boorMode === 'drill') { const i = st.n > 1 ? (a.i || 0) : 0; st.drill[i] = Math.min(1, st.drill[i] + (st.n > 1 ? BAAS.TAP2 : BAAS.TAP1)); ev.push({ type: 'drill', i }); }
+  }
+  if (st.phase === 'mol') {
+    if (st.hole && st.hole.dig < 1) st.hole.dig = Math.min(1, st.hole.dig + dt / BAAS.HOLE_DIG);
+    if (m.mode === 'idle') { m.y += (BAAS.MY - m.y) * Math.min(1, dt * 4); m.t -= dt; if (m.t <= 0) { m.lane = Math.floor(st.R() * 3); m.mode = 'tele'; m.t = BAAS.TELE; ev.push({ type: 'tele', lane: m.lane }); } }
+    else if (m.mode === 'tele') { m.x += (BAAS.LANES[m.lane] - m.x) * Math.min(1, dt * 5); m.t -= dt; if (m.t <= 0) { m.mode = 'drive'; m.x = BAAS.LANES[m.lane]; ev.push({ type: 'drive', lane: m.lane }); } }
+    else if (m.mode === 'drive') {
+      m.y += (BAAS.DRIVE_V + st.hits * BAAS.DRIVE_UP) * dt;
+      if (st.hole && st.hole.lane === m.lane && st.hole.dig >= 1 && m.y + .9 >= BAAS.HOLE_Y) { m.y = BAAS.HOLE_Y - .5; m.mode = 'stuck'; m.t = 1.6; st.hole = null; ev.push({ type: 'stuck', lane: m.lane }); bsHit(st, ev, BAAS.MOL_HITS); }
+      else if (m.y >= BAAS.ROW_END) { m.mode = 'back'; st.stats.mowed++; ev.push({ type: 'mowed', lane: m.lane }); bsSpend(st, ev, BAAS.MOWED, ev); if (st.hole && st.hole.lane === m.lane) st.hole = null; }
+    }
+    else if (m.mode === 'stuck') { m.t -= dt; if (m.t <= 0) m.mode = 'back'; }
+    else if (m.mode === 'back') { m.y -= 5 * dt; if (m.y <= BAAS.MY) { m.y = BAAS.MY; m.mode = 'idle'; m.t = BAAS.IDLE; } }
+  }
+  else if (st.phase === 'vlieg') {
+    m.x += (4.5 - m.x) * Math.min(1, dt * 3); m.y += (4.2 - m.y) * Math.min(1, dt * 3);
+    if (st.lit >= 0) { st.litT -= dt; if (st.litT <= 0) { st.lit = -1; st.gap = BAAS.GAP; ev.push({ type: 'unlit' }); } }
+    else { st.gap -= dt; if (st.gap <= 0) { let k = Math.floor(st.R() * 4); if (k === st.lastLit) k = (k + 1 + Math.floor(st.R() * 3)) % 4; st.lit = st.lastLit = k; st.litT = BAAS.WIN0 - (BAAS.WIN0 - BAAS.WIN1) * st.hits / BAAS.VLIEG_HITS; ev.push({ type: 'lit', k }); } }
+  }
+  else if (st.phase === 'boor') {
+    m.x += (4.5 - m.x) * Math.min(1, dt * 3); m.y += (6.4 - m.y) * Math.min(1, dt * 3);
+    if (st.boorMode === 'wait') { st.boorT -= dt; if (st.boorT <= 0) { st.boorMode = 'drill'; st.boorT = BAAS.BOOR_T; st.drill = st.drill.map(() => 0); ev.push({ type: 'boorGo' }); bsSpend(st, ev, BAAS.BOOR, ev); if (st.done) return ev; } }
+    else {
+      st.boorT -= dt; st.drill = st.drill.map(d => d >= 1 ? 1 : Math.max(0, d - BAAS.DECAY * dt));
+      if (st.drill.every(d => d >= 1)) { ev.push({ type: 'drilled' }); bsHit(st, ev, 1); }
+      else if (st.boorT <= 0) { st.boorMode = 'wait'; st.boorT = BAAS.BOOR_WAIT; ev.push({ type: 'boorFail' }); }
+    }
+  }
+  else if (st.phase === 'ruimte') {
+    const p = bsFlee(st.t); m.x = p.x; m.y = p.y;
+    st.locks = (holds || []).map((h, i) => !!h && bsOwner(st, i) && Math.hypot(h.x - m.x, h.y - m.y) < BAAS.BEAM_R);
+    const nl = st.locks.filter(Boolean).length;
+    if (nl) { st.beam += dt * (nl > 1 ? BAAS.BEAM_DUO : 1); bsSpend(st, ev, BAAS.BEAM_DRAIN * dt, ev); if (st.done) return ev; if (st.beam >= BAAS.BEAM_NEED) { ev.push({ type: 'lifted' }); bsHit(st, ev, 1); } }
+    else st.beam = Math.max(0, st.beam - BAAS.BEAM_DECAY * dt);
+  }
+  return ev;
+}
+const bsScore = st => Math.round(st.energy * 10) + (st.won ? 300 : 0) + st.pi * 50;
+// testspeler (react = reactietijd in s); geeft { acts, holds }
+function bsBot(st, react, sloppy) {
+  const m = st.mower, acts = [], holds = Array(st.n).fill(null), i0 = st.n > 1 ? 1 : 0;
+  if (st.done || st.wait > 0) return { acts, holds };
+  if (st.phase === 'mol' && (m.mode === 'tele' || m.mode === 'drive') && (!st.hole || st.hole.lane !== m.lane) && (m.mode === 'drive' || BAAS.TELE - m.t > react)) acts.push({ type: 'lane', lane: sloppy && st.R() < sloppy ? (m.lane + 1) % 3 : m.lane, i: 0 });
+  if (st.phase === 'vlieg' && st.lit >= 0 && st.litT < (BAAS.WIN0 - react) && st.litT > 0) acts.push({ type: 'spot', k: sloppy && st.R() < sloppy ? (st.lit + 1) % 4 : st.lit, i: i0 });
+  if (st.phase === 'boor' && st.boorMode === 'drill') for (let i = 0; i < st.n; i++) if (st.R() < (sloppy ? .045 : .07)) acts.push({ type: 'tap', i });
+  if (st.phase === 'ruimte') { const p = bsFlee(st.t - react); for (let i = 0; i < st.n; i++) holds[i] = { x: p.x, y: p.y }; }
+  return { acts, holds };
+}
+
+/* ===== minigames/baas.js ===== */
+/* =========================================================
+   EINDBAAS: DE MAAI-O-MATIC (grasmaaier-robot van buurman Brom). Logica in baas_logic.js.
+   Start vanuit de tuin (world/einde.js), pas als de Superlader vol is (BAAS.E ⚡). 4 fases, elke robot doet iets:
+   Supermol graaft kuilen, Vliegbot trekt antennes eraf, Boorbeest boort (snel tikken), Ruimtebot tilt hem op (vinger vasthouden).
+   Batterij leeg? Dan meteen opnieuw (elke verloren poging +5 ⚡ extra, tot +10). 2 spelers: speler 1 = Supermol,
+   speler 2 = Vliegbot, samen boren (links/rechts) en samen de trekstraal vasthouden.
+   Toetsen: A/S/D of 1/2/3 (baan), 1-4 (antenne), spatie / Enter (boren), spatie ingedrukt (trekstraal).
+   ========================================================= */
+registerMinigame({
+  id: 'grasmaaier', name: 'De Maai-o-Matic', emoji: '🤖', music: 'baas', hidden: true, twoMode: 'samen tegen de maaier',
+  help: 'De robot-grasmaaier van buurman Brom is op hol geslagen! Stop hem met <b>alle 4 robots</b>: de <b>Supermol</b> graaft kuilen, de <b>Vliegbot</b> trekt zijn antennes eraf, het <b>Boorbeest</b> boort door zijn pantser en de <b>Ruimtebot</b> tilt hem op. Alles kost ⚡ uit de Superlader. Is de batterij op? Gewoon opnieuw proberen!',
+  coins: s => Math.floor(s / 40) + 3,
+  create: api => new MaaiBaas(api),
+});
+const BSV_DT = 1 / 120;
+const BS_ROBOT = { mol: ['🦫', 'Supermol'], vlieg: ['🚁', 'Vliegbot'], boor: ['⛏️', 'Boorbeest'], ruimte: ['🚀', 'Ruimtebot'] };
+function bsTip(phase, n, pl) {
+  const a = pl[0] ? esc(pl[0].name) : 'Speler 1', b = pl[1] ? esc(pl[1].name) : 'Speler 2';
+  if (phase === 'mol') return n > 1 ? `🦫 ${a} is de Supermol: tik op de baan waar de maaier heen rijdt. Dan graaft de mol daar een kuil!` : '🦫 Supermol: tik op de baan waar de maaier heen rijdt. Dan graaft de mol daar een kuil!';
+  if (phase === 'vlieg') return n > 1 ? `🚁 ${b} is de Vliegbot: tik snel op de antenne die geel oplicht!` : '🚁 Vliegbot: tik snel op de antenne die geel oplicht en trek hem eraf!';
+  if (phase === 'boor') return n > 1 ? `⛏️ Boorbeest: samen boren! ${a} tikt links, ${b} rechts. Zo snel als je kan!` : '⛏️ Boorbeest: tik zo snel als je kan en boor door het pantser!';
+  if (phase === 'ruimte') return n > 1 ? '🚀 Ruimtebot: houd je vinger op de maaier! Met z’n tweeën tegelijk gaat het sneller.' : '🚀 Ruimtebot: houd je vinger op de maaier, dan tilt de trekstraal hem op!';
+  return '';
+}
+// De robot-grasmaaier. (X, Y) = midden, s = breedte in px. opt: spin (mesjes), mood ('boos' | 'blij' | 'duizelig'), t, lit (antenne-index die oplicht), ants (antennes over)
+function drawMaaier(c, X, Y, s, opt) {
+  opt = opt || {}; const t = opt.t || 0, mood = opt.mood || 'boos', h = s * .62, lw = Math.max(1.5, s * .028);
+  c.save(); c.translate(X, Y); c.lineJoin = 'round'; c.strokeStyle = LINE; c.lineWidth = lw;
+  c.fillStyle = 'rgba(0,0,0,.2)'; c.beginPath(); c.ellipse(0, h * .55, s * .55, s * .1, 0, 0, 7); c.fill();
+  // duwstang van de oude grasmaaier
+  c.lineWidth = lw * 1.6; c.beginPath(); c.moveTo(-s * .3, -h * .2); c.lineTo(-s * .38, -h * .95); c.lineTo(s * .38, -h * .95); c.lineTo(s * .3, -h * .2); c.stroke(); c.lineWidth = lw;
+  // wielen
+  for (const sx of [-1, 1]) { box(c, sx * s * .5 - s * .09, -h * .25, s * .18, h * .7, s * .06, '#2b2f3a', lw); c.strokeStyle = '#555c6b'; for (let k = 0; k < 3; k++) { const yy = -h * .2 + ((t * 3 + k / 3) % 1) * h * .6; c.beginPath(); c.moveTo(sx * s * .5 - s * .07, yy); c.lineTo(sx * s * .5 + s * .07, yy); c.stroke(); } c.strokeStyle = LINE; }
+  // mesjes onderaan
+  if (opt.spin != null) { c.save(); c.translate(0, h * .42); c.scale(1, .3); c.fillStyle = 'rgba(200,210,225,.7)'; c.beginPath(); c.arc(0, 0, s * .36, 0, 7); c.fill(); c.strokeStyle = '#8a93a6'; c.lineWidth = lw * 2; for (let k = 0; k < 3; k++) { const a = opt.spin + k * 2.1; c.beginPath(); c.moveTo(Math.cos(a) * s * .34, Math.sin(a) * s * .34); c.lineTo(-Math.cos(a) * s * .34, -Math.sin(a) * s * .34); c.stroke(); } c.restore(); c.strokeStyle = LINE; c.lineWidth = lw; }
+  // lijf
+  box(c, -s * .42, -h * .5, s * .84, h, s * .16, mood === 'blij' ? '#3cae5a' : '#2f9e4f', lw);
+  c.fillStyle = '#ffb627'; c.fillRect(-s * .42 + lw, h * .05, s * .84 - lw * 2, h * .1);
+  // motorkap + antenne
+  c.fillStyle = '#c4452c'; c.beginPath(); c.ellipse(0, -h * .5, s * .2, h * .2, 0, Math.PI, 0); c.fill(); c.stroke();
+  c.beginPath(); c.moveTo(0, -h * .7); c.lineTo(0, -h * 1.05); c.stroke(); dot(c, 0, -h * 1.08, s * .05, (t * 3 | 0) % 2 ? '#e8403a' : '#ffd23f');
+  // ogen
+  const ey = -h * .2;
+  for (const sx of [-1, 1]) {
+    box(c, sx * s * .18 - s * .11, ey - s * .08, s * .22, s * .16, s * .06, '#1f2a44', lw * .7);
+    if (mood === 'duizelig') { c.strokeStyle = '#fff'; c.lineWidth = lw * .8; c.beginPath(); c.arc(sx * s * .18, ey, s * .045, t * 8, t * 8 + 5); c.stroke(); c.strokeStyle = LINE; c.lineWidth = lw; }
+    else if (mood === 'blij') { c.strokeStyle = '#5ef0ff'; c.lineWidth = lw; c.beginPath(); c.arc(sx * s * .18, ey + s * .03, s * .05, Math.PI * 1.1, Math.PI * 1.9); c.stroke(); c.strokeStyle = LINE; }
+    else { dot(c, sx * s * .18, ey + s * .01, s * .045, '#ff3b3b'); c.lineWidth = lw * 1.3; c.beginPath(); c.moveTo(sx * s * .3, ey - s * .12); c.lineTo(sx * s * .08, ey - s * .07); c.stroke(); c.lineWidth = lw; }
+  }
+  // grijns met tandjes
+  const my = h * .28; c.fillStyle = '#1f2a44'; rrect(c, -s * .24, my - s * .06, s * .48, s * .12, s * .05); c.fill();
+  c.fillStyle = '#fff'; c.beginPath(); for (let k = 0; k < 6; k++) { const x0 = -s * .22 + k * s * .074; c.moveTo(x0, my - s * .05); c.lineTo(x0 + s * .037, my + (mood === 'blij' ? -s * .01 : s * .02)); c.lineTo(x0 + s * .074, my - s * .05); } c.fill();
+  c.restore();
+}
+class MaaiBaas {
+  constructor(api) {
+    this.api = api; this.c = api.ctx; this.n = api.players.length; this.t = 0; this.acc = 0; this.state = 'intro'; this.ended = false;
+    this.bonus = typeof S !== 'undefined' && S.boss ? Math.min(10, (S.boss.lost | 0) * 5) : 0;
+    this.st = bsBuild((Math.random() * 1e9) | 0, this.n, this.bonus); this.st.wait = BAAS.PAUSE;
+    this.acts = []; this.ptrs = {}; this.holdKey = false; this.pops = []; this.parts = []; this.shake = 0; this.flash = 0; this.cut = [];
+    this.W = api.W; this.H = api.H; this.layout();
+    this.onDown = e => this.pDown(e); this.onMove = e => this.pMove(e); this.onUp = e => this.pUp(e);
+    api.cv.addEventListener('pointerdown', this.onDown); addEventListener('pointermove', this.onMove); addEventListener('pointerup', this.onUp); addEventListener('pointercancel', this.onUp);
+    const pl = api.players, extra = this.bonus ? `<p>🔋 De Superlader heeft extra bijgeladen: <b>+${this.bonus} ⚡</b>!</p>` : '';
+    api.banner(`<h2>🤖 De Maai-o-Matic!</h2><p>${this.n > 1 ? `${esc(pl[0].name)} en ${esc(pl[1].name)}, samen` : 'Met'} alle 4 robots stoppen we hem! Alles kost ⚡ uit de batterij (${this.st.max} ⚡). Op? Dan proberen we het gewoon opnieuw.</p>${extra}`, { ms: 3800 })
+      .then(() => { if (MG.inst === this) this.state = 'play'; });
+  }
+  destroy() { const c = this.api.cv; c.removeEventListener('pointerdown', this.onDown); removeEventListener('pointermove', this.onMove); removeEventListener('pointerup', this.onUp); removeEventListener('pointercancel', this.onUp); }
+  resize(W, H) { this.W = W; this.H = H; this.layout(); }
+  layout() {
+    const W = this.W, H = this.H, top = this.api.top, land = W > H * 1.1; this.land = land;
+    this.hudBox = { x: 8, y: top, w: W - 16, h: 34 };
+    const y0 = top + 42, y1 = H - 8;
+    if (land) {
+      const ah = y1 - y0, k = Math.max(12, Math.min((W - 16) * .46 / BAAS.W, ah / BAAS.H)); this.k = k;
+      const fw = k * BAAS.W, fh = k * BAAS.H, pw = Math.max(120, Math.min(330, W - 40 - fw - 16)), x0 = Math.max(8, (W - pw - 16 - fw) / 2);
+      this.tipBox = { x: x0, y: y0, w: pw, h: Math.min(ah, 210) }; this.field = { x: x0 + pw + 16, y: y0 + Math.max(0, (ah - fh) / 2), w: fw, h: fh };
+    } else {
+      const th = W < 360 ? 66 : 58; this.tipBox = { x: 8, y: y1 - th, w: W - 16, h: th };
+      const ah = this.tipBox.y - 8 - y0, k = Math.max(12, Math.min((W - 16) / BAAS.W, ah / BAAS.H)); this.k = k;
+      const fw = k * BAAS.W, fh = k * BAAS.H; this.field = { x: (W - fw) / 2, y: y0 + Math.max(0, (ah - fh) / 2), w: fw, h: fh };
+    }
+  }
+  S(x, y) { const F = this.field; return [F.x + x * this.k, F.y + y * this.k]; }
+  L(X, Y) { const F = this.field; return [(X - F.x) / this.k, (Y - F.y) / this.k]; }
+  inField(X, Y) { const F = this.field, m = this.k * .4; return X > F.x - m && X < F.x + F.w + m && Y > F.y - m && Y < F.y + F.h + m; }
+  tapAt(X, Y) {
+    const st = this.st; if (this.state !== 'play' || st.wait > 0 || st.done) return;
+    const [x, y] = this.L(X, Y);
+    if (st.phase === 'mol' && this.inField(X, Y)) { const lane = x < 3 ? 0 : x < 6 ? 1 : 2; this.acts.push({ type: 'lane', lane, i: 0 }); }
+    else if (st.phase === 'vlieg') { let best = -1, bd = 2.1; BAAS.SPOTS.forEach(([sx, sy], k) => { const d = Math.hypot(sx - x, sy - y); if (d < bd) { bd = d; best = k; } }); if (best >= 0) this.acts.push({ type: 'spot', k: best, i: this.n > 1 ? 1 : 0 }); }
+    else if (st.phase === 'boor') this.acts.push({ type: 'tap', i: this.n > 1 && X >= this.W / 2 ? 1 : 0 });
+  }
+  pDown(e) {
+    e.preventDefault(); const [X, Y] = this.api.xy(e); this.tapAt(X, Y);
+    const used = Object.values(this.ptrs).map(p => p.slot), slot = this.n > 1 ? (used.includes(0) ? 1 : 0) : 0;
+    this.ptrs[e.pointerId] = { slot, X, Y };
+  }
+  pMove(e) { const p = this.ptrs[e.pointerId]; if (!p) return; const [X, Y] = this.api.xy(e); p.X = X; p.Y = Y; }
+  pUp(e) { if (e.pointerId in this.ptrs) delete this.ptrs[e.pointerId]; }
+  key(k, down) {
+    const st = this.st; if (k === ' ' || k === 'enter') { if (down && st.phase === 'boor') this.acts.push({ type: 'tap', i: k === 'enter' && this.n > 1 ? 1 : 0 }); if (k === ' ') this.holdKey = down; return true; }
+    if (!down) return ['a', 's', 'd', '1', '2', '3', '4'].includes(k);
+    if (st.phase === 'mol') { const lane = { a: 0, s: 1, d: 2, 1: 0, 2: 1, 3: 2 }[k]; if (lane != null) { this.acts.push({ type: 'lane', lane, i: 0 }); return true; } }
+    if (st.phase === 'vlieg') { const sp = { 1: 0, 2: 1, 3: 2, 4: 3 }[k]; if (sp != null) { this.acts.push({ type: 'spot', k: sp, i: this.n > 1 ? 1 : 0 }); return true; } }
+    return false;
+  }
+  holds() {
+    const h = Array(this.n).fill(null); for (const p of Object.values(this.ptrs)) { const [x, y] = this.L(p.X, p.Y); h[Math.min(p.slot, this.n - 1)] = { x, y }; }
+    if (this.holdKey && !h[0]) h[0] = { x: this.st.mower.x, y: this.st.mower.y };
+    return h;
+  }
+  tick(dt) {
+    this.t += dt; const st = this.st;
+    if (this.state === 'play') {
+      this.acc = Math.min(this.acc + dt, .25); let first = true;
+      while (this.acc >= BSV_DT) { this.acc -= BSV_DT; const acts = first ? this.acts : []; first = false; for (const e of bsStep(st, acts, this.holds(), BSV_DT)) this.onEvent(e); }
+      this.acts = [];
+      const m = st.mower; if (st.phase === 'mol' && m.mode === 'drive' && Math.random() < dt * 30) this.parts.push({ x: m.x + (Math.random() - .5) * 1.4, y: m.y - .6, vx: (Math.random() - .5) * 3, vy: -1 - Math.random() * 2, t: 0, life: .6, col: Math.random() < .5 ? '#5aa83c' : '#8fd16a' });
+      if (st.phase === 'mol' && m.mode === 'drive') { const last = this.cut[this.cut.length - 1]; if (!last || Math.abs(last[1] - m.y) > .3 || last[0] !== m.x) this.cut.push([m.x, m.y]); if (this.cut.length > 80) this.cut.shift(); }
+      if (st.done && !this.ended) { this.ended = true; this.state = 'end'; setTimeout(() => { if (MG.inst === this) this.finish(); }, st.won ? 2200 : 1700); }
+    }
+    this.pops = this.pops.filter(p => (p.t += dt) < 1.3); this.parts = this.parts.filter(p => (p.t += dt) < p.life);
+    for (const p of this.parts) { p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 4 * dt; }
+    this.shake = Math.max(0, this.shake - dt); this.flash = Math.max(0, this.flash - dt);
+    this.draw();
+  }
+  pop(x, y, txt, col, big) { this.pops.push({ x, y, txt, col: col || '#fff', t: 0, big }); }
+  burst(x, y, cols, n) { for (let k = 0; k < n; k++) { const a = Math.random() * 7, v = 1.5 + Math.random() * 3; this.parts.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 1, t: 0, life: .5 + Math.random() * .5, col: cols[k % cols.length] }); } }
+  onEvent(e) {
+    const st = this.st, m = st.mower;
+    if (e.type === 'dig') { SFX.dig(); this.pop(BAAS.LANES[e.lane], BAAS.HOLE_Y - 1, `-${BAAS.HOLE} ⚡`, '#ffd23f'); }
+    else if (e.type === 'tele') SFX.beep();
+    else if (e.type === 'drive') SFX.vroom();
+    else if (e.type === 'stuck') { SFX.crash(); this.shake = .4; this.burst(m.x, m.y, ['#8a5a35', '#6b4226', '#5aa83c'], 16); this.pop(m.x, m.y - 1.6, 'Plof! In de kuil!', '#fff', true); this.cut = []; }
+    else if (e.type === 'mowed') { SFX.aww(); this.shake = .3; this.flash = .3; this.pop(m.x, 11.4, `Ai, de moestuin! -${BAAS.MOWED} ⚡`, '#ff8a8a', true); this.cut = []; }
+    else if (e.type === 'lit') SFX.beep();
+    else if (e.type === 'grab') { SFX.pickup(); const [x, y] = BAAS.SPOTS[e.k]; this.burst(x, y, ['#ffd23f', '#fff', '#5ef0ff'], 14); this.pop(x, y - .8, 'Hebbes!', '#ffd23f', true); }
+    else if (e.type === 'miss') { SFX.nope(); const [x, y] = BAAS.SPOTS[e.k]; this.pop(x, y - .8, `Mis! -${BAAS.GRAB} ⚡`, '#ff8a8a'); }
+    else if (e.type === 'boorGo') { SFX.boost(); this.pop(4.5, 4.4, `Boren! -${BAAS.BOOR} ⚡`, '#ffd23f', true); }
+    else if (e.type === 'drill') { if (Math.random() < .5) SFX.click(); const x = this.n > 1 ? (e.i ? 5.6 : 3.4) : 4.5; this.parts.push({ x: x + (Math.random() - .5), y: 7.2, vx: (Math.random() - .5) * 4, vy: -2 - Math.random() * 2, t: 0, life: .5, col: Math.random() < .5 ? '#ffd23f' : '#c9d1df' }); }
+    else if (e.type === 'boorFail') { SFX.aww(); this.pop(4.5, 4.4, 'Bijna! Nog een keer!', '#fff', true); }
+    else if (e.type === 'drilled') { SFX.crash(); this.shake = .5; this.burst(4.5, 6.4, ['#c9d1df', '#ffd23f', '#2f9e4f'], 22); this.pop(4.5, 4.6, 'Krak! Pantser kapot!', '#fff', true); }
+    else if (e.type === 'lifted') { SFX.fanfare(); this.burst(m.x, m.y, ['#5ef0ff', '#ffd23f', '#fff', '#ff8ad8'], 30); }
+    else if (e.type === 'hit' && e.phase !== 'ruimte') SFX.correct();
+    else if (e.type === 'phase') SFX.whoosh();
+    else if (e.type === 'empty') { SFX.gameover(); this.pop(4.5, 7, 'De batterij is op…', '#fff', true); }
+    else if (e.type === 'win') { achieve('baas'); if (st.energy >= st.max / 2) achieve('baas0'); }
+  }
+  finish() {
+    const st = this.st, pl = this.api.players, sc = bsScore(st), won = st.won;
+    if (typeof S !== 'undefined' && S.boss) { S.boss.tries++; S.boss.day = dayKey(); if (won) { S.boss.wins++; S.boss.lost = 0; } else S.boss.lost = Math.min(99, S.boss.lost + 1); save(); }
+    const robots = BAAS_PHASES.map((p, i) => `${BS_ROBOT[p][0]} ${i < st.pi || won ? '✅' : '❌'}`).join(' ');
+    const lines = [won ? `De Maai-o-Matic staat stil! Nog <b>${Math.floor(st.energy)} ⚡</b> over van de ${st.max}.` : `Gelukt tot de ${BS_ROBOT[BAAS_PHASES[Math.min(st.pi, 3)]][1]}. ${robots}`];
+    if (!won) lines.push(`Geen nood: de Superlader laadt de batterij weer helemaal op. Volgende poging: <b>+${Math.min(10, (S.boss ? S.boss.lost : 1) * 5)} ⚡</b> extra!`);
+    if (!won && st.pi === 0) lines.push('Tip: kijk waar de maaier knippert en tik op díe baan. Dan graaft de Supermol daar een kuil.');
+    if (!won && st.pi === 2) lines.push('Tip: tik heel snel met een paar vingers tegelijk!');
+    const res = { title: won ? '🏆 De Maai-o-Matic is gestopt!' : '🔋 De batterij is op… nog een keer?', scores: this.n > 1 ? [{ name: `${pl[0].name} & ${pl[1].name}`, score: sc, text: `${sc} punten` }] : [{ name: pl[0].name, score: sc, text: `${sc} punten` }], winner: null, best: sc, lines, finished: won };
+    const extra = typeof bossResult === 'function' ? bossResult(won, st) || {} : {}; if (extra.lines) { res.lines = res.lines.concat(extra.lines); delete extra.lines; } Object.assign(res, extra);
+    this.api.end(res);
+  }
+  draw() {
+    const c = this.c, W = this.W, H = this.H, dpr = this.api.dpr, t = this.t, st = this.st, F = this.field, k = this.k, m = st.mower;
+    c.setTransform(dpr, 0, 0, dpr, 0, 0); c.fillStyle = '#2b4a2b'; c.fillRect(0, 0, W, H);
+    this.api.hud(F.x, F.y, F.w, F.h, 'veld');
+    c.save(); rrect(c, F.x, F.y, F.w, F.h, 16); c.clip(); c.translate(this.shake > 0 ? Math.sin(t * 70) * 6 * this.shake : 0, 0);
+    // gras met maaistroken
+    for (let i = 0; i < 9; i++) { c.fillStyle = i % 2 ? '#6cc04a' : '#63b545'; const [x0, y0] = this.S(i, 0); c.fillRect(x0, y0, k + 1, F.h); }
+    // Broms hek bovenaan, moestuin + ons luik onderaan
+    const [, fy] = this.S(0, 1.2); c.fillStyle = '#c9965a'; c.fillRect(F.x, fy - k * .5, F.w, k * .18); c.fillRect(F.x, fy - k * .15, F.w, k * .18); for (let i = 0; i < 12; i++) box(c, F.x + i * F.w / 12 + 2, fy - k * .9, F.w / 12 - 4, k * 1.05, 3, '#e0b07a', 1.5);
+    const [, gy] = this.S(0, BAAS.ROW_END + .1); c.fillStyle = '#8a5a35'; c.fillRect(F.x, gy, F.w, F.h); for (let i = 0; i < 9; i++) { const [x, y] = this.S(i + .5, BAAS.ROW_END + .9); c.font = `${Math.round(k * .7)}px system-ui, "Apple Color Emoji", sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(i === 4 ? '🚪' : i % 3 === 1 ? '🥬' : '🥕', x, y); }
+    // gemaaid spoor
+    c.fillStyle = 'rgba(160,200,90,.55)'; for (const [x, y] of this.cut) { const [X, Y] = this.S(x, y); c.fillRect(X - k * .6, Y - k * .5, k * 1.2, k * .8); }
+    if (st.phase === 'mol') this.drawMol(); else if (st.phase === 'vlieg') this.drawVlieg(); else if (st.phase === 'boor') this.drawBoor(); else if (st.phase === 'ruimte' || st.phase === 'win') this.drawRuimte();
+    const [MX, MY] = this.S(m.x, m.y);
+    if (st.phase !== 'ruimte' && st.phase !== 'win') drawMaaier(c, MX, MY, k * 2.2, { t, spin: m.spin, mood: m.mode === 'stuck' ? 'duizelig' : 'boos' });
+    for (const p of this.parts) { const [X, Y] = this.S(p.x, p.y); c.globalAlpha = 1 - p.t / p.life; dot(c, X, Y, Math.max(2, k * .09), p.col); }
+    c.globalAlpha = 1;
+    if (st.wait > 0 && this.state === 'play') this.drawCard();
+    for (const p of this.pops) { const [X, Y] = this.S(p.x, p.y - p.t * .8); c.globalAlpha = Math.min(1, 1.3 - p.t); const fs = p.big ? clamp(k * .62, 15, 28) : clamp(k * .48, 13, 20); c.font = `800 ${fs}px Fredoka, sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineWidth = 4; c.strokeStyle = 'rgba(11,16,40,.8)'; const xx = clamp(X, F.x + c.measureText(p.txt).width / 2 + 4, F.x + F.w - c.measureText(p.txt).width / 2 - 4); c.strokeText(p.txt, xx, Y, F.w - 8); c.fillStyle = p.col; c.fillText(p.txt, xx, Y, F.w - 8); }
+    c.globalAlpha = 1;
+    if (this.flash > 0) { c.fillStyle = `rgba(255,80,80,${this.flash})`; c.fillRect(F.x, F.y, F.w, F.h); }
+    c.restore();
+    c.strokeStyle = 'rgba(255,255,255,.5)'; c.lineWidth = 2; rrect(c, F.x, F.y, F.w, F.h, 16); c.stroke();
+    this.drawHud(); this.drawTip(); c.textBaseline = 'alphabetic';
+  }
+  drawMol() {
+    const c = this.c, k = this.k, st = this.st, m = st.mower, t = this.t;
+    BAAS.LANES.forEach((lx, i) => {
+      const [X0, Y0] = this.S(lx - 1.4, 1.6), [X1, Y1] = this.S(lx + 1.4, BAAS.ROW_END);
+      const warn = m.mode === 'tele' && m.lane === i; c.fillStyle = warn ? `rgba(255,70,50,${.32 + .14 * Math.sin(t * 16)})` : 'rgba(255,255,255,.06)'; rrect(c, X0 + 3, Y0, X1 - X0 - 6, Y1 - Y0, 12); c.fill(); if (warn) { c.strokeStyle = '#ff4a3a'; c.lineWidth = 3; c.stroke(); }
+      if (warn) { c.font = `800 ${Math.round(k * .9)}px Fredoka, sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = '#fff'; for (let j = 0; j < 3; j++) { const [X, Y] = this.S(lx, 4.5 + j * 2 + ((t * 2) % 1) * .6); c.globalAlpha = .7; c.fillText('▼', X, Y); } c.globalAlpha = 1; }
+    });
+    const h = st.hole;
+    if (h) { const [X, Y] = this.S(BAAS.LANES[h.lane], BAAS.HOLE_Y), r = k * 1.1 * (.3 + .7 * h.dig); c.fillStyle = '#4a2e18'; c.beginPath(); c.ellipse(X, Y, r, r * .5, 0, 0, 7); c.fill(); c.fillStyle = '#2a1a0c'; c.beginPath(); c.ellipse(X, Y + r * .08, r * .75, r * .32, 0, 0, 7); c.fill(); drawMol(c, X + k * 1.1, Y + k * .5, 'left', t, k * 1.3, h.dig < 1); }
+    else { const [X, Y] = this.S(4.5, BAAS.HOLE_Y + 1.5); c.globalAlpha = .9; drawMol(c, X, Y, 'right', t, k * 1.3, false); c.globalAlpha = 1; }
+  }
+  drawVlieg() {
+    const c = this.c, k = this.k, st = this.st, m = st.mower, t = this.t, [MX, MY] = this.S(m.x, m.y);
+    BAAS.SPOTS.forEach(([sx, sy], i) => {
+      const [X, Y] = this.S(sx, sy), lit = st.lit === i;
+      c.strokeStyle = '#3b3f4a'; c.lineWidth = Math.max(3, k * .12); c.beginPath(); c.moveTo(MX, MY - k * .3); c.quadraticCurveTo((MX + X) / 2, Math.min(MY, Y) - k, X, Y); c.stroke();
+      const r = k * (lit ? .55 + .08 * Math.sin(t * 14) : .4);
+      if (lit) { c.fillStyle = 'rgba(255,230,80,.35)'; c.beginPath(); c.arc(X, Y, r * 2, 0, 7); c.fill(); }
+      dot(c, X, Y, r, lit ? '#ffd23f' : '#8a93a6'); c.strokeStyle = LINE; c.lineWidth = 2; c.beginPath(); c.arc(X, Y, r, 0, 7); c.stroke();
+      if (lit) { c.font = `800 ${Math.round(k * .5)}px Fredoka, sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = '#1f2a44'; c.fillText(i + 1, X, Y + 1); }
+    });
+    const tgt = st.lit >= 0 ? BAAS.SPOTS[st.lit] : [4.5, 9.5]; this.vx = this.vx == null ? 4.5 : this.vx + (tgt[0] - this.vx) * .06; this.vy = this.vy == null ? 9.5 : this.vy + (tgt[1] + 1.4 - this.vy) * .06;
+    const [VX, VY] = this.S(this.vx, this.vy); drawDrone(c, VX, VY + k * .4, k * .4, t, null, k / 22);
+    for (let i = 0; i < BAAS.VLIEG_HITS; i++) { const [X, Y] = this.S(i ? 8.1 : .9, 11.7); c.globalAlpha = i < st.hits ? 1 : .3; c.font = `${Math.round(k * .8)}px system-ui, "Apple Color Emoji", sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('📡', X, Y); c.globalAlpha = 1; }
+  }
+  drawBoor() {
+    const c = this.c, k = this.k, st = this.st, t = this.t, F = this.field;
+    const [X, Y] = this.S(4.5, 6.4); c.fillStyle = 'rgba(200,210,225,.85)'; c.strokeStyle = LINE; c.lineWidth = 2; rrect(c, X - k * 1.5, Y - k * 1.6, k * 3, k * .5, 6); c.fill(); c.stroke();
+    const img = typeof boorImg === 'function' ? boorImg() : null, bw = k * 2.4, drilling = st.boorMode === 'drill';
+    for (let i = 0; i < st.n; i++) {
+      const bx = st.n > 1 ? (i ? 6.6 : 2.4) : 4.5, [BX, BY] = this.S(bx, 10.4 + (drilling ? Math.sin(t * 40 + i) * .05 : 0));
+      if (img && img.complete && img.naturalWidth) c.drawImage(img, BX - bw / 2, BY - bw * .4, bw, bw * .8); else box(c, BX - bw * .3, BY - bw * .2, bw * .6, bw * .4, 8, '#d9822b');
+      const v = st.drill[i] || 0, [x0, y0] = this.S(bx - 1.6, 12.6), w = k * 3.2, h = k * .45; c.fillStyle = 'rgba(11,16,40,.6)'; rrect(c, x0, y0, w, h, h / 2); c.fill(); c.fillStyle = v >= 1 ? '#3cae5a' : '#ffb627'; rrect(c, x0, y0, Math.max(h, w * v), h, h / 2); c.fill();
+      if (st.n > 1) { c.font = `700 ${Math.round(clamp(k * .42, 11, 16))}px Fredoka, sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = '#fff'; c.fillText(this.api.players[i].name, x0 + w / 2, y0 - h * .7, w); }
+    }
+    if (st.n > 1) { c.strokeStyle = 'rgba(255,255,255,.4)'; c.setLineDash([6, 8]); c.beginPath(); c.moveTo(F.x + F.w / 2, F.y + k * 8.5); c.lineTo(F.x + F.w / 2, F.y + F.h); c.stroke(); c.setLineDash([]); }
+    c.font = `800 ${Math.round(clamp(k * .7, 15, 30))}px Fredoka, sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineWidth = 4; c.strokeStyle = 'rgba(11,16,40,.8)';
+    const txt = drilling ? `TIK TIK TIK! ${Math.ceil(st.boorT)}` : 'Klaar… boren!', [TX, TY] = this.S(4.5, 2.9); c.strokeText(txt, TX, TY, F.w - 10); c.fillStyle = drilling ? '#ffd23f' : '#fff'; c.fillText(txt, TX, TY, F.w - 10);
+  }
+  drawRuimte() {
+    const c = this.c, k = this.k, st = this.st, t = this.t, m = st.mower, [MX, MY] = this.S(m.x, m.y), won = st.phase === 'win';
+    const img = cineBotImg(), bw = k * 3, [BX, BY] = this.S(4.5, 12.6);
+    const on = won || st.locks.some(Boolean), lift = won ? Math.min(1, (this.liftT = (this.liftT || 0) + 1 / 60) / 1.5) : 0;
+    if (on) { const g = c.createLinearGradient(BX, BY - bw * .6, MX, MY); g.addColorStop(0, 'rgba(94,240,255,.15)'); g.addColorStop(1, 'rgba(94,240,255,.55)'); c.fillStyle = g; c.beginPath(); c.moveTo(BX - k * .3, BY - bw * .6); c.lineTo(MX - k * 1.4, MY + k * .4); c.lineTo(MX + k * 1.4, MY + k * .4); c.lineTo(BX + k * .3, BY - bw * .6); c.closePath(); c.fill(); }
+    if (img.complete && img.naturalWidth) c.drawImage(img, BX - bw / 2, BY - bw * .84, bw, bw * .84);
+    drawMaaier(c, MX, MY - lift * k * 3, k * 2.2, { t, spin: won ? null : m.spin, mood: won ? 'duizelig' : 'boos' });
+    if (!won) { const r = k * 1.9, p = clamp(st.beam / BAAS.BEAM_NEED, 0, 1); c.lineWidth = Math.max(4, k * .18); c.strokeStyle = 'rgba(255,255,255,.35)'; c.beginPath(); c.arc(MX, MY, r, 0, 7); c.stroke(); c.strokeStyle = '#5ef0ff'; c.beginPath(); c.arc(MX, MY, r, -Math.PI / 2, -Math.PI / 2 + p * Math.PI * 2); c.stroke(); }
+    if (!won && !on) { c.globalAlpha = .6 + .4 * Math.sin(t * 8); c.font = `${Math.round(k * 1.1)}px system-ui, "Apple Color Emoji", sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('👆', MX + k * .6, MY + k * 1.2); c.globalAlpha = 1; }
+  }
+  drawCard() {
+    const c = this.c, k = this.k, F = this.field, st = this.st, ph = st.phase, r = BS_ROBOT[ph]; if (!r) return;
+    const w = F.w * .86, h = Math.min(F.h * .3, k * 4.4), x = F.x + (F.w - w) / 2, y = F.y + F.h * .34;
+    c.fillStyle = 'rgba(255,255,255,.95)'; rrect(c, x, y, w, h, 18); c.fill(); c.strokeStyle = '#3f6fe0'; c.lineWidth = 3; c.stroke();
+    c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = '#1f2a44';
+    c.font = `800 ${Math.round(clamp(k * .62, 15, 28))}px Fredoka, sans-serif`; c.fillText(`${r[0]} ${st.pi + 1}/4: ${r[1]}!`, x + w / 2, y + h * .3, w - 16);
+    const who = this.n > 1 ? (ph === 'mol' ? this.api.players[0].name : ph === 'vlieg' ? this.api.players[1].name : 'Samen!') : 'Jij bent aan de beurt!';
+    c.font = `700 ${Math.round(clamp(k * .45, 12, 20))}px Fredoka, sans-serif`; c.fillText(who, x + w / 2, y + h * .62, w - 16);
+    c.fillStyle = '#3f6fe0'; c.fillRect(x + 16, y + h - 12, (w - 32) * clamp(st.wait / BAAS.PAUSE, 0, 1), 4);
+  }
+  drawHud() {
+    const c = this.c, B = this.hudBox, st = this.st; this.api.hud(B.x, B.y, B.w, B.h, 'score');
+    c.fillStyle = 'rgba(255,255,255,.94)'; rrect(c, B.x, B.y, B.w, B.h, 12); c.fill();
+    const fs = B.w < 360 ? 13 : 15, yy = B.y + B.h / 2; c.font = `700 ${fs}px Fredoka, sans-serif`; c.textBaseline = 'middle'; c.textAlign = 'left'; c.fillStyle = '#1f2a44';
+    const lbl = `⚡ ${Math.ceil(st.energy)}/${st.max}`, lw = c.measureText(lbl).width; c.fillText(lbl, B.x + 10, yy);
+    const icons = BAAS_PHASES.map(p => BS_ROBOT[p][0]), iw = fs * 1.7, ix0 = B.x + B.w - 8 - iw * 4;
+    const bx = B.x + 18 + lw, bw = Math.max(20, ix0 - bx - 10), p = clamp(st.energy / st.max, 0, 1);
+    c.fillStyle = '#d7deea'; rrect(c, bx, yy - 6, bw, 12, 6); c.fill(); c.fillStyle = p > .5 ? '#3cae5a' : p > .25 ? '#ffb627' : '#e8403a'; rrect(c, bx, yy - 6, Math.max(8, bw * p), 12, 6); c.fill();
+    c.font = `${fs + 1}px system-ui, "Apple Color Emoji", sans-serif`; c.textAlign = 'center';
+    icons.forEach((ic, i) => { const x = ix0 + iw * (i + .5), done = i < st.pi || st.won, cur = i === st.pi && !st.won; if (cur) { c.fillStyle = '#ffe680'; c.beginPath(); c.arc(x, yy, iw * .48, 0, 7); c.fill(); } c.globalAlpha = done || cur ? 1 : .35; c.fillText(ic, x, yy + 1); c.globalAlpha = 1; if (done) { c.font = `700 ${Math.round(fs * .8)}px sans-serif`; c.fillStyle = '#2f9e4f'; c.fillText('✓', x + iw * .35, yy + fs * .45); c.font = `${fs + 1}px system-ui, "Apple Color Emoji", sans-serif`; } });
+  }
+  drawTip() {
+    const c = this.c, B = this.tipBox, st = this.st, txt = st.won ? '🏆 Hij zweeft weg… GEWONNEN!' : st.done ? '🔋 De batterij is op…' : bsTip(st.phase, this.n, this.api.players).replace(/&amp;/g, '&').replace(/&lt;/g, '<').replace(/&gt;/g, '>').replace(/&#39;/g, "'").replace(/&quot;/g, '"');
+    this.api.hud(B.x, B.y, B.w, B.h, 'tip');
+    c.fillStyle = 'rgba(255,255,255,.92)'; rrect(c, B.x, B.y, B.w, B.h, 12); c.fill();
+    let fs = B.w < 340 ? 13 : 15; c.font = `600 ${fs}px Fredoka, sans-serif`; c.fillStyle = '#1f2a44'; c.textAlign = 'left'; c.textBaseline = 'top';
+    const wrap = () => { const words = txt.split(' '), out = []; let cur = ''; for (const w of words) { const n = cur ? cur + ' ' + w : w; if (c.measureText(n).width > B.w - 20 && cur) { out.push(cur); cur = w; } else cur = n; } if (cur) out.push(cur); return out; };
+    let lines = wrap(); while (lines.length * fs * 1.25 > B.h - 12 && fs > 10) { fs--; c.font = `600 ${fs}px Fredoka, sans-serif`; lines = wrap(); }
+    const y0 = B.y + Math.max(6, (B.h - lines.length * fs * 1.25) / 2); lines.forEach((l, i) => c.fillText(l, B.x + 10, y0 + i * fs * 1.25, B.w - 20));
+    if (this.land && B.h > 120) { const r = BS_ROBOT[st.phase]; if (r) { c.font = `${Math.round(Math.min(B.w * .3, 54))}px system-ui, "Apple Color Emoji", sans-serif`; c.textAlign = 'center'; c.textBaseline = 'bottom'; c.fillText(r[0], B.x + B.w / 2, B.y + B.h - 6); } }
+  }
+}
+
+/* ===== world/einde.js ===== */
+/* =========================================================
+   AFLEVERING 5C: DE EINDBAAS EN HET EINDE.
+   1. Alle kamers gegraven + Ruimtebot gebouwd -> filmpje 'maaieralarm': Broms Maai-o-Matic slaat op hol.
+   2. Superlader in het Wolken-HQ: breng er ⚡ naartoe tot hij vol is (BOSS_E = 30 ⚡, blijft bewaard, ook over dagen heen).
+   3. De Maai-o-Matic staat in de tuin. Superlader vol? Dan start het gevecht (minigame 'grasmaaier', baas.js).
+   4. Gewonnen (1e keer): Brom bedankt de kinderen, dan het slotfilmpje op zolder (alles was fantasie),
+      de mama van de vriend komt hem ophalen, aftiteling. Daarna gewoon verder spelen (doel 'vrij').
+      De maaier blijft in de tuin staan om nog eens te oefenen; via de Superlader kun je het einde nog eens zien.
+   ========================================================= */
+const BOSS_E = BAAS.E;
+const VRIENDMAMA_LOOK = { skin: '#e8b48a', hair: 'lang', hairCol: '#2b1d14', shirt: '#3f8cff', pants: '#3b4767' };
+const bossStoryReady = () => robotBuilt('ruimtebot') && flag('eilandSeen') && isDug('wolk') && !nextRoom();
+const bossCharge = () => (S.boss && S.boss.charge) | 0;
+const bossFull = () => bossCharge() >= BOSS_E;
+// ⚡ in de Superlader stoppen. Geeft terug hoeveel er echt in ging.
+function bossDeposit(n) {
+  const k = Math.max(0, Math.min(n | 0, S.energie | 0, BOSS_E - bossCharge())); if (!k) return 0;
+  S.energie -= k; S.boss.charge += k; save(); BUS.emit('res'); updateHud(); return k;
+}
+/* ---------- in de wereld: Superlader (eiland) en de Maai-o-Matic (tuin) ---------- */
+Object.assign(FURN, {
+  superlader(c, o, X, Y, W) {
+    c.fillStyle = 'rgba(0,0,0,.18)'; c.beginPath(); c.ellipse(X + W / 2, Y + T - 4, W * .42, 6, 0, 0, 7); c.fill();
+    box(c, X + 8, Y - 26, W - 16, T + 22, 10, '#e6ecf5', 2.5); box(c, X + W / 2 - 8, Y - 33, 16, 8, 3, '#c9d1df', 2);
+    box(c, X + 13, Y - 21, W - 26, T + 12, 6, '#1f2a44', 1.5);
+  },
+  superladerDyn(c, o, X, Y, W, H, t) {
+    const f = clamp(bossCharge() / BOSS_E, 0, 1), x = X + 16, w = W - 32, top = Y - 18, bot = Y + T - 12, n = 5, bh = (bot - top) / n, full = f >= 1;
+    c.fillStyle = full ? `hsl(${120 + Math.sin(t * 3) * 20},70%,50%)` : f > .5 ? '#3cae5a' : f > .2 ? '#ffb627' : '#e8403a';
+    for (let i = 0; i < n; i++) { const part = clamp(f * n - i, 0, 1); if (part > 0) { const hh = (bh - 3) * part; c.fillRect(x, bot - i * bh - 1.5 - hh, w, hh); } }
+    c.font = '13px system-ui, "Apple Color Emoji", sans-serif'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.globalAlpha = .7 + .3 * Math.sin(t * 4); c.fillText('⚡', X + W / 2, Y - 29); c.globalAlpha = 1;
+    const lbl = `${bossCharge()}/${BOSS_E}`; c.font = '700 12px Fredoka, sans-serif'; const lw = c.measureText(lbl).width + 10; c.fillStyle = 'rgba(255,255,255,.9)'; rrect(c, X + W / 2 - lw / 2, Y - 52, lw, 15, 7); c.fill(); c.fillStyle = '#1f2a44'; c.fillText(lbl, X + W / 2, Y - 44); c.textBaseline = 'alphabetic';
+  },
+  maaierSpot(c, o, X, Y, W, H) { c.fillStyle = 'rgba(160,200,90,.6)'; c.beginPath(); c.ellipse(X + W / 2, Y + H * .6, W * .62, H * .42, 0, 0, 7); c.fill(); },
+  maaierDyn(c, o, X, Y, W, H, t) {
+    const won = flag('baasVerslagen'), wob = won ? 0 : Math.sin(t * 9) * 1.5;
+    drawMaaier(c, X + W / 2 + wob, Y + H * .5, W * .78, { t, spin: won ? null : t * 14, mood: won ? 'blij' : 'boos' });
+    if (!won) { c.font = '12px system-ui, "Apple Color Emoji", sans-serif'; c.textAlign = 'center'; c.globalAlpha = .5 + .5 * Math.sin(t * 5); c.fillText('💢', X + W - 4, Y - 6); c.globalAlpha = 1; }
+  },
+});
+function islandBossObjects(objs) {
+  if (!flag('maaierAlarm') || !isDug('wolk')) return;
+  objs.push({ id: 'superlader', kind: 'superlader', dyn: 'superladerDyn', x: 16, y: 14, w: 2, use: { label: 'Superlader', icon: '🔋', action: 'superlader' } });
+}
+function tuinMaaier() {
+  const m = GB.MAPS.tuin; if (!m) return; const i = m.objects.findIndex(o => o.id === 'maaierbaas'), want = flag('maaierAlarm');
+  if (want && i < 0) m.objects.push({ id: 'maaierbaas', kind: 'maaierSpot', dyn: 'maaierDyn', x: 15, y: 9, w: 2, h: 2, use: { label: 'Maaier', icon: '🤖', action: 'maaierbaas' } });
+  if (!want && i >= 0) m.objects.splice(i, 1);
+  if (WORLD.map && WORLD.map.id === 'tuin') WORLD.rebuild();
+}
+function refreshBossMaps() {
+  buildIslandMap(); tuinMaaier();
+  if (WORLD.map && WORLD.map.id === 'eiland') { WORLD.map = GB.MAPS.eiland; WORLD.rebuild(); }
+}
+BUS.on('map', id => { if (id === 'tuin') tuinMaaier(); });
+GB.ACTIONS.superlader = async () => {
+  SFX.click();
+  if (flag('baasVerslagen')) {
+    const a = await ask('bot', 'Bliep! De Superlader heeft zijn werk gedaan. De Maai-o-Matic is weer lief! Wil je het einde van het verhaal nog eens zien?', ['🎬 Ja, het einde!', 'Nee, dank je']);
+    if (a === 0) await eindeFilm(true); return;
+  }
+  const c = bossCharge();
+  if (c >= BOSS_E) { await talk([['bot', `Bliep! De Superlader is vol: ${BOSS_E}/${BOSS_E} ⚡!`], ['f', 'Op naar de tuin! Daar staat de Maai-o-Matic. Met alle 4 robots stoppen we hem!']]); return; }
+  if (!(S.energie > 0)) {
+    await talk([['bot', `Bliep! Superlader: ${c}/${BOSS_E} ⚡. Wij hebben nu geen ⚡ bij ons.`], ['f', 'Energie krijgen we door spelletjes goed te spelen, door mee te eten met mama en papa en met munten bij de energie-automaat in het Hoofdkwartier!']]);
+    return;
+  }
+  const a = await ask('bot', `Bliep bloep! De Superlader heeft ${c}/${BOSS_E} ⚡. Wij hebben ${S.energie} ⚡. Hoeveel stoppen we erin?`, [`⚡ Alles (${Math.min(S.energie, BOSS_E - c)})`, '⚡ Eentje', 'Nog niet']);
+  if (a === 2 || a == null || a < 0) return;
+  const k = bossDeposit(a === 0 ? S.energie : 1); if (!k) return;
+  SFX.energie(); burst(17 * T, 13.4 * T, 16, ['#ffd23f', '#5ef0ff', '#fff']);
+  if (bossFull()) {
+    achieve('superlader'); SFX.fanfare();
+    await talk([['bot', `VOL! ${BOSS_E}/${BOSS_E} ⚡! Bliep bliep hoera!`], ['p', 'Nu zijn we sterk genoeg voor de Maai-o-Matic!'], ['f', 'Snel, naar de tuin! Supermol, Vliegbot, Boorbeest, Ruimtebot: we gaan met z’n allen!']]);
+  } else {
+    const left = BOSS_E - bossCharge();
+    await talk([['bot', `Zoemmm… ${bossCharge()}/${BOSS_E} ⚡. Nog ${left} ⚡ nodig!`], ['f', left > 15 ? 'Nog best veel. Kom, spelletjes spelen voor energie!' : 'We komen in de buurt! Nog even doorspelen!']]);
+  }
+  updateHud();
+};
+GB.ACTIONS.maaierbaas = async () => {
+  SFX.click();
+  if (flag('baasVerslagen')) {
+    const a = await ask('brom', 'Mijn Maai-o-Matic is weer lief, dankzij jullie! Willen jullie nog eens oefenen? Dan doet hij net alsof hij boos is. Haha!', ['🤖 Oefenen!', 'Nee, dank u']);
+    if (a === 0) openSetup('grasmaaier'); return;
+  }
+  if (!bossFull()) {
+    await talk([['f', `Hij is veel te sterk! Eerst moet de Superlader vol: ${bossCharge()}/${BOSS_E} ⚡.`], ['p', 'De Superlader staat in het Wolken-HQ op het eiland. Elke ⚡ telt!']]);
+    return;
+  }
+  const a = await ask('p', 'De Superlader is vol! Klaar om de Maai-o-Matic te stoppen?', ['💪 Ja, met alle robots!', 'Nog even niet']);
+  if (a === 0) openSetup('grasmaaier');
+};
+// Wat er na het gevecht gebeurt (baas.js vraagt dit op)
+function bossResult(won) {
+  if (won && !flag('baasVerslagen')) return { noAgain: true, backLabel: '🎬 Verder', after: eindeStory };
+  if (won) return { lines: ['(Dit was een oefenpotje. Brom lacht: “Goed zo!”)'] };
+  return null;
+}
+async function eindeStory() {
+  setFlag('baasVerslagen'); achieve('baas'); refreshBossMaps();
+  await eindeFilm(false);
+  achieve('einde'); updateHud();
+  await talk([['', 'Einde… of toch niet? De basis, het eiland en alle spelletjes blijven gewoon open. Speel lekker verder!']]);
+}
+async function eindeFilm(again) {
+  await cinema(EINDE_SCENES(), { music: 'einde' });
+  await cinema(CREDITS_SCENES(), { music: 'einde' });
+  if (again) updateHud();
+}
+/* ---------- het filmpje: de maaier slaat op hol ---------- */
+async function maaierAlarm() {
+  if (flag('maaierAlarm')) return; setFlag('maaierAlarm'); WORLD.busy++;
+  try {
+    await cinema(MAAIER_SCENES(), { music: 'baas' });
+    refreshBossMaps();
+    await talk([['f', 'Een Superlader? Die staat in ons Wolken-HQ!'], ['p', 'Dan gaan we energie verzamelen. Héél veel energie! Spelletjes spelen, mee-eten, munten sparen…'], ['bot', `Bliep! ${BOSS_E} ⚡ nodig. Breng alles naar de Superlader!`]]);
+  } finally { WORLD.busy--; updateHud(); }
+}
+let eindeWait = 0;
+function eindeTick(dt) {
+  if (flag('maaierAlarm') || !bossStoryReady() || !WORLD.map || !WORLD.active) { eindeWait = 0; return; }
+  if (WORLD.busy || DLG.open || anyOverlay() || MG.active || CINE.on || (typeof MEAL !== 'undefined' && MEAL.st && MEAL.st !== 'idle')) { eindeWait = 0; return; }
+  eindeWait += dt; if (eindeWait > 2.5) { eindeWait = 0; maaierAlarm(); }
+}
+/* ---------- tekenhulpjes ---------- */
+function cineShed(c, x, gy, s, t, smoke) {
+  box(c, x - s * .5, gy - s * .55, s, s * .55, 5, '#8a9a7a'); c.fillStyle = '#5b6b4a'; c.strokeStyle = LINE; c.lineWidth = 2; c.beginPath(); c.moveTo(x - s * .6, gy - s * .55); c.lineTo(x, gy - s * .85); c.lineTo(x + s * .6, gy - s * .55); c.closePath(); c.fill(); c.stroke();
+  box(c, x - s * .18, gy - s * .42, s * .36, s * .42, 3, '#4a3a2a');
+  if (smoke) { for (let k = 0; k < 6; k++) { const q = (t * .4 + k / 6) % 1; c.globalAlpha = (1 - q) * .7; dot(c, x + s * .25 + Math.sin(q * 6 + k) * s * .08, gy - s * .9 - q * s * .9, s * (.06 + q * .12), '#9aa3b2'); } c.globalAlpha = 1;
+    for (let k = 0; k < 5; k++) { if (hash2(k, Math.floor(t * 8)) > .5) { const a = hash2(Math.floor(t * 8), k) * 6.28; c.strokeStyle = '#ffd23f'; c.lineWidth = 2; c.beginPath(); c.moveTo(x, gy - s * .3); c.lineTo(x + Math.cos(a) * s * .35, gy - s * .3 + Math.sin(a) * s * .25); c.stroke(); } } }
+}
+function cineGround(c, W, H, gy) { c.fillStyle = '#6cc04a'; c.fillRect(0, gy, W, H - gy); c.fillStyle = '#5aa83c'; for (let k = 0; k < 30; k++) c.fillRect(hash2(k, 1) * W, gy + hash2(1, k) * (H - gy), 3, 6); }
+function cineFence(c, W, gy, s) { c.fillStyle = '#e0b07a'; c.strokeStyle = LINE; c.lineWidth = 1.5; for (let x = -4; x < W; x += s * .09) { c.fillRect(x, gy - s * .2, s * .07, s * .2); c.strokeRect(x, gy - s * .2, s * .07, s * .2); } }
+function toyDigger(c, x, y, s, t) {
+  c.save(); c.translate(x, y); c.strokeStyle = LINE; c.lineWidth = Math.max(1.5, s * .03);
+  box(c, -s * .5, -s * .14, s * .7, s * .14, s * .07, '#3b3f4a', c.lineWidth); for (let k = 0; k < 4; k++) dot(c, -s * .42 + k * s * .18, -s * .07, s * .04, '#8a93a6');
+  box(c, -s * .45, -s * .42, s * .6, s * .28, s * .05, '#ffc21f', c.lineWidth); box(c, -s * .2, -s * .62, s * .3, s * .22, s * .04, '#ffc21f', c.lineWidth); box(c, -s * .15, -s * .58, s * .2, s * .14, s * .03, '#9fdcff', c.lineWidth * .7);
+  const a = -.5 + Math.sin(t * 1.6) * .25; c.save(); c.translate(s * .12, -s * .36); c.rotate(a); box(c, 0, -s * .05, s * .45, s * .1, s * .04, '#ffb000', c.lineWidth); c.translate(s * .45, 0); c.rotate(.9 - a); box(c, -s * .04, -s * .04, s * .1, s * .3, s * .03, '#ffb000', c.lineWidth);
+  c.fillStyle = '#8a93a6'; c.beginPath(); c.moveTo(-s * .08, s * .26); c.lineTo(s * .14, s * .26); c.lineTo(s * .1, s * .4); c.lineTo(-s * .06, s * .36); c.closePath(); c.fill(); c.stroke(); c.restore();
+  c.restore();
+}
+function cardboardRocket(c, x, y, s) {
+  c.strokeStyle = LINE; c.lineWidth = Math.max(1.5, s * .025); box(c, x - s * .22, y - s * .7, s * .44, s * .7, 4, '#c9965a', c.lineWidth);
+  c.fillStyle = '#e8403a'; c.beginPath(); c.moveTo(x - s * .24, y - s * .7); c.lineTo(x, y - s); c.lineTo(x + s * .24, y - s * .7); c.closePath(); c.fill(); c.stroke();
+  dot(c, x, y - s * .5, s * .09, '#9fdcff'); c.beginPath(); c.arc(x, y - s * .5, s * .09, 0, 7); c.stroke();
+  c.fillStyle = '#3f6fe0'; c.beginPath(); c.moveTo(x - s * .22, y - s * .2); c.lineTo(x - s * .36, y); c.lineTo(x - s * .22, y); c.closePath(); c.fill(); c.stroke(); c.beginPath(); c.moveTo(x + s * .22, y - s * .2); c.lineTo(x + s * .36, y); c.lineTo(x + s * .22, y); c.closePath(); c.fill(); c.stroke();
+  c.font = `700 ${Math.round(s * .1)}px Fredoka, sans-serif`; c.fillStyle = '#1f2a44'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('RUIMTEBOT', x, y - s * .25, s * .42);
+}
+// de zolder: schuine balken, rond raampje met avondzon, ruimteschip-poster, kleed met speelgoed. o: { mama, kids, wink }
+function cineAttic(c, W, H, t, o) {
+  o = o || {}; const s = Math.min(W, H), gy = H * .78;
+  c.fillStyle = '#e9c48f'; c.fillRect(0, 0, W, H);
+  const g = c.createRadialGradient(W * .5, H * .25, s * .05, W * .5, H * .3, Math.max(W, H) * .8); g.addColorStop(0, 'rgba(255,214,140,.55)'); g.addColorStop(1, 'rgba(120,60,20,.35)'); c.fillStyle = g; c.fillRect(0, 0, W, H);
+  c.fillStyle = '#8a5a35'; c.strokeStyle = LINE; c.lineWidth = 2; c.beginPath(); c.moveTo(0, 0); c.lineTo(W * .22, 0); c.lineTo(0, H * .55); c.closePath(); c.fill(); c.stroke(); c.beginPath(); c.moveTo(W, 0); c.lineTo(W * .78, 0); c.lineTo(W, H * .55); c.closePath(); c.fill(); c.stroke();
+  for (let k = 1; k < 4; k++) { c.fillStyle = '#7a4a2a'; c.fillRect(W * (k / 4) - 6, 0, 12, gy * .22); }
+  // rond raampje met avondlucht
+  const wx = W * .5, wy = H * .2, wr = s * .1; const sg = c.createLinearGradient(0, wy - wr, 0, wy + wr); sg.addColorStop(0, '#ff9a5a'); sg.addColorStop(1, '#ffd88a'); c.fillStyle = sg; c.beginPath(); c.arc(wx, wy, wr, 0, 7); c.fill(); dot(c, wx + wr * .2, wy + wr * .4, wr * .3, '#fff3b0'); c.lineWidth = 4; c.strokeStyle = '#7a4a2a'; c.beginPath(); c.arc(wx, wy, wr, 0, 7); c.stroke(); c.beginPath(); c.moveTo(wx - wr, wy); c.lineTo(wx + wr, wy); c.moveTo(wx, wy - wr); c.lineTo(wx, wy + wr); c.stroke();
+  // poster met een ruimteschip
+  const px = W * .22, py = H * .2, pw = s * .26, ph = s * .34; c.save(); c.translate(px, py); c.rotate(-.04); box(c, -pw / 2, -ph / 2, pw, ph, 4, '#1b2c6e', 2); cineStars(c, pw, ph, 0, t); for (let k = 0; k < 14; k++) dot(c, -pw / 2 + hash2(k, 2) * pw, -ph / 2 + hash2(2, k) * ph, 1.4, '#fff');
+  dot(c, pw * .25, -ph * .3, pw * .1, '#ff8ad8'); c.save(); c.translate(-pw * .05, ph * .05); c.rotate(.5); c.fillStyle = '#e6ecf5'; c.strokeStyle = LINE; c.lineWidth = 1.5; c.beginPath(); c.ellipse(0, 0, pw * .1, pw * .28, 0, 0, 7); c.fill(); c.stroke(); dot(c, 0, -pw * .06, pw * .04, '#9fdcff'); c.fillStyle = '#ffb627'; c.beginPath(); c.moveTo(-pw * .06, pw * .26); c.lineTo(0, pw * .42 + Math.sin(t * 20) * pw * .03); c.lineTo(pw * .06, pw * .26); c.fill(); c.restore();
+  c.font = `700 ${Math.round(pw * .1)}px Fredoka, sans-serif`; c.fillStyle = '#ffd23f'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('RUIMTE!', 0, ph * .38, pw * .9); dot(c, 0, -ph / 2 + 4, 3, '#e8403a'); c.restore();
+  // vloer en kleed
+  c.fillStyle = '#b07a4a'; c.fillRect(0, gy, W, H - gy); c.strokeStyle = 'rgba(80,40,10,.35)'; c.lineWidth = 2; for (let k = 0; k < 6; k++) { c.beginPath(); c.moveTo(0, gy + k * (H - gy) / 6); c.lineTo(W, gy + k * (H - gy) / 6); c.stroke(); }
+  c.fillStyle = '#3f6fe0'; c.beginPath(); c.ellipse(W * .5, gy + (H - gy) * .35, W * .34, (H - gy) * .38, 0, 0, 7); c.fill(); c.strokeStyle = '#ffd23f'; c.lineWidth = 4; c.beginPath(); c.ellipse(W * .5, gy + (H - gy) * .35, W * .3, (H - gy) * .3, 0, 0, 7); c.stroke();
+  // speelgoed
+  cardboardRocket(c, W * .82, gy + s * .02, s * .36);
+  if (o.kids !== false) {
+    const L = S.chars || {}, ks = s / 120;
+    drawKid(c, L.p || DEFAULT_P, W * .38, gy + s * .1, 'down', 0, false, { scale: ks, t });
+    drawKid(c, L.f || DEFAULT_F, W * .62, gy + s * .1, 'down', 0, false, { scale: ks, t: t + 1 });
+  }
+  toyDigger(c, W * .48, gy + s * .2, s * .16, t);
+  toyDigger(c, W * .22, gy + s * .17, s * .12, t + 2);
+  drawMol(c, W * .3, gy + s * .07, 'right', o.wink ? 0 : t, s * .1, false);
+  drawDrone(c, W * .7, gy + s * .2, s * .05, t, null, s / 420);
+  if (o.wink) { const blink = (t % 1.6) < .25; c.font = `${Math.round(s * .06)}px system-ui, "Apple Color Emoji", sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(blink ? '😉' : '✨', W * .3 + s * .04, gy - s * .05); }
+  if (o.mama) {
+    const mx = W * .12, my = gy + s * .06; c.fillStyle = '#3b2412'; c.strokeStyle = LINE; c.lineWidth = 2; c.beginPath(); c.ellipse(mx, my, s * .1, s * .03, 0, 0, 7); c.fill(); c.stroke();
+    c.strokeStyle = '#8a5a35'; c.lineWidth = 4; c.beginPath(); c.moveTo(mx - s * .05, my); c.lineTo(mx - s * .05, my - s * .06); c.moveTo(mx + s * .05, my); c.lineTo(mx + s * .05, my - s * .06); c.stroke();
+    drawKid(c, NPC_LOOKS.mama, mx, my, 'right', 0, false, { scale: s / 118, adult: true, t });
+  }
+}
+/* ---------- filmpje 1: de maaier slaat op hol ---------- */
+function MAAIER_SCENES() {
+  return [
+    { dur: 4.2, who: '', text: 'Ondertussen, in de schuur van buurman Brom… BZZT! KRAK! 💥', sfx: 'zap', draw(c, W, H, t, p) {
+      const s = Math.min(W, H), gy = H * .72; cineSky(c, W, H, '#8fd0ff', '#d8f1ff'); cineCloud(c, W * .2, H * .18, s * .06); cineGround(c, W, H, gy); cineFence(c, W, gy, s);
+      cineShed(c, W * .55, gy, s * .7, t, true); drawBrom(c, W * .22, gy + s * .02, 'right', t * 8, false, { scale: s / 150, t, mood: 'roep' });
+    } },
+    { dur: 4.6, who: 'brom', text: 'Help! Mijn Maai-o-Matic luistert niet meer! Ik wilde hem alleen een beetje sneller maken…', sfx: 'vroom', draw(c, W, H, t, p) {
+      const s = Math.min(W, H), gy = H * .72; cineSky(c, W, H, '#8fd0ff', '#d8f1ff'); cineGround(c, W, H, gy); cineFence(c, W, gy, s); cineShed(c, W * .78, gy, s * .7, t, true);
+      const mx = W * .78 - ease(p) * W * .45; drawMaaier(c, mx, gy - s * .06, s * .34, { t, spin: t * 20, mood: 'boos' });
+      for (let k = 0; k < 8; k++) dot(c, mx + s * .2 + hash2(k, Math.floor(t * 10)) * s * .2, gy - hash2(Math.floor(t * 10), k) * s * .1, 3, '#5aa83c');
+      drawBrom(c, mx + s * .45, gy + s * .03, 'left', t * 14, true, { scale: s / 150, t, mood: 'roep' });
+    } },
+    { dur: 4.4, who: 'f', text: 'Hij maait alles kapot! De bloemen… de moestuin… en straks ons geheime luik!', sfx: 'crash', draw(c, W, H, t, p) {
+      const s = Math.min(W, H), gy = H * .7; cineSky(c, W, H, '#8fd0ff', '#d8f1ff'); cineGround(c, W, H, gy);
+      for (let k = 0; k < 7; k++) { const x = W * (.1 + k * .13); c.font = `${Math.round(s * .07)}px system-ui, "Apple Color Emoji", sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(x < W * (.15 + p * .8) ? '🍂' : k % 2 ? '🌷' : '🥕', x, gy + s * .1); }
+      drawMaaier(c, W * (.15 + p * .8), gy + s * .04, s * .3, { t, spin: t * 20, mood: 'boos' });
+      const L = S.chars || {}; drawKid(c, L.p || DEFAULT_P, W * .12, gy + s * .28, 'right', 0, false, { scale: s / 160, t }); drawKid(c, L.f || DEFAULT_F, W * .24, gy + s * .28, 'right', 0, false, { scale: s / 160, t: t + 1 });
+    } },
+    { dur: 5.4, who: 'bot', text: `Bliep! Deze maaier is supersterk. Alleen met alle 4 robots samen én een volle Superlader (${BOSS_E} ⚡) kunnen we hem stoppen!`, sfx: 'beep', draw(c, W, H, t, p) {
+      const s = Math.min(W, H), gy = H * .74; cineSky(c, W, H, '#6fb6f5', '#cfeeff'); cineGround(c, W, H, gy);
+      cineRocket(c, W * .5, gy, s * .3, t, 0);
+      const img = typeof boorImg === 'function' ? boorImg() : null; if (img && img.complete && img.naturalWidth) c.drawImage(img, W * .74, gy - s * .17, s * .22, s * .18);
+      drawDrone(c, W * .26, gy, s * .22, t, null, s / 260); drawMol(c, W * .16, gy + s * .02, 'right', t, s * .14, false);
+      const f = (Math.sin(t * 4) + 1) / 2; box(c, W * .5 - s * .05, H * .1, s * .1, s * .16, 6, '#e6ecf5', 2); c.fillStyle = '#3cae5a'; c.fillRect(W * .5 - s * .035, H * .1 + s * .16 - 6 - s * .13 * f, s * .07, s * .13 * f);
+    } },
+  ];
+}
+/* ---------- filmpje 2: gewonnen! Brom, de zolder, ophalen ---------- */
+function EINDE_SCENES() {
+  const L = S.chars || {}, kp = L.p || DEFAULT_P, kf = L.f || DEFAULT_F;
+  const tuin = (c, W, H, t, mood, kids) => { const s = Math.min(W, H), gy = H * .7; cineSky(c, W, H, '#8fd0ff', '#e2f5ff'); cineGround(c, W, H, gy); cineFence(c, W, gy, s); drawMaaier(c, W * .5, gy + s * .02, s * .28, { t, mood }); if (kids) { drawKid(c, kp, W * .16, gy + s * .26, 'right', 0, false, { scale: s / 150, t }); drawKid(c, kf, W * .27, gy + s * .26, 'right', 0, false, { scale: s / 150, t: t + 1 }); } return { s, gy }; };
+  return [
+    { dur: 4.4, who: 'brom', text: 'Jongens… Jullie hebben mijn Maai-o-Matic gestopt! En de moestuin is gered!', sfx: 'fanfare', draw(c, W, H, t) { const { s, gy } = tuin(c, W, H, t, 'duizelig', true); drawBrom(c, W * .8, gy + s * .1, 'left', 0, false, { scale: s / 140, t, mood: 'blij' }); } },
+    { dur: 5, who: 'brom', text: 'Ik was een echte mopperkont, hè? Sorry voor al dat gebrom. Willen jullie robots mij helpen hem te repareren?', draw(c, W, H, t) { const { s, gy } = tuin(c, W, H, t, 'blij', true); drawBrom(c, W * .78, gy + s * .1, 'left', 0, false, { scale: s / 140, t, mood: 'blij' }); } },
+    { dur: 3.6, who: 'f', text: 'Natuurlijk, buurman! Robots… HIGH FIVE! 🖐️', sfx: 'correct', draw(c, W, H, t, p) {
+      const { s, gy } = tuin(c, W, H, t, 'blij', true); drawBrom(c, W * .78, gy + s * .1, 'left', 0, false, { scale: s / 140, t, mood: 'blij' });
+      for (let k = 0; k < 14; k++) { const a = k / 14 * 6.28 + t, r = s * (.1 + ((t * .6 + k * .07) % 1) * .3); c.globalAlpha = .8; dot(c, W * .5 + Math.cos(a) * r, H * .25 + Math.sin(a) * r * .6, s * .012, ['#ffd23f', '#ff6fa8', '#5ef0ff', '#fff'][k % 4]); } c.globalAlpha = 1;
+    } },
+    { dur: 3.2, who: 'mama', text: '{p}! {f}! Waar zijn jullie? Het eten is bijna klaar!', sfx: 'mealCall', draw(c, W, H, t, p) {
+      const s = Math.min(W, H); cineSky(c, W, H, '#ffb07a', '#ffe2b0'); cineHouse(c, W, H, H * .74, s * .55); c.fillStyle = `rgba(255,240,210,${ease(p) * .9})`; c.fillRect(0, 0, W, H);
+    } },
+    { dur: 4.6, who: 'mama', text: 'Hé… Wat zijn jullie hier op zolder aan het doen?', sfx: 'door', draw(c, W, H, t) { cineAttic(c, W, H, t, { mama: true, look: true }); } },
+    { dur: 5.4, who: 'p', text: 'Mama! We hebben de hele wereld gered! Van een grasmaaier-robot! Met de Supermol, de Vliegbot, het Boorbeest en de Ruimtebot!', draw(c, W, H, t) { cineAttic(c, W, H, t, { mama: true }); } },
+    { dur: 4.4, who: 'mama', text: 'Haha! Met jullie speelgoedgravers en een kartonnen raket? Wat een fantasie hebben jullie toch! 😄', draw(c, W, H, t) { cineAttic(c, W, H, t, { mama: true }); } },
+    { dur: 4, who: 'f', text: '(fluistert) Het was écht, hè {p}? Een beetje dan…', draw(c, W, H, t) { cineAttic(c, W, H, t, { mama: false }); } },
+    { dur: 4.4, who: 'vriendmama', text: 'Ding dong! 🔔 Hallo! Ik kom {f} ophalen. Heb je het leuk gehad, lieverd?', sfx: 'doorbell', draw(c, W, H, t) {
+      const s = Math.min(W, H), gy = H * .74; cineSky(c, W, H, '#ff9a6a', '#ffd9a0'); cineHouse(c, W, H, gy, s * .55); cineStars(c, W, H * .3, 6, t, .5);
+      drawKid(c, VRIENDMAMA_LOOK, W * .5, gy + s * .1, 'left', 0, false, { scale: s / 130, adult: true, t }); drawKid(c, kf, W * .38, gy + s * .1, 'right', 0, false, { scale: s / 150, t });
+    } },
+    { dur: 5, who: 'f', text: 'Super leuk! Dag {p}! Dag en tot de volgende keer! 👋', hold: false, draw(c, W, H, t, p) {
+      const s = Math.min(W, H), gy = H * .74; cineSky(c, W, H, '#f08a6a', '#ffcf98'); cineHouse(c, W, H, gy, s * .55); cineStars(c, W, H * .3, 10, t, .7);
+      const x = W * .5 + ease(p) * W * .3; drawKid(c, VRIENDMAMA_LOOK, x + s * .1, gy + s * .1, 'right', t * 8, true, { scale: s / 130, adult: true, t }); drawKid(c, kf, x - s * .02, gy + s * .1, 'left', t * 8, true, { scale: s / 150, t });
+      drawKid(c, kp, W * .22, gy + s * .1, 'right', 0, false, { scale: s / 150, t }); c.font = `${Math.round(s * .08)}px system-ui, "Apple Color Emoji", sans-serif`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(Math.sin(t * 8) > 0 ? '👋' : '🖐️', W * .22 + s * .08, gy - s * .12);
+    } },
+    { dur: 4.4, who: 'mol', text: 'Piep! 😉', sfx: 'beep', draw(c, W, H, t) { cineAttic(c, W, H, t, { kids: false, wink: true }); c.fillStyle = 'rgba(30,20,60,.25)'; c.fillRect(0, 0, W, H); } },
+  ];
+}
+function CREDITS_SCENES() {
+  const lines = [['🎬 GEHEIME BASIS', 2], ['Tussen hemel en aarde', 1.2], ['', 1], ['Bedacht en gebouwd door', .9], ['oom Lucas', 1.5], ['', 1], ['In de hoofdrollen', .9], [`${pName()} en ${fName()}`, 1.5],
+    ['de Supermol · de Vliegbot', 1.1], ['het Boorbeest · de Ruimtebot', 1.1], ['buurman Brom en zijn Maai-o-Matic', 1.1], ['mama en papa', 1.1], [`de mama van ${fName()}`, 1.1], ['Henk de vogelverschrikker', 1.1], ['', 1],
+    ['Speciale dank aan', .9], ['Sam, de allerbeste speler 💙', 1.4], ['', 1.5], ['Dag en tot de volgende keer! 👋', 1.8]];
+  return [{ dur: 24, who: '', text: '', hold: true, draw(c, W, H, t) {
+    const s = Math.min(W, H); cineSky(c, W, H, '#0b1430', '#2b2f6b'); cineStars(c, W, H, 60, t, .9);
+    const lh = clamp(s * .065, 18, 34), total = lines.reduce((a, l) => a + l[1] * lh, 0), y0 = H + 10 - Math.min(t / 21, 1) * (total + H * .5 - lh);
+    let y = y0; c.textAlign = 'center'; c.textBaseline = 'middle';
+    for (const [txt, k] of lines) { y += k * lh * .5; const big = k >= 1.4; c.font = `${big ? 800 : 600} ${Math.round(lh * (big ? .95 : .7))}px Fredoka, sans-serif`; c.fillStyle = big ? '#ffd23f' : '#e6ecf5'; if (y > -lh && y < H + lh) c.fillText(txt, W / 2, y, W - 24); y += k * lh * .5; }
+    const gy = H - s * .04, px = ((t * s * .12) % (W + s)) - s * .5;
+    drawMol(c, px, gy, 'right', t, s * .09, false); drawDrone(c, px - s * .14, gy, s * .08, t, null, s / 500);
+    const img = typeof boorImg === 'function' ? boorImg() : null; if (img && img.complete && img.naturalWidth) c.drawImage(img, px - s * .34, gy - s * .1, s * .13, s * .1);
+    const bi = cineBotImg(); if (bi.complete && bi.naturalWidth) c.drawImage(bi, px - s * .52, gy - s * .14, s * .16, s * .14);
+    if (t > 21) { c.globalAlpha = .6 + .4 * Math.sin(t * 4); c.font = `600 ${Math.round(lh * .55)}px Fredoka, sans-serif`; c.fillStyle = '#fff'; c.fillText('Tik om verder te spelen', W / 2, H * .9, W - 24); c.globalAlpha = 1; }
+  } }];
+}
+
 /* ===== minigames/klusje.js ===== */
 /* =========================================================
    KLUSJE VOOR MAMA – de 'tenzij' als de pogingen van vandaag op zijn (1x per dag: +1 poging).
@@ -10905,6 +11563,7 @@ window.__gb = {
   ECON, econCardLine, canDigNow, ECON_FULL_TXT, econDigsLeft, econEnergyLeft,
   BUUR, PRANKS, buurGateOn, buurWaiting, buurLeft, buurLevel, buurCutscene, buurSkip, openBuurPlan, renderBuurPlan, buurRequestNow, buurDigAfterWin, buurKlusDone, buurLocked, drawBrom, drawGnome, buurNews,
   buurFinish, BOOR_PARTS, boorHave, buildBoorbeestNow, digDeepStart, buildDeepMap, buildBaseMap, roomList, roomLevel, partNotNeeded, gjBuild, GJ, GJ_LEVELS, MK, mkBuild, mkCart, mkStep, mkScore, KM, kmBuild, kmFindMove, kmSwap, RV, rvBuild, rvState, rvStep, rvScore, rvBoatY, rvCenter, rvHalf, RUIMTE_PARTS, ruimteHave, spotsOn, WP, wpBuild, wpStep, wpTap, wpOwner, CM, cmBuild, cmStep, cmSees, cmAngle, SD, sdBuild, sdStep, sdSock, sdTol,
+  BAAS, BAAS_PHASES, bsBuild, bsStep, bsBot, bsScore, bsFlee, bsOwner, BOSS_E, bossCharge, bossFull, bossDeposit, bossStoryReady, maaierAlarm, eindeStory, eindeFilm, tuinMaaier, refreshBossMaps, MAAIER_SCENES, EINDE_SCENES, CREDITS_SCENES, drawMaaier,
   CINE, cinema, buildIslandMap, digIslandStart, buildRuimtebotNow, tuinRuimtePark, ruimtebotBuiltScene, FLY_SCENES, recipeHere, MT, mtBuild, mtStep, mtScore, mtLane, ZK, zkBuild, zkState, zkStep, zkPos, zkSim, zkScore, zkBot, PG, PG_HOLES, pgState, pgStep, pgSim, pgBot, pgNextHole, pgScore, pgTotal, SB, SB_SKY, sbBuild, sbStep, sbLink, sbBot, sbSky, sbKey, sbRound, RP, rpBuild, rpStep, rpPredict, rpPoints, rpPadY,
 };
 
