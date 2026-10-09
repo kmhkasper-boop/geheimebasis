@@ -1,0 +1,96 @@
+<!doctype html><html lang="nl"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Geheime Basis – gratis robotavontuur voor kinderen (6-10 jaar)</title>
+<meta name="description" content="Bouw samen een geheime basis onder je huis! Gratis Nederlands browserspel voor kinderen van 6-10 jaar. Solo of met z'n tweeën. Geen reclame, geen account.">
+<link rel="icon" href="img/icon-192.png">
+<style>
+:root{--ink:#1d2340;--deep:#1a1440;--vio:#5a3fd6;--yel:#ffcc3d;--grn:#3ddc97;--pink:#ff6fa1}
+*{box-sizing:border-box}body{margin:0;font-family:"Trebuchet MS",system-ui,sans-serif;color:var(--ink);background:#f6f4ff;line-height:1.55}
+a{color:var(--vio)}
+.wrap{max-width:1080px;margin:0 auto;padding:0 18px}
+.hero{position:relative;overflow:hidden;color:#fff;text-align:center;padding:56px 0 150px;
+ background:radial-gradient(circle at 20% 10%,#4b3bb0 0,transparent 45%),linear-gradient(#1a1440,#2d2470 60%,#3a2d86)}
+.stars{position:absolute;inset:0;background-image:radial-gradient(2px 2px at 10% 20%,#fff,transparent),radial-gradient(1.5px 1.5px at 30% 70%,#fff,transparent),radial-gradient(2px 2px at 70% 30%,#fff,transparent),radial-gradient(1.5px 1.5px at 85% 60%,#fff,transparent),radial-gradient(1px 1px at 50% 15%,#fff,transparent),radial-gradient(1.5px 1.5px at 60% 85%,#fff,transparent);opacity:.8}
+.logo{width:88px;height:88px;border-radius:22px;box-shadow:0 6px 0 #0006}
+h1{font-size:clamp(2.4rem,9vw,4.6rem);margin:.2em 0 .1em;letter-spacing:1px;text-shadow:0 5px 0 #0007}
+h1 span{color:var(--yel)}
+.tag{font-size:clamp(1.05rem,3.6vw,1.35rem);max-width:620px;margin:0 auto 26px;opacity:.95}
+.btn{display:inline-block;background:var(--yel);color:#2a1d00;font-weight:800;font-size:1.35rem;padding:16px 38px;border-radius:999px;text-decoration:none;box-shadow:0 6px 0 #c08a00;transition:transform .1s}
+.btn:hover{transform:translateY(-2px)}.btn:active{transform:translateY(3px);box-shadow:0 3px 0 #c08a00}
+.small{font-size:.9rem;opacity:.85;margin-top:12px}
+.ground{position:absolute;left:0;right:0;bottom:0;height:110px;background:linear-gradient(#5fbf4a 0 18px,#8a5a35 18px 100%)}
+.ground:after{content:"";position:absolute;left:50%;bottom:16px;width:150px;height:64px;transform:translateX(-50%);background:#2a1b10;border-radius:14px;box-shadow:inset 0 0 0 6px #6b4426,0 0 30px var(--grn)}
+/* CSS robot */
+.bot{position:absolute;bottom:92px;width:60px;height:70px}
+.bot .h{position:absolute;top:0;left:8px;width:44px;height:34px;background:#cfd8ff;border-radius:12px;border:3px solid #1a1440}
+.bot .h:before,.bot .h:after{content:"";position:absolute;top:10px;width:9px;height:9px;border-radius:50%;background:var(--grn);box-shadow:0 0 8px var(--grn)}
+.bot .h:before{left:8px}.bot .h:after{right:8px}
+.bot .b{position:absolute;top:30px;left:4px;width:52px;height:38px;background:var(--pink);border-radius:10px;border:3px solid #1a1440}
+.bot .a{position:absolute;top:-14px;left:28px;width:4px;height:14px;background:#1a1440}
+.bot .a:after{content:"";position:absolute;top:-6px;left:-4px;width:12px;height:12px;border-radius:50%;background:var(--yel)}
+.bot.l{left:8%;animation:bob 2.2s ease-in-out infinite}.bot.r{right:8%;animation:bob 2.2s .6s ease-in-out infinite}.bot.r .b{background:var(--grn)}
+@keyframes bob{50%{transform:translateY(-10px)}}
+section{padding:56px 0}h2{font-size:clamp(1.6rem,5vw,2.3rem);color:#3b2f8f;text-align:center;margin:0 0 28px}
+.grid{display:grid;gap:18px;grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.card{background:#fff;border-radius:20px;padding:22px;box-shadow:0 4px 0 #ddd6ff}
+.card .ic{font-size:2.2rem}.card h3{margin:.3em 0;color:#3b2f8f}
+.shots{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(280px,1fr))}
+.shots figure{margin:0;background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 4px 0 #ddd6ff}
+.shots img{display:block;width:100%;height:auto}.shots figcaption{padding:8px 12px;font-weight:700;color:#3b2f8f}
+.parents{background:#fff}
+.two{display:grid;gap:30px;grid-template-columns:1fr;align-items:center}
+@media(min-width:800px){.two{grid-template-columns:1.3fr 1fr}}
+.check{list-style:none;padding:0;margin:0}.check li{padding:8px 0 8px 34px;position:relative}
+.check li:before{content:"✓";position:absolute;left:0;top:6px;width:24px;height:24px;border-radius:50%;background:var(--grn);color:#fff;text-align:center;font-weight:900;line-height:24px}
+.qr{text-align:center;background:#f6f4ff;border-radius:20px;padding:22px}.qr img{width:200px;max-width:70%;border-radius:12px;background:#fff;padding:8px}
+.promo{max-width:100%;border-radius:20px;box-shadow:0 6px 0 #ddd6ff}
+.cta{text-align:center;background:linear-gradient(#2d2470,#1a1440);color:#fff}.cta h2{color:#fff}
+footer{text-align:center;padding:26px 18px;font-size:.9rem;color:#666}
+</style></head><body>
+<header class="hero"><div class="stars"></div>
+ <div class="wrap" style="position:relative">
+  <img class="logo" src="img/icon-192.png" alt="">
+  <h1>Geheime <span>Basis</span></h1>
+  <p class="tag">Bouw samen een geheime basis onder je huis, maak supercoole robots en beleef 5 spannende avonturen!</p>
+  <a class="btn" href="https://kmhkasper-boop.github.io/geheimebasis/">▶ Speel nu</a>
+  <p class="small">Gratis · in de browser · geen download · voor 6-10 jaar</p>
+ </div>
+ <div class="bot l"><div class="a"></div><div class="h"></div><div class="b"></div></div>
+ <div class="bot r"><div class="a"></div><div class="h"></div><div class="b"></div></div>
+ <div class="ground"></div>
+</header>
+
+<section><div class="wrap"><h2>Wat ga je doen?</h2><div class="grid">
+ <div class="card"><div class="ic">🤖</div><h3>4 robots bouwen</h3><p>De Supermol, de Vliegbot, het Boorbeest en de Ruimtebot. Elke robot brengt je naar een nieuwe plek.</p></div>
+ <div class="card"><div class="ic">🗺️</div><h3>5 afleveringen</h3><p>Graaf naar de diepe kelder, vlieg naar het zwevende eiland en haal streken uit bij buurman Brom.</p></div>
+ <div class="card"><div class="ic">🎮</div><h3>20+ minigames</h3><p>Mijnkarretjes, ruimtepong, racen, sterrenbeelden zoeken en nog veel meer.</p></div>
+ <div class="card"><div class="ic">👫</div><h3>Solo of met z'n tweeën</h3><p>Speel alleen, of samen met een broer, zus of vriendje op één apparaat.</p></div>
+</div></div></section>
+
+<section style="padding-top:0"><div class="wrap"><h2>Kijk maar!</h2><div class="shots">
+ <figure><img src="img/01-basis.jpg" alt="De geheime basis" loading="lazy"><figcaption>Jullie eigen basis</figcaption></figure>
+ <figure><img src="img/03-diepe-kelder.jpg" alt="De diepe kelder" loading="lazy"><figcaption>De diepe kelder</figcaption></figure>
+ <figure><img src="img/04-zwevend-eiland.jpg" alt="Het zwevende eiland" loading="lazy"><figcaption>Het zwevende eiland</figcaption></figure>
+ <figure><img src="img/11-mijnkarretje.jpg" alt="Minigame mijnkarretje" loading="lazy"><figcaption>Mijnkarretje</figcaption></figure>
+ <figure><img src="img/16-ruimtepong.jpg" alt="Minigame ruimtepong" loading="lazy"><figcaption>Ruimtepong</figcaption></figure>
+ <figure><img src="img/20-racebaan.jpg" alt="Minigame racebaan" loading="lazy"><figcaption>Racebaan</figcaption></figure>
+</div></div></section>
+
+<section class="parents"><div class="wrap two">
+ <div><h2 style="text-align:left">Voor ouders</h2>
+  <ul class="check">
+   <li><b>Helemaal gratis</b>, zonder aankopen in het spel.</li>
+   <li><b>Geen reclame</b>, geen tracking, geen account nodig.</li>
+   <li><b>Voortgang blijft op uw apparaat</b> (in de browser), niets wordt naar ons gestuurd.</li>
+   <li><b>Volledig Nederlands</b>, met duidelijke uitleg en hints.</li>
+   <li><b>Werkt op tablet, telefoon en computer</b>, en ook offline als u het op het beginscherm zet.</li>
+   <li>Geen chat en geen contact met vreemden.</li>
+  </ul>
+  <p>Lees de <a href="privacy.html">privacyverklaring</a>.</p></div>
+ <div class="qr"><img src="img/qr.png" alt="QR-code naar het spel"><p><b>Scan en speel</b><br>op tablet of telefoon</p></div>
+</div></section>
+
+<section><div class="wrap" style="text-align:center"><img class="promo" src="img/vierkant.jpg" alt="Geheime Basis poster" loading="lazy" width="560"></div></section>
+
+<section class="cta"><div class="wrap"><h2>Klaar voor het avontuur?</h2><a class="btn" href="https://kmhkasper-boop.github.io/geheimebasis/">▶ Speel nu</a></div></section>
+<footer>Geheime Basis · een gratis spel van Lucas Casca · <a href="privacy.html">Privacy</a> · Contact: lucascaska@gmail.com</footer>
+</body></html>

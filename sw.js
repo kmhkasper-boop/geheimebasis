@@ -6,7 +6,7 @@
    Verhoog VERSION alleen als iconen/manifest veranderen of als er losse bestanden (js/afbeeldingen) bijkomen
    die later nog wijzigen: die worden 'eerst cache' geserveerd. */
 const ID = 'geheimebasis';
-const VERSION = 'v23';
+const VERSION = 'v24';
 const CORE = ID + '-core-' + VERSION;
 const FONTS = ID + '-fonts-' + VERSION;
 const PAGE = new URL('./', self.registration.scope).href;
@@ -63,5 +63,6 @@ self.addEventListener('fetch', e => {
   const url = new URL(req.url);
   if (url.origin !== location.origin || !url.href.startsWith(self.registration.scope)) return;
   if (url.pathname.endsWith('/sw.js')) return;
+  if (url.pathname.includes('/info/') || url.pathname.endsWith('/info')) return;
   e.respondWith(isPage(req, url) ? networkFirst(req) : cacheFirst(req));
 });
