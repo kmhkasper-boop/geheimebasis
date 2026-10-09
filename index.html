@@ -73,6 +73,8 @@ h1,h2,h3{margin:0}
 .topbar{display:flex;align-items:center;gap:10px;width:100%}
 .topbar .title{flex:1;text-align:center;font-weight:700;font-size:1.15em;background:#fff;border-radius:999px;padding:.35em .8em;box-shadow:var(--shadow);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mcard{background:#fff;border-radius:28px;box-shadow:0 8px 0 rgba(31,42,68,.22);padding:18px 20px;width:min(560px,94vw);max-height:92vh;overflow-y:auto;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;animation:popin .3s;touch-action:pan-y}
+/* startkaart op een lage (liggende) telefoon: de Start-knop blijft altijd in beeld, ook als de kaart scrolt */
+#setupCard > .btnrow{position:sticky;bottom:-18px;background:#fff;padding:8px 0 18px;margin-bottom:-18px;width:100%;justify-content:center;z-index:1;box-shadow:0 -10px 12px -8px rgba(255,255,255,.95)}
 .mcard h2{font-size:1.45em}
 
 /* ---------- titelscherm ---------- */
@@ -274,6 +276,8 @@ h1,h2,h3{margin:0}
 .monitor{background:#07131f;border-radius:22px;box-shadow:0 0 0 6px #2d6ea8,0 0 30px rgba(80,200,255,.35) inset,var(--shadow);padding:10px;position:relative;overflow:hidden}
 .monitor::after{content:"";position:absolute;inset:0;background:repeating-linear-gradient(0deg,rgba(255,255,255,.04) 0 2px,transparent 2px 4px);pointer-events:none}
 #hqMap{width:100%;display:block;aspect-ratio:42/30;border-radius:14px}
+.hqlvl{display:flex;gap:6px;margin-bottom:6px;flex-wrap:wrap}.hqlvl .btn{min-height:38px;padding:.15em .7em;font-size:.82em;opacity:.6}.hqlvl .btn.on{opacity:1;box-shadow:0 0 0 3px #5ef0ff}
+.rooms .lvlhead{grid-column:1/-1;color:#9ff3ff;font-weight:700;margin:6px 0 0;text-align:left}
 .hqside{display:flex;flex-direction:column;gap:12px}
 .hqcard{background:#0f2340;border-radius:20px;padding:12px 14px;box-shadow:0 0 0 3px #2d6ea8;text-align:left}
 .hqcard h3{color:#8ff0ff;font-size:1em;margin-bottom:6px}
@@ -618,7 +622,7 @@ h1,h2,h3{margin:0}
   <div class="wrap">
     <div class="topbar"><button class="iconbtn" data-close="scrHQ" aria-label="Terug">⬅️</button><div class="title">🖥️ Hoofdkwartier – Monitor</div></div>
     <div class="hqgrid">
-      <div class="monitor"><canvas id="hqMap" width="840" height="600"></canvas></div>
+      <div class="monitor"><div class="hqlvl" id="hqLvl" style="display:none"><button class="btn small" data-lvl="1">🏠 Basis</button><button class="btn small" data-lvl="2">💎 Diepe kelder</button></div><canvas id="hqMap" width="840" height="600"></canvas></div>
       <div class="hqside">
         <div class="hqcard" id="hqMol"></div>
         <div class="hqcard" id="hqEnergy"></div>
@@ -655,11 +659,12 @@ h1,h2,h3{margin:0}
   <div class="mcard ocard">
     <h2>👪 Voor ouders</h2>
     <div><h3>🦫 Zo werkt de graafdag</h3>
-      <p>Als de Supermol gebouwd is, graaft hij meteen het <b>Hoofdkwartier</b> en de <b>Bowlingbaan</b>. Daarna graaft hij <b>elke echte kalenderdag één nieuwe kamer</b> (om middernacht, op de klok van dit apparaat). Was je kind een paar dagen weg, dan staan die kamers er bij terugkomst allemaal. Volgorde: Blokkenkamer, Flipperkastkamer, daarna komen nieuwe kamers in latere versies (Binnenkort: Minigolf, Racebaan, Escaperoom).</p>
+      <p>Als de Supermol gebouwd is, graaft hij meteen het <b>Hoofdkwartier</b> en de <b>Bowlingbaan</b>. Daarna graaft hij <b>elke echte kalenderdag één nieuwe kamer</b> (om middernacht, op de klok van dit apparaat). Was je kind een paar dagen weg, dan staan die kamers er bij terugkomst allemaal. Volgorde: Blokkenkamer, Flipperkastkamer, Minigolf, Racebaan, Escaperoom.</p>
+      <p>⛏️ <b>De diepe kelder</b> (aflevering 4): als de basis af is, ligt in de Escaperoom de tekening van het <b>Boorbeest</b>. Met 5 onderdelen (het gouden tandwiel uit de eik, de Flipperkast, de ketel in de kelder en twee gewonnen streken bij buurman Brom) bouwen de kinderen het aan de werkbank. Dan komt er een <b>lift</b> in het Hoofdkwartier naar een tweede verdieping met een kristalgrot en nieuwe spelkamers (eerst de <b>Grottenjacht</b>); die worden op dezelfde manier gegraven. Meer kamers volgen in de volgende versies.</p>
       <p>Sneller graven kan met <b>⚡ energie-batterijen</b>: met 3 stuks graaft de Supermol meteen een extra kamer (knop <b>Graaf nu</b> op de monitor). Energie vind je verstopt in huis en tuin, krijg je van mol-brandstof (wortel + appel, die groeien elke dag opnieuw), één keer per dag per spel bij een goede score, en in de energie-automaat (50 munten). Munten verdien je met de spelletjes.</p>
       <div class="orow"><span id="oudStatus" class="small-note"></span></div>
       <p id="oudEcon" class="small-note"></p>
-      <div class="orow"><button class="btn green small" id="oudUnlock">🔓 Alle kamers openen</button><button class="btn small" id="oudEnergy">⚡ +3 energie geven</button></div>
+      <div class="orow"><button class="btn green small" id="oudUnlock">🔓 Alle kamers openen (+ Vliegbot en Boorbeest)</button><button class="btn small" id="oudEnergy">⚡ +3 energie geven</button></div>
     </div>
     <div><h3>🤫 Buurman Brom</h3>
       <p>Na de eerste kamers belt <b>buurman Brom</b> (de mopperende buurman) aan en klaagt bij mama over het lawaai. Daarna graaft de Supermol nieuwe kamers als de kinderen hem <b>te slim af zijn</b>: een onschuldige kwajongensstreek als spelletje (Mollenrace, Tuinkabouters, Belletje lellen). <b>Elke gewonnen streek = de Supermol graaft meteen de volgende kamer</b>, zonder limiet: de hele basis kan dus in één keer worden uitgespeeld. Daarnaast staat er nog steeds elke dag een kamer klaar (die wacht ook op een streek), en met <b>Graaf nu</b> (3 ⚡) graaft de mol meteen, ook zonder streek. Verloren streken kosten alleen een poging terwijl er een dag-kamer wacht. Gegraven kamers en alle spellen blijven altijd open.</p>
@@ -1014,6 +1019,12 @@ const TRACKS = {
   flipper: { naam: 'Flipperkast', bpm: 132, root: 349.23, swing: .05, lead: 'chip', lv: .12, bv: .2, pad: 0, stab: 0,
     bass: 'r . o . r . o .', drums: { k: 'x . . . x . . .', h: 'x . x . x . x .', c: '. . . . x . . .' }, prog: 'I IV V I I IV V I',
     mel: ['0 4 7 4 9 7 4 7', '3 5 8 5 10 8 5 8', '4 6 9 6 11 9 6 9', '7 . 4 . 0 . . .', '0 4 7 4 9 7 4 7', '3 5 8 5 10 8 5 8', '6 4 2 4 6 8 9 8', '7 . . . 0 . . .'] },
+  diep: { naam: 'Diepe kelder', bpm: 92, root: 277.18, scale: MINOR, swing: .08, lead: 'bell', lv: .14, bv: .22, pad: .02, stab: 0,
+    bass: 'r . . r f . . .', drums: { k: 'x . . . . . x .', t: '. . . x . . . .' }, prog: 'I vi iv v I vi iv V',
+    mel: ['0 . 4 . 7 . . .', '9 . 7 . 4 - . .', '3 . 5 . 8 . 7 .', '4 - - - . . . .', '7 . 9 . 11 . 9 .', '7 . 4 . 2 - . .', '3 . 4 . 5 . 6 .', '4 - - - . . . .'] },
+  grottenjacht: { naam: 'Grottenjacht', bpm: 140, root: 329.63, scale: MINOR, swing: 0, lead: 'chip', lv: .12, bv: .21, pad: 0, stab: .02,
+    bass: 'r o r o f o r o', stabs: '. x . . . x . .', drums: { k: 'x . . . x . . .', h: '. x . x . x . x', c: '. . . . x . . .' }, prog: 'I vi IV V I vi iv V',
+    mel: ['0 2 4 2 7 . 4 .', '5 4 2 4 0 . . .', '3 5 7 5 9 . 7 .', '8 7 6 7 4 . . .', '0 2 4 2 7 . 9 .', '10 9 7 9 5 . . .', '3 4 5 6 7 6 5 4', '7 . 4 . 0 . . .'] },
 };
 const tok = s => s.trim().split(/\s+/);
 function scheduleBar(ctx, out, tr, bar, t0) {
@@ -1311,6 +1322,7 @@ function drawPortrait(cv, look, opt) {
   const ctx = cv.getContext('2d'), w = cv.width, h = cv.height; ctx.clearRect(0, 0, w, h);
   if (opt && opt.vlieg) { drawDrone(ctx, w / 2, h * .92, h * .36, 1, null, w / 46); return; }
   if (opt && opt.brom) { const sc = w / 34; drawBrom(ctx, w / 2, h * .5 + 34 * sc * .92, 'down', 0, false, { scale: sc, noShadow: true, t: 1, mood: opt.mood || 'boos' }); return; }
+  if (opt && opt.boor) { const img = boorImg(); if (img.complete && img.naturalWidth) ctx.drawImage(img, 0, h * .1, w, w * .8); else img.onload = () => drawPortrait(cv, look, opt); return; }
   if (opt && opt.mol) { const img = molImg(); if (img.complete && img.naturalWidth) ctx.drawImage(img, w * .02, h * .12, w * .96, w * .96 * .8); else img.onload = () => drawPortrait(cv, look, opt); return; }
   const sc = w / 34; drawKid(ctx, look, w / 2, h * .5 + 34 * sc * (opt && opt.adult ? .9 : .78), 'down', 0, false, Object.assign({ scale: sc, noShadow: true, t: 1 }, opt || {}));
 }
@@ -1516,6 +1528,29 @@ function drawGnome(ctx, x, y, s, turned, hat, t, spin) {
   ctx.restore();
 }
 
+/* ===== core/art_diep.js ===== */
+/* =========================================================
+   Tekenwerk aflevering 4 (De diepe kelder): iconen van de Boorbeest-onderdelen en het Boorbeest zelf (SVG, zelfde stijl
+   als de Supermol: dikke donkere lijnen, vrolijke kleuren). Tegels/meubels van de diepe kelder staan in world/diep.js.
+   ========================================================= */
+Object.assign(ICON_SVG, {
+  boortekening: SV(`<rect x="8" y="12" width="44" height="40" rx="3" fill="#6a3bd6" ${K}/><path d="M14 20 h20 M14 26 h12" stroke="#e6dcff" stroke-width="2.5"/><rect x="18" y="32" width="18" height="12" rx="3" fill="none" stroke="#e6dcff" stroke-width="2.5"/><path d="M36 38 L48 33 L48 43Z" fill="none" stroke="#e6dcff" stroke-width="2.5"/><circle cx="22" cy="46" r="2.5" fill="#e6dcff"/><circle cx="32" cy="46" r="2.5" fill="#e6dcff"/>`),
+  reuzenboor: SV(`<rect x="4" y="22" width="16" height="20" rx="4" fill="#5d6577" ${K}/><path d="M20 16 L62 32 L20 48Z" fill="#ffd23f" ${K}/><path d="M28 21 l-3 22 M38 25 l-2 15 M48 28 l-1 8" stroke="#c99a00" stroke-width="3.5"/>`),
+  rupsbanden: SV(`<rect x="4" y="18" width="56" height="32" rx="16" fill="#3b3f4a" ${K}/><path d="M10 18 v32 M18 18 v32 M26 18 v32 M34 18 v32 M42 18 v32 M50 18 v32" stroke="#5d6577" stroke-width="3"/><circle cx="18" cy="34" r="8" fill="#c9d1df" ${K}/><circle cx="46" cy="34" r="8" fill="#c9d1df" ${K}/>`),
+  koplampen: SV(`<path d="M30 30 L4 14 V46 Z" fill="#fff6b0" opacity=".8"/><circle cx="40" cy="30" r="15" fill="#e6ecf5" ${K}/><circle cx="40" cy="30" r="9" fill="#fff6b0" ${K}/><circle cx="37" cy="27" r="3" fill="#fff"/><rect x="34" y="44" width="12" height="12" rx="3" fill="#5d6577" ${K}/>`),
+  turbomotor: SV(`<rect x="6" y="20" width="40" height="30" rx="7" fill="#e8403a" ${K}/><rect x="12" y="13" width="28" height="8" rx="3" fill="#5d6577" ${K}/><circle cx="26" cy="35" r="9" fill="#ffd23f" ${K}/><circle cx="26" cy="35" r="3" fill="#1f2a44"/><path d="M46 26 h8 v-8 h6 M46 40 h12" stroke="#1f2a44" stroke-width="4"/><circle cx="58" cy="44" r="4" fill="#c9d1df" ${K}/>`),
+});
+const BOOR_SVG_PARTS = {
+  rupsbanden: `<g class="p-rupsbanden"><rect x="18" y="112" width="140" height="40" rx="20" fill="#3b3f4a" stroke="#1f2a44" stroke-width="4"/><path d="M34 112 v40 M50 112 v40 M66 112 v40 M82 112 v40 M98 112 v40 M114 112 v40 M130 112 v40 M146 112 v40" stroke="#5d6577" stroke-width="3"/><g fill="#c9d1df" stroke="#1f2a44" stroke-width="3"><circle cx="40" cy="132" r="12"/><circle cx="88" cy="132" r="12"/><circle cx="136" cy="132" r="12"/></g></g>`,
+  body: `<g class="p-body"><rect x="26" y="58" width="112" height="58" rx="14" fill="#ff9f1c" stroke="#1f2a44" stroke-width="4"/><path d="M34 106 h96" stroke="#e07b00" stroke-width="5"/><g fill="#1f2a44"><path d="M34 66 l10 0 l-10 10z"/><path d="M130 66 l-10 0 l10 10z"/></g><rect x="74" y="26" width="52" height="38" rx="10" fill="#ffd23f" stroke="#1f2a44" stroke-width="4"/><rect x="82" y="32" width="36" height="22" rx="6" fill="#9ff3ff" stroke="#3b3f4a" stroke-width="4"/><circle cx="94" cy="43" r="5" fill="#1f2a44"/><circle cx="108" cy="43" r="5" fill="#1f2a44"/><circle cx="96" cy="41" r="1.8" fill="#fff"/><circle cx="110" cy="41" r="1.8" fill="#fff"/><path d="M96 50 q5 4 10 0" stroke="#1f2a44" stroke-width="2.5" fill="none"/></g>`,
+  turbomotor: `<g class="p-turbomotor"><rect x="6" y="66" width="30" height="34" rx="7" fill="#e8403a" stroke="#1f2a44" stroke-width="4"/><path d="M14 66 v-16 h10" stroke="#1f2a44" stroke-width="5" fill="none"/><circle cx="21" cy="83" r="8" fill="#ffd23f" stroke="#1f2a44" stroke-width="3"/><circle cx="21" cy="83" r="2.5" fill="#1f2a44"/></g>`,
+  tandwiel: `<g class="p-tandwiel" transform="translate(56 86)"><path d="${Array.from({ length: 10 }, (_, i) => { const a = i * Math.PI / 5, b = a + Math.PI / 10, P = (r, t) => `${(Math.cos(t) * r).toFixed(1)} ${(Math.sin(t) * r).toFixed(1)}`; return `${i ? 'L' : 'M'}${P(17, a - .12)} L${P(17, b - .02)} L${P(12, b + .12)} L${P(12, a + Math.PI / 5 - .12)}`; }).join(' ')}Z" fill="#ffd23f" stroke="#1f2a44" stroke-width="3"/><circle r="5" fill="#c99a00" stroke="#1f2a44" stroke-width="2.5"/></g>`,
+  reuzenboor: `<g class="p-reuzenboor"><rect x="136" y="70" width="16" height="34" rx="4" fill="#5d6577" stroke="#1f2a44" stroke-width="4"/><path d="M152 62 L198 87 L152 112 Z" fill="#ffd23f" stroke="#1f2a44" stroke-width="4"/><path d="M162 68 l-4 38 M174 74 l-3 26 M186 80 l-2 14" stroke="#c99a00" stroke-width="4"/></g>`,
+  koplampen: `<g class="p-koplampen"><path d="M92 24 V14 M110 24 V14" stroke="#1f2a44" stroke-width="4"/><circle cx="92" cy="11" r="8" fill="#fff6b0" stroke="#1f2a44" stroke-width="3.5"/><circle cx="110" cy="11" r="8" fill="#fff6b0" stroke="#1f2a44" stroke-width="3.5"/><path d="M118 6 l12 -4 M118 14 l14 2" stroke="#ffd23f" stroke-width="3"/></g>`,
+};
+function boorSVG(parts) { return `<svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg" stroke-linejoin="round" stroke-linecap="round">${['rupsbanden', 'turbomotor', 'body', 'tandwiel', 'reuzenboor', 'koplampen'].filter(p => !parts || parts.includes(p)).map(p => BOOR_SVG_PARTS[p]).join('')}</svg>`; }
+const BOORBEEST_SVG = boorSVG(null);
+
 /* ===== core/dialog.js ===== */
 /* =========================================================
    Praatwolken onderin: talk([[wie, tekst], ...]) en ask(wie, tekst, [keuzes]) -> Promise.
@@ -1534,6 +1569,7 @@ function speaker(who) {
   if (who === 'papa') return { name: 'Papa', look: NPC_LOOKS.papa, adult: true, col: '#2f6b4b', pitch: .8 };
   if (who === 'mol') return { name: 'Supermol', mol: true, col: '#7a4a2a', pitch: 1.6 };
   if (who === 'vlieg') return { name: 'Vliegbot', vlieg: true, col: '#1fa6e0', pitch: 1.9 };
+  if (who === 'boor') return { name: 'Boorbeest', boor: true, col: '#d9822b', pitch: .7 };
   if (who === 'brom') return { name: 'Buurman Brom', brom: true, col: '#7a5a2a', pitch: .62 };
   return { name: '', col: '#6a3bd6', pitch: 1 };
 }
@@ -1545,7 +1581,7 @@ function showLine(who, text, choices) {
     DLG.open = true; DLG.res = res; DLG.full = fillNames(text); DLG.shown = 0; DLG.typing = true; DLG.choices = choices || null; DLG.t0 = performance.now();
     $('#dlg').classList.add('show');
     const port = $('#dlgPort'); port.style.display = sp.name ? '' : 'none';
-    if (sp.name) { if (sp.mol) drawPortrait(port, null, { mol: true }); else if (sp.brom) drawPortrait(port, null, { brom: true }); else if (sp.vlieg) drawPortrait(port, null, { vlieg: true }); else drawPortrait(port, sp.look, { adult: sp.adult }); }
+    if (sp.name) { if (sp.mol) drawPortrait(port, null, { mol: true }); else if (sp.brom) drawPortrait(port, null, { brom: true }); else if (sp.vlieg) drawPortrait(port, null, { vlieg: true }); else if (sp.boor) drawPortrait(port, null, { boor: true }); else drawPortrait(port, sp.look, { adult: sp.adult }); }
     const nm = $('#dlgName'); nm.textContent = sp.name || '📢'; nm.style.background = sp.col;
     $('#dlgMsg').innerHTML = ''; $('#dlgChoices').innerHTML = ''; $('#dlgNext').style.visibility = 'hidden';
     clearInterval(DLG.timer);
@@ -1669,9 +1705,16 @@ function registerItem(o) { GB.ITEMS[o.id] = Object.assign({ cat: 'materiaal' }, 
   { id: 'koekje', name: 'Koekje van mama', cat: 'eten', desc: 'Vers uit de oven. Mama geeft er elke dag één.' },
   { id: 'koekjestrommel', name: 'Appelkoekjes', cat: 'eten', desc: 'Een trommel appelkoekjes. Daar wordt zelfs buurman Brom vrolijk van!' },
   { id: 'tandwiel', name: 'Geheimzinnig tandwiel', cat: 'sleutel', desc: 'Een gouden tandwiel met een vreemd teken. Is er nóg een robot?' },
+  // Aflevering 4: De diepe kelder. Het Boorbeest (robot 3) en zijn onderdelen
+  { id: 'boortekening', name: 'Boortekening', cat: 'sleutel', desc: 'Een tekening van een reuzegrote graafrobot met een gigantische boor: het Boorbeest!' },
+  { id: 'reuzenboor', name: 'Reuzenboor', cat: 'onderdeel', desc: 'Een gigantische boor. Daarmee boor je door de hardste rots!' },
+  { id: 'rupsbanden', name: 'Reuzenrupsbanden', cat: 'onderdeel', desc: 'Superbrede rupsbanden voor een zware robot.' },
+  { id: 'koplampen', name: 'Superkoplampen', cat: 'onderdeel', desc: 'Felle lampen, want diep onder de grond is het pikkedonker.' },
+  { id: 'turbomotor', name: 'Turbomotor', cat: 'onderdeel', desc: 'VROEM! Een motor met heel veel kracht.' },
 ].forEach(registerItem);
 const VLIEG_PARTS = ['propellers', 'afstandsbediening', 'camera', 'lichtframe'];
 const ROBOT_PARTS = ['boorkop', 'wieltjes', 'accu', 'motor', 'schep'];
+const BOOR_PARTS = ['tandwiel', 'reuzenboor', 'rupsbanden', 'koplampen', 'turbomotor'];
 const CAT_NAME = { onderdeel: '🔩 Robotonderdeel', gereedschap: '🧰 Gereedschap', materiaal: '📦 Materiaal', deco: '🎨 Versiering', eten: '🍎 Eten', sleutel: '📜 Belangrijk' };
 
 /* ===== data/recipes.js ===== */
@@ -1693,6 +1736,8 @@ registerRecipe({ id: 'molbrandstof', name: 'Mol-brandstof', icon: 'molbrandstof'
   hint: 'Wortel + appel = 1 ⚡ energie. Elke dag opnieuw!' });
 registerRecipe({ id: 'koekjestrommel', name: 'Appelkoekjes', icon: 'koekjestrommel', needs: ['koekje', 'appel'], gives: { item: 'koekjestrommel' }, once: false,
   hint: 'Koekje van mama + appel uit de boom. Om buurman Brom blij te maken!', when: () => S.buur && S.buur.met });
+registerRecipe({ id: 'boorbeest', name: 'Boorbeest', icon: 'robot', needs: ['tandwiel', 'reuzenboor', 'rupsbanden', 'koplampen', 'turbomotor'], gives: { robot: 'boorbeest' }, blueprint: 'boortekening', once: true,
+  hint: 'Het gouden tandwiel + 4 onderdelen: in de tuin van buurman Brom (streken), hoog in de kelder (Vliegbot) en in de Flipperkastkamer.', lockedText: 'Ligt er een nieuwe tekening in de laatste kamer, de Escaperoom?' });
 
 /* ===== data/robots.js ===== */
 /* =========================================================
@@ -1715,6 +1760,14 @@ registerRobot({
     { part: 'lichtframe', x: 20, y: 52, label: 'Licht frame' }, { part: 'camera', x: 50, y: 84, label: 'Camera' },
   ],
 });
+registerRobot({
+  id: 'boorbeest', name: 'Boorbeest', job: 'Boort met zijn reuzenboor een tweede verdieping onder de basis: de diepe kelder.', svg: () => BOORBEEST_SVG, partsSvg: p => boorSVG(p),
+  slots: [
+    { part: 'reuzenboor', x: 88, y: 54, label: 'Reuzenboor' }, { part: 'tandwiel', x: 30, y: 54, label: 'Gouden tandwiel' },
+    { part: 'turbomotor', x: 10, y: 52, label: 'Turbomotor' }, { part: 'rupsbanden', x: 46, y: 88, label: 'Rupsbanden' },
+    { part: 'koplampen', x: 52, y: 10, label: 'Koplampen' },
+  ],
+});
 
 /* ===== data/rooms.js ===== */
 /* =========================================================
@@ -1731,6 +1784,15 @@ registerRoom({ id: 'flipper', name: 'Flipperkastkamer', emoji: '🕹️', order:
 registerRoom({ id: 'minigolf', name: 'Minigolf', emoji: '⛳', order: 4, slot: 'S', floor: 'O', machine: 'minigolf', minigame: 'minigolf', desc: '6 holes met bumpers, een heuvel, een windmolen en water!' });
 registerRoom({ id: 'racebaan', name: 'Racebaan', emoji: '🏎️', order: 5, slot: 'NW', floor: 'A', machine: 'racebaan', minigame: 'racebaan', desc: 'Race met radiografische autootjes: 3 banen, 3 rondes!' });
 registerRoom({ id: 'escaperoom', name: 'Escaperoom', emoji: '🔐', order: 6, slot: 'NE', floor: 'M', machine: 'escaperoom', minigame: 'escaperoom', desc: 'Puzzels, raadsels en een deur op slot. Kunnen jullie ontsnappen?' });
+// Aflevering 4: de diepe kelder (level 2, onder de basis; zie world/diep.js). Pas te graven als het Boorbeest gebouwd is.
+registerRoom({ id: 'grot', name: 'Kristalgrot', emoji: '💎', order: 7, level: 2, slot: 'C', floor: 'X', desc: 'De grote grot onder de basis, met de lift, het Boorbeest en een ondergrondse rivier.', decoSpots: 0 });
+registerRoom({ id: 'grottenjacht', name: 'Grottenjacht', emoji: '🦇', order: 8, level: 2, slot: 'W', floor: 'Y', machine: 'grottenjacht', minigame: 'grottenjacht', desc: 'Verzamel alle kristallen in het doolhof, maar pas op voor de vleermuizen!' });
+registerRoom({ id: 'mijnkarretje', name: 'Mijnkarretje', emoji: '🛤️', order: 9, level: 2, slot: 'E', floor: 'Y', machine: 'mijnkarretje', minigame: 'mijnkarretje', soon: true, desc: 'Race met het mijnkarretje over de rails: wissel van spoor, spring en duik!' });
+registerRoom({ id: 'kristallen', name: 'Kristallenkamer', emoji: '💠', order: 10, level: 2, slot: 'N', floor: 'Y', machine: 'kristallen', minigame: 'kristallen', soon: true, desc: 'Zet drie kristallen op een rij!' });
+registerRoom({ id: 'rivier', name: 'Ondergrondse rivier', emoji: '🛶', order: 11, level: 2, slot: 'S', floor: 'Y', machine: 'rivier', minigame: 'rivier', soon: true, desc: 'Vaar met een bootje over de wilde ondergrondse rivier!' });
+const roomLevel = r => r.level || 1;
+// Kan deze kamer al gegraven worden? De diepe kelder pas als het Boorbeest er is.
+const roomOpen = r => roomLevel(r) === 1 || (typeof robotBuilt === 'function' && robotBuilt('boorbeest'));
 const roomList = () => Object.values(GB.ROOMS).sort((a, b) => a.order - b.order);
 
 /* ===== data/achievements.js ===== */
@@ -1765,7 +1827,7 @@ function registerAch(o) { GB.ACHIEVEMENTS[o.id] = o; }
   { id: 'escapesnel', icon: '⏱️', name: 'Snelle speurder', desc: 'Met tijd binnen 6 minuten ontsnapt.' },
   { id: 'vliegtekening', icon: '🗺️', name: 'Nog een uitvinding!', desc: 'De vliegtekening gevonden.' },
   { id: 'vliegbot', icon: '🚁', name: 'Piloot', desc: 'De Vliegbot gebouwd!' },
-  { id: 'vlieg5', icon: '🪺', name: 'Hoog in de lucht', desc: 'Alle 5 hoge plekken bezocht met de Vliegbot.' },
+  { id: 'vlieg5', icon: '🪺', name: 'Hoog in de lucht', desc: 'Alle hoge plekken bezocht met de Vliegbot.' },
   { id: 'deco', icon: '🎨', name: 'Binnenhuisarchitect', desc: 'Iets moois in de basis gezet.' },
   { id: 'buurman', icon: '👀', name: 'Buurman Brom', desc: 'Buurman Brom houdt jullie in de gaten. Oei!' },
   { id: 'teslim', icon: '😎', name: 'Te slim af!', desc: 'Voor het eerst een streek uitgehaald bij buurman Brom.' },
@@ -1776,6 +1838,12 @@ function registerAch(o) { GB.ACHIEVEMENTS[o.id] = o; }
   { id: 'koekjes', icon: '🍪', name: 'Vrede met koekjes', desc: 'Buurman Brom blij gemaakt met appelkoekjes.' },
   { id: 'nietsmam', icon: '🤫', name: 'Niks, mam!', desc: 'Bijna betrapt… maar niks verraden.' },
   { id: 'brein10', icon: '🧠', name: 'Meesterbrein', desc: '10 streken gelukt bij buurman Brom.' },
+  { id: 'boortekening', icon: '📐', name: 'Nóg dieper', desc: 'De tekening van het Boorbeest gevonden.' },
+  { id: 'boorbeest', icon: '⛏️', name: 'Boormeester', desc: 'Het Boorbeest gebouwd!' },
+  { id: 'diep', icon: '🛗', name: 'De diepte in', desc: 'Met de lift naar de diepe kelder.' },
+  { id: 'dieper', icon: '😠', name: 'Nog dieper?!', desc: 'Buurman Brom hoorde het Boorbeest.' },
+  { id: 'grot1', icon: '🦇', name: 'Vleermuizenjager', desc: 'Een doolhof leeg gemaakt in de Grottenjacht.' },
+  { id: 'grot5k', icon: '💎', name: 'Kristalkoning', desc: '5000 punten in de Grottenjacht.' },
   { id: 'samen', icon: '👫', name: 'Samen spelen', desc: 'Een spel met 2 spelers gespeeld.' },
 ].forEach(registerAch);
 
@@ -1871,6 +1939,8 @@ function drawFence(c, x, y, tx, ty, m) {
 }
 
 /* ---------- meubels en dingen. f(ctx, o, X, Y, W, H, t) ---------- */
+// Extra speelautomaten (nieuwe afleveringen): MACHINE_EXTRA[game] = { col, label, screen(c, sx, sy, sw, sh, t) }
+const MACHINE_EXTRA = {};
 const FURN = {
   bed(c, o, X, Y, W, H) { box(c, X + 2, Y - 8, W - 4, 14, 5, '#8a5a35'); box(c, X + 3, Y, W - 6, H - 3, 6, '#fff'); box(c, X + 3, Y + H * .35, W - 6, H * .65 - 3, 6, '#5aa9e6'); c.fillStyle = 'rgba(255,255,255,.35)'; for (let i = 0; i < 3; i++) dot(c, X + 14 + i * 14, Y + H * .6, 4, 'rgba(255,255,255,.4)'); box(c, X + 8, Y + 4, W - 16, 16, 7, '#ffffff'); },
   nightstand(c, o, X, Y, W, H) { box(c, X + 4, Y - 2, W - 8, H - 2, 4, '#c98f55'); c.fillStyle = '#a8743f'; c.fillRect(X + 8, Y + 12, W - 16, 3); dot(c, X + W / 2, Y + 20, 2, LINE); box(c, X + 10, Y - 14, 12, 12, 4, '#ffe680', 1.5); },
@@ -1945,7 +2015,7 @@ const FURN = {
     c.fillStyle = 'rgba(94,61,36,.6)'; c.beginPath(); c.ellipse(X + W * .3, Y + H * .75, 12, 6, 0, 0, 7); c.ellipse(X + W * .75, Y + H * .3, 9, 5, 0, 0, 7); c.fill(); },
   ladderUp(c, o, X, Y, W, H) { c.fillStyle = '#d9a35a'; c.strokeStyle = LINE; c.lineWidth = 1.5; c.fillRect(X + 6, Y - 32, 4, H + 30); c.fillRect(X + W - 10, Y - 32, 4, H + 30); for (let i = 0; i < 5; i++) c.fillRect(X + 6, Y - 28 + i * 11, W - 12, 3); c.fillStyle = 'rgba(255,240,180,.25)'; c.beginPath(); c.moveTo(X + 2, Y - 32); c.lineTo(X + W - 2, Y - 32); c.lineTo(X + W + 6, Y + H); c.lineTo(X - 6, Y + H); c.fill(); },
   monitor(c, o, X, Y, W, H) { box(c, X + 2, Y - 34, W - 4, 32, 4, '#1f2a44'); box(c, X + 2, Y - 2, W - 4, H, 4, '#5d6b85'); for (let i = 0; i < 6; i++) dot(c, X + 12 + i * 10, Y + 10, 2.5, ['#e8403a', '#ffd23f', '#3cc46a'][i % 3]); },
-  monitorDyn(c, o, X, Y, W, H, t) { c.fillStyle = '#07131f'; c.fillRect(X + 6, Y - 30, W - 12, 24); const rooms = roomList(); const n = rooms.length; rooms.forEach((r, i) => { const dug = S.base.dug.includes(r.id); c.fillStyle = dug ? (r.id === 'hq' ? '#5ef0ff' : '#4cd964') : r.soon ? '#3b4767' : '#ffd23f'; if (!dug && !r.soon && (t * 2 | 0) % 2) c.fillStyle = '#7a6a20'; c.fillRect(X + 10 + i * ((W - 20) / n), Y - 24, (W - 20) / n - 4, 12); });
+  monitorDyn(c, o, X, Y, W, H, t) { c.fillStyle = '#07131f'; c.fillRect(X + 6, Y - 30, W - 12, 24); const rooms = roomList().filter(roomOpen); const n = rooms.length; rooms.forEach((r, i) => { const dug = S.base.dug.includes(r.id); c.fillStyle = dug ? (r.id === 'hq' ? '#5ef0ff' : '#4cd964') : r.soon ? '#3b4767' : '#ffd23f'; if (!dug && !r.soon && (t * 2 | 0) % 2) c.fillStyle = '#7a6a20'; c.fillRect(X + 10 + i * ((W - 20) / n), Y - 24, (W - 20) / n - 4, 12); });
     c.fillStyle = '#8ff0ff'; c.font = 'bold 7px sans-serif'; c.textAlign = 'left'; c.fillText('BASIS-MONITOR', X + 10, Y - 9); },
   dock(c, o, X, Y, W, H) { box(c, X + 4, Y + 4, W - 8, H - 8, 10, '#2a3550'); c.strokeStyle = '#5ef0ff'; c.lineWidth = 2; rrect(c, X + 9, Y + 9, W - 18, H - 18, 8); c.stroke(); c.fillStyle = '#5ef0ff'; c.font = 'bold 10px sans-serif'; c.textAlign = 'center'; c.fillText('⚡', X + W / 2, Y + 14); },
   automaat(c, o, X, Y, W, H) { box(c, X + 2, Y - 30, W - 4, H + 26, 5, '#e8403a'); box(c, X + 6, Y - 26, W - 12, 18, 3, '#07131f', 1.5); c.fillStyle = '#4cd964'; c.font = 'bold 12px sans-serif'; c.textAlign = 'center'; c.fillText('⚡', X + W / 2, Y - 12); box(c, X + 8, Y - 2, 8, 8, 2, '#ffd23f', 1); box(c, X + W - 16, Y + 2, 8, 4, 1, '#2a2f3d', 0); },
@@ -1959,9 +2029,9 @@ const FURN = {
   decoSpotDyn(c, o, X, Y, W, H, t) { const it = S.base.deco[o.id]; if (!it) return; let b = 0; if (it === 'discobal') b = Math.sin(t * 2) * 2; drawIcon(c, it, X + W / 2, Y + H / 2 - 6 + b, 30);
     if (it === 'discobal') { for (let i = 0; i < 5; i++) { const a = t * 1.5 + i * 1.256; dot(c, X + W / 2 + Math.cos(a) * 34, Y + H / 2 + Math.sin(a) * 18, 2, ['#ff6fa8', '#5ef0ff', '#ffd23f', '#fff', '#9b5de5'][i]); } } },
   machine(c, o, X, Y, W, H) { // speelautomaat: kast met scherm
-    const col = { bowling: '#e8403a', blokken: '#3f6fe0', flipper: '#9b5de5', minigolf: '#2e9e5b', racebaan: '#ff8a1f', escaperoom: '#6a3bd6' }[o.game] || '#5d6577';
+    const col = { bowling: '#e8403a', blokken: '#3f6fe0', flipper: '#9b5de5', minigolf: '#2e9e5b', racebaan: '#ff8a1f', escaperoom: '#6a3bd6' }[o.game] || (MACHINE_EXTRA[o.game] || {}).col || '#5d6577';
     box(c, X + 4, Y - 38, W - 8, H + 34, 8, col); box(c, X + 10, Y - 32, W - 20, 30, 4, '#07131f', 2); box(c, X + 6, Y + H - 22, W - 12, 14, 4, shade(col, -.25));
-    c.fillStyle = '#fff'; c.font = 'bold 11px sans-serif'; c.textAlign = 'center'; c.fillText(({ bowling: 'BOWLING', blokken: 'BLOKKEN', flipper: 'FLIPPER', minigolf: 'GOLF', racebaan: 'RACE', escaperoom: 'ESCAPE' })[o.game] || '', X + W / 2, Y + H - 12); },
+    c.fillStyle = '#fff'; c.font = 'bold 11px sans-serif'; c.textAlign = 'center'; c.fillText(({ bowling: 'BOWLING', blokken: 'BLOKKEN', flipper: 'FLIPPER', minigolf: 'GOLF', racebaan: 'RACE', escaperoom: 'ESCAPE' })[o.game] || (MACHINE_EXTRA[o.game] || {}).label || '', X + W / 2, Y + H - 12); },
   machineDyn(c, o, X, Y, W, H, t) { const sx = X + 12, sy = Y - 30, sw = W - 24, sh = 26; c.save(); c.beginPath(); c.rect(sx, sy, sw, sh); c.clip();
     if (o.game === 'bowling') { c.fillStyle = '#e8bf82'; c.beginPath(); c.moveTo(sx + sw * .3, sy); c.lineTo(sx + sw * .7, sy); c.lineTo(sx + sw * .9, sy + sh); c.lineTo(sx + sw * .1, sy + sh); c.fill(); for (let i = 0; i < 4; i++) dot(c, sx + sw * (.4 + i * .065), sy + 5, 2, '#fff'); dot(c, sx + sw / 2 + Math.sin(t * 2) * 8, sy + sh - 6 - ((t * 10) % 16), 3.5, '#3f6fe0'); }
     else if (o.game === 'blokken') { const cols = ['#e8403a', '#ffd23f', '#3cc46a', '#1fa6e0', '#9b5de5']; for (let i = 0; i < 5; i++) { c.fillStyle = cols[i]; c.fillRect(sx + 6 + i * 9, sy + sh - 6, 8, 5); } c.fillStyle = cols[(t | 0) % 5]; c.fillRect(sx + sw / 2 - 8, sy + ((t * 14) % (sh - 8)), 16, 5); }
@@ -1969,6 +2039,7 @@ const FURN = {
     else if (o.game === 'minigolf') { c.fillStyle = '#3cae5a'; c.fillRect(sx, sy, sw, sh); dot(c, sx + sw * .78, sy + sh * .5, 3.5, '#07131f'); c.fillStyle = '#e8403a'; c.fillRect(sx + sw * .78, sy + 3, 7, 5); c.fillStyle = '#fff'; c.fillRect(sx + sw * .78 - 1, sy + 3, 1.5, 11); const k = (t * .6) % 1; dot(c, sx + 6 + k * (sw * .78 - 6), sy + sh * .5 + Math.sin(k * 9) * 3, 2.5, '#fff'); }
     else if (o.game === 'racebaan') { c.fillStyle = '#4a4f5c'; c.fillRect(sx, sy, sw, sh); c.strokeStyle = '#fff'; c.setLineDash([4, 4]); c.beginPath(); c.moveTo(sx, sy + sh / 2); c.lineTo(sx + sw, sy + sh / 2); c.stroke(); c.setLineDash([]); const k = (t * .9) % 1; box(c, sx - 10 + k * (sw + 20), sy + 4, 12, 6, 2, '#e8403a', 1); box(c, sx - 10 + ((k + .45) % 1) * (sw + 20), sy + sh - 10, 12, 6, 2, '#3f6fe0', 1); }
     else if (o.game === 'escaperoom') { c.fillStyle = '#241a3a'; c.fillRect(sx, sy, sw, sh); box(c, sx + sw / 2 - 7, sy + 3, 14, sh - 6, 2, '#8a5a35', 1); dot(c, sx + sw / 2 + 4, sy + sh / 2, 1.6, '#ffd23f'); c.fillStyle = (t * 2 | 0) % 2 ? '#ffd23f' : '#fff'; c.font = 'bold 10px sans-serif'; c.textAlign = 'center'; c.fillText('?', sx + 8, sy + sh / 2 + 4); c.fillText('?', sx + sw - 8, sy + sh / 2 + 4); }
+    else if (MACHINE_EXTRA[o.game] && MACHINE_EXTRA[o.game].screen) MACHINE_EXTRA[o.game].screen(c, sx, sy, sw, sh, t);
     c.restore(); dot(c, X + 12, Y - 34, 2.5, (t * 4 | 0) % 2 ? '#ffd23f' : '#fff'); dot(c, X + W - 12, Y - 34, 2.5, (t * 4 | 0) % 2 ? '#fff' : '#ffd23f'); },
   window(c, o, X, Y) { box(c, X + 4, Y + 6, 24, 18, 3, '#fff', 1.5); c.fillStyle = '#9fd8ff'; c.fillRect(X + 7, Y + 9, 8, 12); c.fillRect(X + 17, Y + 9, 8, 12); },
   roundwindow(c, o, X, Y) { dot(c, X + 16, Y + 16, 11, '#fff'); dot(c, X + 16, Y + 16, 8, '#9fd8ff'); c.strokeStyle = LINE; c.lineWidth = 1.5; c.beginPath(); c.arc(X + 16, Y + 16, 11, 0, 7); c.stroke(); },
@@ -2195,6 +2266,7 @@ const BASE_SLOTS = {
 };
 // Extra spullen per kamer (x/y relatief aan de kamer). De kist in de Minigolf-kamer bevat de vliegtekening.
 const ROOM_PROPS = {
+  escaperoom: [{ id: 'boorkist', kind: 'chest', x: 1, y: 4, use: { label: 'Open', loot: 'boortekening', unlessRobot: 'boorbeest', text: 'Achter het slot van de Escaperoom staat nóg een kist… met een tekening van een reusachtige BOORROBOT!', empty: 'De kist is leeg. De Boorbeest-tekening zit in mijn rugzak.' } }],
   minigolf: [{ id: 'vliegkist', kind: 'chest', x: 8, y: 4, use: { label: 'Open', loot: 'vliegtekening', unlessRobot: 'vliegbot', text: 'Een oude kist… met een opgerolde tekening erin. Van een VLIEGENDE robot!', empty: 'De kist is leeg. De vliegtekening zit in mijn rugzak.' } }],
 };
 // Waar komen tunnels de kamer in (boven- en onderwand)? Altijd uit ALLE plekken berekend (ook nog niet gegraven kamers),
@@ -2216,18 +2288,18 @@ function machineSpot(slot) {
   cand.sort((a, b) => Math.abs(a - c) - Math.abs(b - c) || Math.abs(b + 1 - own) - Math.abs(a + 1 - own));
   return { x: cand.length ? cand[0] : c, y: fromTop ? ry + rh - 1 : ry, fromTop, top: op.top };
 }
-const roomBySlot = slot => Object.values(GB.ROOMS).find(r => r.slot === slot);
+const roomBySlot = (slot, lvl = 1) => Object.values(GB.ROOMS).find(r => r.slot === slot && roomLevel(r) === lvl);
 const isDug = id => S.base.dug.includes(id);
-function buildBaseMap() {
-  const g = []; for (let y = 0; y < BASE_H; y++) g.push(Array(BASE_W).fill('E'));
-  const carve = (ch, [x, y, w, h]) => { for (let j = y; j < y + h; j++) for (let i = x; i < x + w; i++) g[j][i] = ch; };
-  const objects = [], areas = [], spawns = { ladder: { x: 15, y: 11.6, dir: 'down' } };
-  const slotDug = slot => { const r = roomBySlot(slot); return slot === 'C' ? isDug('hq') : !!(r && isDug(r.id)); };
+// Kamers + tunnels van één verdieping uitgraven (level 1 = de basis, level 2 = de diepe kelder; zelfde raster BASE_SLOTS).
+function placeSlotRooms(level, hub, g, carve, objects, areas, spawns) {
+  // tunnels: aarde in de basis, grotvloer in de diepe kelder
+  const tun = level === 2 ? 'X' : 'u';
+  const slotDug = slot => { const r = roomBySlot(slot, level); return slot === 'C' ? isDug(hub) : !!(r && isDug(r.id)); };
   for (const slot in BASE_SLOTS) {
-    const sl = BASE_SLOTS[slot], r = roomBySlot(slot); if (!r) continue;
+    const sl = BASE_SLOTS[slot], r = roomBySlot(slot, level); if (!r) continue;
     const [rx, ry, rw, rh] = sl.room;
     if (slotDug(slot)) {
-      carve(r.floor || 'M', sl.room); if (sl.tunnel) carve('u', sl.tunnel);
+      carve(r.floor || 'M', sl.room); if (sl.tunnel) carve(tun, sl.tunnel);
       areas.push({ name: r.emoji + ' ' + r.name, x: rx, y: ry, w: rw, h: rh });
       if (sl.tunnel) areas.push({ name: 'Tunnel', x: sl.tunnel[0], y: sl.tunnel[1], w: sl.tunnel[2], h: sl.tunnel[3] });
       const ms = machineSpot(slot), fromTop = ms.fromTop; // tunnel aan de bovenkant: automaat dan onderaan
@@ -2240,14 +2312,20 @@ function buildBaseMap() {
         for (let i = 0; i < r.decoSpots; i++) { // versierplek recht onder de automaat? dan naar de hoek onderin (zelfde id: versiering blijft)
           const dx = i === 0 ? rx + 1 : rx + rw - 2, under = r.machine && !fromTop && dx >= ms.x && dx <= ms.x + 1;
           objects.push({ id: 'deco_' + r.id + i, kind: 'decoSpot', dyn: 'decoSpotDyn', x: dx, y: under ? ry + rh - 2 : ry + 1, solid: false, use: { label: 'Versier', icon: '🎨', action: 'deco' } }); }
-        objects.push({ id: 'rug_' + r.id, kind: 'rug', x: rx + 3, y: ry + 2, w: rw - 6, h: 3, solid: false, layer: 0, color: { bowling: '#c4452c', blokken: '#3f6fe0', flipper: '#9b5de5', minigolf: '#2a7a43', racebaan: '#4a4f5c', escaperoom: '#6a3bd6' }[r.machine] || '#8a6a52' });
+        objects.push({ id: 'rug_' + r.id, kind: 'rug', x: rx + 3, y: ry + 2, w: rw - 6, h: 3, solid: false, layer: 0, color: { bowling: '#c4452c', blokken: '#3f6fe0', flipper: '#9b5de5', minigolf: '#2a7a43', racebaan: '#4a4f5c', escaperoom: '#6a3bd6' }[r.machine] || (MACHINE_EXTRA[r.machine] || {}).rug || '#8a6a52' });
       }
     } else if (sl.parent && slotDug(sl.parent)) {
       // tunnel-stompje met afzetting: hier komt een kamer
-      carve('u', sl.stub);
+      carve(tun, sl.stub);
       objects.push({ id: 'barrier_' + r.id, kind: 'barrier', x: sl.stub[0], y: sl.stub[1], w: sl.stub[2], h: sl.stub[3], vert: sl.vert, use: { label: 'Bekijk', icon: '🚧', action: 'barrier', room: r.id } });
     }
   }
+}
+function buildBaseMap() {
+  const g = []; for (let y = 0; y < BASE_H; y++) g.push(Array(BASE_W).fill('E'));
+  const carve = (ch, [x, y, w, h]) => { for (let j = y; j < y + h; j++) for (let i = x; i < x + w; i++) g[j][i] = ch; };
+  const objects = [], areas = [], spawns = { ladder: { x: 15, y: 11.6, dir: 'down' } };
+  placeSlotRooms(1, 'hq', g, carve, objects, areas, spawns);
   // inrichting van het Hoofdkwartier
   if (isDug('hq')) {
     objects.push(
@@ -2257,15 +2335,133 @@ function buildBaseMap() {
       { id: 'automaat', kind: 'automaat', x: 26, y: 11, use: { label: 'Automaat', icon: '🪙', action: 'automaat' } },
       { id: 'hqrug', kind: 'rug', x: 18, y: 14, w: 6, h: 2, solid: false, layer: 0, color: '#3f6fe0' },
       { id: 'hqbank', kind: 'sofaBase', x: 19, y: 17, w: 3, use: { label: 'Bekijk', empty: ['Onze eigen bank in onze eigen basis!', 'Even uitrusten… zo, weer verder!'] } },
+      ...(robotBuilt('boorbeest') ? [{ id: 'lift', kind: 'lift', dyn: 'liftDyn', x: 25, y: 14, w: 2, use: { label: 'Lift', icon: '🛗', action: 'lift', to: 'diep' } }] : []),
       ...(S.buur.met ? [{ id: 'buurbord', kind: 'buurBoard', x: 25, y: 11, use: { label: 'Plan', icon: '🤫', action: 'buurplan' } }] : []),
       ...[[16, 17], [25, 17], [16, 15]].map(([x, y], i) => ({ id: 'deco_hq' + i, kind: 'decoSpot', dyn: 'decoSpotDyn', x, y, solid: false, use: { label: 'Versier', icon: '🎨', action: 'deco' } })),
     );
     areas.unshift({ name: '🖥️ Hoofdkwartier', x: 15, y: 11, w: 12, h: 8 });
+    spawns.lift = { x: 25.5, y: 15, dir: 'down' };
   }
   return registerMap({ id: 'basis', name: 'Geheime basis', music: 'basis', indoor: true, underground: true, rows: g.map(r => r.join('')), objects, areas, spawns,
     doors: [{ x: 15, y: 11, w: 1, h: 1, to: 'kelder', spawn: 'luik', sfx: 'door' }] });
 }
 buildBaseMap();
+
+/* ===== world/diep.js ===== */
+/* =========================================================
+   DE DIEPE KELDER (aflevering 4). Een tweede verdieping onder de basis, gegraven door het BOORBEEST (robot 3).
+   Zelfde raster als de basis (BASE_SLOTS), maar dan level 2: de Kristalgrot (C) in het midden, met de lift
+   omhoog naar het Hoofdkwartier, het geparkeerde Boorbeest en een ondergrondse rivier met een brug.
+   Kamers: grottenjacht (W), mijnkarretje (E), kristallen (N), rivier (S). Graven gaat net als boven.
+   Boorbeest: tekening = kist in de Escaperoom. Onderdelen: tandwiel (eik, Vliegbot), reuzenboor (Tuinkabouters
+   gewonnen), rupsbanden (Belletje lellen gewonnen), koplampen (op de ketel in de kelder, Vliegbot),
+   turbomotor (eerste keer Flipperkast).
+   ========================================================= */
+// --- tegels: X grotvloer, Y kristalvloer, Q rotswand, V rivier (water, niet begaanbaar), W brug ---
+function drawCrystal(c, x, y, s, col) {
+  c.fillStyle = col; c.beginPath(); c.moveTo(x, y - s); c.lineTo(x + s * .42, y - s * .35); c.lineTo(x + s * .3, y); c.lineTo(x - s * .3, y); c.lineTo(x - s * .42, y - s * .35); c.closePath(); c.fill();
+  c.strokeStyle = LINE; c.lineWidth = 1.2; c.stroke(); c.fillStyle = 'rgba(255,255,255,.55)'; c.beginPath(); c.moveTo(x - s * .05, y - s * .85); c.lineTo(x + s * .15, y - s * .4); c.lineTo(x - s * .12, y - s * .3); c.closePath(); c.fill();
+}
+const CRYSTAL_COLS = ['#7ef0ff', '#c58bff', '#ff8ad8', '#8affb0'];
+function drawRock(c, x, y, tx, ty, m) {
+  const below = tileAt(m, tx, ty + 1);
+  c.fillStyle = '#342f4a'; c.fillRect(x, y, T, T);
+  for (let i = 0; i < 3; i++) { const h = hash2(tx * 5 + i, ty * 3); dot(c, x + h * 30, y + hash2(tx, ty * 7 + i) * 30, 2 + h * 2.5, h > .5 ? '#3f3958' : '#2a2640'); }
+  if (hash2(tx + 11, ty) > .94) drawCrystal(c, x + 16, y + 24, 12, CRYSTAL_COLS[(tx + ty) % 4]);
+  if (below && !TILES[below].solid) {
+    c.fillStyle = '#4a4468'; c.fillRect(x, y + 6, T, T - 6); for (let i = 0; i < 3; i++) dot(c, x + 5 + i * 11, y + 14 + (i % 2) * 7, 3, '#3d3858');
+    c.fillStyle = '#625b8a'; c.fillRect(x, y + T - 6, T, 6); c.strokeStyle = LINE; c.lineWidth = 1.5; c.strokeRect(x, y + T - 6, T, 6);
+    if (hash2(tx, ty + 5) > .78) drawCrystal(c, x + 10 + hash2(tx, ty) * 12, y + T - 7, 10, CRYSTAL_COLS[(tx * 3 + ty) % 4]);
+  }
+}
+Object.assign(TILES, {
+  Q: { solid: true, draw: drawRock },
+  X: { draw(c, x, y, tx, ty) { c.fillStyle = '#7a6a5a'; c.fillRect(x, y, T, T); const h = hash2(tx, ty); c.fillStyle = h > .5 ? '#837262' : '#736353'; rrect(c, x + 2, y + 2, T - 4, T - 4, 7); c.fill();
+    if (h > .7) { dot(c, x + 8 + h * 10, y + 22, 2.5, '#5f5246'); dot(c, x + 20, y + 9 + h * 6, 1.8, '#5f5246'); } if (h < .06) drawCrystal(c, x + 16, y + 26, 8, CRYSTAL_COLS[(tx + ty) % 4]); } },
+  Y: { draw(c, x, y, tx, ty) { c.fillStyle = '#4b456b'; c.fillRect(x, y, T, T); c.fillStyle = (tx + ty) % 2 ? '#544d78' : '#4f4872'; rrect(c, x + 1.5, y + 1.5, T - 3, T - 3, 4); c.fill();
+    if (hash2(tx, ty) > .86) dot(c, x + 16, y + 16, 2, 'rgba(126,240,255,.7)'); } },
+  V: { solid: true, draw(c, x, y, tx, ty) { c.fillStyle = '#1f6fa8'; c.fillRect(x, y, T, T); c.strokeStyle = 'rgba(190,240,255,.55)'; c.lineWidth = 2; const h = hash2(tx, ty);
+    c.beginPath(); c.moveTo(x + 3 + h * 6, y + 10); c.quadraticCurveTo(x + 9 + h * 6, y + 6, x + 15 + h * 6, y + 10); c.moveTo(x + 13 - h * 5, y + 23); c.quadraticCurveTo(x + 19 - h * 5, y + 19, x + 25 - h * 5, y + 23); c.stroke();
+    c.fillStyle = 'rgba(0,0,0,.18)'; c.fillRect(x, y, T, 4); } },
+  W: { draw(c, x, y, tx, ty) { c.fillStyle = '#1f6fa8'; c.fillRect(x, y, T, T); planks(c, x + 2, y, tx, ty, '#b88552', '#9c6d3f', false); c.fillStyle = '#6b4a2a'; c.fillRect(x, y, 2, T); c.fillRect(x + T - 2, y, 2, T); } },
+});
+// --- meubels: lift, geparkeerd Boorbeest, kristallen ---
+let BOOR_IMG = null;
+const boorImg = () => BOOR_IMG || (BOOR_IMG = svgImage(BOORBEEST_SVG));
+Object.assign(FURN, {
+  lift(c, o, X, Y, W, H) {
+    box(c, X + 2, Y - 40, W - 4, H + 38, 6, '#5d6577'); box(c, X + 8, Y - 30, W - 16, H + 24, 3, '#2a2f3d', 1.5);
+    box(c, X + 9, Y - 29, (W - 18) / 2 - 1, H + 22, 2, '#a9b3c7', 1.2); box(c, X + W / 2 + 1, Y - 29, (W - 18) / 2 - 1, H + 22, 2, '#a9b3c7', 1.2);
+    c.fillStyle = '#ffd23f'; c.fillRect(X + 4, Y + H - 6, W - 8, 4); c.fillStyle = '#2a2f3d'; for (let i = 0; i < 6; i++) c.fillRect(X + 6 + i * 9, Y + H - 6, 4, 4);
+  },
+  liftDyn(c, o, X, Y, W, H, t) { const on = (t * 2 | 0) % 2; box(c, X + W / 2 - 10, Y - 38, 20, 8, 3, '#07131f', 1); c.fillStyle = on ? '#5ef08a' : '#2f7a4a'; c.font = 'bold 8px sans-serif'; c.textAlign = 'center'; c.fillText(o.use && o.use.to === 'diep' ? '▼' : '▲', X + W / 2, Y - 31.5); },
+  boorPark(c, o, X, Y, W, H) { const img = boorImg(); if (img.complete && img.naturalWidth) c.drawImage(img, X - 4, Y + H - 92, 115, 92); else box(c, X + 8, Y - 20, W - 16, H + 16, 8, '#e8a33a'); },
+  crystals(c, o, X, Y) { const h = hash2(o.x, o.y), k = Math.floor(h * 4); drawCrystal(c, X + 9, Y + 26, 15, CRYSTAL_COLS[k]); drawCrystal(c, X + 23, Y + 27, 12, CRYSTAL_COLS[(k + 1) % 4]); drawCrystal(c, X + 16, Y + 22, 22, CRYSTAL_COLS[(k + 2) % 4]); },
+  crystalsDyn(c, o, X, Y, W, H, t) { const s = (Math.sin(t * 2.4 + o.x) + 1) / 2; c.fillStyle = `rgba(255,255,255,${.25 + s * .6})`; c.beginPath(); c.arc(X + 16 + Math.sin(t + o.y) * 4, Y + 2 - s * 4, 1.5 + s * 1.5, 0, 7); c.fill(); },
+});
+// Speelautomaten van de diepe kelder (kleur, naam op de kast, schermpje)
+Object.assign(MACHINE_EXTRA, {
+  grottenjacht: { col: '#2b9c8f', rug: '#2b5f78', label: 'GROT', screen(c, sx, sy, sw, sh, t) {
+    c.fillStyle = '#1a1430'; c.fillRect(sx, sy, sw, sh); c.fillStyle = '#4b3f86'; c.fillRect(sx + 2, sy + 2, sw - 4, 3); c.fillRect(sx + 2, sy + sh - 5, sw - 4, 3);
+    for (let i = 0; i < 6; i++) dot(c, sx + 8 + i * 6, sy + sh / 2, 1.4, '#7ef0ff'); const k = (t * .5) % 1; dot(c, sx + 4 + k * (sw - 8), sy + sh / 2, 3.5, '#ffd23f');
+    c.fillStyle = '#c58bff'; const bx = sx + 4 + ((k + .4) % 1) * (sw - 8); c.beginPath(); c.moveTo(bx - 5, sy + sh / 2 - 6); c.lineTo(bx, sy + sh / 2 - 3); c.lineTo(bx + 5, sy + sh / 2 - 6); c.lineTo(bx, sy + sh / 2); c.fill(); } },
+  mijnkarretje: { col: '#b5651d', rug: '#6b4a2a', label: 'KAR' },
+  kristallen: { col: '#c0399b', rug: '#5a3b8a', label: 'KRISTAL' },
+  rivier: { col: '#1f8ad6', rug: '#1f5f8a', label: 'RIVIER' },
+});
+// --- de kaart ---
+function buildDeepMap() {
+  const g = []; for (let y = 0; y < BASE_H; y++) g.push(Array(BASE_W).fill('Q'));
+  const carve = (ch, [x, y, w, h]) => { for (let j = y; j < y + h; j++) for (let i = x; i < x + w; i++) g[j][i] = ch; };
+  const objects = [], areas = [], spawns = { lift: { x: 15.5, y: 12.2, dir: 'down' } };
+  placeSlotRooms(2, 'grot', g, carve, objects, areas, spawns);
+  if (isDug('grot')) {
+    // ondergrondse rivier onderin de grot, met een brug naar de zuid-tunnel
+    for (let x = 15; x <= 26; x++) g[18][x] = x >= 19 && x <= 22 ? 'W' : 'V';
+    objects.push(
+      { id: 'liftop', kind: 'lift', dyn: 'liftDyn', x: 15, y: 11, w: 2, use: { label: 'Lift', icon: '🛗', action: 'lift', to: 'basis' } },
+      { id: 'boorpark', kind: 'boorPark', x: 23, y: 11, w: 3, h: 2, use: { label: 'Bekijk', icon: '⛏️', action: 'boorbeest' } },
+      ...[[26, 15], [15, 16], [26, 17], [17, 13]].map(([x, y], i) => ({ id: 'kristal' + i, kind: 'crystals', dyn: 'crystalsDyn', x, y, use: { label: 'Bekijk', empty: ['Wat een mooie kristallen! Ze geven een beetje licht.', 'Kristallen in alle kleuren. Net een schatkamer!', 'Niet aankomen… ze zijn zo mooi!'] } })),
+    );
+    areas.unshift({ name: '💎 Kristalgrot', x: 15, y: 11, w: 12, h: 8 });
+  }
+  return registerMap({ id: 'diep', name: 'Diepe kelder', music: 'diep', indoor: true, underground: true, rows: g.map(r => r.join('')), objects, areas, spawns, doors: [] });
+}
+buildDeepMap();
+// --- lift en Boorbeest ---
+GB.ACTIONS.lift = async o => { SFX.door(); await goMap(o.use.to, 'lift', 'whoosh'); };
+// eerste keer in de diepe kelder (met de lift of via de monitor): even rondkijken
+BUS.on('map', id => { if (id === 'diep' && !flag('diepSeen') && S.introDone) setTimeout(diepFirstVisit, 700); });
+async function diepFirstVisit() {
+  if (flag('diepSeen') || !WORLD.map || WORLD.map.id !== 'diep') return;
+  if (WORLD.busy || DLG.open || anyOverlay() || MG.active) { setTimeout(diepFirstVisit, 500); return; }
+  setFlag('diepSeen'); achieve('diep'); WORLD.busy++;
+  try { await talk([['f', 'Woooow… een echte kristalgrot! Onder onze basis!'], ['p', 'En hoor je dat? Daar stroomt een ondergrondse rivier!'], ['mol', 'Piep! Hier graaf ik ook nieuwe kamers. Elke nacht één, en na elke gelukte streek meteen!'], ['f', 'De eerste is al klaar: de Grottenjacht! Links door de tunnel.']]); }
+  finally { WORLD.busy--; updateHud(); }
+}
+GB.ACTIONS.boorbeest = async () => { SFX.dig(); WORLD.shake = .6; await talk([['p', 'Het Boorbeest rust even uit na al dat boren.'], ['f', 'Wat een reuzenboor! Daar boor je dwars door een berg heen.']]); };
+async function boorbeestBuiltScene() {
+  WORLD.busy++;
+  try {
+    achieve('boorbeest');
+    await talk([['f', 'Hij doet het! Het BOORBEEST!'], ['p', 'Wat een reuzenboor! Daarmee kunnen we nóg dieper graven!'], ['mol', 'Piep piep! Samen met het Boorbeest boor ik een gat onder het Hoofdkwartier. Kijk maar!']]);
+    SFX.dig(); WORLD.shake = 2.4; await wait(900); SFX.dig(); WORLD.shake = 1.6;
+    digDeepStart(); if (WORLD.map && WORLD.map.id === 'basis') loadMap('basis', { px: WORLD.p.x, py: WORLD.p.y, dir: WORLD.p.dir });
+    SFX.build(); toast('🛗 Er zit nu een lift in het Hoofdkwartier!', 'gold');
+    await talk([['mol', 'Piep! Klaar! Er zit nu een LIFT in het Hoofdkwartier. Beneden ligt een kristalgrot… en de Grottenjacht!'], ['f', 'Snel, naar de lift in het Hoofdkwartier!']]);
+  } finally { WORLD.busy--; updateHud(); }
+}
+// Het Boorbeest boort de Kristalgrot + de eerste kamer (Grottenjacht). Ook voor 'Voor ouders: alles openen'.
+function digDeepStart() {
+  if (!isDug('grot')) digRoom('grot', 'boor');
+  const first = roomList().find(r => roomLevel(r) === 2 && r.id !== 'grot' && !r.soon);
+  if (first && !isDug(first.id)) digRoom(first.id, 'boor');
+}
+// Voor ouders: Boorbeest meteen bouwen (alle onderdelen + tekening)
+function buildBoorbeestNow() {
+  if (robotBuilt('boorbeest')) return; BOOR_PARTS.forEach(p => { S.seenItems[p] = 1; }); S.seenItems.boortekening = 1; if (!has('boortekening')) giveItem('boortekening');
+  S.found.boorkist = 1; S.robots.boorbeest = { built: dayKey() }; S.crafted.boorbeest = 1; save();
+}
 
 /* ===== world/mol.js ===== */
 /* =========================================================
@@ -2276,12 +2472,12 @@ buildBaseMap();
    - Fase 3: als buurman Brom oplet (buurGateOn), wacht een nieuwe kamer op een gelukte streek (zie buurman.js).
    ========================================================= */
 const DIG_COST = 3;
-const nextRoom = () => roomList().find(r => !r.soon && !isDug(r.id));
+const nextRoom = () => roomList().find(r => !r.soon && !isDug(r.id) && roomOpen(r));
 const soonRooms = () => roomList().filter(r => r.soon);
 function digRoom(id, how) {
   if (isDug(id)) return; S.base.dug.push(id); S.base.news.push({ id, how, day: dayKey() }); save();
   if (S.base.dug.filter(x => x !== 'hq').length >= 2) achieve('kamer2');
-  buildBaseMap(); BUS.emit('dug', id);
+  buildBaseMap(); buildDeepMap(); BUS.emit('dug', id);
 }
 function openBase() { // eerste keer: luik open, HQ + bowling
   setFlag('baseOpen'); S.base.lastDay = dayKey(); S.buur.fresh = 1; save();
@@ -2313,12 +2509,14 @@ function unlockAllRooms() {
   let r; while ((r = nextRoom())) digRoom(r.id, 'ouders');
   S.buur.due = 0; S.buur.nowReq = 0;
   buildVliegbotNow();
-  save(); buildBaseMap();
+  buildBoorbeestNow(); digDeepStart(); while ((r = nextRoom())) digRoom(r.id, 'ouders');
+  save(); buildBaseMap(); buildDeepMap();
 }
 function molStatus() {
   const r = nextRoom();
   if (!robotBuilt('supermol')) return { text: 'De Supermol is nog niet gebouwd.', next: null };
   if (!flag('baseOpen')) return { text: 'De Supermol wacht in de kelder op een plek om te graven.', next: r };
+  if (!r && !robotBuilt('boorbeest')) return { text: 'Alle kamers zijn gegraven! Nu kan de Supermol niet dieper… tenzij er een Boorbeest komt!', next: null };
   if (!r) return { text: 'Alle kamers zijn gegraven! Wat een geheime basis!', next: null };
   return { text: `Volgende kamer: ${r.emoji} ${r.name}`, next: r, ms: msToMidnight() };
 }
@@ -2354,6 +2552,7 @@ function buildSolid(m) {
 }
 function loadMap(id, spawn) {
   if (id === 'basis') buildBaseMap();
+  if (id === 'diep') buildDeepMap();
   const m = GB.MAPS[id]; if (!m) return;
   m.objects.forEach(o => { o.w = o.w || 1; o.h = o.h || 1; });
   WORLD.map = m; WORLD.solid = buildSolid(m); WORLD.chunks.clear();
@@ -2650,6 +2849,7 @@ requestAnimationFrame(frame);
    ========================================================= */
 const partsHave = () => ROBOT_PARTS.filter(p => S.seenItems[p] || robotBuilt('supermol')).length;
 const hasBlueprint = () => !!S.seenItems.bouwtekening;
+const boorHave = () => BOOR_PARTS.filter(p => S.seenItems[p] || robotBuilt('boorbeest')).length;
 function achieve(id) {
   if (S.ach[id] || !GB.ACHIEVEMENTS[id]) return; S.ach[id] = dayKey(); save();
   const a = GB.ACHIEVEMENTS[id]; setTimeout(() => { toast(`🏆 <span>Prestatie: <b>${a.icon} ${a.name}</b></span>`, 'gold'); SFX.coin(); }, 400);
@@ -2667,6 +2867,9 @@ function goalKey() {
   } else if (flyCount() < allFlySpots().length && !(S.flags.flyGoalSkip > 0)) return 'vliegen';
   if (isDug('escaperoom') && !flag('first_escaperoom')) return 'escape';
   if (S.buur.met && !S.buur.total && S.buur.on) return 'buurplan';
+  // aflevering 4: het Boorbeest (tekening in de Escaperoom, de laatste kamer)
+  if (!robotBuilt('boorbeest') && isDug('escaperoom')) { if (!S.seenItems.boortekening) return 'boorkist'; return boorHave() < BOOR_PARTS.length ? 'boordelen' : 'boorbouwen'; }
+  if (robotBuilt('boorbeest') && !flag('diepSeen')) return 'lift';
   return nextRoom() ? 'wachten' : 'klaar';
 }
 function nextGoal() {
@@ -2689,10 +2892,25 @@ function nextGoal() {
     buurdig: r ? `🤫 Eerst een streek bij buurman Brom: dan graaft de Supermol de ${r.name}!` : '',
     buurmorgen: '😴 Morgen graaft de Supermol verder… tenzij!',
     buurplan: '🤫 Bekijk het Buurman-plan in het Hoofdkwartier',
+    boorkist: '📐 Zoek in de Escaperoom: daar staat nog een kist',
+    boordelen: `⛏️ Zoek de onderdelen van het Boorbeest (${boorHave()}/${BOOR_PARTS.length})`,
+    boorbouwen: '🛠️ Bouw het Boorbeest aan de werkbank in de speelkamer',
+    lift: '🛗 Neem de lift in het Hoofdkwartier naar de diepe kelder',
   }[k];
 }
 function hint() {
   const k = goalKey();
+  if (k === 'boorkist') return 'In de Escaperoom staat een oude kist in de hoek. Wat zou erin zitten?';
+  if (k === 'boorbouwen') return 'Alle onderdelen van het Boorbeest! Snel naar de werkbank in de speelkamer.';
+  if (k === 'lift') return 'In het Hoofdkwartier zit nu een lift. Daarmee gaan we naar beneden!';
+  if (k === 'boordelen') {
+    const m = BOOR_PARTS.find(p => !S.seenItems[p]);
+    if (m === 'tandwiel') return robotBuilt('vliegbot') ? 'Bovenin de grote eik in de tuin glinstert iets. Stuur de Vliegbot erheen!' : 'Er glinstert iets bovenin de grote eik. Daar kunnen we alleen vliegend bij…';
+    if (m === 'koplampen') return robotBuilt('vliegbot') ? 'Boven op de verwarmingsketel in de kelder ligt iets wat licht geeft. Vliegbot, kom maar!' : 'Op de verwarmingsketel in de kelder ligt iets. Te hoog… een vliegende robot zou erbij kunnen.';
+    if (m === 'turbomotor') return 'Speel eens op de Flipperkast. Wie weet wat er uit die kast rolt!';
+    if (m === 'reuzenboor') return 'Haal de Tuinkabouters-streek uit bij buurman Brom. In zijn tuin ligt een reuzenboor!';
+    if (m === 'rupsbanden') return 'Belletje lellen bij buurman Brom! Naast zijn vuilnisbak liggen oude rupsbanden.';
+  }
   if (k === 'tekening') return 'Mijn opa zei dat de bouwtekening in de boekenkast in de speelkamer ligt!';
   if (k === 'onderdelen') {
     const miss = ROBOT_PARTS.filter(p => !S.seenItems[p]);
@@ -2890,6 +3108,8 @@ BUS.on('found', async id => {
   if (id === 'vliegtekening') { achieve('vliegtekening'); await talk([['f', 'Kijk! Een VLIEGBOT! Een robot die kan vliegen!'], ['p', 'Dan kunnen we overal bij: op het dak, in de grote boom…'], ['f', 'We hebben 4 onderdelen nodig: propellers, een afstandsbediening, een camera en een licht frame.'], ['p', 'Op zoek!']]); updateHud(); return; }
   if (VLIEG_PARTS.includes(id)) { const n = vliegHave(); friendSays(n >= VLIEG_PARTS.length ? 'Alle onderdelen van de Vliegbot! Snel naar de werkbank!' : `Een onderdeel van de Vliegbot! Nog ${VLIEG_PARTS.length - n} te gaan!`, 5); return; }
   if (id === 'trofee') { friendSays('Een echte Escape-trofee! Wij zijn de slimste speurders van de hele basis!', 5); return; }
+  if (id === 'boortekening') { achieve('boortekening'); await talk([['f', 'Kijk! Een BOORBEEST! Een robot met een reuzenboor!'], ['p', 'Daarmee kunnen we nóg dieper graven, onder onze basis!'], ['f', 'Het gouden tandwiel hoort erbij! En dan nog een reuzenboor, rupsbanden, koplampen en een turbomotor.'], ['p', 'Misschien ligt er iets in de tuin van buurman Brom… en hoog in de kelder. Kom, we gaan zoeken!']]); return; }
+  if (BOOR_PARTS.includes(id) && (S.seenItems.boortekening || id !== 'tandwiel')) { const n = boorHave(); friendSays(n >= BOOR_PARTS.length ? 'Alle onderdelen van het Boorbeest! Snel naar de werkbank!' : S.seenItems.boortekening ? `Een onderdeel van het Boorbeest! Nog ${BOOR_PARTS.length - n} te gaan!` : 'Dat lijkt wel een robotonderdeel! Goed bewaren!', 5); return; }
   if (id === 'tandwiel') { await talk([['p', 'Er staat een vreemd teken op… een robot met een hamer?'], ['f', 'Zou er nóg een robot bestaan? Bewaar dat tandwiel goed!']]); return; }
   if (ROBOT_PARTS.includes(id)) {
     achieve('eerste'); const n = partsHave();
@@ -2938,6 +3158,9 @@ const FLY_SPOTS = {
   ],
   huis: [
     { id: 'kast', name: 'de bovenkant van de kledingkast', at: [8, .35], loot: 'robotknuffel', see: 'Boven op mijn kledingkast ligt iets… maar die is veel te hoog!', got: 'Mijn oude robotknuffel! Die was ik al zo lang kwijt!' },
+  ],
+  kelder: [
+    { id: 'ketel', name: 'de bovenkant van de grote verwarmingsketel', at: [12.5, .45], loot: 'koplampen', see: 'Boven op de verwarmingsketel ligt iets wat licht geeft…', got: 'Twee superkoplampen! Papa zocht die al jaren. Perfect voor het Boorbeest!' },
   ],
 };
 const allFlySpots = () => Object.values(FLY_SPOTS).flat();
@@ -3053,7 +3276,7 @@ const BUUR_COINS = [10, 15, 20];
 const buurGateOn = () => !!(S.buur.on && S.buur.met && flag('baseOpen') && robotBuilt('supermol'));
 function buurDay() { const t = dayKey(); if (S.buur.day !== t) { S.buur.day = t; S.buur.lost = 0; S.buur.extra = 0; save(); } }
 function buurLeft() { buurDay(); return S.buur.tries ? Math.max(0, S.buur.tries + S.buur.extra - S.buur.lost) : Infinity; }
-const buurRemaining = () => roomList().filter(r => !r.soon && !isDug(r.id)).length;
+const buurRemaining = () => roomList().filter(r => !r.soon && !isDug(r.id) && roomOpen(r)).length;
 // Wacht er een kamer op een gelukte streek?
 function buurWaiting() {
   const b = S.buur;
@@ -3068,6 +3291,8 @@ const buurStars = n => '⭐'.repeat(n);
 // Met welke inzet start een streek? (test vanuit het ouderpaneel telt nooit mee)
 // dig: winnen = de Supermol graaft meteen de volgende kamer. stake: er wacht een dag-kamer (alleen dan kost verliezen een poging).
 function buurCtx() { const on = !BUUR.test && buurGateOn() && !!nextRoom() && !buurLocked(); return { dig: on, stake: on && buurWaiting() }; }
+// Onderdelen van het Boorbeest die je bij een gelukte streek vindt (pas als je de Boorbeest-tekening hebt)
+const BUUR_PARTS = { kabouters: 'reuzenboor', belletje: 'rupsbanden' };
 const BUUR_WIN_DIG = 'Gewonnen! Nu kan de Supermol verder graven! ⛏️';
 // Dag-kamers worden 'wachtend' in plaats van meteen gegraven (aangeroepen vanuit checkDailyDig)
 function buurQueueDays(n) {
@@ -3081,13 +3306,15 @@ function buurRequestNow() { return false; }   // vervallen (fase 3.4): 'Graaf nu
 function buurFinish(api, id, o) {
   const b = S.buur, ctx = (MG.inst && MG.inst.bctx) || { dig: false }; buurDay();
   b.plays[id] = (b.plays[id] || 0) + 1;
-  const lines = (o.lines || []).slice(); let after = null, noAgain = false, backLabel = null, title;
+  const lines = (o.lines || []).slice(); let after = null, noAgain = false, backLabel = null, title, gotPart = null;
   if (o.won) {
     const oldLvl = buurLevel(id); b.wins[id] = (b.wins[id] || 0) + 1; b.total++; b.lvl[id] = Math.max(b.lvl[id] || 0, o.level);
     achieve('teslim'); if (b.total >= 10) achieve('brein10');
     if (o.level >= 3) achieve({ mollenrace: 'mollenrace3', belletje: 'belletje' }[id] || '_');
     const nl = buurLevel(id); if (nl > oldLvl) lines.push(`🔓 Nieuw niveau vrij: <b>${buurStars(nl)}</b>!`);
     title = '😎 Te slim af!';
+    const part = BUUR_PARTS[id];
+    if (part && !BUUR.test && S.seenItems.boortekening && !partNotNeeded(part)) { giveItem(part); gotPart = part; lines.push(`🎁 In de tuin van buurman Brom gevonden: <b>${GB.ITEMS[part].name}</b>! Voor het Boorbeest.`); }
     if (ctx.dig && nextRoom()) {
       const r = nextRoom();
       lines.unshift(`<span class="buurdig"><b>${BUUR_WIN_DIG}</b><br>Buurman Brom heeft niks door. Volgende kamer: <b>${r.emoji} ${r.name}</b></span>`);
@@ -3104,6 +3331,7 @@ function buurFinish(api, id, o) {
       if (!left) { noAgain = true; after = () => buurOutScene(); }
     } else lines.push('Geeft niks! Probeer het gerust nog een keer.');
   }
+  if (gotPart) { const prev = after; after = async () => { await foundPopup(gotPart); BUS.emit('found', gotPart); if (prev) await prev(); }; }
   save(); if (WORLD.map && WORLD.map.id === 'basis') buildBaseMap();
   const sc = o.scores || api.players.map(p => ({ name: p.name, score: o.won ? o.level : 0, text: o.won ? buurStars(o.level) + ' gelukt' : 'betrapt' }));
   if (o.won) S.hi[id] = Math.max(S.hi[id] || 0, o.level);   // 'record' = hoogste niveau gewonnen (zonder 'Nieuw record!'-kop)
@@ -3220,7 +3448,8 @@ FURN.buurBoard = (c, o, X, Y, W, H) => {   // het Buurman-plan: prikbord aan de 
   box(c, X + 3, Y - 2, W - 6, H - 4, 3, '#5d4630', 1.5); c.fillStyle = '#ffd23f'; c.font = 'bold 9px sans-serif'; c.textAlign = 'center'; c.fillText('🤫', X + W / 2, Y + 11);
 };
 function npcWalk(n, x, y, dir, sp) { return new Promise(res => { n.cut = { x: x * T, y: y * T, dir, sp: sp || .55, done: res }; }); }
-async function buurCutscene(fromBase) {
+// deep = het tweede filmpje (aflevering 4): na het bouwen van het Boorbeest. "Nu bonkt het nog dieper!"
+async function buurCutscene(fromBase, deep) {
   if (BUUR.cut) return; BUUR.cut = true; BUUR.replay = false; WORLD.busy++;
   const W = WORLD;
   try {
@@ -3240,27 +3469,46 @@ async function buurCutscene(fromBase) {
     if (mama) { await npcWalk(mama, 12.6, 12.2, 'down'); await npcWalk(mama, 12.6, 14.6, 'left'); }
     SFX.door(); BUUR.doorOpen = true; W.npcs.push(brom); await wait(250);
     await npcWalk(brom, 11.5, 15.6, 'right', .4);
-    await talk([['mama', 'Hallo! O… buurman Brom.'],
-      ['brom', 'Dag mevrouw. Zeg eens… Wordt u niet gek van al dat lawaai?'],
-      ['mama', 'Lawaai? Welk lawaai? Ik heb niks gehoord, hoor.'],
-      ['brom', 'Niks gehoord?! Het bonkt en het rommelt de hele dag! Onder de grond! Mijn kopjes rammelen in de kast!'],
-      ['mama', 'Nou, dat zal de verwarming wel zijn. Fijne dag nog, buurman!']]);
-    if (mama) mama.dir = 'down';
-    brom.mood = 'roep'; SFX.grumble();
-    await talk([['brom', 'Ho, ho! Niet zo snel! Ik weet heus wel wie u in bescherming neemt. Uw eigen {p}! En die {f}!']]);
-    brom.dir = 'up'; await wait(300);
-    await talk([['brom', 'Ik zag ze al door de tuin struinen. Ik houd ze in de gaten, die twee!']]);
-    brom.mood = 'boos'; brom.dir = 'right';
-    await talk([['mama', 'Dag, buurman Brom!']]);
+    if (deep) {
+      await talk([['mama', 'Hallo! O… buurman Brom. Alweer?'],
+        ['brom', 'Ja, alweer! Eerst bonkte het onder de grond. Maar nu… NU BONKT HET NOG DIEPER!'],
+        ['brom', 'Het zoemt en het boort, alsof er een reuzenboor onder mijn schuur zit! Mijn tuinkabouters trillen ervan!'],
+        ['mama', 'Een reuzenboor? Ach buurman, dat zal de verwarming wel weer zijn. Fijne dag nog!']]);
+      if (mama) mama.dir = 'down';
+      brom.mood = 'roep'; SFX.grumble();
+      await talk([['brom', 'De verwarming?! Ik weet heus wie er boort. {p} en {f}!']]);
+      brom.dir = 'up'; await wait(300);
+      await talk([['brom', 'Ik ga camera’s ophangen. En ik houd mijn waterpistool klaar! Dan betrap ik ze wel!']]);
+      brom.mood = 'boos'; brom.dir = 'right';
+      await talk([['mama', 'Dag, buurman Brom!']]);
+    } else {
+      await talk([['mama', 'Hallo! O… buurman Brom.'],
+        ['brom', 'Dag mevrouw. Zeg eens… Wordt u niet gek van al dat lawaai?'],
+        ['mama', 'Lawaai? Welk lawaai? Ik heb niks gehoord, hoor.'],
+        ['brom', 'Niks gehoord?! Het bonkt en het rommelt de hele dag! Onder de grond! Mijn kopjes rammelen in de kast!'],
+        ['mama', 'Nou, dat zal de verwarming wel zijn. Fijne dag nog, buurman!']]);
+      if (mama) mama.dir = 'down';
+      brom.mood = 'roep'; SFX.grumble();
+      await talk([['brom', 'Ho, ho! Niet zo snel! Ik weet heus wel wie u in bescherming neemt. Uw eigen {p}! En die {f}!']]);
+      brom.dir = 'up'; await wait(300);
+      await talk([['brom', 'Ik zag ze al door de tuin struinen. Ik houd ze in de gaten, die twee!']]);
+      brom.mood = 'boos'; brom.dir = 'right';
+      await talk([['mama', 'Dag, buurman Brom!']]);
+    }
     await npcWalk(brom, 11.5, 16.8, 'down', .5); W.npcs = W.npcs.filter(n => n !== brom); BUUR.doorOpen = false; SFX.door(); W.shake = .4;
     await wait(400);
-    if (mama) { mama.dir = 'up'; await talk([['mama', 'Pff, wat een mopperkont. Bonken onder de grond… Hoe verzint hij het!']]); npcWalk(mama, 14.6, 10.7, 'right').then(() => { mama.cut = null; }); }
+    if (mama) { mama.dir = 'up'; await talk([['mama', deep ? 'Camera’s en een waterpistool… Wat een fantasie heeft die man!' : 'Pff, wat een mopperkont. Bonken onder de grond… Hoe verzint hij het!']]); npcWalk(mama, 14.6, 10.7, 'right').then(() => { mama.cut = null; }); }
     W.camTarget = { x: 11.1 * T, y: 10.4 * T };
-    await talk([['p', '(fluistert) Oei… Hij heeft onze basis gehoord!'],
+    if (deep) await talk([['p', '(fluistert) Oei… Hij heeft het Boorbeest gehoord!'],
+      ['f', 'Dan moeten we nóg slimmer zijn dan hij. Camera’s of niet!'],
+      ['p', 'Precies. Elke streek die lukt, graaft de Supermol meteen verder. Ook in de diepe kelder!']]);
+    else await talk([['p', '(fluistert) Oei… Hij heeft onze basis gehoord!'],
       ['f', 'Psst, {p}… We moeten hem te slim af zijn…'],
       ['p', 'Ja! Voordat de Supermol verder graaft, halen we eerst een streek bij hem uit. Dan let hij niet op het gegraaf!'],
       ['f', 'Kom, in het Hoofdkwartier maken we een Buurman-plan! 🤫']]);
-    S.buur.met = true; S.buur.metDay = dayKey(); save(); achieve('buurman'); buildBaseMap();
+    if (deep) { S.buur.deepMet = true; save(); achieve('dieper'); }
+    else { S.buur.met = true; S.buur.metDay = dayKey(); save(); achieve('buurman'); }
+    buildBaseMap();
   } finally {
     W.camTarget = null; W.camFree = false; W.f.hold = false; if (W.mol) W.mol.hold = false; BUUR.doorOpen = false; W.npcs = W.npcs.filter(n => !n.cutActor);
     W.npcs.forEach(n => { if (n.cut && n.cut.done) { const d = n.cut.done; n.cut = null; d(); } });
@@ -3269,11 +3517,12 @@ async function buurCutscene(fromBase) {
 }
 // Wanneer speelt het filmpje? Nieuw spel: na het eerste potje bowlen (lawaai!) belt hij aan. Oude saves: de volgende keer in huis.
 function buurTick(dt) {
-  if ((S.buur.met && !BUUR.replay) || BUUR.cut || !flag('baseOpen') || !S.introDone || !WORLD.map) return;
+  const deep = S.buur.met && !S.buur.deepMet && !BUUR.replay && robotBuilt('boorbeest') && flag('diepSeen');
+  if ((S.buur.met && !BUUR.replay && !deep) || BUUR.cut || !flag('baseOpen') || !S.introDone || !WORLD.map) return;
   if (WORLD.busy || DLG.open || anyOverlay() || MG.active || (typeof MEAL !== 'undefined' && MEAL.st && MEAL.st !== 'idle')) { BUUR.wait = 0; return; }
-  const id = WORLD.map.id, ready = id === 'huis' || (id === 'basis' && S.buur.fresh && S.stats.games.bowling > 0 && !BUUR.replay);
+  const id = WORLD.map.id, ready = deep ? ['huis', 'basis', 'diep'].includes(id) : id === 'huis' || (id === 'basis' && S.buur.fresh && S.stats.games.bowling > 0 && !BUUR.replay);
   if (!ready) { BUUR.wait = 0; return; }
-  BUUR.wait += dt; if (BUUR.wait > (id === 'huis' ? 1.2 : 2.2)) { BUUR.wait = 0; buurCutscene(id !== 'huis'); }
+  BUUR.wait += dt; if (BUUR.wait > (id === 'huis' ? 1.2 : 2.2)) { BUUR.wait = 0; buurCutscene(id !== 'huis', deep); }
 }
 // Nieuws: er wacht een kamer (na een nieuwe dag)
 async function buurNews() {
@@ -3570,7 +3819,7 @@ $('#volSfx').addEventListener('input', e => { S.sfxVol = +e.target.value; $('#vo
 $('#volSfx').addEventListener('change', () => SFX.coin());
 $('#oudUnlock').addEventListener('click', () => {
   if (!S.started) { S.chars.p = S.chars.p || Object.assign({}, DEFAULT_P, { name: 'Speler' }); S.chars.f = S.chars.f || Object.assign({}, DEFAULT_F); S.started = true; S.introDone = true; S.created = S.created || now(); }
-  unlockAllRooms(); SFX.build(); renderOuders(); toast('🔓 Alle kamers zijn open en de Vliegbot is gebouwd!', 'gold');
+  unlockAllRooms(); SFX.build(); renderOuders(); toast('🔓 Alle kamers zijn open en de Vliegbot en het Boorbeest zijn gebouwd!', 'gold');
 });
 $('#oudEnergy').addEventListener('click', () => { addEnergie(3); SFX.energie(); renderOuders(); toast('⚡ +3 energie', 'gold'); });
 $('#oudReset').addEventListener('click', e => { const b = e.currentTarget; if (!b.dataset.armed) { b.dataset.armed = '1'; b.textContent = '⚠️ Echt alles wissen? Tik nog een keer'; return; } resetSave(); WORLD.active = false; renderOuders(); renderTitle(); b.textContent = '✅ Gewist'; });
@@ -3678,7 +3927,7 @@ $('#wbBuild').addEventListener('click', async () => {
   if (r.gives.robot) { const mol = res.querySelector('svg'); if (mol) mol.style.animation = 'bob 1s ease-in-out infinite'; }
   $('#wbMsg').textContent = label; await wait(r.gives.robot ? 2600 : 1600);
   WB.busy = false;
-  if (r.gives.robot) { closeOv('scrWerk'); BUS.emit('built', r.gives.robot); if (r.gives.robot === 'vliegbot') vliegbotBuiltScene(); else supermolBuiltScene(); }
+  if (r.gives.robot) { closeOv('scrWerk'); BUS.emit('built', r.gives.robot); if (r.gives.robot === 'vliegbot') vliegbotBuiltScene(); else if (r.gives.robot === 'boorbeest') boorbeestBuiltScene(); else supermolBuiltScene(); }
   else { WB.placed = new Set(); renderWerkbank(); updateHud(); if (r.gives.item === 'ladder') friendSays('Een ladder! Nu kunnen we bij het zolderluik in de gang!', 5); if (r.gives.item === 'zaklamp') friendSays('Een zaklamp! Nu durven we de kelder in!', 5); }
 });
 
@@ -3687,9 +3936,17 @@ $('#wbBuild').addEventListener('click', async () => {
    HOOFDKWARTIER-MONITOR: kaart van de basis, status van de Supermol met aftellen, energie + 'Graaf nu',
    en alle kamers (gegraven: ga erheen / speel; nog niet: wanneer; binnenkort).
    ========================================================= */
-let hqTimer = 0;
-function openHQ() { SFX.click(); renderHQ(); openOv('scrHQ'); clearInterval(hqTimer); hqTimer = setInterval(() => { if (!$('#scrHQ').classList.contains('show')) { clearInterval(hqTimer); return; } const cd = $('#hqCd'), st = molStatus(); if (cd && st.ms && $('#hqMol').dataset.k === hqKey()) cd.textContent = fmtDur(st.ms); else renderHQStatus(); drawHQMap(); }, 1000); }
-function renderHQ() { renderHQStatus(); drawHQMap(); renderHQRooms(); }
+let hqTimer = 0, hqLevel = 1;
+const hqHub = lvl => lvl === 2 ? 'grot' : 'hq';
+const lvlMap = lvl => lvl === 2 ? 'diep' : 'basis';
+function openHQ() { SFX.click(); hqLevel = WORLD.map && WORLD.map.id === 'diep' ? 2 : 1; renderHQ(); openOv('scrHQ'); clearInterval(hqTimer); hqTimer = setInterval(() => { if (!$('#scrHQ').classList.contains('show')) { clearInterval(hqTimer); return; } const cd = $('#hqCd'), st = molStatus(); if (cd && st.ms && $('#hqMol').dataset.k === hqKey()) cd.textContent = fmtDur(st.ms); else renderHQStatus(); drawHQMap(); }, 1000); }
+function renderHQ() { renderHQStatus(); renderHQLevels(); drawHQMap(); renderHQRooms(); }
+// Twee verdiepingen (na het Boorbeest): knoppen boven de kaart
+function renderHQLevels() {
+  const el = $('#hqLvl'), on = robotBuilt('boorbeest'); el.style.display = on ? '' : 'none'; if (!on) hqLevel = 1;
+  el.querySelectorAll('[data-lvl]').forEach(b => b.classList.toggle('on', +b.dataset.lvl === hqLevel));
+}
+$('#hqLvl').addEventListener('click', e => { const b = e.target.closest('[data-lvl]'); if (!b) return; SFX.click(); hqLevel = +b.dataset.lvl; renderHQLevels(); drawHQMap(); });
 const hqKey = () => [S.energie, S.munten, buurWaiting(), buurLeft(), S.buur.total, nextRoom() && nextRoom().id, (molStatus().ms / 864e5 * 1000 | 0)].join();
 function renderHQStatus() {
   const st = molStatus(), r = st.next; $('#hqMol').dataset.k = hqKey();
@@ -3697,7 +3954,9 @@ function renderHQStatus() {
   $('#hqMol').innerHTML = `<h3>🦫 Supermol</h3><div style="display:flex;gap:10px;align-items:center"><div style="width:90px;flex:none">${SUPERMOL_SVG}</div><div>${buurWaiting() ? `<b>Supermol staat klaar!</b><br>Wil graven: <b>${r.emoji} ${r.name}</b><br>👀 Maar buurman Brom luistert mee…` : r && flag('baseOpen') ? `<b>Supermol graaft…</b><br>Volgende kamer: <b>${r.emoji} ${r.name}</b><br>Klaar: morgen${buurGateOn() ? ' (na een streek 🤫)<br>⛏️ Of meteen: win een streek op het Buurman-plan!' : ''}` : st.text}</div></div>
     ${st.ms ? `<div class="hqbar"><i style="width:${(frac * 100).toFixed(1)}%"></i></div><div>Nog <span class="cd" id="hqCd">${fmtDur(st.ms)}</span></div>` : ''}
     ${robotBuilt('vliegbot') ? `<div style="display:flex;gap:10px;align-items:center;margin-top:6px"><div style="width:60px;flex:none">${VLIEGBOT_SVG}</div><div style="font-size:.9em">🚁 <b>Vliegbot</b>: hoge plekken ${flyCount()}/${allFlySpots().length}</div></div>`
-      : S.seenItems.vliegtekening ? `<div style="font-size:.9em;margin-top:6px">🚁 Vliegbot-onderdelen: <b>${vliegHave()}/${VLIEG_PARTS.length}</b></div>` : ''}`;
+      : S.seenItems.vliegtekening ? `<div style="font-size:.9em;margin-top:6px">🚁 Vliegbot-onderdelen: <b>${vliegHave()}/${VLIEG_PARTS.length}</b></div>` : ''}
+    ${robotBuilt('boorbeest') ? `<div style="display:flex;gap:10px;align-items:center;margin-top:6px"><div style="width:60px;flex:none">${BOORBEEST_SVG}</div><div style="font-size:.9em">⛏️ <b>Boorbeest</b>: diepe kelder ${roomList().filter(r => roomLevel(r) === 2 && isDug(r.id)).length}/${roomList().filter(r => roomLevel(r) === 2).length} kamers · 🛗 lift in het HQ</div></div>`
+      : S.seenItems.boortekening ? `<div style="font-size:.9em;margin-top:6px">⛏️ Boorbeest-onderdelen: <b>${boorHave()}/${BOOR_PARTS.length}</b></div>` : ''}`;
   const can = canDigNow() && !!r && flag('baseOpen'), dl = econDigsLeft(S.econ, dayKey()), gate = buurGateOn(), waiting = buurWaiting();
   $('#hqEnergy').innerHTML = `<h3>⚡ Energie</h3><div class="energybar">${Array.from({ length: DIG_COST }, (_, i) => `<span class="eb ${i < S.energie ? 'on' : ''}"></span>`).join('')}<b style="margin-left:6px">${S.energie}</b></div>
     <p style="margin:.4em 0;font-size:.85em">${dl ? `Met ${DIG_COST} energie graaft de Supermol <b>meteen</b> een extra kamer (vandaag nog ${dl}×).` : `⏸️ ${ECON_DIG_TXT}`}</p>
@@ -3715,16 +3974,19 @@ function renderHQStatus() {
 }
 function renderHQRooms() {
   const nr = nextRoom();
-  $('#hqRooms').innerHTML = roomList().map(r => {
-    const d = isDug(r.id), here = WORLD.map && WORLD.map.id === 'basis';
+  const deep = robotBuilt('boorbeest'), under = WORLD.map && ['basis', 'diep'].includes(WORLD.map.id);
+  const list = roomList().filter(r => roomLevel(r) === 1 || deep);
+  const tease = !deep && S.seenItems.boortekening ? `<div class="lvlhead">💎 Diepe kelder: bouw eerst het Boorbeest (onderdelen ${boorHave()}/${BOOR_PARTS.length})</div>` : '';
+  $('#hqRooms').innerHTML = list.map((r, i) => {
+    const d = isDug(r.id), here = under, head = deep && roomLevel(r) === 2 && roomLevel(list[i - 1] || r) === 1 ? '<div class="lvlhead">💎 Verdieping 2: de diepe kelder (lift in het HQ)</div>' : '';
     const status = d ? (r.id === 'hq' ? 'Hier ben je nu' : '✅ Gegraven') : r.soon ? '🔜 Binnenkort' : r === nr ? '⛏️ Wordt vannacht gegraven' : '⏳ Nog niet gegraven';
     const btns = d && r.id !== 'hq' ? `<div class="rbtns">${here ? `<button class="btn small" data-go="${r.id}">🚶 Ga erheen</button>` : ''}${r.minigame && GB.MINIGAMES[r.minigame] ? `<button class="btn small green" data-play="${r.minigame}">▶️ Speel</button>` : ''}</div>` : '';
-    return `<div class="room ${d ? 'dug' : r.soon ? 'soon' : r === nr ? 'next' : 'locked'}"><span class="re">${r.emoji}</span><span><b>${r.name}</b><small>${status}</small>${btns}</span></div>`;
-  }).join('');
+    return head + `<div class="room ${d ? 'dug' : r.soon ? 'soon' : r === nr ? 'next' : 'locked'}"><span class="re">${r.emoji}</span><span><b>${r.name}</b><small>${status}</small>${btns}</span></div>`;
+  }).join('') + tease;
 }
 $('#hqRooms').addEventListener('click', async e => {
   const g = e.target.closest('[data-go]'), p = e.target.closest('[data-play]');
-  if (g) { SFX.click(); closeOv('scrHQ'); await goMap('basis', 'room_' + g.dataset.go, 'whoosh'); }
+  if (g) { SFX.click(); closeOv('scrHQ'); await goMap(lvlMap(roomLevel(GB.ROOMS[g.dataset.go])), 'room_' + g.dataset.go, 'whoosh'); }
   if (p) { SFX.click(); closeOv('scrHQ'); openSetup(p.dataset.play); }
 });
 function drawHQMap() {
@@ -3733,17 +3995,19 @@ function drawHQMap() {
   c.strokeStyle = 'rgba(90,200,255,.08)'; c.lineWidth = 1; for (let x = 0; x < BASE_W; x += 2) { c.beginPath(); c.moveTo(x * k, 0); c.lineTo(x * k, cv.height); c.stroke(); } for (let y = 0; y < BASE_H; y += 2) { c.beginPath(); c.moveTo(0, y * k); c.lineTo(cv.width, y * k); c.stroke(); }
   const nr = nextRoom();
   for (const slot in BASE_SLOTS) {
-    const sl = BASE_SLOTS[slot], r = roomBySlot(slot), [x, y, w, h] = sl.room;
+    const sl = BASE_SLOTS[slot], r = roomBySlot(slot, hqLevel), [x, y, w, h] = sl.room, hub = r && r.id === hqHub(hqLevel);
     if (!r) { c.strokeStyle = 'rgba(90,200,255,.15)'; c.setLineDash([4, 6]); c.strokeRect(x * k, y * k, w * k, h * k); c.setLineDash([]); continue; }
     const d = isDug(r.id);
     if (sl.tunnel) { c.fillStyle = d ? '#2d6ea8' : 'rgba(45,110,168,.25)'; const [tx, ty, tw, tth] = sl.tunnel; c.fillRect(tx * k, ty * k, tw * k, tth * k); }
-    c.fillStyle = d ? (r.id === 'hq' ? '#1b5f8a' : '#1d6b3a') : 'rgba(255,255,255,.04)'; rrect(c, x * k, y * k, w * k, h * k, 10); c.fill();
-    c.lineWidth = 3; c.strokeStyle = d ? (r.id === 'hq' ? '#5ef0ff' : '#4cd964') : r === nr ? ((t * 2 | 0) % 2 ? '#ffd23f' : '#a88a20') : '#3b4767'; if (!d) c.setLineDash([8, 6]); rrect(c, x * k, y * k, w * k, h * k, 10); c.stroke(); c.setLineDash([]);
+    c.fillStyle = d ? (hub ? (hqLevel === 2 ? '#3d2f6b' : '#1b5f8a') : hqLevel === 2 ? '#2b5f6b' : '#1d6b3a') : 'rgba(255,255,255,.04)'; rrect(c, x * k, y * k, w * k, h * k, 10); c.fill();
+    c.lineWidth = 3; c.strokeStyle = d ? (hub ? (hqLevel === 2 ? '#c58bff' : '#5ef0ff') : '#4cd964') : r === nr ? ((t * 2 | 0) % 2 ? '#ffd23f' : '#a88a20') : '#3b4767'; if (!d) c.setLineDash([8, 6]); rrect(c, x * k, y * k, w * k, h * k, 10); c.stroke(); c.setLineDash([]);
     c.textAlign = 'center'; c.textBaseline = 'middle'; c.globalAlpha = d ? 1 : .55; c.font = `${Math.round(k * 2.4)}px system-ui, "Apple Color Emoji", sans-serif`; c.fillText(r.emoji, (x + w / 2) * k, (y + h / 2 - .9) * k); c.globalAlpha = 1;
     c.fillStyle = d ? '#fff' : '#8a96b3'; c.font = `700 ${Math.round(k * .95)}px Fredoka, sans-serif`; c.fillText(r.name, (x + w / 2) * k, (y + h / 2 + 1) * k);
-    c.font = `600 ${Math.round(k * .75)}px Fredoka, sans-serif`; c.fillStyle = d ? '#9ff3ff' : r === nr ? '#ffd23f' : '#6b7a99'; c.fillText(d ? (r.id === 'hq' ? 'Hoofdkwartier' : 'Klaar!') : r.soon ? 'Binnenkort' : r === nr ? 'morgen gegraven' : 'nog niet gegraven', (x + w / 2) * k, (y + h / 2 + 2.2) * k);
+    c.font = `600 ${Math.round(k * .75)}px Fredoka, sans-serif`; c.fillStyle = d ? '#9ff3ff' : r === nr ? '#ffd23f' : '#6b7a99'; c.fillText(d ? (hub ? (hqLevel === 2 ? 'Lift + Boorbeest' : 'Hoofdkwartier') : 'Klaar!') : r.soon ? 'Binnenkort' : r === nr ? 'morgen gegraven' : 'nog niet gegraven', (x + w / 2) * k, (y + h / 2 + 2.2) * k);
   }
-  if (WORLD.map && WORLD.map.id === 'basis') { const px = WORLD.p.x / T * k, py = WORLD.p.y / T * k; c.fillStyle = (t * 3 | 0) % 2 ? '#ff6fa8' : '#fff'; c.beginPath(); c.arc(px, py, 7, 0, 7); c.fill(); c.font = `700 ${Math.round(k * .7)}px Fredoka, sans-serif`; c.fillStyle = '#fff'; c.fillText('jij', px, py - 14); }
+  if (robotBuilt('boorbeest')) { const [lx, ly] = hqLevel === 2 ? [16, 11.5] : [26, 14.5]; c.textAlign = 'center'; c.textBaseline = 'middle'; c.font = `${Math.round(k * 1.4)}px system-ui, "Apple Color Emoji", sans-serif`; c.fillText('🛗', lx * k, ly * k); }
+  if (hqLevel === 2 && isDug('grot')) { c.fillStyle = 'rgba(79,179,232,.75)'; c.fillRect(15 * k, 18 * k, 4 * k, k); c.fillRect(23 * k, 18 * k, 4 * k, k); c.fillStyle = '#b88552'; c.fillRect(19 * k, 18 * k, 4 * k, k); }
+  if (WORLD.map && WORLD.map.id === lvlMap(hqLevel)) { const px = WORLD.p.x / T * k, py = WORLD.p.y / T * k; c.fillStyle = (t * 3 | 0) % 2 ? '#ff6fa8' : '#fff'; c.beginPath(); c.arc(px, py, 7, 0, 7); c.fill(); c.font = `700 ${Math.round(k * .7)}px Fredoka, sans-serif`; c.fillStyle = '#fff'; c.fillText('jij', px, py - 14); }
   c.textBaseline = 'alphabetic';
 }
 
@@ -3893,6 +4157,11 @@ $('#mgExit').onclick = async () => {
 document.addEventListener('visibilitychange', () => { if (document.hidden && MG.active && !MG.paused && !$('#mdResult').classList.contains('show')) mgPauseToggle(true); });
 /* ---------- uitslag + beloning ---------- */
 // res: { scores: [{name, score}], best, winner (index of null), lines: [extra regels] }
+// Robotonderdeel als beloning: niet meer geven als je het al had of als die robot al gebouwd is.
+const partRobot = id => VLIEG_PARTS.includes(id) ? 'vliegbot' : BOOR_PARTS.includes(id) ? 'boorbeest' : null;
+const partNotNeeded = id => { const r = partRobot(id); return !!r && (robotBuilt(r) || !!S.seenItems[id]); };
+// Boorbeest-onderdelen pas geven als je de tekening hebt (anders komt de beloning later, bij een volgend potje)
+const partLocked = id => partRobot(id) === 'boorbeest' && !S.seenItems.boortekening;
 function mgFinish(res) {
   const id = MG.id, g = GB.MINIGAMES[id], today = dayKey();
   const best = res.best != null ? res.best : (g.low ? Math.min : Math.max)(...res.scores.map(s => s.score));
@@ -3901,7 +4170,7 @@ function mgFinish(res) {
   if (S.daily.day !== today) { S.daily.day = today; S.daily.bonus = {}; }
   let bonus = false, eFull = false; if ((res.bonus != null ? res.bonus : best >= g.bonusAt) && !S.daily.bonus[id]) { if (earnEnergie(1)) { S.daily.bonus[id] = 1; bonus = true; } else eFull = true; }
   S.stats.games[id] = (S.stats.games[id] || 0) + 1; if (MG.n > 1) achieve('samen');
-  let first = null; if (g.firstReward && !flag('first_' + id) && !(VLIEG_PARTS.includes(g.firstReward) && (robotBuilt('vliegbot') || S.seenItems[g.firstReward]))) { S.flags['first_' + id] = 1; first = g.firstReward; giveItem(first); }
+  let first = null; if (g.firstReward && !flag('first_' + id) && !partNotNeeded(g.firstReward) && !partLocked(g.firstReward)) { S.flags['first_' + id] = 1; first = g.firstReward; giveItem(first); }
   save();
   const many = res.scores.length > 1;
   $('#resultCard').innerHTML = `<h2>${res.title && !rec ? res.title : res.title && rec ? res.title + ' Nieuw record!' : many ? (res.winner == null ? '🤝 Gelijkspel!' : `🏆 ${esc(res.scores[res.winner].name)} wint!`) : rec ? '🎉 Nieuw record!' : '👏 Goed gespeeld!'}</h2>
@@ -4826,7 +5095,7 @@ class BlokkenGame {
    Linkerhelft scherm = linkerflipper, rechterhelft = rechterflipper. Met z'n tweeën om de beurt per bal.
    ========================================================= */
 registerMinigame({
-  id: 'flipper', name: 'Flipperkast', emoji: '🕹️', music: 'flipper', twoMode: 'om de beurt per bal',
+  id: 'flipper', name: 'Flipperkast', emoji: '🕹️', music: 'flipper', twoMode: 'om de beurt per bal', firstReward: 'turbomotor',
   help: 'Tik <b>links</b> voor de linkerflipper en <b>rechts</b> voor de rechterflipper. Houd vast en laat los om de bal weg te schieten!',
   coins: s => Math.floor(s / 1500) + 2, bonusAt: 15000, bonusText: 'Haal 15.000 punten voor 1 energie (1x per dag)',
   create: api => new FlipperGame(api),
@@ -7130,6 +7399,330 @@ class Belletje {
   }
 }
 
+/* ===== minigames/grotten_logic.js ===== */
+/* =========================================================
+   GROTTENJACHT – logica (zonder DOM, getest in tests/unit.js). Een doolhof in de diepe kelder:
+   pak alle kristallen (.), ontwijk de vleermuizen. Een krachtkristal (o) maakt de vleermuizen bang: dan jaag je ze weg.
+   2 spelers: allebei in hetzelfde doolhof, samen punten en samen 3 levens. 3 doolhoven (niveaus), steeds snellere vleermuizen.
+   Bewegen gaat over het raster: je kiest een richting (want); die wordt gebruikt zodra het kan (ook vooruit gekozen bij een bocht).
+   ========================================================= */
+const GJ_MAZES = [
+[
+'###############',
+'#o.....#.....o#',
+'#.##.#.#.#.##.#',
+'#....#...#....#',
+'##.#.##.##.#.##',
+'#..#.......#..#',
+'#.##.#.B.#.##.#',
+'#....#####....#',
+'##.#.......#.##',
+'#..#.##.##.#..#',
+'#.P..#...#..Q.#',
+'#o.#...#...#.o#',
+'###############'],
+[
+'###############',
+'#o...........o#',
+'#.###.#.#.###.#',
+'#.............#',
+'#.#.###.###.#.#',
+'#.#...#B#...#.#',
+'#.###.#.#.###.#',
+'#.....#.#.....#',
+'###.#.....#.###',
+'#...#.###.#...#',
+'#.#P...#...Q#.#',
+'#o..#.....#..o#',
+'###############'],
+[
+'###############',
+'#o...#...#...o#',
+'#.#..#.#.#..#.#',
+'#.#....#....#.#',
+'#...##.B.##...#',
+'###.#.....#.###',
+'#...#.###.#...#',
+'#.#.........#.#',
+'#.#.##.#.##.#.#',
+'#....#.#.#....#',
+'#.##.P...Q.##.#',
+'#o.....#.....o#',
+'###############'],
+];
+const GJ = { COLS: 15, ROWS: 13, LIVES: 3, SPEED: 4.3, HIT: .62, CRYSTAL: 10, POWER: 50, BAT: 200, CLEAR: 500, LIFE: 300, READY: 1.4, HIT_T: 1.5, CLEAR_T: 1.8 };
+const GJ_LEVELS = [
+  { bats: 2, speed: 2.9, fright: 2.1, power: 7, chase: .55, release: 3.5 },
+  { bats: 3, speed: 3.35, fright: 2.3, power: 6, chase: .7, release: 3 },
+  { bats: 4, speed: 3.75, fright: 2.5, power: 5, chase: .82, release: 2.5 },
+];
+const GJ_D = { u: [0, -1], d: [0, 1], l: [-1, 0], r: [1, 0] };
+const GJ_OPP = { u: 'd', d: 'u', l: 'r', r: 'l' };
+const gjOpen = (st, x, y) => x >= 0 && y >= 0 && x < GJ.COLS && y < GJ.ROWS && st.grid[y][x] !== '#';
+function gjBuild(level, seed, n) {
+  const st = { level: 1, seed: seed || 1, n: n || 1, rnd: mulberry32(seed || 1), score: 0, lives: GJ.LIVES, t: 0, events: [], done: false, won: false, combo: 0, power: 0, batsAway: 0 };
+  st.players = Array.from({ length: st.n }, (_, i) => ({ i, x: 0, y: 0, dir: null, want: null, crystals: 0, moving: false }));
+  gjLoad(st, level || 1); return st;
+}
+// laad doolhof van een niveau (score en levens blijven)
+function gjLoad(st, level) {
+  st.level = level; const L = st.L = GJ_LEVELS[Math.min(level, GJ_LEVELS.length) - 1], rows = GJ_MAZES[(level - 1) % GJ_MAZES.length];
+  st.grid = rows.map(r => r.split('')); st.left = 0; st.starts = {}; st.home = null;
+  for (let y = 0; y < GJ.ROWS; y++) for (let x = 0; x < GJ.COLS; x++) {
+    const ch = st.grid[y][x];
+    if (ch === '.' || ch === 'o') st.left++;
+    else if (ch === 'P' || ch === 'Q') { st.starts[ch] = [x, y]; st.grid[y][x] = ' '; }
+    else if (ch === 'B') { st.home = [x, y]; st.grid[y][x] = ' '; }
+  }
+  st.total = st.left;
+  st.bats = Array.from({ length: L.bats }, (_, i) => ({ i, x: 0, y: 0, dir: null, want: null, fright: false, gone: 0, wait: 0 }));
+  gjReset(st); st.ph = 'ready'; st.phT = GJ.READY;
+}
+// iedereen terug naar de start (na een tik van een vleermuis of een nieuw doolhof)
+function gjReset(st) {
+  st.players.forEach((p, i) => { const s = st.starts[i ? 'Q' : 'P'] || st.starts.P; p.x = s[0]; p.y = s[1]; p.dir = null; p.want = null; p.moving = false; });
+  st.bats.forEach((b, i) => { b.x = st.home[0]; b.y = st.home[1]; b.dir = null; b.want = null; b.fright = false; b.gone = 0; b.wait = .4 + i * st.L.release; });
+  st.power = 0; st.combo = 0;
+}
+// beweeg e met snelheid v; pick(e, cx, cy) kiest bij een kruispunt (vleermuizen)
+function gjMove(st, e, v, dt, pick) {
+  let left = v * dt, moved = false;
+  for (let guard = 0; left > 1e-9 && guard < 20; guard++) {
+    // omkeren mag altijd
+    if (e.want && e.dir && GJ_OPP[e.dir] === e.want) e.dir = e.want;
+    const cx = Math.round(e.x), cy = Math.round(e.y);
+    // zonder richting staat iets altijd midden in een vakje (vangnet)
+    if (!e.dir) { e.x = cx; e.y = cy; }
+    if (Math.abs(e.x - cx) < 1e-9 && Math.abs(e.y - cy) < 1e-9) {
+      e.x = cx; e.y = cy; if (pick) pick(e, cx, cy);
+      if (e.want && gjOpen(st, cx + GJ_D[e.want][0], cy + GJ_D[e.want][1])) e.dir = e.want;
+      if (!e.dir || !gjOpen(st, cx + GJ_D[e.dir][0], cy + GJ_D[e.dir][1])) break;
+    }
+    const [dx, dy] = GJ_D[e.dir], pos = dx ? e.x : e.y, s = dx || dy;
+    const target = s > 0 ? Math.floor(pos + 1e-9) + 1 : Math.ceil(pos - 1e-9) - 1, step = Math.min(left, Math.abs(target - pos));
+    const np = Math.abs(target - pos) - step < 1e-9 ? target : pos + s * step;
+    if (dx) e.x = np; else e.y = np; left -= step; moved = true;
+  }
+  e.moving = moved; return moved;
+}
+const gjNear = (st, x, y) => { let best = null, bd = 1e9; for (const p of st.players) { const d = Math.abs(p.x - x) + Math.abs(p.y - y); if (d < bd) { bd = d; best = p; } } return best; };
+// vleermuis kiest een richting: niet omkeren (tenzij het niet anders kan); jagen op de dichtstbijzijnde speler, of bang wegvliegen
+function gjBatPick(st, b, cx, cy) {
+  const opts = Object.keys(GJ_D).filter(d => gjOpen(st, cx + GJ_D[d][0], cy + GJ_D[d][1]));
+  let cand = opts.filter(d => !b.dir || d !== GJ_OPP[b.dir]); if (!cand.length) cand = opts; if (!cand.length) return;
+  const p = gjNear(st, cx, cy), dist = d => Math.hypot(cx + GJ_D[d][0] - p.x, cy + GJ_D[d][1] - p.y);
+  const smart = st.rnd() < (b.fright ? .75 : st.L.chase);
+  if (smart && p) { cand.sort((a, c) => b.fright ? dist(c) - dist(a) : dist(a) - dist(c)); b.want = cand[0]; }
+  else b.want = cand[Math.floor(st.rnd() * cand.length)];
+}
+// inputs: [{ dir: 'u'|'d'|'l'|'r'|null }] per speler
+function gjStep(st, inputs, dt) {
+  st.events = []; if (st.done) return st; st.t += dt;
+  inputs.forEach((inp, i) => { if (inp && inp.dir && st.players[i]) st.players[i].want = inp.dir; });
+  if (st.ph === 'ready') { st.phT -= dt; if (st.phT <= 0) st.ph = 'play'; return st; }
+  if (st.ph === 'hit') { st.phT -= dt; if (st.phT <= 0) { if (st.lives <= 0) { st.ph = 'over'; st.done = true; st.events.push({ type: 'over' }); } else { gjReset(st); st.ph = 'ready'; st.phT = GJ.READY; } } return st; }
+  if (st.ph === 'clear') {
+    st.phT -= dt;
+    if (st.phT <= 0) { if (st.level >= GJ_LEVELS.length) { st.ph = 'win'; st.won = true; st.done = true; st.score += st.lives * GJ.LIFE; st.events.push({ type: 'win' }); } else { gjLoad(st, st.level + 1); st.events.push({ type: 'level', level: st.level }); } }
+    return st;
+  }
+  // spelers
+  for (const p of st.players) {
+    gjMove(st, p, GJ.SPEED, dt);
+    const cx = Math.round(p.x), cy = Math.round(p.y);
+    if (Math.abs(p.x - cx) < .3 && Math.abs(p.y - cy) < .3) {
+      const ch = st.grid[cy][cx];
+      if (ch === '.' || ch === 'o') {
+        st.grid[cy][cx] = ' '; st.left--; p.crystals++;
+        if (ch === '.') { st.score += GJ.CRYSTAL; st.events.push({ type: 'crystal', p: p.i, x: cx, y: cy }); }
+        else { st.score += GJ.POWER; st.power = st.L.power; st.combo = 0; st.bats.forEach(b => { if (!b.gone && b.wait <= 0) { b.fright = true; if (b.dir) b.want = GJ_OPP[b.dir]; } }); st.events.push({ type: 'power', p: p.i, x: cx, y: cy }); }
+      }
+    }
+  }
+  if (st.power > 0) { st.power -= dt; if (st.power <= 0) { st.power = 0; st.bats.forEach(b => { b.fright = false; }); st.events.push({ type: 'powerEnd' }); } }
+  // vleermuizen
+  for (const b of st.bats) {
+    if (b.gone > 0) { b.gone -= dt; if (b.gone <= 0) { b.gone = 0; b.x = st.home[0]; b.y = st.home[1]; b.dir = null; b.fright = false; b.wait = .6; st.events.push({ type: 'batBack', b: b.i }); } continue; }
+    if (b.wait > 0) { b.wait -= dt; continue; }
+    gjMove(st, b, b.fright ? st.L.fright : st.L.speed, dt, (e, cx, cy) => gjBatPick(st, e, cx, cy));
+  }
+  // botsingen
+  for (const b of st.bats) {
+    if (b.gone > 0 || b.wait > 0) continue;
+    for (const p of st.players) {
+      if (Math.hypot(p.x - b.x, p.y - b.y) > GJ.HIT) continue;
+      if (b.fright) { const pts = GJ.BAT * Math.pow(2, Math.min(st.combo, 3)); st.combo++; st.score += pts; b.gone = 3.5; b.fright = false; st.batsAway++; st.events.push({ type: 'bat', p: p.i, b: b.i, pts, x: b.x, y: b.y }); break; }
+      st.lives--; st.ph = 'hit'; st.phT = GJ.HIT_T; st.hitBy = p.i; st.events.push({ type: 'hit', p: p.i, x: p.x, y: p.y }); return st;
+    }
+  }
+  if (st.left <= 0) { st.score += GJ.CLEAR; st.ph = 'clear'; st.phT = GJ.CLEAR_T; st.events.push({ type: 'clear', level: st.level }); }
+  return st;
+}
+// computer-speler voor de tests: kortste weg naar het dichtstbijzijnde kristal, met een boog om enge vleermuizen
+function gjBot(st, i) {
+  const p = st.players[i]; if (!p) return { dir: null };
+  const cx = Math.round(p.x), cy = Math.round(p.y), danger = new Set();
+  for (const b of st.bats) if (!b.gone && b.wait <= 0 && !b.fright) { const bx = Math.round(b.x), by = Math.round(b.y); for (let dy = -2; dy <= 2; dy++) for (let dx = -2; dx <= 2; dx++) if (Math.abs(dx) + Math.abs(dy) <= 2) danger.add((bx + dx) + ',' + (by + dy)); }
+  const goal = (x, y) => { const ch = st.grid[y][x]; if (st.power > 1.2 && st.bats.some(b => b.fright && !b.gone && Math.round(b.x) === x && Math.round(b.y) === y)) return true; return ch === '.' || ch === 'o'; };
+  const bfs = avoid => {
+    const seen = new Map([[cx + ',' + cy, null]]), q = [[cx, cy]];
+    while (q.length) {
+      const [x, y] = q.shift();
+      if ((x !== cx || y !== cy) && goal(x, y)) { let k = x + ',' + y, first = null; while (seen.get(k)) { first = seen.get(k); k = first.from; } return first ? first.dir : null; }
+      for (const d of Object.keys(GJ_D)) { const nx = x + GJ_D[d][0], ny = y + GJ_D[d][1], k = nx + ',' + ny; if (!gjOpen(st, nx, ny) || seen.has(k) || (avoid && danger.has(k))) continue; seen.set(k, { from: x + ',' + y, dir: d }); q.push([nx, ny]); }
+    }
+    return null;
+  };
+  let dir = bfs(true);
+  // geen veilige weg: vluchten naar de buur-tegel die het verst van de enge vleermuizen ligt
+  if (!dir) {
+    let best = -1; for (const d of Object.keys(GJ_D)) { const nx = cx + GJ_D[d][0], ny = cy + GJ_D[d][1]; if (!gjOpen(st, nx, ny)) continue; const m = Math.min(99, ...st.bats.filter(b => !b.gone && !b.fright).map(b => Math.abs(b.x - nx) + Math.abs(b.y - ny))); if (m > best) { best = m; dir = d; } }
+    if (!dir) dir = bfs(false);
+  }
+  return { dir };
+}
+
+/* ===== minigames/grotten.js ===== */
+/* =========================================================
+   GROTTENJACHT – speelautomaat in de diepe kelder (logica in grotten_logic.js).
+   Besturen: vegen of slepen (de richting wordt onthouden tot de bocht er is), of tikken waar je heen wilt.
+   2 spelers: linkerhelft van het scherm = speler 1, rechterhelft = speler 2. Toetsen: WASD (speler 1) en pijltjes (speler 2; solo ook).
+   ========================================================= */
+registerMinigame({
+  id: 'grottenjacht', name: 'Grottenjacht', emoji: '🦇', music: 'grottenjacht', twoMode: 'samen in één doolhof',
+  help: 'Pak alle <b>kristallen</b> in het doolhof, maar pas op voor de <b>vleermuizen</b>! Een <b>krachtkristal</b> maakt ze bang: jaag ze weg! <b>Veeg</b> of tik om te sturen.',
+  coins: s => Math.floor(s / 200) + 2, bonusAt: 3000, bonusText: 'Haal 3.000 punten voor 1 energie (1x per dag)',
+  create: api => new GrottenGame(api),
+});
+const GJ_KEYS = { p0: { w: 'u', s: 'd', a: 'l', d: 'r' }, p1: { arrowup: 'u', arrowdown: 'd', arrowleft: 'l', arrowright: 'r' } };
+const GJ_DIRNAME = { u: 'up', d: 'down', l: 'left', r: 'right' };
+class GrottenGame {
+  constructor(api) {
+    this.api = api; this.c = api.ctx; this.n = api.players.length; this.t = 0; this.started = false; this.ended = false;
+    this.st = gjBuild(1, (Math.random() * 1e9) | 0, this.n); this.pend = this.st.players.map(() => null); this.ptrs = {}; this.pops = []; this.parts = []; this.swipeFx = [];
+    this.W = api.W; this.H = api.H; this.layout();
+    this.onDown = e => this.pDown(e); this.onMove = e => this.pMove(e); this.onUp = e => this.pUp(e);
+    api.cv.addEventListener('pointerdown', this.onDown); addEventListener('pointermove', this.onMove); addEventListener('pointerup', this.onUp); addEventListener('pointercancel', this.onUp);
+    api.banner(this.n > 1 ? `<h2>🦇 Samen op grottenjacht!</h2><p>Links stuurt ${esc(api.players[0].name)}, rechts ${esc(api.players[1].name)}. Veeg om te sturen!</p>` : `<h2>🦇 Grottenjacht</h2><p>Veeg of tik om te sturen. Pak alle kristallen!</p>`, { ms: 1900 }).then(() => { if (MG.inst === this) this.started = true; });
+  }
+  destroy() { const c = this.api.cv; c.removeEventListener('pointerdown', this.onDown); removeEventListener('pointermove', this.onMove); removeEventListener('pointerup', this.onUp); removeEventListener('pointercancel', this.onUp); }
+  resize(W, H) { this.W = W; this.H = H; this.layout(); }
+  layout() {
+    const W = this.W, H = this.H, top = this.api.top, hudH = 30, land = W > H * 1.15;
+    this.hudBox = { x: 8, y: top, w: W - 16, h: hudH };
+    const y0 = top + hudH + 8, y1 = H - (land ? 8 : 34), side = land && this.n > 1 ? 70 : 8;
+    const cs = Math.max(8, Math.floor(Math.min((W - side * 2) / GJ.COLS, (y1 - y0) / GJ.ROWS)));
+    this.cs = cs; this.land = land; this.mx = Math.round((W - cs * GJ.COLS) / 2); this.my = Math.round(y0 + Math.max(0, (y1 - y0 - cs * GJ.ROWS) / 2));
+  }
+  // welke speler hoort bij deze plek op het scherm?
+  who(x) { return this.n > 1 && x >= this.W / 2 ? 1 : 0; }
+  pDown(e) { const [x, y] = this.api.xy(e); this.ptrs[e.pointerId] = { x, y, sx: x, sy: y, pl: this.who(x), moved: false }; e.preventDefault(); }
+  pMove(e) {
+    const p = this.ptrs[e.pointerId]; if (!p) return; const [x, y] = this.api.xy(e), dx = x - p.x, dy = y - p.y, thr = Math.max(14, this.cs * .55);
+    if (Math.hypot(dx, dy) < thr) return;
+    const d = Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'r' : 'l') : (dy > 0 ? 'd' : 'u'); this.steer(p.pl, d); p.x = x; p.y = y; p.moved = true;
+    this.swipeFx.push({ x, y, d, t: 0, pl: p.pl });
+  }
+  pUp(e) {
+    const p = this.ptrs[e.pointerId]; if (!p) return; delete this.ptrs[e.pointerId];
+    if (p.moved) return;
+    // tikken: stuur naar de getikte plek (ten opzichte van je eigen poppetje)
+    const pl = this.st.players[p.pl]; if (!pl) return;
+    const px = this.mx + (pl.x + .5) * this.cs, py = this.my + (pl.y + .5) * this.cs, dx = p.sx - px, dy = p.sy - py;
+    if (Math.hypot(dx, dy) < this.cs * .6) return;
+    this.steer(p.pl, Math.abs(dx) > Math.abs(dy) ? (dx > 0 ? 'r' : 'l') : (dy > 0 ? 'd' : 'u'));
+  }
+  steer(i, d) { if (i < this.pend.length) this.pend[i] = d; }
+  key(k, down) {
+    if (!down) return false;
+    if (GJ_KEYS.p0[k]) { this.steer(0, GJ_KEYS.p0[k]); return true; }
+    if (GJ_KEYS.p1[k]) { this.steer(this.n > 1 ? 1 : 0, GJ_KEYS.p1[k]); return true; }
+    return false;
+  }
+  tick(dt) {
+    this.t += dt; const st = this.st;
+    if (this.started && !this.ended) {
+      gjStep(st, this.pend.map(d => ({ dir: d })), dt); this.pend = this.pend.map(() => null);
+      for (const ev of st.events) this.onEvent(ev);
+      if (st.done && !this.ended) this.finish();
+    }
+    this.pops = this.pops.filter(p => (p.t += dt) < 1.1); this.parts = this.parts.filter(p => (p.t += dt) < p.life); this.swipeFx = this.swipeFx.filter(s => (s.t += dt) < .35);
+    for (const p of this.parts) { p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 60 * dt; }
+    this.draw();
+  }
+  cellXY(x, y) { return [this.mx + (x + .5) * this.cs, this.my + (y + .5) * this.cs]; }
+  burst(x, y, cols, n) { const [px, py] = this.cellXY(x, y); for (let i = 0; i < n; i++) { const a = Math.random() * 7, v = 30 + Math.random() * 80; this.parts.push({ x: px, y: py, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 30, t: 0, life: .5 + Math.random() * .4, col: cols[i % cols.length] }); } }
+  onEvent(ev) {
+    if (ev.type === 'crystal') { if ((this.st.total - this.st.left) % 2) SFX.move(); }
+    else if (ev.type === 'power') { SFX.zap(); this.burst(ev.x, ev.y, ['#ff8ad8', '#fff', '#c58bff'], 14); }
+    else if (ev.type === 'bat') { SFX.correct(); this.pops.push({ x: ev.x, y: ev.y, txt: '+' + ev.pts, t: 0 }); this.burst(ev.x, ev.y, ['#c58bff', '#fff'], 12); }
+    else if (ev.type === 'hit') { SFX.nope(); this.burst(ev.x, ev.y, ['#ffd23f', '#fff', '#ff6fa8'], 16); }
+    else if (ev.type === 'clear') { SFX.fanfare(); achieve('grot1'); }
+    else if (ev.type === 'level') { SFX.build(); }
+    else if (ev.type === 'over') SFX.gameover();
+  }
+  finish() {
+    this.ended = true; const st = this.st, pl = this.api.players, names = pl.map(p => p.name).join(' & ');
+    if (st.score >= 5000) achieve('grot5k');
+    const lines = [st.won ? '🏆 Alle 3 de doolhoven leeg! Wat een kristaljagers!' : `Je kwam tot doolhof <b>${st.level}</b> van ${GJ_LEVELS.length}.`];
+    if (this.n > 1) lines.push(pl.map((p, i) => `${esc(p.name)}: 💎 ${st.players[i].crystals}`).join(' · '));
+    if (st.batsAway) lines.push(`🦇 ${st.batsAway} ${st.batsAway === 1 ? 'vleermuis' : 'vleermuizen'} weggejaagd`);
+    setTimeout(() => { if (MG.inst === this) this.api.end({ title: st.won ? '🏆 Alle kristallen!' : null, scores: [{ name: names, score: st.score, text: fmtNum(st.score) + ' punten' }], winner: null, best: st.score, lines }); }, 1300);
+  }
+  draw() {
+    const c = this.c, W = this.W, H = this.H, dpr = this.api.dpr, st = this.st, cs = this.cs, mx = this.mx, my = this.my, t = this.t;
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const bg = c.createLinearGradient(0, 0, 0, H); bg.addColorStop(0, '#1a1430'); bg.addColorStop(1, '#2a1f45'); c.fillStyle = bg; c.fillRect(0, 0, W, H);
+    // 2 spelers: wie veegt waar
+    if (this.n > 1) { c.fillStyle = 'rgba(63,140,255,.08)'; c.fillRect(0, 0, W / 2, H); c.fillStyle = 'rgba(255,138,31,.08)'; c.fillRect(W / 2, 0, W / 2, H); }
+    // doolhof
+    this.api.hud(mx, my, cs * GJ.COLS, cs * GJ.ROWS, 'doolhof');
+    c.fillStyle = '#120d22'; rrect(c, mx - 3, my - 3, cs * GJ.COLS + 6, cs * GJ.ROWS + 6, 10); c.fill();
+    for (let y = 0; y < GJ.ROWS; y++) for (let x = 0; x < GJ.COLS; x++) {
+      const ch = st.grid[y][x], X = mx + x * cs, Y = my + y * cs;
+      if (ch === '#') { c.fillStyle = '#4b3f86'; rrect(c, X + .5, Y + .5, cs - 1, cs - 1, cs * .22); c.fill(); c.fillStyle = '#6a5bb0'; rrect(c, X + 1.5, Y + 1.5, cs - 3, cs * .32, cs * .15); c.fill(); if (hash2(x, y) > .85) drawCrystal(c, X + cs * .5, Y + cs * .85, cs * .35, CRYSTAL_COLS[(x + y) % 4]); }
+      else if (ch === '.') { const s = cs * .14; c.fillStyle = '#7ef0ff'; c.beginPath(); c.moveTo(X + cs / 2, Y + cs / 2 - s * 1.4); c.lineTo(X + cs / 2 + s, Y + cs / 2); c.lineTo(X + cs / 2, Y + cs / 2 + s * 1.4); c.lineTo(X + cs / 2 - s, Y + cs / 2); c.fill(); }
+      else if (ch === 'o') { const k = 1 + Math.sin(t * 6 + x) * .12; c.fillStyle = 'rgba(255,138,216,.25)'; c.beginPath(); c.arc(X + cs / 2, Y + cs / 2, cs * .46 * k, 0, 7); c.fill(); drawCrystal(c, X + cs / 2, Y + cs * .78, cs * .55 * k, '#ff8ad8'); }
+    }
+    // spelers (met een hoofdlampje)
+    st.players.forEach((p, i) => {
+      const [px, py] = this.cellXY(p.x, p.y), blink = st.ph === 'hit' && st.hitBy === i && (t * 10 | 0) % 2;
+      const g = c.createRadialGradient(px, py, 2, px, py, cs * 1.6); g.addColorStop(0, 'rgba(255,240,170,.35)'); g.addColorStop(1, 'rgba(255,240,170,0)'); c.fillStyle = g; c.beginPath(); c.arc(px, py, cs * 1.6, 0, 7); c.fill();
+      if (!blink) drawKid(c, this.api.players[i].look, px, py + cs * .42, GJ_DIRNAME[p.dir] || 'down', t * 8, p.moving, { scale: cs / 36, t });
+      if (this.n > 1) { c.fillStyle = this.api.players[i].col; c.beginPath(); c.arc(px, py - cs * .95, Math.max(3, cs * .12), 0, 7); c.fill(); }
+    });
+    // vleermuizen
+    for (const b of st.bats) { if (b.gone > 0) continue; const [bx, by] = this.cellXY(b.x, b.y); const flash = b.fright && st.power < 2 && (t * 6 | 0) % 2; gjDrawBat(c, bx, by - (b.wait > 0 ? Math.sin(t * 3 + b.i) * cs * .1 : 0), cs * .46, t + b.i, b.fright, flash); }
+    for (const p of this.parts) { c.globalAlpha = 1 - p.t / p.life; dot(c, p.x, p.y, 2.5, p.col); } c.globalAlpha = 1;
+    c.textAlign = 'center'; c.textBaseline = 'middle';
+    for (const p of this.pops) { const [px, py] = this.cellXY(p.x, p.y); c.globalAlpha = 1 - p.t / 1.1; c.font = `800 ${Math.max(12, cs * .6)}px Fredoka, sans-serif`; c.fillStyle = '#fff'; c.strokeStyle = '#4b3f86'; c.lineWidth = 3; c.strokeText(p.txt, px, py - p.t * 30); c.fillText(p.txt, px, py - p.t * 30); } c.globalAlpha = 1;
+    for (const s of this.swipeFx) { c.globalAlpha = 1 - s.t / .35; c.font = `800 26px Fredoka, sans-serif`; c.fillStyle = s.pl ? '#ffb066' : '#9cc4ff'; c.fillText({ u: '▲', d: '▼', l: '◀', r: '▶' }[s.d], s.x, s.y); } c.globalAlpha = 1;
+    // midden-tekst
+    const msg = !this.started ? '' : st.ph === 'ready' ? (st.level > 1 && st.phT > GJ.READY - .9 ? `Doolhof ${st.level}!` : 'Klaar?') : st.ph === 'clear' ? '💎 Doolhof leeg!' : st.ph === 'hit' ? (st.lives > 0 ? 'Au! Een vleermuis!' : 'Oei…') : st.ph === 'over' ? 'Game over' : st.ph === 'win' ? '🏆 Gewonnen!' : '';
+    if (msg) { const fs = Math.max(16, Math.min(cs * 1.1, 34)); c.font = `800 ${fs}px Fredoka, sans-serif`; const w = c.measureText(msg).width + 28, cx = mx + cs * GJ.COLS / 2, cy = my + cs * 5.5; this.api.hud(cx - w / 2, cy - fs * .8, w, fs * 1.6, 'melding'); c.fillStyle = 'rgba(18,13,34,.85)'; rrect(c, cx - w / 2, cy - fs * .8, w, fs * 1.6, 12); c.fill(); c.fillStyle = '#ffd23f'; c.fillText(msg, cx, cy); }
+    // HUD bovenin
+    const B = this.hudBox; this.api.hud(B.x, B.y, B.w, B.h, 'score'); c.fillStyle = 'rgba(255,255,255,.9)'; rrect(c, B.x, B.y, B.w, B.h, 12); c.fill();
+    const fs = B.w < 330 ? 13 : 15; c.font = `700 ${fs}px Fredoka, sans-serif`; c.fillStyle = '#1f2a44'; c.textBaseline = 'middle'; const yy = B.y + B.h / 2;
+    c.textAlign = 'left'; c.fillText(`⭐ ${fmtNum(st.score)}`, B.x + 10, yy);
+    c.textAlign = 'center'; c.fillText(`💎 ${st.left}  ·  Doolhof ${st.level}/${GJ_LEVELS.length}`, B.x + B.w * .52, yy);
+    c.textAlign = 'right'; c.fillText('❤️'.repeat(Math.max(0, st.lives)) + (st.power > 0 ? `  ⚡${Math.ceil(st.power)}` : ''), B.x + B.w - 10, yy);
+    // uitleg onderin (staand) of opzij (liggend, 2 spelers)
+    c.font = `600 13px Fredoka, sans-serif`; c.fillStyle = 'rgba(255,255,255,.7)'; c.textBaseline = 'middle';
+    if (!this.land) { const y = Math.min(H - 16, my + cs * GJ.ROWS + 18); c.textAlign = 'center'; c.fillText(this.n > 1 ? `◀ ${this.api.players[0].name} veegt links · ${this.api.players[1].name} veegt rechts ▶` : 'Veeg of tik om te sturen', W / 2, y); }
+    else if (this.n > 1 && mx > 64) { c.save(); c.translate(mx / 2, my + cs * GJ.ROWS / 2); c.rotate(-Math.PI / 2); c.textAlign = 'center'; c.fillText(`${this.api.players[0].name}: veeg hier`, 0, 0); c.restore(); c.save(); c.translate(W - mx / 2, my + cs * GJ.ROWS / 2); c.rotate(Math.PI / 2); c.textAlign = 'center'; c.fillText(`${this.api.players[1].name}: veeg hier`, 0, 0); c.restore(); }
+    c.textBaseline = 'alphabetic';
+  }
+}
+function gjDrawBat(c, x, y, s, t, fright, flash) {
+  const flap = Math.sin(t * 14) * .5, body = fright ? (flash ? '#fff' : '#3f6fe0') : '#6b3fa0', wing = fright ? (flash ? '#dfe8ff' : '#2c4fae') : '#4a2a78';
+  c.fillStyle = wing; c.strokeStyle = LINE; c.lineWidth = 1.2;
+  for (const sd of [-1, 1]) { c.beginPath(); c.moveTo(x + sd * s * .2, y - s * .1); c.quadraticCurveTo(x + sd * s * .9, y - s * (.7 + flap * .4), x + sd * s * 1.15, y - s * (.05 + flap * .3)); c.quadraticCurveTo(x + sd * s * .8, y + s * .05, x + sd * s * .65, y + s * .3); c.quadraticCurveTo(x + sd * s * .45, y + s * .05, x + sd * s * .2, y + s * .25); c.closePath(); c.fill(); c.stroke(); }
+  c.fillStyle = body; c.beginPath(); c.ellipse(x, y, s * .38, s * .45, 0, 0, 7); c.fill(); c.stroke();
+  c.beginPath(); c.moveTo(x - s * .3, y - s * .3); c.lineTo(x - s * .22, y - s * .65); c.lineTo(x - s * .08, y - s * .38); c.moveTo(x + s * .3, y - s * .3); c.lineTo(x + s * .22, y - s * .65); c.lineTo(x + s * .08, y - s * .38); c.fill();
+  if (fright) { dot(c, x - s * .13, y - s * .08, s * .07, '#fff'); dot(c, x + s * .13, y - s * .08, s * .07, '#fff'); c.strokeStyle = '#fff'; c.lineWidth = 1.2; c.beginPath(); c.moveTo(x - s * .18, y + s * .18); for (let i = 1; i <= 4; i++) c.lineTo(x - s * .18 + i * s * .09, y + s * (i % 2 ? .12 : .18)); c.stroke(); }
+  else { dot(c, x - s * .13, y - s * .08, s * .1, '#ffd23f'); dot(c, x + s * .13, y - s * .08, s * .1, '#ffd23f'); dot(c, x - s * .12, y - s * .08, s * .04, '#1f1430'); dot(c, x + s * .14, y - s * .08, s * .04, '#1f1430'); c.fillStyle = '#fff'; c.beginPath(); c.moveTo(x - s * .1, y + s * .15); c.lineTo(x - s * .05, y + s * .27); c.lineTo(x, y + s * .15); c.moveTo(x + s * .02, y + s * .15); c.lineTo(x + s * .07, y + s * .27); c.lineTo(x + s * .12, y + s * .15); c.fill(); }
+}
+
 /* ===== minigames/klusje.js ===== */
 /* =========================================================
    KLUSJE VOOR MAMA – de 'tenzij' als de pogingen van vandaag op zijn (1x per dag: +1 poging).
@@ -7236,6 +7829,7 @@ window.__gb = {
   GOLF_HOLES, GOLF, golfPar, FLY_SPOTS, allFlySpots, flyCount, flyDone, nearFlySpot, flyCutscene, buildVliegbotNow, vliegHave, VLIEG_PARTS, findNear, nearLabel, lootAvail, takeItem, goalKey, nextGoal, hint,
   ECON, econCardLine, canDigNow, ECON_FULL_TXT, econDigsLeft, econEnergyLeft,
   BUUR, PRANKS, buurGateOn, buurWaiting, buurLeft, buurLevel, buurCutscene, buurSkip, openBuurPlan, renderBuurPlan, buurRequestNow, buurDigAfterWin, buurKlusDone, buurLocked, drawBrom, drawGnome, buurNews,
+  buurFinish, BOOR_PARTS, boorHave, buildBoorbeestNow, digDeepStart, buildDeepMap, buildBaseMap, roomList, roomLevel, partNotNeeded, gjBuild, GJ, GJ_LEVELS,
 };
 
 </script>
