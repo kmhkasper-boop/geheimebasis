@@ -2631,7 +2631,7 @@ function cinema(scenes, opt) {
     WORLD.busy++; CINE.on = true; CINE.n = scenes.length; el.style.display = 'block'; if (opt.music) musicWant(opt.music);
     const size = () => { const d = Math.min(2, devicePixelRatio || 1); cv.width = Math.round(innerWidth * d); cv.height = Math.round(innerHeight * d); return d; };
     let dpr = size();
-    const setTxt = () => { const s = scenes[i]; CINE.i = i; if (!s || !s.text) { txt.style.display = 'none'; return; } const w = s.who ? CINE_WHO()[s.who] || s.who : ''; txt.innerHTML = (w ? `<b style="color:#3f6fe0">${esc(w)}:</b> ` : '') + s.text; txt.style.display = 'block'; };
+    const setTxt = () => { const s = scenes[i]; CINE.i = i; if (!s || !s.text) { txt.style.display = 'none'; return; } const w = s.who ? CINE_WHO()[s.who] || s.who : ''; txt.innerHTML = (w ? `<b style="color:#3f6fe0">${esc(w)}:</b> ` : '') + fillNames(s.text); txt.style.display = 'block'; };
     const finish = () => { if (done) return; done = true; cancelAnimationFrame(raf); el.style.display = 'none'; removeEventListener('resize', onRs); el.onpointerdown = null; CINE.on = false; CINE.skip = CINE.next = null; WORLD.busy--; if (opt.music) musicWant(opt.keepMusic ? opt.music : prevMus); res(); };
     const next = () => { i++; t = 0; if (i >= scenes.length) finish(); else { setTxt(); if (scenes[i].sfx && SFX[scenes[i].sfx]) SFX[scenes[i].sfx](); } };
     const onRs = () => { dpr = size(); }; addEventListener('resize', onRs);
