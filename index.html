@@ -73,6 +73,7 @@ h1,h2,h3{margin:0}
 .topbar{display:flex;align-items:center;gap:10px;width:100%}
 .topbar .title{flex:1;text-align:center;font-weight:700;font-size:1.15em;background:#fff;border-radius:999px;padding:.35em .8em;box-shadow:var(--shadow);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 .mcard{background:#fff;border-radius:28px;box-shadow:0 8px 0 rgba(31,42,68,.22);padding:18px 20px;width:min(560px,94vw);max-height:92vh;overflow-y:auto;text-align:center;display:flex;flex-direction:column;gap:10px;align-items:center;animation:popin .3s;touch-action:pan-y}
+#resultCard .btnrow{position:sticky;bottom:-18px;margin-bottom:-18px;padding:8px 0 18px;background:#fff;width:100%;justify-content:center;z-index:2}
 /* startkaart op een lage (liggende) telefoon: de Start-knop blijft altijd in beeld, ook als de kaart scrolt */
 #setupCard > .btnrow{position:sticky;bottom:-18px;background:#fff;padding:8px 0 18px;margin-bottom:-18px;width:100%;justify-content:center;z-index:1;box-shadow:0 -10px 12px -8px rgba(255,255,255,.95)}
 .mcard h2{font-size:1.45em}
@@ -219,6 +220,8 @@ h1,h2,h3{margin:0}
 .bp .bslot svg{width:78%;height:78%}
 .bp .bslot .em{font-size:2em}
 .bp.simple{aspect-ratio:auto;min-height:260px;display:flex;align-items:center;justify-content:center;gap:4%;padding:40px 16px 20px;flex-wrap:wrap}
+.bp .bptorn{position:absolute;right:0;top:0;width:30%;height:100%;background:#7a5230;clip-path:polygon(40% 0,100% 0,100% 100%,22% 100%,34% 88%,18% 76%,32% 62%,14% 50%,30% 36%,16% 24%,34% 12%);display:flex;align-items:center;justify-content:flex-end;padding-right:4%;z-index:2}
+.bp .bptorn span{font-weight:700;font-size:.85em;color:#ffe6c4;transform:rotate(-8deg)}
 .bp.simple .bslot{position:relative;transform:none;width:min(120px,24vw)}
 .bp.simple .op{font-size:2.2em;font-weight:700}
 .bp .bpres{position:absolute;inset:0;display:none;align-items:center;justify-content:center;flex-direction:column}
@@ -660,7 +663,7 @@ h1,h2,h3{margin:0}
     <h2>👪 Voor ouders</h2>
     <div><h3>🦫 Zo werkt de graafdag</h3>
       <p>Als de Supermol gebouwd is, graaft hij meteen het <b>Hoofdkwartier</b> en de <b>Bowlingbaan</b>. Daarna graaft hij <b>elke echte kalenderdag één nieuwe kamer</b> (om middernacht, op de klok van dit apparaat). Was je kind een paar dagen weg, dan staan die kamers er bij terugkomst allemaal. Volgorde: Blokkenkamer, Flipperkastkamer, Minigolf, Racebaan, Escaperoom.</p>
-      <p>⛏️ <b>De diepe kelder</b> (aflevering 4): als de basis af is, ligt in de Escaperoom de tekening van het <b>Boorbeest</b>. Met 5 onderdelen (het gouden tandwiel uit de eik, de Flipperkast, de ketel in de kelder en twee gewonnen streken bij buurman Brom) bouwen de kinderen het aan de werkbank. Dan komt er een <b>lift</b> in het Hoofdkwartier naar een tweede verdieping met een kristalgrot en nieuwe spelkamers (de <b>Grottenjacht</b>, het <b>Mijnkarretje</b> en <b>Kristallen matchen</b>); die worden op dezelfde manier gegraven. Elk spel kan alleen of met z'n tweeën op één apparaat, en de dagelijkse grens voor munten en energie geldt ook hier. Meer kamers volgen in de volgende versies.</p>
+      <p>⛏️ <b>De diepe kelder</b> (aflevering 4): als de basis af is, ligt in de Escaperoom de tekening van het <b>Boorbeest</b>. Met 5 onderdelen (het gouden tandwiel uit de eik, de Flipperkast, de ketel in de kelder en twee gewonnen streken bij buurman Brom) bouwen de kinderen het aan de werkbank. Dan komt er een <b>lift</b> in het Hoofdkwartier naar een tweede verdieping met een kristalgrot en nieuwe spelkamers (de <b>Grottenjacht</b>, het <b>Mijnkarretje</b>, <b>Kristallen matchen</b> en de <b>Ondergrondse rivier</b>); die worden op dezelfde manier gegraven. Bij de rivier dobbert flessenpost met een half afgescheurde tekening van de <b>Ruimtebot</b>: de 4 onderdelen (raketmotor: de rivier uitvaren, zonnepanelen: Kristallen matchen, maanwielen: de finish van het Mijnkarretje, antenne: met de Vliegbot bovenop de kristalpilaar) kun je al verzamelen, bouwen kan pas in een volgende aflevering. Elk spel kan alleen of met z'n tweeën op één apparaat, en de dagelijkse grens voor munten en energie geldt ook hier.</p>
       <p>Sneller graven kan met <b>⚡ energie-batterijen</b>: met 3 stuks graaft de Supermol meteen een extra kamer (knop <b>Graaf nu</b> op de monitor). Energie vind je verstopt in huis en tuin, krijg je van mol-brandstof (wortel + appel, die groeien elke dag opnieuw), één keer per dag per spel bij een goede score, en in de energie-automaat (50 munten). Munten verdien je met de spelletjes.</p>
       <div class="orow"><span id="oudStatus" class="small-note"></span></div>
       <p id="oudEcon" class="small-note"></p>
@@ -1031,6 +1034,9 @@ const TRACKS = {
   kristallen: { naam: 'Kristallen matchen', bpm: 108, root: 349.23, scale: MAJOR, swing: .12, lead: 'bell', lv: .13, bv: .2, pad: .03, stab: 0,
     bass: 'r . . o f . o .', drums: { k: 'x . . . x . . .', h: '. . x . . . x .', t: '. . . . . . . x' }, prog: 'I iii IV V I vi ii V',
     mel: ['4 . 7 . 9 . 7 .', '11 . 9 7 4 - . .', '5 . 9 . 11 . 9 .', '7 - - - . . . .', '4 . 7 . 9 . 11 .', '12 . 11 9 7 - . .', '5 . 4 . 2 . 4 .', '0 - - - . . . .'] },
+  rivier: { naam: 'Ondergrondse rivier', bpm: 118, root: 261.63, scale: MAJOR, swing: .18, lead: 'bell', lv: .13, bv: .21, pad: .025, stab: 0,
+    bass: 'r . o . f . o .', drums: { k: 'x . . x . . x .', h: '. . x . . . x .', t: '. . . . . x . .' }, prog: 'I vi IV V I iii IV V',
+    mel: ['0 . 4 . 7 . 9 7', '5 . 4 . 2 - . .', '4 . 5 . 7 . 4 .', '2 - - - . . . .', '7 . 9 . 11 . 9 7', '9 . 7 . 5 - . .', '4 . 2 . 4 . 5 .', '0 - - - . . . .'] },
 };
 const tok = s => s.trim().split(/\s+/);
 function scheduleBar(ctx, out, tr, bar, t0) {
@@ -1556,6 +1562,23 @@ const BOOR_SVG_PARTS = {
 };
 function boorSVG(parts) { return `<svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg" stroke-linejoin="round" stroke-linecap="round">${['rupsbanden', 'turbomotor', 'body', 'tandwiel', 'reuzenboor', 'koplampen'].filter(p => !parts || parts.includes(p)).map(p => BOOR_SVG_PARTS[p]).join('')}</svg>`; }
 const BOORBEEST_SVG = boorSVG(null);
+/* ---------- aflevering 4C: de Ruimtebot (robot 4, teaser) – iconen en tekening ---------- */
+Object.assign(ICON_SVG, {
+  ruimtetekening: SV(`<path d="M8 12 H52 V40 L46 46 L40 40 L34 50 L28 44 L22 52 L16 46 L8 52 Z" fill="#1f3f8a" ${K}/><circle cx="30" cy="24" r="7" fill="none" stroke="#dbe8ff" stroke-width="2.5"/><path d="M30 31 v8 M22 36 h16 M16 18 l2 2 M44 16 l1 2 M46 30 l2 1" stroke="#dbe8ff" stroke-width="2.5"/><path d="M40 20 l6 -6 l1 5z" fill="#ffd23f"/>`),
+  raketmotor: SV(`<path d="M22 8 h20 l4 10 v22 h-28 v-22z" fill="#e6ecf5" ${K}/><rect x="24" y="18" width="16" height="10" rx="3" fill="#ff5d73" ${K}/><path d="M22 40 l-4 8 h28 l-4 -8" fill="#5d6577" ${K}/><path d="M24 48 l4 10 l4 -6 l4 6 l4 -10" fill="#ffb627" ${K}/>`),
+  zonnepanelen: SV(`<rect x="4" y="16" width="24" height="30" rx="2" fill="#2a5fd6" ${K}/><rect x="36" y="16" width="24" height="30" rx="2" fill="#2a5fd6" ${K}/><path d="M12 16 v30 M20 16 v30 M4 31 h24 M44 16 v30 M52 16 v30 M36 31 h24" stroke="#8fb8ff" stroke-width="2"/><rect x="28" y="28" width="8" height="6" fill="#5d6577" ${K}/>`),
+  antenne: SV(`<path d="M32 22 V54" stroke="#5d6577" stroke-width="5"/><path d="M18 56 h28" stroke="#1f2a44" stroke-width="5"/><circle cx="32" cy="16" r="7" fill="#ff5d73" ${K}/><path d="M18 8 q-6 8 0 16 M46 8 q6 8 0 16 M12 4 q-9 12 0 24 M52 4 q9 12 0 24" fill="none" stroke="#ffd23f" stroke-width="3"/>`),
+  maanwielen: SV(`<circle cx="18" cy="38" r="13" fill="#3b3f4a" ${K}/><circle cx="46" cy="38" r="13" fill="#3b3f4a" ${K}/><circle cx="18" cy="38" r="6" fill="#c9d1df" ${K}/><circle cx="46" cy="38" r="6" fill="#c9d1df" ${K}/><path d="M18 22 h28" stroke="#5d6577" stroke-width="5"/><g fill="#ffd23f"><circle cx="9" cy="14" r="2"/><circle cx="54" cy="12" r="2.5"/><circle cx="32" cy="8" r="2"/></g>`),
+});
+const RUIMTE_SVG_PARTS = {
+  maanwielen: `<g class="p-maanwielen"><path d="M64 128 h72" stroke="#5d6577" stroke-width="8"/><g fill="#3b3f4a" stroke="#1f2a44" stroke-width="4"><circle cx="64" cy="134" r="18"/><circle cx="136" cy="134" r="18"/></g><g fill="#c9d1df" stroke="#1f2a44" stroke-width="3"><circle cx="64" cy="134" r="7"/><circle cx="136" cy="134" r="7"/></g></g>`,
+  zonnepanelen: `<g class="p-zonnepanelen"><path d="M58 80 H40 M142 80 H160" stroke="#5d6577" stroke-width="6"/><g fill="#2a5fd6" stroke="#1f2a44" stroke-width="4"><rect x="4" y="58" width="38" height="44" rx="3"/><rect x="158" y="58" width="38" height="44" rx="3"/></g><path d="M17 58 v44 M29 58 v44 M4 80 h38 M171 58 v44 M183 58 v44 M158 80 h38" stroke="#8fb8ff" stroke-width="2.5"/></g>`,
+  raketmotor: `<g class="p-raketmotor"><rect x="84" y="112" width="32" height="14" rx="4" fill="#5d6577" stroke="#1f2a44" stroke-width="4"/><path d="M88 126 l6 22 l6 -10 l6 10 l6 -22z" fill="#ffb627" stroke="#e8403a" stroke-width="3"/></g>`,
+  body: `<g class="p-body"><rect x="58" y="54" width="84" height="64" rx="18" fill="#e6ecf5" stroke="#1f2a44" stroke-width="4"/><rect x="74" y="74" width="52" height="28" rx="6" fill="#c9d1df" stroke="#1f2a44" stroke-width="3"/><g fill="#ff5d73"><circle cx="86" cy="88" r="5"/></g><g fill="#5ef08a"><circle cx="100" cy="88" r="5"/></g><g fill="#ffd23f"><circle cx="114" cy="88" r="5"/></g><circle cx="100" cy="36" r="26" fill="#9ff3ff" fill-opacity=".55" stroke="#1f2a44" stroke-width="4"/><rect x="82" y="26" width="36" height="22" rx="8" fill="#e6ecf5" stroke="#1f2a44" stroke-width="3"/><circle cx="92" cy="37" r="4.5" fill="#1f2a44"/><circle cx="108" cy="37" r="4.5" fill="#1f2a44"/><circle cx="93.5" cy="35.5" r="1.6" fill="#fff"/><circle cx="109.5" cy="35.5" r="1.6" fill="#fff"/><path d="M95 43 q5 4 10 0" stroke="#1f2a44" stroke-width="2.5" fill="none"/></g>`,
+  antenne: `<g class="p-antenne"><path d="M100 10 V-2" stroke="#5d6577" stroke-width="4" transform="translate(0 2)"/><circle cx="100" cy="2" r="6" fill="#ff5d73" stroke="#1f2a44" stroke-width="3"/><path d="M88 0 q-5 6 0 12 M112 0 q5 6 0 12" fill="none" stroke="#ffd23f" stroke-width="3"/></g>`,
+};
+function ruimteSVG(parts) { return `<svg viewBox="0 -8 200 168" xmlns="http://www.w3.org/2000/svg" stroke-linejoin="round" stroke-linecap="round">${['zonnepanelen', 'maanwielen', 'raketmotor', 'body', 'antenne'].filter(p => !parts || parts.includes(p)).map(p => RUIMTE_SVG_PARTS[p]).join('')}</svg>`; }
+const RUIMTEBOT_SVG = ruimteSVG(null);
 
 /* ===== core/dialog.js ===== */
 /* =========================================================
@@ -1717,10 +1740,17 @@ function registerItem(o) { GB.ITEMS[o.id] = Object.assign({ cat: 'materiaal' }, 
   { id: 'rupsbanden', name: 'Reuzenrupsbanden', cat: 'onderdeel', desc: 'Superbrede rupsbanden voor een zware robot.' },
   { id: 'koplampen', name: 'Superkoplampen', cat: 'onderdeel', desc: 'Felle lampen, want diep onder de grond is het pikkedonker.' },
   { id: 'turbomotor', name: 'Turbomotor', cat: 'onderdeel', desc: 'VROEM! Een motor met heel veel kracht.' },
+  // Aflevering 4C: de Ruimtebot (robot 4). Nog niet te bouwen: de tekening is afgescheurd (wordt vervolgd)
+  { id: 'ruimtetekening', name: 'Ruimtetekening', cat: 'sleutel', desc: 'Een tekening van een robot voor de ruimte: de Ruimtebot! Er is een stuk van afgescheurd…' },
+  { id: 'raketmotor', name: 'Raketmotor', cat: 'onderdeel', desc: 'Een kleine raketmotor. Pssjoew! Daarmee vlieg je naar de sterren.' },
+  { id: 'zonnepanelen', name: 'Zonnepanelen', cat: 'onderdeel', desc: 'Blauwe zonnepanelen: stroom uit zonlicht, ook in de ruimte.' },
+  { id: 'antenne', name: 'Ruimte-antenne', cat: 'onderdeel', desc: 'Een antenne die heel ver kan bellen. Tot op de maan!' },
+  { id: 'maanwielen', name: 'Maanwielen', cat: 'onderdeel', desc: 'Dikke wielen om over de maan te rijden.' },
 ].forEach(registerItem);
 const VLIEG_PARTS = ['propellers', 'afstandsbediening', 'camera', 'lichtframe'];
 const ROBOT_PARTS = ['boorkop', 'wieltjes', 'accu', 'motor', 'schep'];
 const BOOR_PARTS = ['tandwiel', 'reuzenboor', 'rupsbanden', 'koplampen', 'turbomotor'];
+const RUIMTE_PARTS = ['raketmotor', 'zonnepanelen', 'antenne', 'maanwielen'];
 const CAT_NAME = { onderdeel: '🔩 Robotonderdeel', gereedschap: '🧰 Gereedschap', materiaal: '📦 Materiaal', deco: '🎨 Versiering', eten: '🍎 Eten', sleutel: '📜 Belangrijk' };
 
 /* ===== data/recipes.js ===== */
@@ -1744,6 +1774,9 @@ registerRecipe({ id: 'koekjestrommel', name: 'Appelkoekjes', icon: 'koekjestromm
   hint: 'Koekje van mama + appel uit de boom. Om buurman Brom blij te maken!', when: () => S.buur && S.buur.met });
 registerRecipe({ id: 'boorbeest', name: 'Boorbeest', icon: 'robot', needs: ['tandwiel', 'reuzenboor', 'rupsbanden', 'koplampen', 'turbomotor'], gives: { robot: 'boorbeest' }, blueprint: 'boortekening', once: true,
   hint: 'Het gouden tandwiel + 4 onderdelen: in de tuin van buurman Brom (streken), hoog in de kelder (Vliegbot) en in de Flipperkastkamer.', lockedText: 'Ligt er een nieuwe tekening in de laatste kamer, de Escaperoom?' });
+registerRecipe({ id: 'ruimtebot', name: 'Ruimtebot', icon: 'robot', needs: ['raketmotor', 'zonnepanelen', 'antenne', 'maanwielen'], gives: { robot: 'ruimtebot' }, blueprint: 'ruimtetekening', once: true, soon: true,
+  hint: 'Raketmotor (de rivier uitvaren), zonnepanelen (Kristallen matchen), maanwielen (finish bij het Mijnkarretje) en een antenne (hoog in de Kristalgrot: Vliegbot!).',
+  lockedText: 'Drijft er iets op de ondergrondse rivier?', when: () => robotBuilt('boorbeest') });
 
 /* ===== data/robots.js ===== */
 /* =========================================================
@@ -1774,6 +1807,14 @@ registerRobot({
     { part: 'koplampen', x: 52, y: 10, label: 'Koplampen' },
   ],
 });
+// Aflevering 4C: de Ruimtebot. Teaser: de tekening is afgescheurd, dus bouwen kan nog niet (soon in het recept)
+registerRobot({
+  id: 'ruimtebot', name: 'Ruimtebot', job: 'Vliegt met zijn raketmotor naar de sterren… maar eerst moet de rest van de tekening gevonden worden!', svg: () => RUIMTEBOT_SVG, partsSvg: p => ruimteSVG(p), torn: true,
+  slots: [
+    { part: 'antenne', x: 50, y: 7, label: 'Antenne' }, { part: 'zonnepanelen', x: 12, y: 50, label: 'Zonnepanelen' },
+    { part: 'raketmotor', x: 36, y: 79, label: 'Raketmotor' }, { part: 'maanwielen', x: 60, y: 79, label: 'Maanwielen' },
+  ],
+});
 
 /* ===== data/rooms.js ===== */
 /* =========================================================
@@ -1795,7 +1836,7 @@ registerRoom({ id: 'grot', name: 'Kristalgrot', emoji: '💎', order: 7, level: 
 registerRoom({ id: 'grottenjacht', name: 'Grottenjacht', emoji: '🦇', order: 8, level: 2, slot: 'W', floor: 'Y', machine: 'grottenjacht', minigame: 'grottenjacht', desc: 'Verzamel alle kristallen in het doolhof, maar pas op voor de vleermuizen!' });
 registerRoom({ id: 'mijnkarretje', name: 'Mijnkarretje', emoji: '🛤️', order: 9, level: 2, slot: 'E', floor: 'Y', machine: 'mijnkarretje', minigame: 'mijnkarretje', desc: 'Race met het mijnkarretje over de rails: wissel van spoor, spring en duik!' });
 registerRoom({ id: 'kristallen', name: 'Kristallenkamer', emoji: '💠', order: 10, level: 2, slot: 'N', floor: 'Y', machine: 'kristallen', minigame: 'kristallen', desc: 'Zet drie kristallen op een rij!' });
-registerRoom({ id: 'rivier', name: 'Ondergrondse rivier', emoji: '🛶', order: 11, level: 2, slot: 'S', floor: 'Y', machine: 'rivier', minigame: 'rivier', soon: true, desc: 'Vaar met een bootje over de wilde ondergrondse rivier!' });
+registerRoom({ id: 'rivier', name: 'Ondergrondse rivier', emoji: '🛶', order: 11, level: 2, slot: 'S', floor: 'Y', machine: 'rivier', minigame: 'rivier', desc: 'Vaar met een bootje over de wilde ondergrondse rivier!' });
 const roomLevel = r => r.level || 1;
 // Kan deze kamer al gegraven worden? De diepe kelder pas als het Boorbeest er is.
 const roomOpen = r => roomLevel(r) === 1 || (typeof robotBuilt === 'function' && robotBuilt('boorbeest'));
@@ -1855,6 +1896,10 @@ function registerAch(o) { GB.ACHIEVEMENTS[o.id] = o; }
   { id: 'kristalster', icon: '🌟', name: 'Sterkristal', desc: 'Een sterkristal gemaakt (5 op een rij).' },
   { id: 'kristalcombo', icon: '💥', name: 'Kettingreactie', desc: '300 punten of meer met één zet bij Kristallen matchen.' },
   { id: 'kristal3k', icon: '💠', name: 'Kristalkenner', desc: '3000 punten bij Kristallen matchen.' },
+  { id: 'rivier1', icon: '🛶', name: 'Rivierkapitein', desc: 'De Ondergrondse rivier helemaal uitgevaren.' },
+  { id: 'rivier0', icon: '🌊', name: 'Droge voeten', desc: 'De Ondergrondse rivier uitgevaren zonder ergens tegenaan te botsen.' },
+  { id: 'ruimtetekening', icon: '🍾', name: 'Flessenpost', desc: 'De (afgescheurde) tekening van de Ruimtebot gevonden.' },
+  { id: 'ruimtedelen', icon: '🚀', name: 'Klaar voor de ruimte', desc: 'Alle 4 de onderdelen van de Ruimtebot verzameld.' },
   { id: 'samen', icon: '👫', name: 'Samen spelen', desc: 'Een spel met 2 spelers gespeeld.' },
 ].forEach(registerAch);
 
@@ -2407,6 +2452,8 @@ Object.assign(FURN, {
   },
   liftDyn(c, o, X, Y, W, H, t) { const on = (t * 2 | 0) % 2; box(c, X + W / 2 - 10, Y - 38, 20, 8, 3, '#07131f', 1); c.fillStyle = on ? '#5ef08a' : '#2f7a4a'; c.font = 'bold 8px sans-serif'; c.textAlign = 'center'; c.fillText(o.use && o.use.to === 'diep' ? '▼' : '▲', X + W / 2, Y - 31.5); },
   boorPark(c, o, X, Y, W, H) { const img = boorImg(); if (img.complete && img.naturalWidth) c.drawImage(img, X - 4, Y + H - 92, 115, 92); else box(c, X + 8, Y - 20, W - 16, H + 16, 8, '#e8a33a'); },
+  bottle(c, o, X, Y) { },
+  bottleDyn(c, o, X, Y, W, H, t) { const bob = Math.sin(t * 2.2) * 2, x = X + 16, y = Y + 26 + bob; c.fillStyle = 'rgba(200,240,255,.35)'; c.beginPath(); c.ellipse(x, Y + 30, 13, 4, 0, 0, 7); c.fill(); c.save(); c.translate(x, y); c.rotate(-.5 + Math.sin(t * 1.6) * .15); c.fillStyle = 'rgba(140,220,170,.85)'; c.strokeStyle = LINE; c.lineWidth = 1.5; rrect(c, -10, -5, 16, 10, 4); c.fill(); c.stroke(); c.fillRect(6, -2.5, 6, 5); c.strokeRect(6, -2.5, 6, 5); c.fillStyle = '#a0703f'; c.fillRect(11, -2, 3, 4); if (!S.seenItems.ruimtetekening) { c.fillStyle = '#f4ead2'; c.fillRect(-6, -2.5, 9, 5); } c.restore(); },
   crystals(c, o, X, Y) { const h = hash2(o.x, o.y), k = Math.floor(h * 4); drawCrystal(c, X + 9, Y + 26, 15, CRYSTAL_COLS[k]); drawCrystal(c, X + 23, Y + 27, 12, CRYSTAL_COLS[(k + 1) % 4]); drawCrystal(c, X + 16, Y + 22, 22, CRYSTAL_COLS[(k + 2) % 4]); },
   crystalsDyn(c, o, X, Y, W, H, t) { const s = (Math.sin(t * 2.4 + o.x) + 1) / 2; c.fillStyle = `rgba(255,255,255,${.25 + s * .6})`; c.beginPath(); c.arc(X + 16 + Math.sin(t + o.y) * 4, Y + 2 - s * 4, 1.5 + s * 1.5, 0, 7); c.fill(); },
 });
@@ -2423,7 +2470,9 @@ Object.assign(MACHINE_EXTRA, {
   kristallen: { col: '#c0399b', rug: '#5a3b8a', label: 'KRISTAL', screen(c, sx, sy, sw, sh, t) {
     c.fillStyle = '#160e26'; c.fillRect(sx, sy, sw, sh); const cols = ['#ff5d73', '#ffb627', '#4cd97b', '#3fa9ff', '#b26bff'], n = 5, cw = (sw - 4) / n, rows = Math.floor((sh - 2) / cw), f = Math.floor(t * 1.2);
     for (let y = 0; y < rows; y++) for (let x = 0; x < n; x++) { const hit = y === rows - 1 && x >= 1 && x <= 3 && (t * 1.2) % 1 > .6; if (hit) continue; dot(c, sx + 2 + (x + .5) * cw, sy + 1 + (y + .5) * cw, cw * .36, cols[Math.floor(hash2(x + f * 3, y) * 5)]); } } },
-  rivier: { col: '#1f8ad6', rug: '#1f5f8a', label: 'RIVIER' },
+  rivier: { col: '#1f8ad6', rug: '#1f5f8a', label: 'RIVIER', screen(c, sx, sy, sw, sh, t) {
+    c.fillStyle = '#3b2f52'; c.fillRect(sx, sy, sw, sh); c.fillStyle = '#2a86c4'; c.beginPath(); for (let j = 0; j <= 6; j++) { const yy = sy + sh * j / 6, xx = sx + sw / 2 + Math.sin(j * 1.3 + t * 2) * sw * .12; j ? c.lineTo(xx - sw * .3, yy) : c.moveTo(xx - sw * .3, yy); } for (let j = 6; j >= 0; j--) { const yy = sy + sh * j / 6, xx = sx + sw / 2 + Math.sin(j * 1.3 + t * 2) * sw * .12; c.lineTo(xx + sw * .3, yy); } c.fill();
+    const k = (t * .5) % 1; dot(c, sx + sw * (.3 + .4 * ((k * 3) % 1)), sy + sh * (1 - k), 2.5, '#8d96a8'); c.fillStyle = '#8a5a2b'; c.beginPath(); c.ellipse(sx + sw / 2 + Math.sin(t * 2.5) * 4, sy + sh * .75, 3, 5, 0, 0, 7); c.fill(); } },
 });
 // --- de kaart ---
 function buildDeepMap() {
@@ -2437,6 +2486,8 @@ function buildDeepMap() {
     objects.push(
       { id: 'liftop', kind: 'lift', dyn: 'liftDyn', x: 15, y: 11, w: 2, use: { label: 'Lift', icon: '🛗', action: 'lift', to: 'basis' } },
       { id: 'boorpark', kind: 'boorPark', x: 23, y: 11, w: 3, h: 2, use: { label: 'Bekijk', icon: '⛏️', action: 'boorbeest' } },
+      // aflevering 4C: flessenpost op de rivier (zodra de rivier-kamer gegraven is) met de afgescheurde Ruimtetekening
+      ...(isDug('rivier') ? [{ id: 'flessenpost', kind: 'bottle', dyn: 'bottleDyn', x: 17, y: 17, use: { label: 'Pak', loot: 'ruimtetekening', text: 'Er dobbert een fles in het water, vlak bij de kant. Er zit een opgerold papiertje in!', empty: ['Een lege fles. Het papiertje hebben we al.', 'Flessenpost… wie zou die gestuurd hebben?'] } }] : []),
       ...[[26, 15], [15, 16], [26, 17], [17, 13]].map(([x, y], i) => ({ id: 'kristal' + i, kind: 'crystals', dyn: 'crystalsDyn', x, y, use: { label: 'Bekijk', empty: ['Wat een mooie kristallen! Ze geven een beetje licht.', 'Kristallen in alle kleuren. Net een schatkamer!', 'Niet aankomen… ze zijn zo mooi!'] } })),
     );
     areas.unshift({ name: '💎 Kristalgrot', x: 15, y: 11, w: 12, h: 8 });
@@ -2865,6 +2916,7 @@ requestAnimationFrame(frame);
    ========================================================= */
 const partsHave = () => ROBOT_PARTS.filter(p => S.seenItems[p] || robotBuilt('supermol')).length;
 const hasBlueprint = () => !!S.seenItems.bouwtekening;
+const ruimteHave = () => RUIMTE_PARTS.filter(p => S.seenItems[p]).length;
 const boorHave = () => BOOR_PARTS.filter(p => S.seenItems[p] || robotBuilt('boorbeest')).length;
 function achieve(id) {
   if (S.ach[id] || !GB.ACHIEVEMENTS[id]) return; S.ach[id] = dayKey(); save();
@@ -2886,7 +2938,9 @@ function goalKey() {
   // aflevering 4: het Boorbeest (tekening in de Escaperoom, de laatste kamer)
   if (!robotBuilt('boorbeest') && isDug('escaperoom')) { if (!S.seenItems.boortekening) return 'boorkist'; return boorHave() < BOOR_PARTS.length ? 'boordelen' : 'boorbouwen'; }
   if (robotBuilt('boorbeest') && !flag('diepSeen')) return 'lift';
-  return nextRoom() ? 'wachten' : 'klaar';
+  // aflevering 4C: flessenpost op de rivier met de (afgescheurde) Ruimtetekening, dan de 4 onderdelen
+  if (robotBuilt('boorbeest') && isDug('rivier')) { if (!S.seenItems.ruimtetekening) return 'flessenpost'; if (ruimteHave() < RUIMTE_PARTS.length) return 'ruimtedelen'; }
+  return nextRoom() ? 'wachten' : robotBuilt('boorbeest') && S.seenItems.ruimtetekening ? 'vervolg' : 'klaar';
 }
 function nextGoal() {
   const k = goalKey(), r = nextRoom();
@@ -2912,12 +2966,24 @@ function nextGoal() {
     boordelen: `⛏️ Zoek de onderdelen van het Boorbeest (${boorHave()}/${BOOR_PARTS.length})`,
     boorbouwen: '🛠️ Bouw het Boorbeest aan de werkbank in de speelkamer',
     lift: '🛗 Neem de lift in het Hoofdkwartier naar de diepe kelder',
+    flessenpost: '🍾 Er drijft iets op de rivier in de Kristalgrot…',
+    ruimtedelen: `🚀 Zoek de onderdelen van de Ruimtebot (${ruimteHave()}/${RUIMTE_PARTS.length})`,
+    vervolg: '🚀 Alle onderdelen van de Ruimtebot! Maar waar is de rest van de tekening? Wordt vervolgd…',
   }[k];
 }
 function hint() {
   const k = goalKey();
   if (k === 'boorkist') return 'In de Escaperoom staat een oude kist in de hoek. Wat zou erin zitten?';
   if (k === 'boorbouwen') return 'Alle onderdelen van het Boorbeest! Snel naar de werkbank in de speelkamer.';
+  if (k === 'flessenpost') return 'Bij de rivier in de Kristalgrot, vlak bij de brug, dobbert een fles. Er zit een papiertje in!';
+  if (k === 'ruimtedelen') {
+    const m = RUIMTE_PARTS.find(p => !S.seenItems[p]);
+    if (m === 'raketmotor') return 'Vaar de Ondergrondse rivier helemaal uit, tot de finish. Misschien spoelt er iets aan!';
+    if (m === 'zonnepanelen') return 'Speel een potje Kristallen matchen. Wie weet wat er tussen de kristallen zit!';
+    if (m === 'maanwielen') return 'Haal de finish met het Mijnkarretje! Aan het eind van de mijn staat iets met wielen…';
+    if (m === 'antenne') return robotBuilt('vliegbot') ? 'Helemaal bovenin de Kristalgrot, op een hoge kristalpilaar, steekt iets uit. Vliegbot, kom maar!' : 'Hoog op een kristalpilaar in de grot zit iets. Te hoog… een vliegende robot zou erbij kunnen.';
+  }
+  if (k === 'vervolg') return 'We hebben alle 4 onderdelen van de Ruimtebot! Maar er mist een stuk van de tekening. Dat vinden we vast in een volgend avontuur…';
   if (k === 'lift') return 'In het Hoofdkwartier zit nu een lift. Daarmee gaan we naar beneden!';
   if (k === 'boordelen') {
     const m = BOOR_PARTS.find(p => !S.seenItems[p]);
@@ -3126,6 +3192,8 @@ BUS.on('found', async id => {
   if (id === 'trofee') { friendSays('Een echte Escape-trofee! Wij zijn de slimste speurders van de hele basis!', 5); return; }
   if (id === 'boortekening') { achieve('boortekening'); await talk([['f', 'Kijk! Een BOORBEEST! Een robot met een reuzenboor!'], ['p', 'Daarmee kunnen we nóg dieper graven, onder onze basis!'], ['f', 'Het gouden tandwiel hoort erbij! En dan nog een reuzenboor, rupsbanden, koplampen en een turbomotor.'], ['p', 'Misschien ligt er iets in de tuin van buurman Brom… en hoog in de kelder. Kom, we gaan zoeken!']]); return; }
   if (BOOR_PARTS.includes(id) && (S.seenItems.boortekening || id !== 'tandwiel')) { const n = boorHave(); friendSays(n >= BOOR_PARTS.length ? 'Alle onderdelen van het Boorbeest! Snel naar de werkbank!' : S.seenItems.boortekening ? `Een onderdeel van het Boorbeest! Nog ${BOOR_PARTS.length - n} te gaan!` : 'Dat lijkt wel een robotonderdeel! Goed bewaren!', 5); return; }
+  if (id === 'ruimtetekening') { achieve('ruimtetekening'); await talk([['f', 'Flessenpost! Er zit een tekening in…'], ['p', 'Een RUIMTEBOT! Een robot met een raketmotor, zonnepanelen, een antenne en maanwielen!'], ['f', 'Maar kijk: er is een stuk afgescheurd. Wat zou daar nog op staan?'], ['p', 'Eerst de 4 onderdelen zoeken. Hier in de diepe kelder, denk ik!']]); updateHud(); return; }
+  if (RUIMTE_PARTS.includes(id)) { const n = ruimteHave(); if (n >= RUIMTE_PARTS.length) { achieve('ruimtedelen'); await talk([['f', 'Alle 4 de onderdelen van de Ruimtebot!'], ['p', 'Maar zonder de rest van de tekening kunnen we hem nog niet bouwen…'], ['f', 'Wordt vervolgd! 🚀']]); } else friendSays(`Een onderdeel van de Ruimtebot! Nog ${RUIMTE_PARTS.length - n} te gaan!`, 5); updateHud(); return; }
   if (id === 'tandwiel') { await talk([['p', 'Er staat een vreemd teken op… een robot met een hamer?'], ['f', 'Zou er nóg een robot bestaan? Bewaar dat tandwiel goed!']]); return; }
   if (ROBOT_PARTS.includes(id)) {
     achieve('eerste'); const n = partsHave();
@@ -3175,11 +3243,17 @@ const FLY_SPOTS = {
   huis: [
     { id: 'kast', name: 'de bovenkant van de kledingkast', at: [8, .35], loot: 'robotknuffel', see: 'Boven op mijn kledingkast ligt iets… maar die is veel te hoog!', got: 'Mijn oude robotknuffel! Die was ik al zo lang kwijt!' },
   ],
+  diep: [
+    { id: 'pilaar', name: 'de top van de hoge kristalpilaar', at: [21.5, 10.35], loot: 'antenne', need: 'ruimtetekening', deco: 'pillar', see: 'Helemaal bovenop die hoge kristalpilaar steekt iets uit… een antenne?', got: 'Een ruimte-antenne! Die stond bovenop de kristalpilaar. Voor de Ruimtebot!' },
+  ],
   kelder: [
     { id: 'ketel', name: 'de bovenkant van de grote verwarmingsketel', at: [12.5, .45], loot: 'koplampen', see: 'Boven op de verwarmingsketel ligt iets wat licht geeft…', got: 'Twee superkoplampen! Papa zocht die al jaren. Perfect voor het Boorbeest!' },
   ],
 };
-const allFlySpots = () => Object.values(FLY_SPOTS).flat();
+// need: plek pas zichtbaar als je dat voorwerp gezien hebt (bv. de antenne pas na de Ruimtetekening)
+const flyOpen = sp => !sp.need || !!S.seenItems[sp.need] || !!S.found['fly_' + sp.id];
+const spotsOn = id => (FLY_SPOTS[id] || []).filter(flyOpen);
+const allFlySpots = () => Object.values(FLY_SPOTS).flat().filter(flyOpen);
 const flyDone = sp => !!S.found['fly_' + sp.id];
 const flyCount = () => allFlySpots().filter(flyDone).length;
 const FLY_REACH = 4.2 * T;
@@ -3187,20 +3261,25 @@ function flySpotDist(sp) { const p = WORLD.p; return Math.hypot(p.x - sp.at[0] *
 // voor findNear: dichtstbijzijnde hoge plek die nog iets heeft
 function nearFlySpot() {
   if (!hasVliegTek() || !WORLD.map) return null; let best = null, bd = FLY_REACH;
-  for (const sp of FLY_SPOTS[WORLD.map.id] || []) { if (flyDone(sp)) continue; const d = flySpotDist(sp); if (d < bd) { bd = d; best = sp; } }
+  for (const sp of spotsOn(WORLD.map.id)) { if (flyDone(sp)) continue; const d = flySpotDist(sp); if (d < bd) { bd = d; best = sp; } }
   return best;
 }
 /* ---------- tekenen: schoorsteen, nest, glinsters en de Vliegbot zelf ---------- */
 function drawFlyDecor(c, t) { // onder de figuren (schoorsteen hoort bij het huis)
   const m = WORLD.map; if (!m) return;
-  for (const sp of FLY_SPOTS[m.id] || []) if (sp.deco === 'chimney') {
+  for (const sp of FLY_SPOTS[m.id] || []) if (sp.deco === 'pillar') {
+    // hoge kristalpilaar tegen de grotwand (altijd te zien, ook voor je de tekening hebt)
+    const x = sp.at[0] * T, y0 = sp.at[1] * T + 8, y1 = (sp.at[1] + 1.9) * T; c.fillStyle = '#5a4f86'; c.strokeStyle = LINE; c.lineWidth = 2; c.beginPath(); c.moveTo(x - 9, y1); c.lineTo(x - 6, y0); c.lineTo(x + 6, y0); c.lineTo(x + 10, y1); c.closePath(); c.fill(); c.stroke();
+    drawCrystal(c, x - 8, y1 - 2, 14, '#c58bff'); drawCrystal(c, x + 9, y1 - 4, 11, '#7ef0ff'); drawCrystal(c, x, y0 + 4, 12, '#8affb0');
+  }
+  for (const sp of spotsOn(m.id)) if (sp.deco === 'chimney') {
     const x = (sp.at[0] - .45) * T, y = sp.at[1] * T + 6; box(c, x, y, T * .9, T * .9, 2, '#a3483b', 2); c.fillStyle = '#7a2f25'; c.fillRect(x + 3, y + 10, T * .9 - 6, 3); c.fillRect(x + 3, y + 19, T * .9 - 6, 3); box(c, x - 3, y - 3, T * .9 + 6, 7, 2, '#5d6577', 1.5);
     for (let i = 0; i < 3; i++) { const k = (t * .35 + i / 3) % 1; c.fillStyle = `rgba(230,230,235,${.45 * (1 - k)})`; c.beginPath(); c.arc(x + T * .45 + Math.sin(k * 6 + i) * 6, y - 6 - k * 40, 5 + k * 9, 0, 7); c.fill(); }
   }
 }
 function drawFlyTop(c, t) { // boven de bomen: nest en wat er ligt
   const m = WORLD.map; if (!m) return; const vis = hasVliegTek();
-  for (const sp of FLY_SPOTS[m.id] || []) {
+  for (const sp of spotsOn(m.id)) {
     const x = sp.at[0] * T, y = sp.at[1] * T;
     if (sp.deco === 'nest') { c.fillStyle = '#8a5a35'; c.beginPath(); c.ellipse(x, y + 6, 13, 6, 0, 0, 7); c.fill(); c.strokeStyle = '#5e3a1e'; c.lineWidth = 1.5; for (let i = 0; i < 5; i++) { c.beginPath(); c.moveTo(x - 13 + i * 6, y + 2); c.lineTo(x - 9 + i * 6, y + 10); c.stroke(); } }
     if (!vis || flyDone(sp) || WORLD.flyCarry === sp) continue;
@@ -3256,7 +3335,7 @@ async function vliegbotBuiltScene() {
 GB.TALKS.vlieg = async () => {
   const left = allFlySpots().filter(sp => !flyDone(sp));
   if (!left.length) { await talk([['vlieg', 'Bliep! Ik heb overal gekeken. Ik zoem gewoon lekker met jullie mee!']]); return; }
-  const here = (FLY_SPOTS[WORLD.map.id] || []).filter(sp => !flyDone(sp));
+  const here = spotsOn(WORLD.map.id).filter(sp => !flyDone(sp));
   await talk([['vlieg', here.length ? `Bliep! Hier in de buurt ligt nog iets hoog: ${here.map(s => s.name).join(', ')}. Loop erheen en tik op 🚁 Vlieg!` : `Bliep! Nog ${left.length} hoge ${left.length === 1 ? 'plek' : 'plekken'}: ${left.map(s => s.name).join(', ')}.`]]);
 };
 // alles klaarzetten (ouders: 'Alle kamers openen')
@@ -3759,9 +3838,10 @@ function openBag() {
     : `<div class="panel"><h3>🔩 Onderdelen van de Supermol (${partsHave()}/5)</h3><div class="invgrid">${ROBOT_PARTS.map(p => slotHTML(p, 1, !has(p))).join('')}</div>${hasBlueprint() ? '' : '<p class="small-note">Zoek eerst de bouwtekening in de speelkamer!</p>'}</div>`;
   const vb = robotBuilt('vliegbot') ? `<div class="panel"><h3>🚁 Vliegbot</h3><div style="display:flex;gap:12px;align-items:center"><div style="width:140px">${VLIEGBOT_SVG}</div><div>De Vliegbot vliegt met jullie mee! Hoge plekken bezocht: <b>${flyCount()}/${allFlySpots().length}</b></div></div></div>`
     : S.seenItems.vliegtekening ? `<div class="panel"><h3>🚁 Onderdelen van de Vliegbot (${vliegHave()}/${VLIEG_PARTS.length})</h3><div class="invgrid">${VLIEG_PARTS.map(p => slotHTML(p, 1, !has(p))).join('')}</div></div>` : '';
+  const rb = S.seenItems.ruimtetekening ? `<div class="panel"><h3>🚀 Onderdelen van de Ruimtebot (${ruimteHave()}/${RUIMTE_PARTS.length})</h3><div class="invgrid">${RUIMTE_PARTS.map(p => slotHTML(p, 1, !has(p))).join('')}</div><p class="small-note">Er is een stuk van de tekening afgescheurd… wordt vervolgd!</p></div>` : '';
   const groups = [['📦 Spullen', ['sleutel', 'gereedschap', 'materiaal']], ['🍎 Eten', ['eten']], ['🎨 Versiering voor de basis', ['deco']]];
   const rest = groups.map(([t, cats]) => { const ids = Object.keys(S.inv).filter(i => GB.ITEMS[i] && cats.includes(GB.ITEMS[i].cat) && S.inv[i] > 0); return `<div class="panel"><h3>${t}</h3>${ids.length ? `<div class="invgrid">${ids.map(i => slotHTML(i, S.inv[i])).join('')}</div>` : '<p class="small-note">Nog niks. Zoek in huis en tuin! ✨</p>'}</div>`; }).join('');
-  $('#bagBody').innerHTML = parts + vb + rest;
+  $('#bagBody').innerHTML = parts + vb + rb + rest;
   openOv('scrBag');
 }
 $('#btnBag').addEventListener('click', openBag);
@@ -3849,7 +3929,7 @@ const WB = { rid: null, placed: new Set(), busy: false };
 function recipeVisible(r) { return !r.when || r.when(); }
 function recipeLocked(r) { return r.blueprint && !S.seenItems[r.blueprint] && !S.crafted[r.id]; }
 function recipeDone(r) { return r.once && S.crafted[r.id] > 0; }
-function recipeReady(r) { return !recipeLocked(r) && !recipeDone(r) && r.needs.every(n => has(n)); }
+function recipeReady(r) { return !r.soon && !recipeLocked(r) && !recipeDone(r) && r.needs.every(n => has(n)); }
 function recIcon(r) { return r.icon === 'robot' ? `<div style="width:44px">${GB.ROBOTS[r.gives.robot].svg()}</div>` : iconHTML(r.icon); }
 function openWerkbank(rid) {
   SFX.click(); achieve('werkbank'); WB.placed = new Set(); WB.busy = false;
@@ -3859,7 +3939,7 @@ function openWerkbank(rid) {
 }
 function renderWerkbank() {
   const list = Object.values(GB.RECIPES).filter(recipeVisible), r = GB.RECIPES[WB.rid];
-  $('#recList').innerHTML = list.map(x => `<button class="rec ${x.id === WB.rid ? 'on' : ''} ${recipeReady(x) ? 'ready' : ''}" data-r="${x.id}"><span class="ri">${recIcon(x)}</span><span>${x.name}<small>${recipeLocked(x) ? '🔒 Bouwtekening nodig' : recipeDone(x) ? '✅ Gemaakt' : x.needs.map(n => (has(n) ? '✔︎ ' : '') + itemName(n)).join(' + ')}</small></span></button>`).join('');
+  $('#recList').innerHTML = list.map(x => `<button class="rec ${x.id === WB.rid ? 'on' : ''} ${recipeReady(x) ? 'ready' : ''}" data-r="${x.id}"><span class="ri">${recIcon(x)}</span><span>${x.name}<small>${recipeLocked(x) ? '🔒 Bouwtekening nodig' : x.soon ? `🔜 Wordt vervolgd · ${x.needs.filter(n => has(n)).length}/${x.needs.length} onderdelen` : recipeDone(x) ? '✅ Gemaakt' : x.needs.map(n => (has(n) ? '✔︎ ' : '') + itemName(n)).join(' + ')}</small></span></button>`).join('');
   const bp = $('#bp'), robot = r.gives.robot ? GB.ROBOTS[r.gives.robot] : null;
   if (recipeLocked(r)) {
     bp.className = 'bp simple'; bp.innerHTML = `<div class="bpt">📜 ${r.name}</div><div style="font-size:4em;opacity:.6">🔒</div><div style="flex-basis:100%;text-align:center;font-weight:600">Je hebt de bouwtekening nog niet.<br><small>${r.lockedText || 'Zoek in de boekenkast!'}</small></div>`;
@@ -3872,7 +3952,7 @@ function renderWerkbank() {
   }
   if (robot) {
     bp.className = 'bp'; bp.innerHTML = `<div class="bpt">📜 Bouwtekening: ${robot.name}</div><div class="bpsvg bpline">${robot.svg().replace('<svg', '<svg width="100%" height="100%"')}</div>` +
-      robot.slots.map(s => `<div class="bslot ${WB.placed.has(s.part) ? 'filled' : ''}" data-slot="${s.part}" style="left:${s.x}%;top:${s.y}%">${WB.placed.has(s.part) ? iconHTML(s.part) : ''}<span class="bl">${s.label}</span></div>`).join('') + `<div class="bpres" id="bpRes"></div>`;
+      (robot.torn ? `<div class="bptorn"><span>✂️ afgescheurd</span></div>` : '') + robot.slots.map(s => `<div class="bslot ${WB.placed.has(s.part) ? 'filled' : ''}" data-slot="${s.part}" style="left:${s.x}%;top:${s.y}%">${WB.placed.has(s.part) ? iconHTML(s.part) : ''}<span class="bl">${s.label}</span></div>`).join('') + `<div class="bpres" id="bpRes"></div>`;
     const st = document.createElement('style'); st.textContent = '.bpline svg *{fill:none!important;stroke:#cfe6ff!important;stroke-width:2.5!important;stroke-dasharray:6 5}'; bp.appendChild(st);
   } else {
     bp.className = 'bp simple';
@@ -3881,6 +3961,11 @@ function renderWerkbank() {
   }
   $('#wbTray').innerHTML = r.needs.map(n => `<div class="part ${WB.placed.has(n) ? 'used' : ''} ${has(n) ? '' : 'used'}" data-part="${n}" style="${has(n) ? '' : 'filter:grayscale(1)'}"><div class="pi">${iconHTML(n)}</div>${has(n) ? itemName(n) : '???'}</div>`).join('');
   const missing = r.needs.filter(n => !has(n));
+  if (r.soon) {
+    // teaser: de tekening is afgescheurd, dus bouwen kan nog niet
+    $('#wbMsg').textContent = `${missing.length ? `Onderdelen: ${r.needs.length - missing.length} van ${r.needs.length}. ${r.hint} ` : 'Alle 4 de onderdelen! '}Maar er is een stuk van de tekening afgescheurd… Wordt vervolgd!`;
+    $('#wbBuild').disabled = true; $('#wbBuild').style.display = 'none'; $('#wbBuild').style.animation = ''; return;
+  }
   $('#wbMsg').textContent = missing.length ? `Nog nodig: ${missing.map(itemName).join(', ')}. ${r.hint}` : WB.placed.size === r.needs.length ? 'Alles zit erin! Tik op Bouwen!' : 'Tik op een onderdeel of sleep het naar de goede plek!';
   const ready = !missing.length && WB.placed.size === r.needs.length;
   $('#wbBuild').disabled = !ready; $('#wbBuild').classList.toggle('pulse', ready); $('#wbBuild').style.animation = ready ? 'actpulse 1.1s infinite' : '';
@@ -3888,7 +3973,7 @@ function renderWerkbank() {
 }
 $('#recList').addEventListener('click', e => { const b = e.target.closest('[data-r]'); if (!b || WB.busy) return; SFX.click(); WB.rid = b.dataset.r; WB.placed = new Set(); renderWerkbank(); });
 function placePart(n, fromEl) {
-  const r = GB.RECIPES[WB.rid]; if (!r.needs.includes(n) || WB.placed.has(n) || !has(n)) return;
+  const r = GB.RECIPES[WB.rid]; if (r.soon) { SFX.nope(); $('#wbMsg').textContent = 'Eerst de rest van de tekening vinden… Wordt vervolgd!'; return; } if (!r.needs.includes(n) || WB.placed.has(n) || !has(n)) return;
   const slot = $(`#bp .bslot[data-slot="${n}"]`); if (!slot) return;
   WB.placed.add(n); SFX.hammer();
   if (fromEl) { // vliegend onderdeeltje
@@ -3972,7 +4057,8 @@ function renderHQStatus() {
     ${robotBuilt('vliegbot') ? `<div style="display:flex;gap:10px;align-items:center;margin-top:6px"><div style="width:60px;flex:none">${VLIEGBOT_SVG}</div><div style="font-size:.9em">🚁 <b>Vliegbot</b>: hoge plekken ${flyCount()}/${allFlySpots().length}</div></div>`
       : S.seenItems.vliegtekening ? `<div style="font-size:.9em;margin-top:6px">🚁 Vliegbot-onderdelen: <b>${vliegHave()}/${VLIEG_PARTS.length}</b></div>` : ''}
     ${robotBuilt('boorbeest') ? `<div style="display:flex;gap:10px;align-items:center;margin-top:6px"><div style="width:60px;flex:none">${BOORBEEST_SVG}</div><div style="font-size:.9em">⛏️ <b>Boorbeest</b>: diepe kelder ${roomList().filter(r => roomLevel(r) === 2 && isDug(r.id)).length}/${roomList().filter(r => roomLevel(r) === 2).length} kamers · 🛗 lift in het HQ</div></div>`
-      : S.seenItems.boortekening ? `<div style="font-size:.9em;margin-top:6px">⛏️ Boorbeest-onderdelen: <b>${boorHave()}/${BOOR_PARTS.length}</b></div>` : ''}`;
+      : S.seenItems.boortekening ? `<div style="font-size:.9em;margin-top:6px">⛏️ Boorbeest-onderdelen: <b>${boorHave()}/${BOOR_PARTS.length}</b></div>` : ''}
+    ${S.seenItems.ruimtetekening ? `<div style="display:flex;gap:10px;align-items:center;margin-top:6px"><div style="width:60px;flex:none;opacity:.75">${RUIMTEBOT_SVG}</div><div style="font-size:.9em">🚀 <b>Ruimtebot</b>: onderdelen <b>${ruimteHave()}/${RUIMTE_PARTS.length}</b> · de tekening is afgescheurd… wordt vervolgd!</div></div>` : ''}`;
   const can = canDigNow() && !!r && flag('baseOpen'), dl = econDigsLeft(S.econ, dayKey()), gate = buurGateOn(), waiting = buurWaiting();
   $('#hqEnergy').innerHTML = `<h3>⚡ Energie</h3><div class="energybar">${Array.from({ length: DIG_COST }, (_, i) => `<span class="eb ${i < S.energie ? 'on' : ''}"></span>`).join('')}<b style="margin-left:6px">${S.energie}</b></div>
     <p style="margin:.4em 0;font-size:.85em">${dl ? `Met ${DIG_COST} energie graaft de Supermol <b>meteen</b> een extra kamer (vandaag nog ${dl}×).` : `⏸️ ${ECON_DIG_TXT}`}</p>
@@ -4033,7 +4119,7 @@ function drawHQMap() {
    Nieuw spel? registerMinigame({ id, name, emoji, music, help, coins(score), bonusAt, bonusText, maxPlayers,
    create(api) }) in een eigen module. create() geeft een object terug met tick(dt), resize(W,H) en optioneel
    key(k, down, e), destroy(), onPause(p). api: cv, ctx, ctl, W, H, dpr, players, banner(), button(), place(), end().
-   Extra opties: low: true (lager is beter, bv. slagen of tijd), fmt(v) (hoe een score eruitziet), firstReward: 'item'
+   Extra opties: firstIf(res): alleen de eerste-keer-beloning als dit klopt (bv. finish gehaald). low: true (lager is beter, bv. slagen of tijd), fmt(v) (hoe een score eruitziet), firstReward: 'item'
    (krijg je de eerste keer dat je het spel uitspeelt), recText() (eigen record-tekst). end(res) mag res.coins, res.bonus
    en res.hiKey (record per baan) zelf invullen; res.title (eigen kop) en res.noRecord (telt niet als record).
    Fase 3: res.after (async, na 'Terug' in de wereld), res.noAgain (geen 'Nog een keer'), res.backLabel (eigen tekst op de terugknop).
@@ -4174,10 +4260,10 @@ document.addEventListener('visibilitychange', () => { if (document.hidden && MG.
 /* ---------- uitslag + beloning ---------- */
 // res: { scores: [{name, score}], best, winner (index of null), lines: [extra regels] }
 // Robotonderdeel als beloning: niet meer geven als je het al had of als die robot al gebouwd is.
-const partRobot = id => VLIEG_PARTS.includes(id) ? 'vliegbot' : BOOR_PARTS.includes(id) ? 'boorbeest' : null;
+const partRobot = id => VLIEG_PARTS.includes(id) ? 'vliegbot' : BOOR_PARTS.includes(id) ? 'boorbeest' : RUIMTE_PARTS.includes(id) ? 'ruimtebot' : null;
 const partNotNeeded = id => { const r = partRobot(id); return !!r && (robotBuilt(r) || !!S.seenItems[id]); };
 // Boorbeest-onderdelen pas geven als je de tekening hebt (anders komt de beloning later, bij een volgend potje)
-const partLocked = id => partRobot(id) === 'boorbeest' && !S.seenItems.boortekening;
+const partLocked = id => (partRobot(id) === 'boorbeest' && !S.seenItems.boortekening) || (partRobot(id) === 'ruimtebot' && !S.seenItems.ruimtetekening);
 function mgFinish(res) {
   const id = MG.id, g = GB.MINIGAMES[id], today = dayKey();
   const best = res.best != null ? res.best : (g.low ? Math.min : Math.max)(...res.scores.map(s => s.score));
@@ -4186,7 +4272,7 @@ function mgFinish(res) {
   if (S.daily.day !== today) { S.daily.day = today; S.daily.bonus = {}; }
   let bonus = false, eFull = false; if ((res.bonus != null ? res.bonus : best >= g.bonusAt) && !S.daily.bonus[id]) { if (earnEnergie(1)) { S.daily.bonus[id] = 1; bonus = true; } else eFull = true; }
   S.stats.games[id] = (S.stats.games[id] || 0) + 1; if (MG.n > 1) achieve('samen');
-  let first = null; if (g.firstReward && !flag('first_' + id) && !partNotNeeded(g.firstReward) && !partLocked(g.firstReward)) { S.flags['first_' + id] = 1; first = g.firstReward; giveItem(first); }
+  let first = null; if (g.firstReward && !flag('first_' + id) && (!g.firstIf || g.firstIf(res)) && !partNotNeeded(g.firstReward) && !partLocked(g.firstReward)) { S.flags['first_' + id] = 1; first = g.firstReward; giveItem(first); }
   save();
   const many = res.scores.length > 1;
   $('#resultCard').innerHTML = `<h2>${res.title && !rec ? res.title : res.title && rec ? res.title + ' Nieuw record!' : many ? (res.winner == null ? '🤝 Gelijkspel!' : `🏆 ${esc(res.scores[res.winner].name)} wint!`) : rec ? '🎉 Nieuw record!' : '👏 Goed gespeeld!'}</h2>
@@ -7823,6 +7909,7 @@ function mkBot(tr, c) {
 registerMinigame({
   id: 'mijnkarretje', name: 'Mijnkarretje', emoji: '🛤️', music: 'mijnkarretje', twoMode: 'race tegen elkaar',
   help: 'Rij met het <b>mijnkarretje</b> door de mijn! <b>▲ ▼</b> = ander spoor, <b>Spring</b> over stenen, <b>Buk</b> onder balken en stuur om de <b>hekken</b> heen. Pak de kristallen en haal de finish!',
+  firstReward: 'maanwielen', firstIf: res => !!res.finished,
   coins: s => Math.floor(s / 200) + 2, bonusAt: 1500, bonusText: 'Haal 1.500 punten voor 1 energie (1x per dag)',
   create: api => new MijnkarGame(api),
 });
@@ -7911,7 +7998,7 @@ class MijnkarGame {
     let winner = null; if (this.n > 1 && sc[0].score !== sc[1].score) winner = sc[0].score > sc[1].score ? 0 : 1;
     const lines = this.carts.map((c, i) => `${this.n > 1 ? esc(pl[i].name) + ': ' : ''}${c.done ? '🏁 finish gehaald' : `💥 kapot na ${Math.floor(c.d)} m`} · 💎 ${c.gems}${c.done ? ` · ❤️ ${c.hearts} over` : ''}`);
     if (!this.carts.some(c => c.done)) lines.push('Tip: spring over de <b>stenen</b>, buk onder de <b>balken</b> en stuur om de <b>hekken</b> heen.');
-    this.api.end({ title: this.n === 1 && this.carts[0].done ? '🏁 Finish gehaald!' : null, scores: sc, winner, best: Math.max(...sc.map(s => s.score)), lines });
+    this.api.end({ title: this.n === 1 && this.carts[0].done ? '🏁 Finish gehaald!' : null, scores: sc, winner, best: Math.max(...sc.map(s => s.score)), lines, finished: this.carts.some(c => c.done) });
   }
   draw() {
     const c = this.c, W = this.W, H = this.H, dpr = this.api.dpr, t = this.t;
@@ -8100,6 +8187,7 @@ function kmBot(st) {
 registerMinigame({
   id: 'kristallen', name: 'Kristallen matchen', emoji: '💠', music: 'kristallen', twoMode: 'om de beurt',
   help: '<b>Veeg</b> een kristal naar zijn buurman (of tik ze allebei aan). <b>3 op een rij</b> = weg! 4 op een rij maakt een <b>lijnkristal</b>, 5 een <b>sterkristal</b>. Je hebt 20 zetten.',
+  firstReward: 'zonnepanelen',
   coins: s => Math.floor(s / 250) + 2, bonusAt: 2500, bonusText: 'Haal 2.500 punten voor 1 energie (1x per dag)',
   create: api => new KristalGame(api),
 });
@@ -8263,6 +8351,268 @@ function kmDrawGem(c, x, y, s, g, t) {
   c.restore();
 }
 
+/* ===== minigames/rivier_logic.js ===== */
+/* =========================================================
+   ONDERGRONDSE RIVIER – logica (zonder DOM, getest in tests/unit.js). Een bootje drijft vanzelf over een kronkelende rivier
+   door de grot (van onder naar boven op het scherm) en gaat steeds harder. Sturen = naar links of rechts.
+   Stenen en boomstammen = hartje minder (3 hartjes). Draaikolken trekken je opzij (geen schade). Tegen de oever = even bonken.
+   Kristallen pakken = punten. Finish na RV.LEN meter = bonus.
+   2 spelers: samen, ieder een eigen bootje op dezelfde rivier (bootje 2 vaart iets achter bootje 1), samen één score.
+   ========================================================= */
+const RV = { LEN: 330, V0: 3, V1: 4.6, HEARTS: 3, R: .38, STEER: 5.5, INV: 1.4, GAP: 2, GEM: 10, FINISH: 200, HEART: 50, LAG: 1.1, POOL_R: 1.7, POOL_PULL: 2.2 };
+const rvSpeed = d => RV.V0 + (RV.V1 - RV.V0) * Math.min(1, Math.max(0, d / RV.LEN));
+// midden en halve breedte van de rivier op afstand y (wereld: x van -5 tot 5)
+function rvCenter(tr, y) { const f = tr.f; return Math.max(-1.6, Math.min(1.6, 1.3 * Math.sin(y * .045 + f[0]) + .7 * Math.sin(y * .11 + f[1]))); }
+function rvHalf(tr, y) { const p = Math.min(1, Math.max(0, y / RV.LEN)); return 3.3 - .8 * p + .3 * Math.sin(y * .07 + tr.f[2]); }
+function rvBuild(seed) {
+  const R = mulberry32(seed || 1), tr = { seed, f: [R() * 6.3, R() * 6.3, R() * 6.3], obs: [], gems: [] }; let y = 14, id = 0, prevGap = 0;
+  const pick = a => a[Math.floor(R() * a.length)];
+  while (y < RV.LEN - 10) {
+    const prog = y / RV.LEN, c = rvCenter(tr, y), w = rvHalf(tr, y), v = rvSpeed(y);
+    const kinds = prog < .2 ? ['rocks', 'rocks', 'log'] : prog < .5 ? ['rocks', 'log', 'pool', 'rocks'] : ['rocks', 'log', 'pool', 'rocks', 'log'];
+    const kind = pick(kinds); let gap;
+    if (kind === 'rocks') {
+      // opening van RV.GAP breed ergens in de rivier; links en rechts ervan stenen
+      gap = c - w + RV.GAP / 2 + .25 + R() * (2 * w - RV.GAP - .5);
+      const l = gap - RV.GAP / 2, r = gap + RV.GAP / 2;
+      for (let x = l - .55; x > c - w + .3; x -= 1.25) tr.obs.push({ id: id++, type: 'rock', x, y: y + (R() - .5) * .4, r: .45 + R() * .15 });
+      for (let x = r + .55; x < c + w - .3; x += 1.25) tr.obs.push({ id: id++, type: 'rock', x, y: y + (R() - .5) * .4, r: .45 + R() * .15 });
+    } else if (kind === 'log') {
+      // boomstam vanaf een oever; de opening zit aan de andere kant
+      const left = R() < .5, len = 2 * w - RV.GAP - .3;
+      if (left) { tr.obs.push({ id: id++, type: 'log', x: c - w - .4, x2: c - w + len, y }); gap = c + w - RV.GAP / 2 - .15; }
+      else { tr.obs.push({ id: id++, type: 'log', x: c + w - len, x2: c + w + .4, y }); gap = c - w + RV.GAP / 2 + .15; }
+    } else {
+      // draaikolk: trekt opzij, geen schade
+      const x = c + (R() - .5) * (2 * w - 2.4); tr.obs.push({ id: id++, type: 'pool', x, y, r: RV.POOL_R }); gap = x + (x > c ? -2 : 2);
+    }
+    // kristallen op een veilig lijntje tussen de vorige en deze opening
+    const dy = Math.max(3.4, v * (1.25 - .3 * prog) + R() * v * .5);
+    if (R() < .8) for (let k = 1; k <= 3; k++) { const gy = y + dy * (k / 4.2) + .6, gx0 = gap, cc = rvCenter(tr, gy), ww = rvHalf(tr, gy); tr.gems.push({ id: id++, x: Math.max(cc - ww + .7, Math.min(cc + ww - .7, gx0)), y: gy }); }
+    prevGap = gap; y += dy;
+  }
+  tr.obs.sort((a, b) => a.y - b.y); tr.gems.sort((a, b) => a.y - b.y);
+  return tr;
+}
+function rvState(n) {
+  const boats = []; for (let i = 0; i < (n || 1); i++) boats.push({ x: n > 1 ? (i ? .9 : -.9) : 0, off: i * RV.LAG, hearts: RV.HEARTS, inv: 0, gems: 0, crashes: 0, out: false, hit: {}, got: {}, spin: 0, bankT: 0, vx: 0 });
+  return { d: 0, v: RV.V0, t: 0, n: n || 1, boats, done: false, over: false };
+}
+const rvBoatY = (st, b) => st.d - b.off;
+const rvScore = st => st.boats.reduce((a, b) => a + b.gems * RV.GEM, 0) + Math.floor(Math.min(st.d, RV.LEN)) + (st.done ? RV.FINISH + st.boats.reduce((a, b) => a + (b.out ? 0 : b.hearts * RV.HEART), 0) : 0);
+// afstand van punt tot een liggende boomstam (lijnstuk op hoogte o.y)
+const rvLogDist = (o, x, y) => Math.hypot(x - Math.max(o.x, Math.min(o.x2, x)), y - o.y);
+// inp per bootje: { steer: -1..1 } (knoppen/toetsen) of { target: x } (slepen: daar wil hij heen)
+function rvStep(tr, st, inp, dt) {
+  const ev = []; if (st.done || st.over) return ev;
+  st.v = rvSpeed(st.d); st.d += st.v * dt; st.t += dt;
+  st.boats.forEach((b, i) => {
+    if (b.out) return; const q = (inp && inp[i]) || {}, y = rvBoatY(st, b);
+    b.inv = Math.max(0, b.inv - dt); b.bankT = Math.max(0, b.bankT - dt); b.spin = Math.max(0, b.spin - dt);
+    let want = q.target != null ? Math.max(-RV.STEER, Math.min(RV.STEER, (q.target - b.x) * 9)) : (q.steer || 0) * RV.STEER;
+    // draaikolk: trekt naar het midden en stuurt slapper
+    for (const o of tr.obs) { if (o.type !== 'pool' || Math.abs(o.y - y) > o.r) continue; const dd = Math.hypot(b.x - o.x, y - o.y); if (dd < o.r) { want = want * .6 - Math.sign(b.x - o.x) * RV.POOL_PULL * (1 - dd / o.r); if (!b.inPool) ev.push({ type: 'pool', i }); b.inPool = o.id; b.spin = .5; } }
+    if (b.inPool && !tr.obs.some(o => o.id === b.inPool && Math.hypot(b.x - o.x, y - o.y) < o.r)) b.inPool = 0;
+    b.vx = want; b.x += want * dt;
+    const c = rvCenter(tr, y), w = rvHalf(tr, y) - RV.R;
+    if (b.x < c - w || b.x > c + w) { b.x = Math.max(c - w, Math.min(c + w, b.x)); if (b.bankT <= 0) { b.bankT = .5; ev.push({ type: 'bank', i }); } }
+    for (const o of tr.obs) {
+      if (o.y < y - 1.2) continue; if (o.y > y + 1.2) break; if (o.type === 'pool' || b.hit[o.id]) continue;
+      const dd = o.type === 'rock' ? Math.hypot(b.x - o.x, y - o.y) - o.r : rvLogDist(o, b.x, y) - .28;
+      if (dd >= RV.R) continue; b.hit[o.id] = 1; if (b.inv > 0) continue;
+      b.hearts--; b.crashes++; b.inv = RV.INV; ev.push({ type: 'crash', i, what: o.type });
+      if (b.hearts <= 0) { b.out = true; ev.push({ type: 'out', i }); }
+    }
+    for (const g of tr.gems) { if (g.y < y - .7) continue; if (g.y > y + .7) break; if (b.got[g.id]) continue; if (Math.hypot(b.x - g.x, y - g.y) < RV.R + .32) { b.got[g.id] = 1; b.gems++; ev.push({ type: 'gem', i, id: g.id }); } }
+  });
+  if (st.boats.every(b => b.out)) { st.over = true; ev.push({ type: 'over' }); }
+  else if (st.d - st.boats.filter(b => !b.out).reduce((a, b) => Math.max(a, b.off), 0) >= RV.LEN) { st.done = true; ev.push({ type: 'finish' }); }
+  return ev;
+}
+// computer-stuurman voor de tests: kies de veiligste plek een stukje vooruit (en pak kristallen als het kan)
+function rvBot(tr, st, i) {
+  const b = st.boats[i], y = rvBoatY(st, b), look = st.v * .9 + 1.2;
+  const ahead = tr.obs.filter(o => o.y > y - .6 && o.y < y + look && o.type !== 'pool');
+  const pools = tr.obs.filter(o => o.type === 'pool' && o.y > y - 1 && o.y < y + look);
+  const c = rvCenter(tr, y + 1), w = rvHalf(tr, y + 1) - RV.R - .15; let best = b.x, bs = -1e9;
+  for (let k = 0; k <= 40; k++) {
+    const x = c - w + 2 * w * k / 40; let s = -Math.abs(x - b.x) * .4;
+    for (const o of ahead) { const dd = o.type === 'rock' ? Math.abs(x - o.x) - o.r : (x >= o.x && x <= o.x2 ? 0 : Math.min(Math.abs(x - o.x), Math.abs(x - o.x2))); if (dd < RV.R + .35) s -= 100 * (1.4 - (o.y - y) / look); }
+    for (const o of pools) if (Math.abs(x - o.x) < o.r) s -= 6;
+    for (const g of tr.gems) if (!b.got[g.id] && g.y > y && g.y < y + look && Math.abs(g.x - x) < .4) s += 3;
+    if (s > bs) { bs = s; best = x; }
+  }
+  return { target: best };
+}
+
+/* ===== minigames/rivier.js ===== */
+/* =========================================================
+   ONDERGRONDSE RIVIER – speelautomaat in de diepe kelder (logica in rivier_logic.js).
+   Sturen: sleep met je vinger naar links of rechts (het bootje volgt je vinger), of tik naast je bootje voor een stapje opzij.
+   Toetsen: A/D (speler 1) en pijltjes (speler 2; solo ook).
+   2 spelers: samen, ieder een eigen bootje. Linkerhelft van het scherm = speler 1, rechterhelft = speler 2.
+   ========================================================= */
+registerMinigame({
+  id: 'rivier', name: 'Ondergrondse rivier', emoji: '🛶', music: 'rivier', twoMode: 'samen, ieder een bootje',
+  help: 'Vaar met je bootje over de wilde rivier! <b>Sleep</b> naar links of rechts om te sturen. Ontwijk de <b>stenen</b> en <b>boomstammen</b>, pas op voor <b>draaikolken</b> en pak de kristallen. Haal de finish!',
+  coins: s => Math.floor(s / 200) + 2, bonusAt: 1500, bonusText: 'Haal 1.500 punten voor 1 energie (1x per dag)',
+  firstReward: 'raketmotor', firstIf: res => !!res.finished,
+  create: api => new RivierGame(api),
+});
+const RV_DT = 1 / 60;
+const RV_KEYS = { a: [0, -1], d: [0, 1], arrowleft: [1, -1], arrowright: [1, 1] };
+class RivierGame {
+  constructor(api) {
+    this.api = api; this.c = api.ctx; this.n = api.players.length; this.t = 0; this.acc = 0; this.state = 'intro'; this.ended = false;
+    this.tr = rvBuild((Math.random() * 1e9) | 0); this.st = rvState(this.n); this.tgt = this.st.boats.map(() => null); this.keys = {}; this.ptrs = {};
+    this.pops = []; this.parts = []; this.shake = 0;
+    this.W = api.W; this.H = api.H; this.layout();
+    this.onDown = e => this.pDown(e); this.onMove = e => this.pMove(e); this.onUp = e => this.pUp(e);
+    api.cv.addEventListener('pointerdown', this.onDown); addEventListener('pointermove', this.onMove); addEventListener('pointerup', this.onUp); addEventListener('pointercancel', this.onUp);
+    api.banner(this.n > 1 ? `<h2>🛶 Samen de rivier af!</h2><p>Links stuurt ${esc(api.players[0].name)}, rechts ${esc(api.players[1].name)}. Sleep om te sturen!</p>` : `<h2>🛶 Ondergrondse rivier</h2><p>Sleep naar links of rechts om te sturen. Ontwijk stenen en boomstammen!</p>`, { ms: 2100 })
+      .then(() => { if (MG.inst === this) { this.state = 'count'; this.cd = 3.2; SFX.tick(); } });
+  }
+  destroy() { const c = this.api.cv; c.removeEventListener('pointerdown', this.onDown); removeEventListener('pointermove', this.onMove); removeEventListener('pointerup', this.onUp); removeEventListener('pointercancel', this.onUp); }
+  resize(W, H) { this.W = W; this.H = H; this.layout(); }
+  layout() {
+    const W = this.W, H = this.H, top = this.api.top, land = W > H * 1.1; this.land = land;
+    this.hudBox = { x: 8, y: top, w: W - 16, h: 30 };
+    const y0 = top + 38, y1 = H - (land ? 6 : 30), side = land && this.n > 1 ? 70 : 8;
+    const k = Math.max(14, Math.min((W - side * 2) / 10.4, (y1 - y0) / 8.5)); this.k = k;
+    const fw = Math.min(W - side * 2, k * 10.4); this.field = { x: (W - fw) / 2, y: y0, w: fw, h: y1 - y0 };
+    this.boatSY = this.field.y + this.field.h * .8;
+  }
+  sx(x) { return this.field.x + this.field.w / 2 + x * this.k; }
+  sy(y) { return this.boatSY - (y - this.st.d) * this.k; }
+  who(x) { return this.n > 1 && x >= this.W / 2 ? 1 : 0; }
+  pDown(e) { e.preventDefault(); const [x, y] = this.api.xy(e), i = this.who(x), b = this.st.boats[i]; this.ptrs[e.pointerId] = { i, x0: x, y0: y, bx: b.x, moved: false }; }
+  pMove(e) {
+    const p = this.ptrs[e.pointerId]; if (!p) return; const [x] = this.api.xy(e);
+    if (Math.abs(x - p.x0) > 6) p.moved = true; if (p.moved) this.tgt[p.i] = p.bx + (x - p.x0) / this.k * 1.15;
+  }
+  pUp(e) {
+    const p = this.ptrs[e.pointerId]; if (!p) return; delete this.ptrs[e.pointerId];
+    if (!p.moved) { const b = this.st.boats[p.i], bx = this.sx(b.x); this.tgt[p.i] = b.x + (p.x0 < bx ? -1.3 : 1.3); this.tapT = .45; return; }
+    // na een snelle veeg vaart hij nog door tot waar je vinger was (tick laat los bij aankomst)
+  }
+  key(k, down) {
+    const m = RV_KEYS[k]; if (!m) return false; const i = this.n > 1 ? m[0] : 0; this.keys[i + ':' + m[1]] = down ? 1 : 0; if (down) this.tgt[i] = null; return true;
+  }
+  input() {
+    return this.st.boats.map((b, i) => { const s = (this.keys[i + ':1'] || 0) - (this.keys[i + ':-1'] || 0); if (s) return { steer: s }; return this.tgt[i] != null ? { target: this.tgt[i] } : {}; });
+  }
+  tick(dt) {
+    this.t += dt;
+    if (this.state === 'count') { const o = Math.ceil(this.cd); this.cd -= dt; if (Math.ceil(this.cd) !== o && this.cd > 0) SFX.tick(); if (this.cd <= 0) { this.state = 'race'; SFX.boost(); } }
+    else if (this.state === 'race') {
+      this.acc = Math.min(this.acc + dt, .25);
+      while (this.acc >= RV_DT) { this.acc -= RV_DT; const ev = rvStep(this.tr, this.st, this.input(), RV_DT); for (const e of ev) this.onEvent(e); }
+      // tik-stapje: na aankomst loslaten
+      this.st.boats.forEach((b, i) => { if (this.tgt[i] != null && !Object.values(this.ptrs).some(p => p.i === i) && Math.abs(b.x - this.tgt[i]) < .05) this.tgt[i] = null; });
+      if ((this.st.done || this.st.over) && !this.ended) { this.ended = true; this.state = 'end'; setTimeout(() => { if (MG.inst === this) this.finish(); }, 1500); }
+    }
+    this.pops = this.pops.filter(p => (p.t += dt) < 1); this.parts = this.parts.filter(p => (p.t += dt) < p.life);
+    for (const p of this.parts) { p.x += p.vx * dt; p.y += p.vy * dt; p.vy += 4 * dt; }
+    this.shake = Math.max(0, this.shake - dt);
+    this.draw();
+  }
+  burst(x, y, cols, n) { for (let k = 0; k < n; k++) { const a = Math.random() * 7, v = 1 + Math.random() * 2.5; this.parts.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v, t: 0, life: .5 + Math.random() * .4, col: cols[k % cols.length] }); } }
+  onEvent(e) {
+    const b = e.i != null ? this.st.boats[e.i] : null, by = b ? rvBoatY(this.st, b) : this.st.d;
+    if (e.type === 'gem') { SFX.pickup(); this.pops.push({ x: b.x, y: by + .6, txt: '+10', col: '#7ef0ff', t: 0 }); }
+    else if (e.type === 'crash') { SFX.bonk(); this.shake = .3; this.burst(b.x, by + .3, e.what === 'log' ? ['#a0703f', '#d8f4ff'] : ['#9aa3b2', '#d8f4ff'], 14); this.pops.push({ x: b.x, y: by + 1, txt: e.what === 'log' ? 'Bonk! Een boomstam!' : 'Krak! Een steen!', col: '#ff8a8a', t: 0 }); if (navigator.vibrate) try { navigator.vibrate(50); } catch (_) { } }
+    else if (e.type === 'bank') SFX.step();
+    else if (e.type === 'pool') { SFX.whoosh(); this.pops.push({ x: b.x, y: by + 1, txt: 'Draaikolk!', col: '#bfefff', t: 0 }); }
+    else if (e.type === 'out') { SFX.aww(); this.pops.push({ x: b.x, y: by + 1.5, txt: this.n > 1 ? `${this.api.players[e.i].name} is lek!` : 'Bootje lek!', col: '#ffd23f', t: 0, big: 1 }); }
+    else if (e.type === 'finish') { SFX.fanfare(); achieve('rivier1'); if (this.st.boats.every(b => !b.crashes)) achieve('rivier0'); this.burst(0, this.st.d + 1, ['#ffd23f', '#7ef0ff', '#ff8ad8', '#fff'], 30); this.pops.push({ x: 0, y: this.st.d + 2.5, txt: '🏁 Finish!', col: '#ffd23f', t: 0, big: 1 }); }
+    else if (e.type === 'over') SFX.gameover();
+  }
+  finish() {
+    const st = this.st, pl = this.api.players, sc = rvScore(st), names = pl.map(p => p.name).join(' & ');
+    const lines = [st.done ? `🏁 Finish gehaald${this.n > 1 ? ' (samen!)' : ''}!` : `Je kwam <b>${Math.floor(st.d)} m</b> ver (finish: ${RV.LEN} m).`];
+    lines.push(this.n > 1 ? pl.map((p, i) => `${esc(p.name)}: 💎 ${st.boats[i].gems}${st.boats[i].out ? ' · lek' : ` · ❤️ ${st.boats[i].hearts}`}`).join(' · ') : `💎 ${st.boats[0].gems} kristallen${st.done ? ` · ❤️ ${st.boats[0].hearts} over` : ''}`);
+    if (!st.done) lines.push('Tip: sleep je bootje op tijd opzij. Kijk ver vooruit!');
+    this.api.end({ title: st.done ? '🏁 De rivier af!' : null, scores: [{ name: names, score: sc, text: fmtNum(sc) + ' punten' }], winner: null, best: sc, lines, finished: st.done });
+  }
+  draw() {
+    const c = this.c, W = this.W, H = this.H, dpr = this.api.dpr, t = this.t, st = this.st, F = this.field, k = this.k;
+    c.setTransform(dpr, 0, 0, dpr, 0, 0);
+    c.fillStyle = '#1d1530'; c.fillRect(0, 0, W, H);
+    if (this.n > 1) { c.fillStyle = 'rgba(63,140,255,.07)'; c.fillRect(0, 0, W / 2, H); c.fillStyle = 'rgba(255,138,31,.07)'; c.fillRect(W / 2, 0, W / 2, H); }
+    this.api.hud(F.x, F.y, F.w, F.h, 'rivier');
+    c.save(); rrect(c, F.x, F.y, F.w, F.h, 14); c.clip(); c.translate(this.shake > 0 ? Math.sin(t * 70) * 4 * this.shake / .3 : 0, 0);
+    // grotbodem met steentjes en kristallen
+    c.fillStyle = '#3b2f52'; c.fillRect(F.x - 6, F.y, F.w + 12, F.h);
+    const yTop = st.d + (this.boatSY - F.y) / k + 1, yBot = st.d - (F.y + F.h - this.boatSY) / k - 1;
+    for (let yy = Math.floor(yBot); yy < yTop; yy++) for (let s = -1; s <= 1; s += 2) { const h = hash2(yy, s + 5); if (h > .55) { const X = this.sx(s * (4.2 + h * .6)), Y = this.sy(yy + h); if (h > .82) drawCrystal(c, X, Y, k * .35, CRYSTAL_COLS[(yy + 4) % 4]); else dot(c, X, Y, k * .12, '#4a3d66'); } }
+    // water
+    const L = [], Rr = []; for (let Y = F.y - 8; Y <= F.y + F.h + 8; Y += 6) { const wy = st.d + (this.boatSY - Y) / k, cc = rvCenter(this.tr, wy), w = rvHalf(this.tr, wy); L.push([this.sx(cc - w), Y]); Rr.push([this.sx(cc + w), Y]); }
+    c.beginPath(); L.forEach(([x, y], i) => i ? c.lineTo(x, y) : c.moveTo(x, y)); for (let i = Rr.length - 1; i >= 0; i--) c.lineTo(Rr[i][0], Rr[i][1]); c.closePath();
+    const wg = c.createLinearGradient(F.x, 0, F.x + F.w, 0); wg.addColorStop(0, '#1a5f94'); wg.addColorStop(.5, '#2a86c4'); wg.addColorStop(1, '#1a5f94'); c.fillStyle = wg; c.fill();
+    c.strokeStyle = '#6b5a8a'; c.lineWidth = Math.max(3, k * .18); c.beginPath(); L.forEach(([x, y], i) => i ? c.lineTo(x, y) : c.moveTo(x, y)); c.stroke(); c.beginPath(); Rr.forEach(([x, y], i) => i ? c.lineTo(x, y) : c.moveTo(x, y)); c.stroke();
+    // stroming (streepjes die meebewegen)
+    c.strokeStyle = 'rgba(210,245,255,.45)'; c.lineWidth = 2;
+    for (let yy = Math.floor(yBot); yy < yTop; yy += 1) for (let j = 0; j < 3; j++) { const h = hash2(yy, j), wy = yy + h, cc = rvCenter(this.tr, wy), w = rvHalf(this.tr, wy), x = cc + (h * 2 - 1) * (w - .6), X = this.sx(x), Y = this.sy(wy) + ((t * st.v * .25 * k) % k); c.beginPath(); c.moveTo(X - k * .25, Y); c.quadraticCurveTo(X, Y - k * .12, X + k * .25, Y); c.stroke(); }
+    // finishlijn
+    const fy = this.sy(RV.LEN); if (fy > F.y - 20 && fy < F.y + F.h + 20) { const cc = rvCenter(this.tr, RV.LEN), w = rvHalf(this.tr, RV.LEN), n = 10; for (let j = 0; j < n; j++) { c.fillStyle = j % 2 ? '#fff' : '#1f2a44'; c.fillRect(this.sx(cc - w) + j * (w * 2 * k / n), fy - 6, w * 2 * k / n + 1, 12); } }
+    // hindernissen
+    for (const o of this.tr.obs) { if (o.y < yBot - 2 || o.y > yTop + 2) continue; rvDrawObs(c, o, this.sx(o.x), this.sy(o.y), k, t, o.x2 != null ? this.sx(o.x2) : 0); }
+    for (const g of this.tr.gems) { if (g.y < yBot || g.y > yTop || st.boats.some(b => b.got[g.id])) continue; drawCrystal(c, this.sx(g.x), this.sy(g.y) + k * .3 + Math.sin(t * 4 + g.id) * 2, k * .55, CRYSTAL_COLS[g.id % 4]); }
+    // bootjes (achterste eerst)
+    for (let i = st.boats.length - 1; i >= 0; i--) this.drawBoat(i);
+    for (const p of this.parts) { c.globalAlpha = 1 - p.t / p.life; dot(c, this.sx(p.x), this.sy(p.y), Math.max(2, k * .08), p.col); }
+    c.globalAlpha = 1; c.textAlign = 'center'; c.textBaseline = 'middle';
+    for (const p of this.pops) { c.globalAlpha = 1 - p.t; const fs = p.big ? clamp(k * .9, 18, 34) : clamp(k * .45, 13, 20); c.font = `800 ${fs}px Fredoka, sans-serif`; c.lineWidth = 4; c.strokeStyle = '#1d1530'; c.fillStyle = p.col; const X = clamp(this.sx(p.x), F.x + 70, F.x + F.w - 70), Y = this.sy(p.y) - p.t * 26; c.strokeText(p.txt, X, Y); c.fillText(p.txt, X, Y); }
+    c.globalAlpha = 1;
+    // voortgang (rechts in het veld)
+    const px = F.x + F.w - 12, ph = F.h - 24, pr = Math.min(1, st.d / RV.LEN); c.fillStyle = 'rgba(255,255,255,.25)'; rrect(c, px, F.y + 12, 6, ph, 3); c.fill(); c.fillStyle = '#ffd23f'; rrect(c, px, F.y + 12 + ph * (1 - pr), 6, ph * pr, 3); c.fill(); dot(c, px + 3, F.y + 12 + ph * (1 - pr), 5, '#ffd23f'); c.font = '12px sans-serif'; c.fillText('🏁', px + 3, F.y + 6);
+    if (this.state === 'count' && this.cd > 0) { const fs = Math.min(80, H / 5); c.font = `800 ${fs}px Fredoka, sans-serif`; c.lineWidth = 6; c.strokeStyle = '#1d1530'; c.fillStyle = '#ffd23f'; c.strokeText(Math.ceil(this.cd), W / 2, F.y + F.h * .4); c.fillText(Math.ceil(this.cd), W / 2, F.y + F.h * .4); }
+    c.restore();
+    // HUD bovenin
+    const B = this.hudBox, pl = this.api.players; this.api.hud(B.x, B.y, B.w, B.h, 'score'); c.fillStyle = 'rgba(255,255,255,.92)'; rrect(c, B.x, B.y, B.w, B.h, 12); c.fill();
+    const fs = B.w < 360 ? 13 : 15; c.font = `700 ${fs}px Fredoka, sans-serif`; c.fillStyle = '#1f2a44'; c.textBaseline = 'middle'; const yy = B.y + B.h / 2;
+    const hearts = b => b.out ? '💧' : '❤️'.repeat(b.hearts) + '🖤'.repeat(RV.HEARTS - b.hearts);
+    c.textAlign = 'left'; c.fillText(`⭐ ${fmtNum(rvScore(st))}  💎 ${st.boats.reduce((a, b) => a + b.gems, 0)}`, B.x + 10, yy);
+    c.textAlign = 'right'; c.fillText(this.n > 1 ? `${pl[0].name} ${hearts(st.boats[0])}  ${pl[1].name} ${hearts(st.boats[1])}` : hearts(st.boats[0]), B.x + B.w - 10, yy);
+    // uitleg
+    c.font = '600 13px Fredoka, sans-serif'; c.fillStyle = 'rgba(255,255,255,.7)'; c.textAlign = 'center';
+    if (!this.land) c.fillText(this.n > 1 ? `◀ ${pl[0].name} sleept links · ${pl[1].name} sleept rechts ▶` : '◀ Sleep om te sturen ▶', W / 2, H - 14);
+    else if (this.n > 1 && F.x > 60) { c.save(); c.translate(F.x / 2, F.y + F.h / 2); c.rotate(-Math.PI / 2); c.fillText(`${pl[0].name}: sleep hier`, 0, 0); c.restore(); c.save(); c.translate(W - F.x / 2, F.y + F.h / 2); c.rotate(Math.PI / 2); c.fillText(`${pl[1].name}: sleep hier`, 0, 0); c.restore(); }
+    c.textBaseline = 'alphabetic';
+  }
+  drawBoat(i) {
+    const c = this.c, st = this.st, b = st.boats[i], k = this.k, t = this.t, X = this.sx(b.x), Y = this.sy(rvBoatY(st, b));
+    if (b.out) { c.globalAlpha = .5; dot(c, X, Y, k * .4, 'rgba(255,255,255,.3)'); c.globalAlpha = 1; return; }
+    if (b.inv > 0 && (t * 12 | 0) % 2) return;
+    c.save(); c.translate(X, Y); c.rotate(b.spin > 0 ? Math.sin(t * 20) * .5 : b.vx * .04);
+    // golfjes achter de boot
+    c.strokeStyle = 'rgba(220,248,255,.6)'; c.lineWidth = 2; c.beginPath(); c.moveTo(-k * .35, k * .55); c.quadraticCurveTo(0, k * (.85 + Math.sin(t * 8) * .08), k * .35, k * .55); c.stroke();
+    c.fillStyle = '#8a5a2b'; c.strokeStyle = LINE; c.lineWidth = 1.8; c.beginPath(); c.moveTo(0, -k * .75); c.quadraticCurveTo(k * .48, -k * .2, k * .36, k * .55); c.lineTo(-k * .36, k * .55); c.quadraticCurveTo(-k * .48, -k * .2, 0, -k * .75); c.fill(); c.stroke();
+    c.fillStyle = '#b07a43'; c.beginPath(); c.moveTo(0, -k * .58); c.quadraticCurveTo(k * .34, -k * .15, k * .26, k * .45); c.lineTo(-k * .26, k * .45); c.quadraticCurveTo(-k * .34, -k * .15, 0, -k * .58); c.fill();
+    // peddel
+    const pa = Math.sin(t * 6 + i) * .6; c.strokeStyle = '#6b4a2a'; c.lineWidth = Math.max(2, k * .07); c.beginPath(); c.moveTo(-k * .7 * Math.cos(pa), k * .1 + k * .3 * Math.sin(pa)); c.lineTo(k * .7 * Math.cos(pa), k * .1 - k * .3 * Math.sin(pa)); c.stroke();
+    c.restore();
+    drawKid(c, this.api.players[i].look, X, Y + k * .35, 'up', 0, false, { scale: k / 52, t });
+    if (this.n > 1) dot(c, X, Y - k * 1.05, Math.max(3, k * .1), this.api.players[i].col);
+  }
+}
+function rvDrawObs(c, o, X, Y, k, t, X2) {
+  c.strokeStyle = LINE; c.lineWidth = 1.6;
+  if (o.type === 'rock') {
+    const r = o.r * k; c.fillStyle = 'rgba(220,248,255,.35)'; c.beginPath(); c.ellipse(X, Y + r * .25, r * 1.25, r * .9, 0, 0, 7); c.fill();
+    c.fillStyle = '#7d869a'; c.beginPath(); for (let j = 0; j < 7; j++) { const a = j / 7 * Math.PI * 2, rr = r * (.85 + hash2(o.id, j) * .25); c.lineTo(X + Math.cos(a) * rr, Y + Math.sin(a) * rr * .85); } c.closePath(); c.fill(); c.stroke();
+    c.fillStyle = 'rgba(255,255,255,.35)'; c.beginPath(); c.ellipse(X - r * .3, Y - r * .3, r * .3, r * .15, -.5, 0, 7); c.fill();
+  } else if (o.type === 'log') {
+    const h = k * .5; c.fillStyle = 'rgba(220,248,255,.3)'; rrect(c, X - 3, Y - h / 2 - 3, X2 - X + 6, h + 6, h / 2); c.fill();
+    c.fillStyle = '#8a5a2b'; rrect(c, X, Y - h / 2, X2 - X, h, h / 2); c.fill(); c.stroke(); c.strokeStyle = '#6b4a2a'; c.lineWidth = 1.5;
+    for (let x = X + h; x < X2 - h; x += h * 1.4) { c.beginPath(); c.moveTo(x, Y - h * .3); c.lineTo(x + h * .5, Y - h * .3); c.stroke(); }
+    c.fillStyle = '#c9965a'; c.beginPath(); c.ellipse(X2 - h * .25, Y, h * .22, h * .42, 0, 0, 7); c.fill(); c.strokeStyle = LINE; c.stroke();
+  } else {
+    const r = o.r * k; for (let j = 0; j < 4; j++) { c.strokeStyle = `rgba(210,245,255,${.55 - j * .1})`; c.lineWidth = 2.5; c.beginPath(); const a0 = t * 3 + j * 1.6; c.arc(X, Y, r * (.25 + j * .22), a0, a0 + 4); c.stroke(); }
+    dot(c, X, Y, r * .12, '#0e3f66');
+  }
+}
+
 /* ===== minigames/klusje.js ===== */
 /* =========================================================
    KLUSJE VOOR MAMA – de 'tenzij' als de pogingen van vandaag op zijn (1x per dag: +1 poging).
@@ -8369,7 +8719,7 @@ window.__gb = {
   GOLF_HOLES, GOLF, golfPar, FLY_SPOTS, allFlySpots, flyCount, flyDone, nearFlySpot, flyCutscene, buildVliegbotNow, vliegHave, VLIEG_PARTS, findNear, nearLabel, lootAvail, takeItem, goalKey, nextGoal, hint,
   ECON, econCardLine, canDigNow, ECON_FULL_TXT, econDigsLeft, econEnergyLeft,
   BUUR, PRANKS, buurGateOn, buurWaiting, buurLeft, buurLevel, buurCutscene, buurSkip, openBuurPlan, renderBuurPlan, buurRequestNow, buurDigAfterWin, buurKlusDone, buurLocked, drawBrom, drawGnome, buurNews,
-  buurFinish, BOOR_PARTS, boorHave, buildBoorbeestNow, digDeepStart, buildDeepMap, buildBaseMap, roomList, roomLevel, partNotNeeded, gjBuild, GJ, GJ_LEVELS, MK, mkBuild, mkCart, mkStep, mkScore, KM, kmBuild, kmFindMove, kmSwap,
+  buurFinish, BOOR_PARTS, boorHave, buildBoorbeestNow, digDeepStart, buildDeepMap, buildBaseMap, roomList, roomLevel, partNotNeeded, gjBuild, GJ, GJ_LEVELS, MK, mkBuild, mkCart, mkStep, mkScore, KM, kmBuild, kmFindMove, kmSwap, RV, rvBuild, rvState, rvStep, rvScore, rvBoatY, rvCenter, rvHalf, RUIMTE_PARTS, ruimteHave, spotsOn,
 };
 
 </script>
