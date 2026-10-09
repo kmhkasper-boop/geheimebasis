@@ -1,36 +1,23 @@
 /* Geheime Basis – service worker (offline spelen + snelle updates)
    - HTML: eerst netwerk (zo komen nieuwe werelden/versies meteen binnen), offline uit de cache
    - iconen/manifest: eerst cache
-   - Google Fonts: stale-while-revalidate
+   - lettertype (fonts/, zelf gehost): eerst cache
    Game-updates in index.html (nieuwe werelden e.d.) komen vanzelf binnen; VERSION hoeft daarvoor niet omhoog.
    Verhoog VERSION alleen als iconen/manifest veranderen of als er losse bestanden (js/afbeeldingen) bijkomen
    die later nog wijzigen: die worden 'eerst cache' geserveerd. */
 const ID = 'geheimebasis';
-const VERSION = 'v22';
+const VERSION = 'v23';
 const CORE = ID + '-core-' + VERSION;
 const FONTS = ID + '-fonts-' + VERSION;
 const PAGE = new URL('./', self.registration.scope).href;
 const ASSETS = ['./', './manifest.webmanifest', './icons/icon-192.png', './icons/icon-512.png',
-  './icons/icon-maskable-512.png', './icons/apple-touch-icon.png', './icons/favicon-48.png'];
+  './icons/icon-maskable-512.png', './icons/apple-touch-icon.png', './icons/favicon-48.png',
+  './fonts/fredoka-latin.woff2', './fonts/fredoka-latinext.woff2'];
 
-const FONT_CSS = 'https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap';
-
-// Lettertype alvast bewaren, zodat het spel ook offline in Fredoka verschijnt (mislukken is niet erg).
-async function precacheFonts() {
-  try {
-    const cache = await caches.open(FONTS);
-    const res = await fetch(FONT_CSS, { mode: 'cors' });
-    if (!res.ok) return;
-    await cache.put(FONT_CSS, res.clone());
-    const urls = [...(await res.text()).matchAll(/url\((https:\/\/fonts\.gstatic\.com\/[^)]+)\)/g)].map(m => m[1]);
-    await Promise.all(urls.map(u => fetch(u, { mode: 'cors' }).then(r => r.ok && cache.put(u, r)).catch(() => {})));
-  } catch (err) { /* geen netwerk: dan later via de runtime-cache */ }
-}
 
 self.addEventListener('install', e => {
   e.waitUntil(Promise.all([
-    caches.open(CORE).then(c => c.addAll(ASSETS.map(u => new Request(u, { cache: 'reload' })))),
-    precacheFonts()
+    caches.open(CORE).then(c => c.addAll(ASSETS.map(u => new Request(u, { cache: 'reload' }))))
   ]).then(() => self.skipWaiting()));
 });
 
@@ -69,25 +56,11 @@ async function cacheFirst(req) {
   return res;
 }
 
-async function staleWhileRevalidate(e) {
-  const cache = await caches.open(FONTS);
-  const hit = await cache.match(e.request.url, { ignoreVary: true });
-  const net = fetch(e.request).then(res => {
-    if (res && (res.ok || res.type === 'opaque')) cache.put(e.request.url, res.clone());
-    return res;
-  });
-  if (hit) { e.waitUntil(net.catch(() => {})); return hit; }
-  return net;
-}
 
 self.addEventListener('fetch', e => {
   const req = e.request;
   if (req.method !== 'GET') return;
   const url = new URL(req.url);
-  if (url.hostname === 'fonts.googleapis.com' || url.hostname === 'fonts.gstatic.com') {
-    e.respondWith(staleWhileRevalidate(e));
-    return;
-  }
   if (url.origin !== location.origin || !url.href.startsWith(self.registration.scope)) return;
   if (url.pathname.endsWith('/sw.js')) return;
   e.respondWith(isPage(req, url) ? networkFirst(req) : cacheFirst(req));
