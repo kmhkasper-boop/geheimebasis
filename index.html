@@ -670,7 +670,7 @@ h1,h2,h3{margin:0}
       <div class="orow"><button class="btn green small" id="oudUnlock">🔓 Alle kamers openen (+ Vliegbot en Boorbeest)</button><button class="btn small" id="oudEnergy">⚡ +3 energie geven</button></div>
     </div>
     <div><h3>🤫 Buurman Brom</h3>
-      <p>Na de eerste kamers belt <b>buurman Brom</b> (de mopperende buurman) aan en klaagt bij mama over het lawaai. Daarna graaft de Supermol nieuwe kamers als de kinderen hem <b>te slim af zijn</b>: een onschuldige kwajongensstreek als spelletje (Mollenrace, Tuinkabouters, Belletje lellen). <b>Elke gewonnen streek = de Supermol graaft meteen de volgende kamer</b>, zonder limiet: de hele basis kan dus in één keer worden uitgespeeld. Daarnaast staat er nog steeds elke dag een kamer klaar (die wacht ook op een streek), en met <b>Graaf nu</b> (3 ⚡) graaft de mol meteen, ook zonder streek. Verloren streken kosten alleen een poging terwijl er een dag-kamer wacht. Gegraven kamers en alle spellen blijven altijd open.</p>
+      <p>Na de eerste kamers belt <b>buurman Brom</b> (de mopperende buurman) aan en klaagt bij mama over het lawaai. Daarna graaft de Supermol nieuwe kamers als de kinderen hem <b>te slim af zijn</b>: een onschuldige kwajongensstreek als spelletje (Mollenrace, Tuinkabouters, Belletje lellen, Waterpistolen, Langs de camera's, Geluid dempen). <b>Elke gewonnen streek = de Supermol graaft meteen de volgende kamer</b>, zonder limiet: de hele basis kan dus in één keer worden uitgespeeld. Daarnaast staat er nog steeds elke dag een kamer klaar (die wacht ook op een streek), en met <b>Graaf nu</b> (3 ⚡) graaft de mol meteen, ook zonder streek. Verloren streken kosten alleen een poging terwijl er een dag-kamer wacht. Gegraven kamers en alle spellen blijven altijd open.</p>
       <p>Per dag zijn er een paar <b>pogingen</b>. Op? Dan roept mama "Genoeg gespeeld voor vandaag, morgen weer verder!". <b>Tenzij</b> ze 1x per dag een <b>klusje voor mama</b> doen (+1 poging) of de buurman <b>appelkoekjes</b> geven (koekje van mama + appel, aan de werkbank): dan graaft de mol toch. De streken kunnen ook altijd voor de lol via het <b>Buurman-plan</b> in het Hoofdkwartier (munten, 1x per dag energie, prestaties).</p>
       <div class="orow"><span class="sk">🚪 Buurman-poort</span><div class="seg" id="oudBuur"><button data-v="0">Uit</button><button data-v="1">Aan</button></div><span class="small-note">Uit = de mol graaft zonder streek</span></div>
       <div class="orow"><span class="sk">🎯 Pogingen per dag</span><div class="seg" id="oudBuurTries"><button data-v="2">2</button><button data-v="3">3</button><button data-v="5">5</button><button data-v="0">Onbeperkt</button></div></div>
@@ -1881,6 +1881,9 @@ function registerAch(o) { GB.ACHIEVEMENTS[o.id] = o; }
   { id: 'mollenrace3', icon: '🏁', name: 'Mollenkampioen', desc: 'De Mollenrace gewonnen op ⭐⭐⭐.' },
   { id: 'kabouter', icon: '🍄', name: 'Kabouterkoning', desc: 'Alle tuinkabouters omgedraaid zonder één keer betrapt te worden.' },
   { id: 'belletje', icon: '🔔', name: 'Belletje-lel-kampioen', desc: 'Belletje lellen gewonnen op ⭐⭐⭐.' },
+  { id: 'water3', icon: '💦', name: 'Waterkampioen', desc: 'Waterpistolen gewonnen op ⭐⭐⭐.' },
+  { id: 'cameras3', icon: '📹', name: 'Onzichtbaar', desc: 'Langs de camera’s gewonnen op ⭐⭐⭐.' },
+  { id: 'stil3', icon: '🔇', name: 'Muisstil', desc: 'Geluid dempen gewonnen op ⭐⭐⭐.' },
   { id: 'klusje', icon: '🧹', name: 'Lieve helper', desc: 'Een klusje voor mama gedaan.' },
   { id: 'koekjes', icon: '🍪', name: 'Vrede met koekjes', desc: 'Buurman Brom blij gemaakt met appelkoekjes.' },
   { id: 'nietsmam', icon: '🤫', name: 'Niks, mam!', desc: 'Bijna betrapt… maar niks verraden.' },
@@ -3362,9 +3365,9 @@ const PRANKS = [
   { id: 'mollenrace', name: 'Mollenrace', emoji: '🦫', desc: 'Race onder de grond tegen de Graafmol van de buurman.' },
   { id: 'kabouters', name: 'Tuinkabouters', emoji: '🍄', desc: 'Sluip zijn tuin in en draai de kabouters om. Stilstaan als hij kijkt!' },
   { id: 'belletje', name: 'Belletje lellen', emoji: '🔔', desc: 'Bel aan en verstop je snel voordat de deur opengaat!' },
-  { id: 'water', name: 'Waterpistolen', emoji: '💦', desc: 'Een watergevecht over de schutting.', soon: true },
-  { id: 'cameras', name: 'Langs de camera’s', emoji: '📹', desc: 'Sluip langs zijn nieuwe beveiligingscamera’s.', soon: true },
-  { id: 'stil', name: 'Geluid dempen', emoji: '🔇', desc: 'Maak de Supermol superstil.', soon: true },
+  { id: 'water', name: 'Waterpistolen', emoji: '💦', desc: 'Een watergevecht over de schutting. Tik op hem als hij opduikt!' },
+  { id: 'cameras', name: 'Langs de camera’s', emoji: '📹', desc: 'Sluip langs zijn nieuwe camera’s en plak er een gekke sticker op!' },
+  { id: 'stil', name: 'Geluid dempen', emoji: '🔇', desc: 'Graaf onder zijn huis door. Stil zijn als hij luistert!' },
 ];
 const BUUR = { test: false, cut: false, wait: 0, replay: false, news: false, doorOpen: false };
 const BUUR_COINS = [10, 15, 20];
@@ -3405,7 +3408,7 @@ function buurFinish(api, id, o) {
   if (o.won) {
     const oldLvl = buurLevel(id); b.wins[id] = (b.wins[id] || 0) + 1; b.total++; b.lvl[id] = Math.max(b.lvl[id] || 0, o.level);
     achieve('teslim'); if (b.total >= 10) achieve('brein10');
-    if (o.level >= 3) achieve({ mollenrace: 'mollenrace3', belletje: 'belletje' }[id] || '_');
+    if (o.level >= 3) achieve({ mollenrace: 'mollenrace3', belletje: 'belletje', water: 'water3', cameras: 'cameras3', stil: 'stil3' }[id] || '_');
     const nl = buurLevel(id); if (nl > oldLvl) lines.push(`🔓 Nieuw niveau vrij: <b>${buurStars(nl)}</b>!`);
     title = '😎 Te slim af!';
     const part = BUUR_PARTS[id];
@@ -7501,6 +7504,746 @@ class Belletje {
   }
 }
 
+/* ===== minigames/water_logic.js ===== */
+/* =========================================================
+   WATERPISTOLEN – logica (zonder tekenen, getest in tests/unit.js). Streek 4 tegen buurman Brom.
+   Een watergevecht over de schutting. Buurman Brom duikt op achter een gat in de schutting (een 'plek').
+   - Tik op hem: pets, nat! (1 raak). Wacht je te lang, dan richt hij (❗) en spuit hij jou nat: een hartje minder.
+   - ⭐⭐: soms zit zijn poes achter de schutting. Niet natspuiten! (1 raak minder)
+   - ⭐⭐⭐: soms heeft hij een paraplu: eerste tik = paraplu weg, tweede tik = nat.
+   Gewonnen: L.need keer raak voor de tijd op is. Hartjes op of tijd op = betrapt.
+   2 spelers: 6 plekken, de linker 3 zijn van speler 1, de rechter 3 van speler 2. Samen raak tellen, hartjes zijn samen.
+   ========================================================= */
+const WP = { SLOTS1: 5, SLOTS2: 6, WARN: .75, KAT_T: 1.7, OUT_T: .45, REACT: .3, DUO_NEED: 1.5, DUO_GAP: .62 };
+const WP_LEVELS = [
+  { need: 14, time: 60, show: 2.5, gap: [1.0, 1.5], max: 2, kat: 0, para: 0, lives: 3 },
+  { need: 18, time: 60, show: 2.0, gap: [.8, 1.2], max: 2, kat: .22, para: 0, lives: 3 },
+  { need: 22, time: 65, show: 1.6, gap: [.65, 1.0], max: 3, kat: .22, para: .28, lives: 3 },
+];
+function wpBuild(level, seed, n) {
+  const L = WP_LEVELS[level - 1], duo = n > 1;
+  return { L, n, level, R: mulberry32(seed || 1), slots: duo ? WP.SLOTS2 : WP.SLOTS1, need: Math.round(L.need * (duo ? WP.DUO_NEED : 1)), gapK: duo ? WP.DUO_GAP : 1,
+    max: L.max + (duo ? 1 : 0), pops: [], nid: 0, t: 0, next: 1.2, hits: Array(n).fill(0), wet: Array(n).fill(0), oops: 0, lives: L.lives, total: 0, done: null, why: null, lastHalf: 1 };
+}
+const wpOwner = (st, slot) => st.n > 1 ? (slot < st.slots / 2 ? 0 : 1) : 0;
+const wpLive = st => st.pops.filter(p => !p.res);
+function wpSpawn(st) {
+  const busy = new Set(st.pops.map(p => p.slot)); let free = [];
+  for (let s = 0; s < st.slots; s++) if (!busy.has(s)) free.push(s);
+  if (st.n > 1) { const half = 1 - st.lastHalf, fh = free.filter(s => wpOwner(st, s) === half); if (fh.length) { free = fh; st.lastHalf = half; } }
+  if (!free.length) return null;
+  const R = st.R, slot = free[Math.floor(R() * free.length)], L = st.L;
+  const kind = R() < L.kat ? 'kat' : 'brom', para = kind === 'brom' && R() < L.para;
+  const p = { id: ++st.nid, slot, kind, age: 0, hp: para ? 2 : 1, para, show: L.show * (.9 + R() * .2), res: null, rt: 0, warned: false };
+  st.pops.push(p); return p;
+}
+// tik op een plek
+function wpTap(st, slot) {
+  const ev = []; if (st.done) return ev;
+  const p = st.pops.find(q => q.slot === slot && !q.res);
+  if (!p) { ev.push({ e: 'miss', slot }); return ev; }
+  const i = wpOwner(st, slot);
+  if (p.kind === 'kat') { p.res = 'kat'; p.rt = 0; st.oops++; st.total = Math.max(0, st.total - 1); st.hits[i] = Math.max(0, st.hits[i] - 1); ev.push({ e: 'kat', p, i }); return ev; }
+  if (p.hp > 1) { p.hp--; p.para = false; p.age = Math.min(p.age, p.show - WP.WARN - .2); p.warned = false; ev.push({ e: 'umbrella', p, i }); return ev; }
+  p.res = 'splash'; p.rt = 0; st.hits[i]++; st.total++; ev.push({ e: 'splash', p, i });
+  if (st.total >= st.need) { st.done = 'win'; ev.push({ e: 'win' }); }
+  return ev;
+}
+function wpStep(st, dt) {
+  const ev = []; if (st.done) return ev; const L = st.L;
+  st.t += dt;
+  for (const p of st.pops) {
+    if (p.res) { p.rt += dt; continue; }
+    p.age += dt;
+    if (p.kind === 'kat') { if (p.age >= WP.KAT_T) { p.res = 'away'; p.rt = 0; ev.push({ e: 'away', p }); } continue; }
+    if (!p.warned && p.age >= p.show - WP.WARN) { p.warned = true; ev.push({ e: 'warn', p }); }
+    if (p.age >= p.show) { p.res = 'squirt'; p.rt = 0; const i = wpOwner(st, p.slot); st.wet[i]++; st.lives--; ev.push({ e: 'squirt', p, i }); }
+  }
+  st.pops = st.pops.filter(p => !p.res || p.rt < WP.OUT_T);
+  if (st.lives <= 0) { st.done = 'lose'; st.why = 'nat'; ev.push({ e: 'lose', why: 'nat' }); return ev; }
+  if (st.t >= L.time) { st.done = 'lose'; st.why = 'tijd'; ev.push({ e: 'lose', why: 'tijd' }); return ev; }
+  st.next -= dt;
+  if (st.next <= 0) {
+    if (wpLive(st).length < st.max) { const p = wpSpawn(st); if (p) ev.push({ e: 'up', p }); }
+    st.next = (L.gap[0] + st.R() * (L.gap[1] - L.gap[0])) * st.gapK;
+  }
+  return ev;
+}
+// voor tests: een speler die alleen Brom raakt (na een korte reactietijd) en de poes met rust laat
+function wpBot(st) { return wpLive(st).filter(p => p.kind === 'brom' && p.age >= WP.REACT).map(p => p.slot); }
+
+/* ===== minigames/water.js ===== */
+/* =========================================================
+   WATERPISTOLEN – streek 4 tegen buurman Brom (logica in water_logic.js).
+   Een watergevecht over de schutting. Brom duikt op achter de schutting: TIK op hem en pets, hij is nat!
+   Wacht niet te lang: als hij richt (❗) spuit hij jou nat. ⭐⭐: niet de poes natspuiten. ⭐⭐⭐: paraplu = 2x tikken.
+   Toetsen: 1 t/m 6 (de plekken van links naar rechts).
+   2 spelers: ieder een eigen helft van de schutting (links / rechts), samen raak tellen.
+   ========================================================= */
+registerMinigame({
+  id: 'water', name: 'Waterpistolen', emoji: '💦', music: 'buurman', twoMode: 'samen, ieder een eigen helft', prank: true,
+  help: 'Een watergevecht over de schutting! Duikt <b>buurman Brom</b> op? <b>Tik op hem</b> en pets, nat! Wacht niet te lang, want als hij richt (❗) spuit hij jou nat. Spuit de <b>poes</b> niet nat!',
+  bonusText: 'Win van de buurman voor 1 energie (1x per dag)', fmt: v => v ? buurStars(v) : '–',
+  create: api => new WaterGame(api),
+});
+const WP_DT = 1 / 120;
+const WP_SAY = {
+  splash: ['Hé! Ik ben kletsnat!', 'Brrr! Koud!', 'Pfff… mijn nette vest!', 'Wacht maar, kwajongens!', 'Mijn bril is nat!'],
+  squirt: ['Hebbes! Pets!', 'Ha! Raak!', 'Wie het laatst lacht…', 'Nat, hè? Ha ha!'],
+  kat: ['Hé! Niet mijn poes!', 'Minoes! Arme Minoes!'],
+};
+class WaterGame {
+  constructor(api) {
+    this.api = api; this.c = api.ctx; this.players = api.players; this.n = this.players.length; this.state = 'choose'; this.t = 0; this.acc = 0;
+    this.bctx = buurCtx(); this.pops = []; this.drops = []; this.shots = []; this.say = null; this.flash = [0, 0]; this.W = api.W; this.H = api.H;
+    this.st = wpBuild(1, 1, this.n); this.layout();
+    this.onDown = e => this.pDown(e); api.cv.addEventListener('pointerdown', this.onDown);
+    buurChoose('water', { title: '💦 Waterpistolen', text: this.n > 1 ? 'Een watergevecht over de schutting! Duikt buurman Brom op aan <b>jouw kant</b>? <b>Tik op hem</b>, pets! Samen raak tellen. Spuit de poes niet nat!' : 'Een watergevecht over de schutting! Duikt buurman Brom op? <b>Tik op hem</b>, pets! Wacht niet te lang: als hij richt (❗) spuit hij jou nat.' })
+      .then(l => { if (MG.inst === this) this.start(l); });
+  }
+  start(level) { this.level = level; this.st = wpBuild(level, (Date.now() / 1000 | 0) % 100000 + 7, this.n); this.state = 'count'; this.cd = 3.2; SFX.tick(); this.say = { txt: 'Lekker rustig in de tuin…', t: 0, life: 2.6, mood: 'blij' }; }
+  destroy() { this.api.cv.removeEventListener('pointerdown', this.onDown); $('#mgBanner').classList.remove('show'); }
+  resize(W, H) { this.W = W; this.H = H; this.layout(); }
+  layout() {
+    const W = this.W, H = this.H, top = this.api.top + 36, avail = H - top - 8;
+    const k = Math.max(14, Math.min((W - 16) / 10, avail / 7)); this.k = k; this.port = H > W * 1.05;
+    this.FH = clamp(avail / k, 7, 11.5); this.ox = (W - k * 10) / 2; this.oy = top + Math.max(0, (avail - this.FH * k) / 2);
+  }
+  X(x) { return this.ox + x * this.k; } Y(y) { return this.oy + y * this.k; }
+  sw() { return 10 / this.st.slots; }
+  slotX(s) { return (s + .5) * this.sw(); }
+  kidX(i) { return this.n > 1 ? (i ? 7.5 : 2.5) : 5; }
+  slotAt(x, y) { const fx = (x - this.ox) / this.k, fy = (y - this.oy) / this.k; if (fx < 0 || fx > 10 || fy < .1 || fy > 4.8) return -1; return clamp(Math.floor(fx / this.sw()), 0, this.st.slots - 1); }
+  pDown(e) {
+    e.preventDefault(); audioUnlock(); if (this.state !== 'play') return;
+    const [x, y] = this.api.xy(e), s = this.slotAt(x, y); if (s < 0) return;
+    this.tap(s);
+  }
+  key(k, down) { const s = +k - 1; if (!(s >= 0 && s < this.st.slots)) return false; if (down && this.state === 'play') this.tap(s); return true; }
+  tap(s) {
+    const i = wpOwner(this.st, s); this.shots.push({ i, s, t: 0 }); SFX.slurp();
+    this.handle(wpTap(this.st, s));
+  }
+  pop(txt, x, y, col, size) { this.pops.push({ txt, x, y, col, size, t: 0, life: 1.2 }); }
+  talk(kind, mood) { this.say = { txt: pick(WP_SAY[kind]), t: 0, life: 1.8, mood }; }
+  splashAt(x, y, n) { for (let j = 0; j < n; j++) { const a = Math.random() * Math.PI * 2, v = 1.5 + Math.random() * 3; this.drops.push({ x, y, vx: Math.cos(a) * v, vy: Math.sin(a) * v - 2, t: 0, life: .5 + Math.random() * .4 }); } }
+  handle(ev) {
+    for (const e of ev) {
+      const p = e.p, px = p ? this.slotX(p.slot) : 5;
+      if (e.e === 'splash') { SFX.splash(); this.splashAt(px, 1.6, 16); this.pop(pick(['Pets!', 'Raak!', 'Plons!', 'Nat!']), this.X(px), this.Y(1.0), '#7ee0ff', 26); if (Math.random() < .35) this.talk('splash', 'roep'); }
+      else if (e.e === 'umbrella') { SFX.whoosh(); this.pop('☂️ Paraplu weg!', this.X(px), this.Y(1.0), '#ffd23f', 20); }
+      else if (e.e === 'kat') { SFX.nope(); this.pop('🐱 Miauw! Niet de poes!', this.X(px), this.Y(1.0), '#ffb347', 20); this.talk('kat', 'boos'); }
+      else if (e.e === 'warn') { SFX.beep(); }
+      else if (e.e === 'squirt') { SFX.splash(); SFX.aww(); this.flash[e.i] = .7; this.splashAt(this.kidX(e.i), this.FH - 2.2, 22); this.pop(this.n > 1 ? `💦 ${this.players[e.i].name} is nat!` : '💦 Nat gespoten!', this.X(this.kidX(e.i)), this.Y(this.FH - 2.6), '#ff8a8a', 22); this.talk('squirt', 'blij'); if (navigator.vibrate) try { navigator.vibrate(100); } catch (_) { } }
+      else if (e.e === 'up') { if (p.kind === 'kat') SFX.tick(); }
+      else if (e.e === 'win') { this.state = 'end'; this.endT = 0; SFX.fanfare(); this.say = { txt: 'Nou moe! Ik ga me omkleden…', t: 0, life: 2.5, mood: 'boos' }; this.pop('💦 Gewonnen!', this.W / 2, this.H / 2, '#ffd23f', 34); }
+      else if (e.e === 'lose') { this.state = 'end'; this.endT = 0; SFX.aww(); this.pop(e.why === 'tijd' ? '⏰ De tijd is op!' : '💦 Te nat gespoten!', this.W / 2, this.H / 2, '#ff6b6b', 30); }
+    }
+  }
+  tick(dt) {
+    this.t += dt; buurPopTick(this.pops, dt); if (this.say && (this.say.t += dt) > this.say.life) this.say = null;
+    this.flash = this.flash.map(f => Math.max(0, f - dt));
+    this.drops = this.drops.filter(d => (d.t += dt) < d.life); for (const d of this.drops) { d.x += d.vx * dt; d.y += d.vy * dt; d.vy += 9 * dt; }
+    this.shots = this.shots.filter(s => (s.t += dt) < .28);
+    if (this.state === 'count') { const o = Math.ceil(this.cd); this.cd -= dt; if (Math.ceil(this.cd) !== o && this.cd > 0) SFX.tick(); if (this.cd <= 0) this.state = 'play'; }
+    else if (this.state === 'play') { this.acc = Math.min(this.acc + dt, .25); while (this.acc >= WP_DT && this.state === 'play') { this.acc -= WP_DT; this.handle(wpStep(this.st, WP_DT)); } }
+    else if (this.state === 'end') { this.st.pops.forEach(p => { if (p.res) p.rt += dt; }); if ((this.endT += dt) > 1.8 && !this.done) { this.done = true; this.finish(); } }
+    this.draw();
+  }
+  finish() {
+    const st = this.st, won = st.done === 'win';
+    const lines = won ? [`💦 ${st.total}× raak! Buurman Brom is kletsnat en snapt er niks van.`, this.level >= 3 ? '🏆 Gewonnen op ⭐⭐⭐: <b>Waterkampioen!</b>' : st.lives === st.L.lives ? '😎 En jullie zijn zelf nog helemaal droog!' : `💧 ${st.L.lives - st.lives}× nat gespoten, maar toch gewonnen!`]
+      : [st.why === 'tijd' ? `⏰ De tijd was op: ${st.total} van de ${st.need}× raak.` : '💦 Buurman Brom was te snel! Tik op hem zodra hij opduikt, nog voordat hij richt.'];
+    if (st.oops) lines.push(`🐱 ${st.oops}× de poes natgespoten… Die vond het niet leuk!`);
+    if (won && this.level < 3) lines.push('Win op ⭐⭐⭐ en word Waterkampioen!');
+    const sc = this.players.map((p, i) => ({ name: p.name, text: `${st.hits[i]}× raak` }));
+    buurFinish(this.api, 'water', { won, level: this.level, lines, scores: sc });
+  }
+  /* ---------- tekenen ---------- */
+  draw() {
+    const c = this.c, W = this.W, H = this.H, k = this.k, st = this.st, t = this.t, X = x => this.X(x), Y = y => this.Y(y), FH = this.FH;
+    c.setTransform(this.api.dpr, 0, 0, this.api.dpr, 0, 0);
+    c.fillStyle = '#2f6b3a'; c.fillRect(0, 0, W, H); for (let i = 0; i < 50; i++) dot(c, hash2(i, 3) * W, hash2(i, 4) * H, 10 + hash2(i, 9) * 14, 'rgba(20,60,30,.35)');
+    c.save(); rrect(c, X(0), Y(0), k * 10, k * FH, 14); c.clip();
+    // achter de schutting: lucht en het huis van Brom
+    const sky = c.createLinearGradient(0, Y(0), 0, Y(2.4)); sky.addColorStop(0, '#8fd3ff'); sky.addColorStop(1, '#d4f0ff'); c.fillStyle = sky; c.fillRect(X(0), Y(0), k * 10, k * 2.4);
+    box(c, X(.6), Y(.15), k * 8.8, k * 2.4, 6, '#e3cfa6', 0); c.fillStyle = '#9b3d2b'; c.fillRect(X(.4), Y(.05), k * 9.2, k * .32);
+    for (const wx of [1.6, 4.2, 6.8]) { box(c, X(wx), Y(.65), k * 1.5, k * .9, 4, '#fff', 2); c.fillStyle = '#7fb6e0'; c.fillRect(X(wx) + 3, Y(.65) + 3, k * 1.5 - 6, k * .9 - 6); c.fillStyle = '#fff'; c.fillRect(X(wx + .72), Y(.65), 3, k * .9); }
+    // gras aan onze kant
+    for (let i = 0; i < 10; i++) { c.fillStyle = i % 2 ? '#6cb257' : '#74bb5e'; c.fillRect(X(i), Y(3.5), k + 1, k * (FH - 3.5)); }
+    // Brom / poes achter de schutting
+    for (const p of st.pops) this.drawPop(c, p);
+    // de schutting met plekken
+    const sw = this.sw();
+    for (let x = 0; x < 10; x += .5) { box(c, X(x + .03), Y(2.25), k * .44, k * 1.4, 3, '#b07a45', 1.5); c.fillStyle = 'rgba(0,0,0,.08)'; c.fillRect(X(x + .3), Y(2.3), 2, k * 1.3); }
+    c.fillStyle = '#8a5a2e'; c.fillRect(X(0), Y(2.55), k * 10, k * .14); c.fillRect(X(0), Y(3.25), k * 10, k * .14);
+    for (let s = 0; s < st.slots; s++) { const live = st.pops.find(p => p.slot === s && !p.res); if (this.state === 'play' && !live) { c.fillStyle = 'rgba(255,255,255,.18)'; rrect(c, X(s * sw + .15), Y(.35), k * (sw - .3), k * 1.85, 10); c.fill(); } }
+    if (this.n > 1) { c.save(); c.setLineDash([8, 6]); c.strokeStyle = 'rgba(255,255,255,.55)'; c.lineWidth = 3; c.beginPath(); c.moveTo(X(5), Y(.2)); c.lineTo(X(5), Y(FH - .1)); c.stroke(); c.restore(); }
+    // onze kant: muurtje met de kinderen erachter
+    const wy = FH - 1.2;
+    this.players.forEach((pl, i) => { const kx = this.kidX(i), wet = this.flash[i] > 0; c.save(); if (wet) c.translate(Math.sin(t * 50) * 2, 0);
+      drawKid(c, pl.look, X(kx), Y(wy + .25), 'up', 0, false, { scale: k / 32 * (this.port ? 1.55 : 1.25), t });
+      c.font = `${Math.round(k * .62)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.save(); c.translate(X(kx + .6), Y(wy - .85)); c.scale(-1, 1); c.rotate(-.6); c.fillText('🔫', 0, 0); c.restore();
+      if (wet) { c.fillStyle = `rgba(90,180,255,${this.flash[i] * .55})`; c.beginPath(); c.arc(X(kx), Y(wy - .4), k * 1.1, 0, 7); c.fill(); }
+      c.restore();
+      if (this.n > 1) { c.font = '800 15px Fredoka, system-ui, "Apple Color Emoji", "Segoe UI Emoji"'; const s = `${pl.name}: 💦 ${st.hits[i]}`, tw = c.measureText(s).width + 18; this.lab = this.lab || []; this.lab[i] = [s, tw, kx, pl.col]; }
+    });
+    for (let x = 0; x < 10; x += .8) box(c, X(x + .02), Y(wy), k * .76, k * .42, 4, (Math.floor(x / .8) % 2) ? '#c9b8a0' : '#bfae95', 1.2);
+    for (let x = .4; x < 10; x += .8) box(c, X(x + .02), Y(wy + .42), k * .76, k * .42, 4, '#c4b39a', 1.2);
+    if (this.n > 1 && this.lab) this.lab.forEach(([s, tw, kx, col]) => { c.font = '800 15px Fredoka, system-ui, "Apple Color Emoji", "Segoe UI Emoji"'; c.textAlign = 'center'; c.textBaseline = 'middle'; box(c, X(kx) - tw / 2, Y(FH - .5) - 12, tw, 24, 12, 'rgba(255,255,255,.9)', 0); c.fillStyle = col; c.fillText(s, X(kx), Y(FH - .5) + 1); });
+    if (this.state === 'play' && st.t < 6 && !st.total) { c.save(); c.globalAlpha = Math.min(1, (6 - st.t) / 1.5); c.font = `900 ${Math.round(k * .55)}px Fredoka, system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineWidth = 6; c.strokeStyle = '#1f2a44'; const ht = '👆 Tik op buurman Brom!'; c.strokeText(ht, X(5), Y((3.6 + wy) / 2 + (this.port ? .8 : 0))); c.fillStyle = '#fff'; c.fillText(ht, X(5), Y((3.6 + wy) / 2 + (this.port ? .8 : 0))); c.restore(); }
+    // waterstraaltjes van ons naar de schutting
+    for (const s of this.shots) { const a = s.t / .28, x0 = X(this.kidX(s.i) + .6), y0 = Y(FH - 2.2), x1 = X(this.slotX(s.s)), y1 = Y(1.5); c.strokeStyle = `rgba(120,210,255,${1 - a})`; c.lineWidth = 5; c.lineCap = 'round'; c.beginPath(); c.moveTo(x0, y0); c.quadraticCurveTo((x0 + x1) / 2, Math.min(y0, y1) - k, x0 + (x1 - x0) * Math.min(1, a * 2.5), y0 + (y1 - y0) * Math.min(1, a * 2.5)); c.stroke(); }
+    for (const d of this.drops) dot(c, X(d.x), Y(d.y), k * .09 * (1 - d.t / d.life * .5), 'rgba(120,205,255,.9)');
+    c.restore();
+    this.drawHud(c);
+    buurPopDraw(c, this.pops, W, H);
+    if (this.say) { c.save(); c.globalAlpha = Math.min(1, (this.say.life - this.say.t) * 3); buurSay(c, this.say.txt, W / 2, Y(this.port ? 4.6 : 3.9), W, this.say.mood, t); c.restore(); }
+    if (this.state === 'count') { const n = Math.ceil(this.cd); c.save(); c.font = '900 64px Fredoka, system-ui'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineWidth = 10; c.strokeStyle = '#1f2a44'; const s = n > 0 ? String(n) : 'Spuiten!'; c.strokeText(s, W / 2, H / 2); c.fillStyle = '#ffd23f'; c.fillText(s, W / 2, H / 2); c.restore(); }
+    if (this.state === 'choose') { c.fillStyle = 'rgba(0,0,0,.25)'; c.fillRect(0, 0, W, H); }
+  }
+  drawPop(c, p) {
+    const k = this.k, x = this.X(this.slotX(p.slot)), t = this.t;
+    let rise = Math.min(1, p.age / .25); if (p.res) rise = Math.max(0, 1 - p.rt / WP.OUT_T * (p.res === 'squirt' ? .5 : 1));
+    const feet = this.Y(2.95 + (1 - rise) * 2.3);
+    c.save(); c.beginPath(); c.rect(x - k * 1.5, this.Y(-1), k * 3, this.Y(2.4) - this.Y(-1)); c.clip();
+    if (p.kind === 'kat') {
+      const cy = feet - k * .9; dot(c, x, cy, k * .55, '#f0a040'); c.fillStyle = '#f0a040';
+      c.beginPath(); c.moveTo(x - k * .5, cy - k * .2); c.lineTo(x - k * .38, cy - k * .8); c.lineTo(x - k * .1, cy - k * .45); c.fill(); c.beginPath(); c.moveTo(x + k * .5, cy - k * .2); c.lineTo(x + k * .38, cy - k * .8); c.lineTo(x + k * .1, cy - k * .45); c.fill();
+      dot(c, x - k * .2, cy - k * .05, k * .07, '#1f2a44'); dot(c, x + k * .2, cy - k * .05, k * .07, '#1f2a44'); dot(c, x, cy + k * .12, k * .06, '#e86a7a');
+      c.strokeStyle = '#1f2a44'; c.lineWidth = 1; for (const d of [-1, 1]) for (const w of [-.06, .06]) { c.beginPath(); c.moveTo(x + d * k * .12, cy + k * .15); c.lineTo(x + d * k * .62, cy + k * (.1 + w * 2)); c.stroke(); }
+      if (p.res === 'kat') { c.font = `${Math.round(k * .5)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.textAlign = 'center'; c.fillText('💧', x + k * .5, cy - k * .7); }
+    } else {
+      const aim = p.warned && !p.res, mood = p.res === 'splash' ? 'roep' : p.res === 'squirt' ? 'blij' : aim ? 'boos' : 'zoek';
+      drawBrom(c, x, feet, 'down', 0, false, { scale: k / 32 * 1.3, mood, t, noShadow: true });
+      // waterpistool: omhoog als hij richt
+      c.save(); c.translate(x + k * .55, feet - k * (aim ? 1.55 : 1.15)); c.rotate(aim ? .5 : 1.2); box(c, -k * .1, -k * .1, k * .5, k * .2, 4, '#4cc3ff', 1.5); box(c, -k * .1, 0, k * .14, k * .3, 3, '#ff8a1f', 1.2); c.restore();
+      if (p.para) { const ux = x - k * .1, uy = feet - k * 2.2; c.fillStyle = '#e8403a'; c.beginPath(); c.arc(ux, uy, k * .95, Math.PI, 0); c.closePath(); c.fill(); c.strokeStyle = '#1f2a44'; c.lineWidth = 2; c.stroke(); c.fillStyle = '#fff'; c.beginPath(); c.moveTo(ux, uy); c.arc(ux, uy, k * .95, Math.PI * 1.33, Math.PI * 1.66); c.closePath(); c.fill(); c.strokeStyle = '#1f2a44'; c.beginPath(); c.moveTo(ux, uy - k * .95); c.lineTo(ux, uy + k * .7); c.stroke(); }
+      if (p.res === 'splash') { c.fillStyle = 'rgba(120,205,255,.55)'; c.beginPath(); c.arc(x, feet - k * 1.6, k * .9, 0, 7); c.fill(); }
+    }
+    c.restore();
+    // richten: ❗ en een ringetje dat volloopt (daarbuiten getekend, ook boven de lucht)
+    if (p.kind === 'brom' && p.warned && !p.res) {
+      const a = clamp((p.age - (p.show - WP.WARN)) / WP.WARN, 0, 1), cy = this.Y(.45);
+      c.lineWidth = 5; c.strokeStyle = 'rgba(31,42,68,.6)'; c.beginPath(); c.arc(x, cy, k * .34, 0, 7); c.stroke(); c.strokeStyle = '#ff5a4a'; c.beginPath(); c.arc(x, cy, k * .34, -Math.PI / 2, -Math.PI / 2 + a * Math.PI * 2); c.stroke();
+      c.font = `900 ${Math.round(k * .5)}px Fredoka, system-ui`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillStyle = '#ff5a4a'; c.fillText('!', x, cy + 1);
+    }
+    if (p.res === 'squirt' && p.rt < .35) { const i = wpOwner(this.st, p.slot), x1 = this.X(this.kidX(i)), y1 = this.Y(this.FH - 2.3); c.strokeStyle = 'rgba(110,200,255,.85)'; c.lineWidth = 7; c.lineCap = 'round'; c.beginPath(); c.moveTo(x + k * .7, this.Y(2.0)); c.quadraticCurveTo((x + x1) / 2, this.Y(1.2), x1, y1); c.stroke(); }
+  }
+  drawHud(c) {
+    const st = this.st, W = this.W, left = Math.max(0, st.L.time - st.t);
+    const txt = `💦 ${st.total}/${st.need}   ${'❤️'.repeat(Math.max(0, st.lives))}${'🤍'.repeat(Math.max(0, st.L.lives - st.lives))}   ⏱️ ${Math.floor(left / 60)}:${String(Math.floor(left % 60)).padStart(2, '0')}`;
+    c.font = '700 16px Fredoka, system-ui, "Apple Color Emoji", "Segoe UI Emoji"'; const tw = c.measureText(txt).width + 26, hy = this.api.top;
+    this.api.hud(W / 2 - tw / 2, hy, tw, 28, 'hud'); box(c, W / 2 - tw / 2, hy, tw, 28, 14, 'rgba(255,255,255,.92)', 0); c.fillStyle = '#1f2a44'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(txt, W / 2, hy + 15);
+  }
+}
+
+/* ===== minigames/cameras_logic.js ===== */
+/* =========================================================
+   LANGS DE CAMERA'S – logica (zonder tekenen, getest in tests/unit.js). Streek 5 tegen buurman Brom.
+   Brom heeft beveiligingscamera's in zijn tuin gehangen. Ze draaien heen en weer en zien alles in hun kijkhoek
+   (behalve achter een struik, de boom of de schuur). Sluip naar elke camera en plak er een gekke sticker 😜 op de lens:
+   dat lukt alleen als je er vlakbij staat terwijl hij de andere kant op kijkt. Alle camera's beplakt = gewonnen.
+   Gezien door een camera = alarm: terug naar het hek, een hartje minder (hartjes zijn samen).
+   2 spelers: ieder een eigen kind en joystick (links / rechts; WASD en pijltjes). Wie een camera beplakt, maakt hem voor allebei uit.
+   ========================================================= */
+const CM = { W: 16, H: 11, SPEED: 2.5, R: .3, STICK: 1.05, CONE: .4, RANGE: 6.2, GRACE: 1.6, TOP: 2.25, STARTS: [[7.2, 10.2], [8.8, 10.2]] };
+const CM_CAMS = [
+  { x: 3.2, y: 1.7, base: Math.PI / 2, amp: 1.2, ph: 0 },
+  { x: 12.6, y: 1.7, base: Math.PI / 2, amp: 1.2, ph: 2.2 },
+  { x: 13.35, y: 6.4, base: Math.PI, amp: .8, ph: 1.1 },
+  { x: 1.75, y: 6.3, base: -.12, amp: .7, ph: 3.6 },
+];
+const CM_OBS = [
+  { x: 6.1, y: 4.4, r: .8, type: 'struik' }, { x: 9.9, y: 4.9, r: .8, type: 'struik' }, { x: 4.6, y: 7.6, r: .7, type: 'struik' },
+  { x: 11.3, y: 8.3, r: .7, type: 'struik' }, { x: 8.0, y: 7.3, r: .9, type: 'boom' }, { x: 14.6, y: 3.3, r: .45, type: 'kliko' }, { x: 14.45, y: 6.4, r: 1.0, type: 'schuur' },
+];
+const CM_LEVELS = [
+  { cams: 2, sp: .55, lives: 4, time: 150 },
+  { cams: 3, sp: .7, lives: 3, time: 150 },
+  { cams: 4, sp: .85, lives: 3, time: 170 },
+];
+function cmBuild(level, seed, n) {
+  const L = CM_LEVELS[level - 1], R = mulberry32(seed || 1);
+  const cams = CM_CAMS.slice(0, L.cams).map((c, i) => Object.assign({}, c, { id: i, ph: c.ph + R() * 1.2, a: c.base, stuck: false, seeing: false }));
+  const players = Array.from({ length: n }, (_, i) => { const s = n > 1 ? CM.STARTS[i] : [8, 10.2]; return { x: s[0], y: s[1], sx: s[0], sy: s[1], dir: 'up', moving: false, ph: 0, grace: 0, stuck: 0, seen: 0 }; });
+  return { L, n, level, cams, obs: CM_OBS, players, t: 0, lives: L.lives + (n > 1 ? 1 : 0), maxLives: L.lives + (n > 1 ? 1 : 0), caught: 0, done: null, why: null };
+}
+const cmAngle = (st, c, t) => c.base + c.amp * Math.sin(c.ph + st.L.sp * (t == null ? st.t : t));
+const angDiff = (a, b) => { let d = (a - b) % (Math.PI * 2); if (d > Math.PI) d -= Math.PI * 2; if (d < -Math.PI) d += Math.PI * 2; return Math.abs(d); };
+// staat er een struik/boom/schuur tussen de camera en dit punt?
+function cmBlocked(st, c, x, y) {
+  for (const o of st.obs) {
+    if (Math.hypot(o.x - c.x, o.y - c.y) < o.r + .3) continue;
+    const dx = x - c.x, dy = y - c.y, L2 = dx * dx + dy * dy, u = clamp(((o.x - c.x) * dx + (o.y - c.y) * dy) / (L2 || 1), 0, 1);
+    if (Math.hypot(c.x + dx * u - o.x, c.y + dy * u - o.y) < o.r * .92) return true;
+  }
+  return false;
+}
+// ziet camera c het punt (x,y) bij hoek a?
+function cmSees(st, c, x, y, a) {
+  if (c.stuck) return false;
+  const d = Math.hypot(x - c.x, y - c.y); if (d > CM.RANGE) return false;
+  if (angDiff(Math.atan2(y - c.y, x - c.x), a == null ? c.a : a) > CM.CONE) return false;
+  return !cmBlocked(st, c, x, y);
+}
+function cmMove(st, p, vx, vy, dt) {
+  p.x += vx * dt; p.y += vy * dt;
+  for (const o of st.obs) { const dx = p.x - o.x, dy = p.y - o.y, d = Math.hypot(dx, dy), m = o.r + CM.R; if (d < m && d > 0) { p.x = o.x + dx / d * m; p.y = o.y + dy / d * m; } }
+  p.x = clamp(p.x, CM.R + .1, CM.W - CM.R - .1); p.y = clamp(p.y, CM.TOP, CM.H - .35);
+}
+// inputs: per speler {x,y} in -1..1
+function cmStep(st, inputs, dt) {
+  const ev = []; if (st.done) return ev;
+  st.t += dt;
+  for (const c of st.cams) { c.a = cmAngle(st, c); c.seeing = false; }
+  st.players.forEach((p, i) => {
+    const inp = inputs[i] || { x: 0, y: 0 }, m = Math.hypot(inp.x, inp.y);
+    p.grace = Math.max(0, p.grace - dt);
+    p.moving = m > .15; if (p.moving) { cmMove(st, p, inp.x * CM.SPEED, inp.y * CM.SPEED, dt); p.ph += dt * 10; p.dir = Math.abs(inp.x) > Math.abs(inp.y) ? (inp.x > 0 ? 'right' : 'left') : (inp.y > 0 ? 'down' : 'up'); }
+    if (p.grace > 0) return;
+    const by = st.cams.find(c => cmSees(st, c, p.x, p.y));
+    if (by) {
+      by.seeing = true; st.lives--; st.caught++; p.seen++; ev.push({ e: 'caught', i, cam: by.id, x: p.x, y: p.y });
+      p.x = p.sx; p.y = p.sy; p.grace = CM.GRACE; p.dir = 'up';
+      return;
+    }
+    for (const c of st.cams) if (!c.stuck && Math.hypot(p.x - c.x, p.y - c.y) < CM.STICK) { c.stuck = true; p.stuck++; ev.push({ e: 'stick', i, cam: c.id }); }
+  });
+  if (st.cams.every(c => c.stuck)) { st.done = 'win'; ev.push({ e: 'win' }); return ev; }
+  if (st.lives <= 0) { st.done = 'lose'; st.why = 'gezien'; ev.push({ e: 'lose', why: 'gezien' }); return ev; }
+  if (st.t >= st.L.time) { st.done = 'lose'; st.why = 'tijd'; ev.push({ e: 'lose', why: 'tijd' }); }
+  return ev;
+}
+// voor tests: een voorzichtige sluiper. Loopt naar de dichtstbijzijnde camera, maar alleen als hij de komende ~0,5 s niet gezien wordt.
+function cmBot(st, i) {
+  const p = st.players[i], todo = st.cams.filter(c => !c.stuck); if (!todo.length) return { x: 0, y: 0 };
+  // met z'n tweeën verdelen: speler 1 neemt de linker camera, speler 2 de rechter
+  const c = st.n > 1 && todo.length > 1 ? todo.slice().sort((a, b) => a.x - b.x)[i ? todo.length - 1 : 0] : todo.reduce((a, b) => Math.hypot(a.x - p.x, a.y - p.y) < Math.hypot(b.x - p.x, b.y - p.y) ? a : b);
+  const safe = (x, y) => { for (let k = 0; k <= 6; k++) { const t = st.t + k * .1; if (st.cams.some(q => !q.stuck && cmSees(st, q, x, y, cmAngle(st, q, t)))) return false; } return true; };
+  let best = { x: 0, y: 0 }, bd = Infinity; const d0 = Math.hypot(c.x - p.x, c.y - p.y);
+  const here = safe(p.x, p.y);
+  for (let k = 0; k < 16; k++) {
+    const a = k / 16 * Math.PI * 2, q = { x: p.x, y: p.y }; cmMove(st, q, Math.cos(a) * CM.SPEED, Math.sin(a) * CM.SPEED, .25);
+    if (!safe(q.x, q.y)) continue; const d = Math.hypot(c.x - q.x, c.y - q.y) + (here ? 0 : -Math.min(...st.cams.filter(z => !z.stuck).map(z => Math.hypot(z.x - q.x, z.y - q.y))) * .01);
+    if (d < bd) { bd = d; best = { x: Math.cos(a), y: Math.sin(a) }; }
+  }
+  if (here && bd > d0 - .05) return { x: 0, y: 0 };
+  return best;
+}
+
+/* ===== minigames/cameras.js ===== */
+/* =========================================================
+   LANGS DE CAMERA'S – streek 5 tegen buurman Brom (logica in cameras_logic.js).
+   Sluip door de tuin van Brom en plak een gekke sticker 😜 op elke camera. Blijf uit het gele kijkvlak (achter een struik ben je onzichtbaar)
+   en loop naar een camera toe als hij de andere kant op kijkt. Gezien = alarm, terug naar het hek.
+   1 speler: joystick (of WASD/pijltjes). 2 spelers: ieder een eigen kind en joystick (links / rechts; WASD en pijltjes).
+   ========================================================= */
+registerMinigame({
+  id: 'cameras', name: 'Langs de camera’s', emoji: '📹', music: 'buurman', twoMode: 'samen, ieder een eigen kind', prank: true,
+  help: 'Buurman Brom heeft <b>camera’s</b> in zijn tuin gehangen! Sluip erheen en plak een gekke <b>sticker</b> 😜 op elke camera. Blijf uit het <b>gele kijkvlak</b>: achter een struik zien ze je niet. Kijkt een camera de andere kant op? Snel erheen!',
+  bonusText: 'Win van de buurman voor 1 energie (1x per dag)', fmt: v => v ? buurStars(v) : '–',
+  create: api => new CamerasGame(api),
+});
+const CM_DT = 1 / 120;
+const CM_SAY = {
+  caught: ['Hebbes! Ik zie je op mijn tv!', 'Aha! Daar sluipt er een!', 'Piep piep! Alarm!', 'Ik zie alles, hoor!'],
+  stick: ['Hé! Mijn tv is ineens heel gek…', 'Wat?! Wie trekt daar een gek gezicht?', 'Mijn camera doet raar!'],
+};
+class CamerasGame {
+  constructor(api) {
+    this.api = api; this.c = api.ctx; this.players = api.players; this.n = this.players.length; this.state = 'choose'; this.t = 0; this.acc = 0;
+    this.bctx = buurCtx(); this.pops = []; this.say = null; this.flash = 0; this.stepT = 0; this.W = api.W; this.H = api.H; this.layer = document.createElement('canvas');
+    this.st = cmBuild(1, 1, this.n); this.layout();
+    this.joy = new BuurJoy(api.cv, this.n, () => this.zones(), i => this.home(i));
+    buurChoose('cameras', { title: '📹 Langs de camera’s', text: 'Sluip door de tuin van buurman Brom en plak een gekke <b>sticker</b> 😜 op elke camera. Blijf uit het <b>gele kijkvlak</b>! Achter een struik zien ze je niet.' })
+      .then(l => { if (MG.inst === this) this.start(l); });
+  }
+  start(level) { this.level = level; this.st = cmBuild(level, (Date.now() / 1000 | 0) % 100000 + 3, this.n); this.state = 'count'; this.cd = 3.2; this.joy.reset(); SFX.tick(); this.say = { txt: 'Met mijn camera’s zie ik alles!', t: 0, life: 2.8, mood: 'blij' }; }
+  destroy() { this.joy.destroy(); $('#mgBanner').classList.remove('show'); }
+  resize(W, H) { this.W = W; this.H = H; this.layout(); }
+  layout() {
+    const W = this.W, H = this.H, port = H > W * 1.05, top = this.api.top + 34, below = port ? Math.min(210, H * .25) : 8;
+    const k = Math.max(14, Math.min((W - 16) / CM.W, (H - top - below) / CM.H)); this.k = k; this.port = port;
+    this.ox = (W - k * CM.W) / 2; this.oy = top + (port ? 6 : Math.max(0, (H - top - below - k * CM.H) / 2));
+  }
+  zones() { const W = this.W, H = this.H, y = this.api.top + 40; return this.n > 1 ? [{ x: 0, y, w: W / 2, h: H - y }, { x: W / 2, y, w: W / 2, h: H - y }] : [{ x: 0, y, w: W, h: H - y }]; }
+  home(i) { const W = this.W, H = this.H, m = 76; return this.n > 1 ? [i ? W - m : m, H - m] : [this.port ? W / 2 : m, H - m]; }
+  key(k, down) { return this.joy.key(k, down); }
+  X(x) { return this.ox + x * this.k; } Y(y) { return this.oy + y * this.k; }
+  pop(txt, x, y, col, size) { this.pops.push({ txt, x, y, col, size, t: 0, life: 1.3 }); }
+  talk(kind, mood) { this.say = { txt: pick(CM_SAY[kind]), t: 0, life: 2.2, mood }; }
+  tick(dt) {
+    this.t += dt; buurPopTick(this.pops, dt); if (this.say && (this.say.t += dt) > this.say.life) this.say = null; this.flash = Math.max(0, this.flash - dt);
+    if (this.state === 'count') { const o = Math.ceil(this.cd); this.cd -= dt; if (Math.ceil(this.cd) !== o && this.cd > 0) SFX.tick(); if (this.cd <= 0) { this.state = 'play'; SFX.sneak(); } }
+    else if (this.state === 'play') {
+      this.acc = Math.min(this.acc + dt, .25);
+      while (this.acc >= CM_DT && this.state === 'play') { this.acc -= CM_DT; this.handle(cmStep(this.st, this.players.map((_, i) => this.joy.get(i)), CM_DT)); }
+      if (this.st.players.some(p => p.moving) && (this.stepT += dt) > .42) { this.stepT = 0; SFX.sneak(); }
+    } else if (this.state === 'end') { if ((this.endT += dt) > 1.8 && !this.done) { this.done = true; this.finish(); } }
+    this.draw();
+  }
+  handle(ev) {
+    for (const e of ev) {
+      if (e.e === 'caught') { SFX.caught(); SFX.shout(); this.flash = .6; this.talk('caught', 'roep'); this.pop('🚨 Gezien!', this.X(e.x), this.Y(e.y) - this.k, '#ff6b6b', 28); if (navigator.vibrate) try { navigator.vibrate(140); } catch (_) { } }
+      if (e.e === 'stick') { const c = this.st.cams[e.cam]; SFX.pickup(); this.pop('😜 Sticker geplakt!', this.X(c.x), this.Y(c.y) + this.k * 1.2, '#c8f08f', 22); if (!this.st.cams.every(q => q.stuck)) this.talk('stick', 'zoek'); }
+      if (e.e === 'win') { this.state = 'end'; this.endT = 0; SFX.fanfare(); this.say = { txt: 'Al mijn camera’s zien alleen nog gekke bekken!', t: 0, life: 2.5, mood: 'boos' }; this.pop('😜 Gelukt!', this.W / 2, this.H / 2, '#ffd23f', 34); }
+      if (e.e === 'lose') { this.state = 'end'; this.endT = 0; SFX.aww(); this.pop(e.why === 'tijd' ? '⏰ De tijd is op!' : '🚨 Te vaak gezien!', this.W / 2, this.H / 2, '#ff6b6b', 30); }
+    }
+  }
+  finish() {
+    const st = this.st, won = st.done === 'win', nc = st.cams.length, done = st.cams.filter(c => c.stuck).length;
+    const lines = won ? [`😜 Alle ${nc} camera’s beplakt! Buurman Brom ziet op zijn tv alleen nog gekke bekken.`, this.level >= 3 ? '🏆 Gewonnen op ⭐⭐⭐: <b>Onzichtbaar!</b>' : st.caught ? `🚨 ${st.caught}× gezien, maar toch gelukt!` : '🤫 Niet één keer gezien. Knap!']
+      : [st.why === 'tijd' ? `⏰ De tijd was op: ${done} van de ${nc} camera’s beplakt.` : '🚨 De camera’s zagen jullie te vaak… Wacht tot een camera de andere kant op kijkt, en verstop je achter een struik!'];
+    if (won && this.level < 3) lines.push('Win op ⭐⭐⭐ en word Onzichtbaar!');
+    const sc = this.players.map((p, i) => ({ name: p.name, text: `${st.players[i].stuck}× geplakt` }));
+    buurFinish(this.api, 'cameras', { won, level: this.level, lines, scores: sc });
+  }
+  /* ---------- tekenen ---------- */
+  draw() {
+    const c = this.c, W = this.W, H = this.H, k = this.k, st = this.st, t = this.t, X = x => this.X(x), Y = y => this.Y(y);
+    c.setTransform(this.api.dpr, 0, 0, this.api.dpr, 0, 0);
+    c.fillStyle = '#2f6b3a'; c.fillRect(0, 0, W, H); for (let i = 0; i < 60; i++) dot(c, hash2(i, 5) * W, hash2(i, 6) * H, 10 + hash2(i, 7) * 16, 'rgba(20,60,30,.35)');
+    c.save(); rrect(c, X(0), Y(0), k * CM.W, k * CM.H, 12); c.clip();
+    for (let i = 0; i < CM.W; i++) { c.fillStyle = i % 2 ? '#62a54e' : '#6aae55'; c.fillRect(X(i), Y(1.9), k + 1, k * (CM.H - 1.9)); }
+    // tuinpad en tegels bij het hek
+    c.fillStyle = '#d6cbb4'; for (let y = 2.1; y < CM.H; y += .62) { rrect(c, X(7.45 + (Math.floor(y / .62) % 2) * .06), Y(y), k * 1.1, k * .5, 4); c.fill(); }
+    // kijkvlakken (met schaduw achter struiken)
+    this.drawCones(c);
+    // huis
+    c.fillStyle = '#d9c7a3'; c.fillRect(X(0), Y(0), k * CM.W, k * 1.9); c.fillStyle = '#8f3a2a'; c.fillRect(X(0), Y(0), k * CM.W, k * .45);
+    for (const wx of [5.2, 10.8]) { box(c, X(wx - 1), Y(.65), k * 2, k * 1, 4, '#fff', 2); c.fillStyle = '#7fb6e0'; c.fillRect(X(wx - 1) + 3, Y(.65) + 3, k * 2 - 6, k - 6); }
+    box(c, X(7.45), Y(.55), k * 1.1, k * 1.35, 3, '#6b8f3a', 2); dot(c, X(8.3), Y(1.3), k * .06, '#ffd23f');
+    // Brom kijkt naar zijn tv achter het raam
+    drawBrom(c, X(10.8), Y(1.75), 'down', 0, false, { scale: k / 32 * .9, mood: this.flash ? 'roep' : 'zoek', t, noShadow: true });
+    box(c, X(10.15), Y(1.35), k * .7, k * .45, 3, '#2a3550', 1); c.fillStyle = st.cams.every(q => q.stuck) ? '#ffd23f' : '#7fe0ff'; c.fillRect(X(10.2), Y(1.4), k * .6, k * .35);
+    c.fillStyle = '#fff'; c.fillRect(X(9.8), Y(1.65), k * 2, k * .12);
+    // dingen + kinderen op volgorde van y
+    const items = [];
+    st.obs.forEach(o => items.push({ y: o.y + (o.type === 'schuur' ? .9 : 0), f: () => this.drawObs(c, o) }));
+    st.players.forEach((p, i) => items.push({ y: p.y, f: () => this.drawPlayer(c, p, i) }));
+    items.sort((a, b) => a.y - b.y).forEach(o => o.f());
+    // camera's (bovenop alles)
+    st.cams.forEach(cam => this.drawCam(c, cam));
+    // haag + hek onderaan
+    c.fillStyle = '#2f7a34'; c.fillRect(X(0), Y(CM.H - .25), k * 7.2, k * .3); c.fillRect(X(8.8), Y(CM.H - .25), k * (CM.W - 8.8), k * .3);
+    c.restore();
+    if (this.flash) { c.fillStyle = `rgba(232,64,58,${this.flash * .45})`; c.fillRect(0, 0, W, H); }
+    this.drawHud(c);
+    buurPopDraw(c, this.pops, W, H);
+    if (this.say) { c.save(); c.globalAlpha = Math.min(1, (this.say.life - this.say.t) * 3); buurSay(c, this.say.txt, W / 2, this.port ? Y(CM.H) + 14 : Y(CM.H) - 62, W, this.say.mood, t); c.restore(); }
+    if (this.state === 'play' || this.state === 'count') this.joy.draw(c);
+    if (this.state === 'play' && st.t < 7 && !st.cams.some(q => q.stuck)) { c.save(); c.globalAlpha = Math.min(1, (7 - st.t) / 1.5); c.font = '900 18px Fredoka, system-ui, "Apple Color Emoji", "Segoe UI Emoji"'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineWidth = 6; c.strokeStyle = '#1f2a44'; const s = '📹 Plak een sticker op elke camera!'; const y = this.port ? Y(CM.H) + 78 : Y(CM.H - 1.4); c.strokeText(s, W / 2, y); c.fillStyle = '#fff'; c.fillText(s, W / 2, y); c.restore(); }
+    if (this.state === 'count') { const n = Math.ceil(this.cd); c.save(); c.font = '900 64px Fredoka, system-ui'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineWidth = 10; c.strokeStyle = '#1f2a44'; const s = n > 0 ? String(n) : 'Sluipen!'; c.strokeText(s, W / 2, H / 2); c.fillStyle = '#ffd23f'; c.fillText(s, W / 2, H / 2); c.restore(); }
+    if (this.state === 'choose') { c.fillStyle = 'rgba(0,0,0,.25)'; c.fillRect(0, 0, W, H); }
+  }
+  drawCones(c) {
+    const cv = this.api.cv, L = this.layer, st = this.st, k = this.k, dpr = this.api.dpr;
+    if (L.width !== cv.width || L.height !== cv.height) { L.width = cv.width; L.height = cv.height; }
+    const g = L.getContext('2d'); g.setTransform(1, 0, 0, 1, 0, 0); g.clearRect(0, 0, L.width, L.height); g.setTransform(dpr, 0, 0, dpr, 0, 0);
+    const R = CM.RANGE * k;
+    for (const cam of st.cams) {
+      if (cam.stuck) continue;
+      const x = this.X(cam.x), y = this.Y(cam.y), a = cam.a, hot = st.players.some(p => p.grace > CM.GRACE - .6) && this.flash > 0;
+      g.globalCompositeOperation = 'source-over';
+      const gr = g.createRadialGradient(x, y, k * .3, x, y, R); gr.addColorStop(0, hot ? 'rgba(255,90,70,.6)' : 'rgba(255,236,120,.55)'); gr.addColorStop(1, hot ? 'rgba(255,90,70,.15)' : 'rgba(255,236,120,.12)');
+      g.fillStyle = gr; g.beginPath(); g.moveTo(x, y); g.arc(x, y, R, a - CM.CONE, a + CM.CONE); g.closePath(); g.fill();
+      // schaduw achter struiken, boom en schuur
+      g.globalCompositeOperation = 'destination-out'; g.fillStyle = '#000';
+      for (const o of st.obs) {
+        if (Math.hypot(o.x - cam.x, o.y - cam.y) < o.r + .3) continue;
+        const dx = o.x - cam.x, dy = o.y - cam.y, d = Math.hypot(dx, dy); if (d > CM.RANGE + o.r) continue;
+        const th = Math.atan2(dy, dx), al = Math.asin(Math.min(1, o.r * .92 / d)), far = CM.RANGE * 1.6;
+        const px = -Math.sin(th) * o.r * .92, py = Math.cos(th) * o.r * .92;
+        g.beginPath(); g.moveTo(this.X(o.x + px), this.Y(o.y + py)); g.lineTo(this.X(cam.x + Math.cos(th + al) * far), this.Y(cam.y + Math.sin(th + al) * far));
+        g.lineTo(this.X(cam.x + Math.cos(th - al) * far), this.Y(cam.y + Math.sin(th - al) * far)); g.lineTo(this.X(o.x - px), this.Y(o.y - py)); g.closePath(); g.fill();
+      }
+    }
+    g.globalCompositeOperation = 'source-over';
+    c.save(); c.setTransform(1, 0, 0, 1, 0, 0); c.drawImage(L, 0, 0); c.restore();
+  }
+  drawCam(c, cam) {
+    const k = this.k, x = this.X(cam.x), y = this.Y(cam.y);
+    if (cam.id === 3) { box(c, x - k * .08, y, k * .16, k * 1.4, 2, '#5b6478', 1); }
+    if (cam.id === 2) { box(c, x, y - k * .08, k * .3, k * .16, 2, '#5b6478', 1); }
+    c.save(); c.translate(x, y); c.rotate(cam.a);
+    box(c, -k * .22, -k * .2, k * .62, k * .4, 5, '#eef1f6', 2); box(c, k * .36, -k * .14, k * .14, k * .28, 3, '#2a3550', 1);
+    if (!cam.stuck) dot(c, -k * .08, -k * .08, k * .05, Math.sin(this.t * 6) > 0 ? '#ff3b30' : '#7a1a14');
+    c.restore();
+    if (cam.stuck) { c.font = `${Math.round(k * .62)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('😜', x + Math.cos(cam.a) * k * .3, y + Math.sin(cam.a) * k * .3); }
+  }
+  drawObs(c, o) {
+    const k = this.k, x = this.X(o.x), y = this.Y(o.y), r = o.r * k;
+    c.fillStyle = 'rgba(0,0,0,.2)'; c.beginPath(); c.ellipse(x, y + r * .5, r * 1.05, r * .38, 0, 0, 7); c.fill();
+    if (o.type === 'struik') {
+      for (const [dx, dy, rr, col] of [[-.45, .05, .62, '#2f7a34'], [.45, .05, .62, '#2f7a34'], [0, -.3, .7, '#3a8f3c'], [-.2, .2, .6, '#358537'], [.25, .25, .55, '#358537']]) dot(c, x + dx * r, y + dy * r, rr * r, col);
+      dot(c, x - r * .2, y - r * .5, r * .22, 'rgba(255,255,255,.18)'); dot(c, x + r * .35, y - r * .1, r * .08, '#ff8ad8'); dot(c, x - r * .45, y + r * .1, r * .08, '#ffd23f');
+    } else if (o.type === 'boom') {
+      box(c, x - k * .15, y - k * .2, k * .3, k * .7, 3, '#8a5a2e', 1.5);
+      for (const [dx, dy, rr, col] of [[-.5, -.5, .7, '#2c7a3a'], [.5, -.5, .7, '#2c7a3a'], [0, -.95, .8, '#36904a'], [0, -.35, .75, '#318541']]) dot(c, x + dx * r, y + dy * r, rr * r, col);
+      dot(c, x - r * .3, y - r * 1.2, r * .2, 'rgba(255,255,255,.18)'); dot(c, x + r * .4, y - r * .6, r * .09, '#e8403a'); dot(c, x - r * .5, y - r * .3, r * .09, '#e8403a');
+    } else if (o.type === 'kliko') {
+      const w = k * .8, h = k * 1.0; box(c, x - w / 2, y - h * .7, w, h, 5, '#3c8d4a', 2); box(c, x - w / 2 - 2, y - h * .7 - k * .12, w + 4, k * .2, 4, '#2c6e39', 2);
+    } else if (o.type === 'schuur') {
+      const w = k * 2.1, h = k * 2.3, x0 = x - k * .95, y0 = y - h / 2;
+      box(c, x0, y0, w, h, 4, '#a0693a', 2); for (let i = 1; i < 6; i++) { c.fillStyle = 'rgba(0,0,0,.12)'; c.fillRect(x0 + w * i / 6, y0, 2, h); }
+      box(c, x0 - 4, y0 - k * .25, w + 8, k * .4, 4, '#6b3d22', 2); box(c, x0 + w * .3, y0 + h * .45, w * .4, h * .55, 3, '#7a4a28', 1.5);
+    }
+  }
+  drawPlayer(c, p, i) {
+    const k = this.k, x = this.X(p.x), y = this.Y(p.y);
+    if (p.grace > 0 && Math.sin(this.t * 25) > 0) c.globalAlpha = .35;
+    drawKid(c, this.players[i].look, x, y, p.dir, p.ph, p.moving, { scale: k / 32 * 1.15, t: this.t });
+    c.globalAlpha = 1;
+    if (this.n > 1) dot(c, x, y - k * 1.55, k * .13, this.players[i].col);
+  }
+  drawHud(c) {
+    const st = this.st, W = this.W, left = Math.max(0, st.L.time - st.t), nc = st.cams.length, done = st.cams.filter(q => q.stuck).length;
+    const txt = `😜 ${done}/${nc}   ${'❤️'.repeat(Math.max(0, st.lives))}${'🤍'.repeat(Math.max(0, st.maxLives - st.lives))}   ⏱️ ${Math.floor(left / 60)}:${String(Math.floor(left % 60)).padStart(2, '0')}`;
+    c.font = '700 16px Fredoka, system-ui, "Apple Color Emoji", "Segoe UI Emoji"'; const tw = c.measureText(txt).width + 26, hy = this.api.top;
+    this.api.hud(W / 2 - tw / 2, hy, tw, 28, 'hud'); box(c, W / 2 - tw / 2, hy, tw, 28, 14, 'rgba(255,255,255,.92)', 0); c.fillStyle = '#1f2a44'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(txt, W / 2, hy + 15);
+  }
+}
+
+/* ===== minigames/stil_logic.js ===== */
+/* =========================================================
+   GELUID DEMPEN – logica (zonder tekenen, getest in tests/unit.js). Streek 6 tegen buurman Brom.
+   De Supermol graaft een gang onder het huis van Brom door. Houd de graafknop ingedrukt om te graven; graven maakt geluid (het metertje).
+   Brom doet steeds iets anders:
+   - 📺 tv kijken (de tv staat hard): je mag lekker graven, alleen het metertje mag niet helemaal vol.
+   - 😴 dutten: graven mag, maar niet te hard (metertje niet in het rood).
+   - ❗ 'Hè? Wat was dat?': de tv gaat uit. STOP met graven, het metertje moet zakken!
+   - 👂 luisteren met zijn oor op de vloer: muisstil zijn. Een klein beetje geluid en hij hoort het.
+   Hoort hij iets: 'WIE GRAAFT DAAR?!', een hartje minder, de mol schrikt (5% terug) en Brom stampt even (dan kun je niet graven).
+   🧦 Sokjes: tik erop, dan graaft de Supermol een tijdje veel zachter.
+   Gewonnen: de gang is af (100%). 2 spelers: twee mollen, ieder een eigen gang en eigen knop; het geluid telt samen op.
+   ========================================================= */
+const SD = { UP: 70, DOWN: 80, CAP1: 55, CAP2: 45, SOCK_K: .4, SOCK_T: 6, SOCK_LIFE: 4.5, ANGRY: 2.2, DUO_WARN: .5, BACK: 5, TOL: { tv: 999, doze: 70, warn: 999, listen: 15, angry: 999 } };
+const SD_LEVELS = [
+  { rate: 5, warn: 1.6, listen: [2.2, 3.0], tv: [3.5, 5.5], doze: .3, time: 90, lives: 3, sock: [7, 10] },
+  { rate: 4.6, warn: 1.25, listen: [2.5, 3.4], tv: [3.0, 5.0], doze: .35, time: 90, lives: 3, sock: [8, 12] },
+  { rate: 4.3, warn: 1.0, listen: [2.8, 3.8], tv: [2.8, 4.5], doze: .4, time: 100, lives: 3, sock: [9, 13] },
+];
+function sdBuild(level, seed, n) {
+  const L = SD_LEVELS[level - 1], R = mulberry32(seed || 1);
+  const st = { L, n, level, R, mols: Array.from({ length: n }, () => ({ prog: 0, dig: false, dug: 0 })), noise: 0, ph: 'tv', phT: 0, phLen: 0, t: 0, lives: L.lives, heard: 0,
+    sockT: 0, sock: null, sockNext: L.sock[0], socks: 0, done: null, why: null };
+  st.phLen = sdLen(st, 'tv') + 1.5; return st;
+}
+const sdRnd = (st, [a, b]) => a + st.R() * (b - a);
+function sdLen(st, ph) { const L = st.L; return ph === 'tv' ? sdRnd(st, L.tv) : ph === 'doze' ? sdRnd(st, L.tv) * .9 : ph === 'warn' ? L.warn + (st.n > 1 ? SD.DUO_WARN : 0) : ph === 'listen' ? sdRnd(st, L.listen) : SD.ANGRY; }
+const sdTol = st => SD.TOL[st.ph];
+function sdNext(st) {
+  const ph = st.ph; let nx;
+  if (ph === 'tv' || ph === 'doze') nx = 'warn'; else if (ph === 'warn') nx = 'listen'; else nx = st.R() < st.L.doze ? 'doze' : 'tv';
+  st.ph = nx; st.phT = 0; st.phLen = sdLen(st, nx); return nx;
+}
+// sokjes pakken (tik op de 🧦)
+function sdSock(st) { if (!st.sock || st.done) return false; st.sock = null; st.sockT = SD.SOCK_T; st.socks++; return true; }
+// inputs: per mol true = graven (knop ingedrukt)
+function sdStep(st, inputs, dt) {
+  const ev = []; if (st.done) return ev; const L = st.L;
+  st.t += dt; st.phT += dt; st.sockT = Math.max(0, st.sockT - dt);
+  if (st.phT >= st.phLen) { const nx = sdNext(st); ev.push({ e: 'phase', ph: nx }); }
+  const angry = st.ph === 'angry'; let diggers = 0;
+  st.mols.forEach((m, i) => {
+    m.dig = !angry && !!inputs[i] && m.prog < 100;
+    if (m.dig) { diggers++; m.prog = Math.min(100, m.prog + L.rate * dt); m.dug += dt; if (m.prog >= 100) ev.push({ e: 'done', i }); }
+  });
+  // graven: het metertje loopt snel op tot een plafond (hoger met twee mollen, lager met sokjes); stoppen: het zakt snel
+  const cap = Math.min(100, diggers * (st.n > 1 ? SD.CAP2 : SD.CAP1) * (st.sockT > 0 ? SD.SOCK_K : 1));
+  if (diggers && st.noise < cap) st.noise = Math.min(cap, st.noise + SD.UP * dt); else st.noise = Math.max(diggers ? cap : 0, st.noise - SD.DOWN * dt);
+  if (!angry && st.noise >= sdTol(st) - 1e-9) {
+    st.lives--; st.heard++; ev.push({ e: 'heard', ph: st.ph }); st.noise = 0; st.mols.forEach(m => { if (m.dig) m.prog = Math.max(0, m.prog - SD.BACK); }); st.ph = 'angry'; st.phT = 0; st.phLen = SD.ANGRY;
+  }
+  // sokjes
+  if (st.sock) { if ((st.sock.t += dt) > SD.SOCK_LIFE) { st.sock = null; ev.push({ e: 'sockgone' }); } }
+  else if (st.sockT <= 0 && (st.sockNext -= dt) <= 0) { st.sock = { t: 0, x: .2 + st.R() * .6, y: .2 + st.R() * .6 }; st.sockNext = sdRnd(st, L.sock); ev.push({ e: 'sock' }); }
+  if (st.mols.every(m => m.prog >= 100)) { st.done = 'win'; ev.push({ e: 'win' }); return ev; }
+  if (st.lives <= 0) { st.done = 'lose'; st.why = 'gehoord'; ev.push({ e: 'lose', why: 'gehoord' }); return ev; }
+  if (st.t >= L.time) { st.done = 'lose'; st.why = 'tijd'; ev.push({ e: 'lose', why: 'tijd' }); }
+  return ev;
+}
+// voor tests: graaft als het veilig is (met een reactietijd op de waarschuwing) en pakt sokjes
+function sdBot(st, react) {
+  if (st.sock && st.sock.t > .5) sdSock(st);
+  const late = st.ph === 'warn' && st.phT < (react || 0);
+  if (st.ph === 'tv' || late) return st.mols.map(() => true);
+  // dutten: met z'n tweeën om de beurt graven als het metertje te hoog wordt
+  if (st.ph === 'doze') return st.mols.map((_, i) => i === 0 ? st.noise < sdTol(st) - 12 : st.noise < sdTol(st) - 30);
+  return st.mols.map(() => false);
+}
+
+/* ===== minigames/stil.js ===== */
+/* =========================================================
+   GELUID DEMPEN – streek 6 tegen buurman Brom (logica in stil_logic.js).
+   De Supermol graaft een gang onder het huis van Brom. Houd de knop ⛏️ ingedrukt om te graven, laat los als Brom gaat luisteren.
+   Het metertje 🔊 laat zien hoeveel geluid je maakt; het streepje is wat Brom nog net niet hoort. 🧦 = tik erop: een tijdje superstil graven.
+   Toetsen: spatie of W (speler 1), pijltje omhoog of Enter (speler 2; solo ook).
+   2 spelers: twee mollen, ieder een eigen gang en knop (links / rechts). Het geluid telt samen op!
+   ========================================================= */
+registerMinigame({
+  id: 'stil', name: 'Geluid dempen', emoji: '🔇', music: 'buurman', twoMode: 'samen, ieder een eigen mol', prank: true,
+  help: 'De Supermol graaft een gang onder het huis van <b>buurman Brom</b> door. <b>Houd de knop ingedrukt</b> om te graven. Kijkt Brom tv? Graven maar! Zet hij de tv uit (❗)? <b>Stop!</b> Met zijn oor op de vloer (👂) moet je muisstil zijn. 🧦 Tik op de sokjes: dan graaft de mol superstil.',
+  bonusText: 'Win van de buurman voor 1 energie (1x per dag)', fmt: v => v ? buurStars(v) : '–',
+  create: api => new StilGame(api),
+});
+const SD_DT = 1 / 120;
+const SD_SAY = {
+  heard: ['WIE GRAAFT DAAR?!', 'Ik hoorde iets! Onder de vloer!', 'Daar is het weer! Dat gebonk!', 'Hé! Wie is daar beneden?!'],
+  warn: ['Hè? Wat was dat?', 'Ssst… hoor ik daar iets?', 'Wacht eens even…', 'Tv uit. Even luisteren…'],
+  quiet: ['Hmm. Niks. Rare vloer.', 'Ik hoor niks… Eindelijk rust.', 'Zal wel de verwarming zijn.'],
+};
+const SD_KEYS = { ' ': 0, w: 0, arrowup: 1, enter: 1 };
+class StilGame {
+  constructor(api) {
+    this.api = api; this.c = api.ctx; this.players = api.players; this.n = this.players.length; this.state = 'choose'; this.t = 0; this.acc = 0;
+    this.bctx = buurCtx(); this.pops = []; this.dirt = []; this.say = null; this.shake = 0; this.W = api.W; this.H = api.H; this.ptrs = {}; this.keys = {};
+    this.st = sdBuild(1, 1, this.n); this.layout();
+    this.onDown = e => this.pDown(e); this.onUp = e => this.pUp(e);
+    api.cv.addEventListener('pointerdown', this.onDown); addEventListener('pointerup', this.onUp); addEventListener('pointercancel', this.onUp);
+    buurChoose('stil', { title: '🔇 Geluid dempen', text: this.n > 1 ? 'Twee mollen graven onder het huis van buurman Brom. <b>Houd je knop ingedrukt</b> om te graven. Zet Brom de tv uit (❗)? Allebei <b>loslaten</b>! Het geluid van jullie twee telt samen op.' : 'De Supermol graaft onder het huis van buurman Brom. <b>Houd de knop ingedrukt</b> om te graven. Zet Brom de tv uit (❗)? <b>Loslaten</b>! Met zijn oor op de vloer moet je muisstil zijn.' })
+      .then(l => { if (MG.inst === this) this.start(l); });
+  }
+  start(level) { this.level = level; this.st = sdBuild(level, (Date.now() / 1000 | 0) % 100000 + 5, this.n); this.state = 'count'; this.cd = 3.2; SFX.tick(); this.say = { txt: 'Lekker tv kijken. Eindelijk stil!', t: 0, life: 2.6, mood: 'blij' }; }
+  destroy() { const c = this.api.cv; c.removeEventListener('pointerdown', this.onDown); removeEventListener('pointerup', this.onUp); removeEventListener('pointercancel', this.onUp); $('#mgBanner').classList.remove('show'); }
+  resize(W, H) { this.W = W; this.H = H; this.layout(); }
+  layout() {
+    const W = this.W, H = this.H, port = H > W * 1.05, top = this.api.top + 36, below = port ? Math.min(190, H * .24) : 8;
+    const FH = this.n > 1 ? 8 : 7.4, k = Math.max(14, Math.min((W - 16) / 10, (H - top - below) / FH)); this.k = k; this.port = port; this.FH = FH;
+    this.ox = (W - k * 10) / 2; this.oy = top + (port ? 4 : Math.max(0, (H - top - below - k * FH) / 2));
+    const side = this.ox;
+    if (port || side < 120) { const r = Math.min(66, port ? Math.max(48, below * .36) : 56), by = port ? Math.max(this.oy + k * FH + r + 40, H - r - 70) : H - 80; this.btns = this.n > 1 ? [[W * .25, by, r], [W * .75, by, r]] : [[W / 2, by, r]]; }
+    else { const r = Math.min(66, side / 2 - 12), by = H - Math.max(84, r + 20); this.btns = this.n > 1 ? [[side / 2, by, r], [W - side / 2, by, r]] : [[W - side / 2, by, r]]; }
+  }
+  X(x) { return this.ox + x * this.k; } Y(y) { return this.oy + y * this.k; }
+  depth(i) { return this.n > 1 ? (i ? 6.9 : 5.4) : 5.6; }
+  sockXY() { const s = this.st.sock; return s ? [this.X(.8 + s.x * 8.4), this.Y(4.2 + s.y * (this.FH - 4.6))] : null; }
+  pDown(e) {
+    e.preventDefault(); audioUnlock(); const [x, y] = this.api.xy(e);
+    const sp = this.sockXY(); if (this.state === 'play' && sp && Math.hypot(x - sp[0], y - sp[1]) < Math.max(34, this.k * .8)) { if (sdSock(this.st)) { SFX.pickup(); this.pop('🧦 Sokjes aan! Superstil!', sp[0], sp[1] - 20, '#c8f08f', 22); } return; }
+    const i = this.btns.findIndex(([bx, by, r]) => Math.hypot(x - bx, y - by) < r * 1.3); if (i < 0) return;
+    this.ptrs[e.pointerId] = i; try { this.api.cv.setPointerCapture(e.pointerId); } catch (_) { }
+  }
+  pUp(e) { delete this.ptrs[e.pointerId]; }
+  key(k, down) { const i = SD_KEYS[k]; if (i == null) return false; this.keys[this.n > 1 ? i : 0] = down ? 1 : 0; return true; }
+  held(i) { return !!this.keys[i] || Object.values(this.ptrs).includes(i); }
+  pop(txt, x, y, col, size) { this.pops.push({ txt, x, y, col, size, t: 0, life: 1.4 }); }
+  talk(kind, mood, life) { this.say = { txt: pick(SD_SAY[kind]), t: 0, life: life || 2.2, mood }; }
+  tick(dt) {
+    this.t += dt; buurPopTick(this.pops, dt); if (this.say && (this.say.t += dt) > this.say.life) this.say = null; this.shake = Math.max(0, this.shake - dt);
+    this.dirt = this.dirt.filter(d => (d.t += dt) < d.life); for (const d of this.dirt) { d.x += d.vx * dt; d.y += d.vy * dt; d.vy += 6 * dt; }
+    if (this.state === 'count') { const o = Math.ceil(this.cd); this.cd -= dt; if (Math.ceil(this.cd) !== o && this.cd > 0) SFX.tick(); if (this.cd <= 0) this.state = 'play'; }
+    else if (this.state === 'play') {
+      this.acc = Math.min(this.acc + dt, .25);
+      while (this.acc >= SD_DT && this.state === 'play') { this.acc -= SD_DT; this.handle(sdStep(this.st, this.players.map((_, i) => this.held(i)), SD_DT)); }
+      this.st.mols.forEach((m, i) => { if (m.dig && Math.random() < dt * 14) { const x = .5 + m.prog / 100 * 9, y = this.depth(i); this.dirt.push({ x: x + .4, y, vx: Math.random() * 1.5 - .3, vy: -1.5 - Math.random(), t: 0, life: .5 }); } });
+      if (this.st.mols.some(m => m.dig) && (this.digT = (this.digT || 0) + dt) > .32) { this.digT = 0; SFX.dig(); }
+    } else if (this.state === 'end') { if ((this.endT += dt) > 1.8 && !this.done) { this.done = true; this.finish(); } }
+    this.draw();
+  }
+  handle(ev) {
+    for (const e of ev) {
+      if (e.e === 'phase') { if (e.ph === 'warn') { SFX.beep(true); this.talk('warn', 'zoek', 1.8); } else if (e.ph === 'listen') SFX.tick(); else if (e.ph === 'tv' || e.ph === 'doze') { if (Math.random() < .5) this.talk('quiet', 'blij', 1.8); } }
+      if (e.e === 'heard') { SFX.caught(); SFX.shout(); this.shake = .6; this.talk('heard', 'roep', 2.2); this.pop('😠 Gehoord!', this.W / 2, this.Y(3.2), '#ff6b6b', 30); if (navigator.vibrate) try { navigator.vibrate(140); } catch (_) { } }
+      if (e.e === 'sock') SFX.whoosh();
+      if (e.e === 'done' && this.n > 1 && !this.st.mols.every(m => m.prog >= 100)) { SFX.pickup(); this.pop(`🏁 ${this.players[e.i].name} is er!`, this.X(9), this.Y(this.depth(e.i)) - 30, '#c8f08f', 20); }
+      if (e.e === 'win') { this.state = 'end'; this.endT = 0; SFX.fanfare(); this.say = { txt: 'Hè hè. Heerlijk stil hier…', t: 0, life: 2.5, mood: 'blij' }; this.pop('🔇 Gelukt!', this.W / 2, this.H / 2, '#ffd23f', 34); }
+      if (e.e === 'lose') { this.state = 'end'; this.endT = 0; SFX.aww(); this.pop(e.why === 'tijd' ? '⏰ De tijd is op!' : '😠 Te vaak gehoord!', this.W / 2, this.H / 2, '#ff6b6b', 30); }
+    }
+  }
+  finish() {
+    const st = this.st, won = st.done === 'win', pr = Math.round(st.mols.reduce((a, m) => a + m.prog, 0) / st.n);
+    const lines = won ? [`🔇 De gang is af! Buurman Brom heeft niks gehoord${st.heard ? ' (nou ja, bijna niks)' : ''}.`, this.level >= 3 ? '🏆 Gewonnen op ⭐⭐⭐: <b>Muisstil!</b>' : st.heard ? `👂 ${st.heard}× gehoord, maar toch gelukt!` : '🤫 Niet één keer gehoord. Knap!']
+      : [st.why === 'tijd' ? `⏰ De tijd was op: de gang is voor ${pr}% af.` : '😠 Buurman Brom hoorde jullie te vaak… Laat de knop los zodra hij de tv uitzet (❗)!'];
+    if (st.socks) lines.push(`🧦 ${st.socks}× sokjes aangetrokken.`);
+    if (won && this.level < 3) lines.push('Win op ⭐⭐⭐ en word Muisstil!');
+    const sc = this.players.map((p, i) => ({ name: p.name, text: `gang ${Math.round(st.mols[i].prog)}%` }));
+    buurFinish(this.api, 'stil', { won, level: this.level, lines, scores: sc });
+  }
+  /* ---------- tekenen ---------- */
+  draw() {
+    const c = this.c, W = this.W, H = this.H, k = this.k, st = this.st, t = this.t, X = x => this.X(x), Y = y => this.Y(y), FH = this.FH, ph = st.ph;
+    c.setTransform(this.api.dpr, 0, 0, this.api.dpr, 0, 0);
+    c.fillStyle = '#3a2a22'; c.fillRect(0, 0, W, H);
+    c.save(); if (this.shake) c.translate(Math.sin(t * 60) * 4 * this.shake, 0); rrect(c, X(0), Y(0), k * 10, k * FH, 14); c.clip();
+    // de kamer van Brom
+    c.fillStyle = '#f0e2c4'; c.fillRect(X(0), Y(0), k * 10, k * 3.6); for (let x = 0; x < 10; x += .5) { c.fillStyle = 'rgba(180,140,90,.12)'; c.fillRect(X(x), Y(0), k * .22, k * 3.6); }
+    box(c, X(.5), Y(.4), k * 1.6, k * 1.1, 4, '#fff', 2); c.fillStyle = '#8fd3ff'; c.fillRect(X(.5) + 3, Y(.4) + 3, k * 1.6 - 6, k * 1.1 - 6);
+    box(c, X(7.6), Y(.5), k * 1.1, k * .9, 3, '#c9a24a', 2); c.fillStyle = '#7a5a2a'; c.font = `${Math.round(k * .45)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('🖼️', X(8.15), Y(.95));
+    // tv
+    const tvOn = ph === 'tv' || ph === 'doze'; box(c, X(1.2), Y(2.15), k * 1.9, k * 1.25, 5, '#2a3550', 2); box(c, X(1.5), Y(3.4), k * 1.3, k * .2, 3, '#5d4630', 1);
+    if (tvOn) { const hue = (t * 60) % 360; c.fillStyle = `hsl(${hue},70%,65%)`; c.fillRect(X(1.3), Y(2.25), k * 1.7, k * 1.05); c.fillStyle = 'rgba(255,255,255,.5)'; dot(c, X(1.8 + Math.sin(t * 2) * .3), Y(2.75), k * .2, '#fff6b0');
+      if (ph === 'tv') for (let j = 0; j < 3; j++) { const a = (t * .8 + j / 3) % 1; c.globalAlpha = 1 - a; c.fillStyle = '#7a3ad6'; c.fillText('♪', X(3.3 + j * .35), Y(2.3 - a * 1.4)); c.globalAlpha = 1; } }
+    else { c.fillStyle = '#141c2e'; c.fillRect(X(1.3), Y(2.25), k * 1.7, k * 1.05); }
+    // stoel + Brom
+    box(c, X(4.3), Y(2.2), k * 2, k * 1.4, 10, '#b5452b', 2); box(c, X(4.1), Y(2.8), k * .5, k * .8, 6, '#9a3a24', 2); box(c, X(6.0), Y(2.8), k * .5, k * .8, 6, '#9a3a24', 2);
+    const listen = ph === 'listen', angry = ph === 'angry';
+    if (listen) { c.save(); c.translate(X(5.6), Y(3.55)); c.rotate(-1.25); drawBrom(c, 0, 0, 'down', 0, false, { scale: k / 32 * 1.05, mood: 'zoek', t, noShadow: true }); c.restore(); c.font = `${Math.round(k * .55)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.fillText('👂', X(4.6), Y(3.25)); }
+    else drawBrom(c, X(5.3), Y(3.55) - (angry ? Math.abs(Math.sin(t * 14)) * k * .35 : 0), angry ? 'down' : 'left', angry ? t * 12 : 0, angry, { scale: k / 32 * 1.15, mood: angry ? 'roep' : ph === 'warn' ? 'zoek' : 'blij', t, noShadow: true });
+    if (ph === 'doze') { c.fillStyle = '#5a6a8a'; c.font = `900 ${Math.round(k * .4)}px Fredoka, system-ui`; for (let j = 0; j < 3; j++) { const a = (t * .6 + j / 3) % 1; c.globalAlpha = 1 - a; c.fillText('z', X(5.9 + a * .8), Y(1.7 - a * 1.0)); } c.globalAlpha = 1; }
+    if (ph === 'warn') { c.font = `900 ${Math.round(k * .9)}px Fredoka, system-ui`; c.fillStyle = '#ff5a4a'; c.fillText('❗', X(5.3), Y(1.0) + Math.sin(t * 18) * 3); }
+    // vloer
+    c.fillStyle = '#a8743f'; c.fillRect(X(0), Y(3.6), k * 10, k * .3); for (let x = 0; x < 10; x += .9) { c.fillStyle = 'rgba(0,0,0,.15)'; c.fillRect(X(x), Y(3.6), 2, k * .3); }
+    // aarde
+    const g = c.createLinearGradient(0, Y(3.9), 0, Y(FH)); g.addColorStop(0, '#8a5a36'); g.addColorStop(1, '#5e3b22'); c.fillStyle = g; c.fillRect(X(0), Y(3.9), k * 10, k * (FH - 3.9));
+    for (let i = 0; i < 40; i++) dot(c, X(hash2(i, 11) * 10), Y(4.1 + hash2(i, 12) * (FH - 4.3)), k * (.05 + hash2(i, 13) * .09), 'rgba(40,24,12,.35)');
+    for (let i = 0; i < 8; i++) box(c, X(hash2(i, 21) * 9.4), Y(4.3 + hash2(i, 22) * (FH - 4.8)), k * (.25 + hash2(i, 23) * .2), k * .18, 6, '#9a8a7a', 0);
+    // geluidsmeter
+    this.drawMeter(c);
+    // gangen + mollen
+    st.mols.forEach((m, i) => {
+      const y = Y(this.depth(i)), x0 = X(.3), x1 = X(.5 + m.prog / 100 * 9), r = k * .42;
+      c.save(); c.setLineDash([6, 6]); c.strokeStyle = 'rgba(255,240,200,.35)'; c.lineWidth = 2; c.beginPath(); c.moveTo(x1, y); c.lineTo(X(9.6), y); c.stroke(); c.restore();
+      c.font = `${Math.round(k * .55)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.fillText('🏁', X(9.6), y - k * .1);
+      c.fillStyle = '#3a2416'; rrect(c, x0, y - r, Math.max(r * 2, x1 - x0), r * 2, r); c.fill();
+      drawMol(c, x1 - k * .1, y + k * .3, 'right', t, k * 1.05, m.dig);
+      if (st.sockT > 0) { c.font = `${Math.round(k * .38)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.fillText('🧦', x1 - k * .3, y + k * .42); }
+      if (this.n > 1) { dot(c, x1 - k * .1, y - k * .62, k * .13, this.players[i].col); }
+    });
+    for (const d of this.dirt) dot(c, X(d.x), Y(d.y), k * .07, '#c8925a');
+    // sokjes
+    const sp = this.sockXY(); if (sp && this.state === 'play') { const b = Math.sin(t * 5) * 4; c.save(); c.globalAlpha = st.sock.t > SD.SOCK_LIFE - 1 ? .5 + Math.sin(t * 20) * .4 : 1; dot(c, sp[0], sp[1] + b, k * .55, 'rgba(255,255,255,.35)'); c.font = `${Math.round(k * .7)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.fillText('🧦', sp[0], sp[1] + b); c.restore(); }
+    c.restore();
+    this.drawHud(c);
+    this.drawBtns(c);
+    buurPopDraw(c, this.pops, W, H);
+    if (this.say) { c.save(); c.globalAlpha = Math.min(1, (this.say.life - this.say.t) * 3); buurSay(c, this.say.txt, W / 2, Y(.15), W, this.say.mood, t); c.restore(); }
+    if (this.state === 'count') { const n = Math.ceil(this.cd); c.save(); c.font = '900 64px Fredoka, system-ui'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.lineWidth = 10; c.strokeStyle = '#1f2a44'; const s = n > 0 ? String(n) : 'Graven!'; c.strokeText(s, W / 2, H / 2); c.fillStyle = '#ffd23f'; c.fillText(s, W / 2, H / 2); c.restore(); }
+    if (this.state === 'choose') { c.fillStyle = 'rgba(0,0,0,.25)'; c.fillRect(0, 0, W, H); }
+  }
+  drawMeter(c) {
+    const st = this.st, k = this.k, x0 = this.X(1.2), y0 = this.Y(4.15), w = k * 8.2, h = Math.max(12, k * .32), tol = sdTol(st);
+    box(c, x0 - k * .9, y0 - 4, w + k * .9 + 6, h + 8, 10, 'rgba(31,42,68,.7)', 0);
+    c.font = `${Math.round(h * 1.1)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText('🔊', x0 - k * .45, y0 + h / 2);
+    const g = c.createLinearGradient(x0, 0, x0 + w, 0); g.addColorStop(0, '#4cd964'); g.addColorStop(.55, '#ffd23f'); g.addColorStop(1, '#ff5a4a');
+    box(c, x0, y0, w, h, h / 2, 'rgba(255,255,255,.2)', 0); if (st.noise > .5) box(c, x0, y0, Math.max(h, w * st.noise / 100), h, h / 2, g, 0);
+    if (tol <= 100) { const tx = x0 + w * tol / 100; c.fillStyle = '#fff'; c.fillRect(tx - 2, y0 - 6, 4, h + 12); c.font = `${Math.round(h * 1.1)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.fillText(st.ph === 'listen' ? '👂' : '😴', tx, y0 - h * .9); }
+  }
+  drawBtns(c) {
+    if (!(this.state === 'play' || this.state === 'count')) return;
+    const ph = this.st.ph, stop = ph === 'warn' || ph === 'listen' || ph === 'angry';
+    this.btns.forEach(([x, y, r], i) => {
+      const on = this.held(i), m = this.st.mols[i], fin = m.prog >= 100; this.api.hud(x - r, y - r, r * 2, r * 2, 'joystick');
+      c.save(); c.globalAlpha = fin ? .45 : 1; c.fillStyle = 'rgba(0,0,0,.28)'; c.beginPath(); c.arc(x, y + 5, r, 0, 7); c.fill();
+      c.fillStyle = stop ? (on ? '#d6402f' : '#ff6b5a') : (on ? '#2e9e4a' : '#4cd964'); c.beginPath(); c.arc(x, y + (on ? 3 : 0), r, 0, 7); c.fill(); c.strokeStyle = '#fff'; c.lineWidth = 4; c.stroke();
+      if (this.n > 1) { c.strokeStyle = this.players[i].col; c.lineWidth = 5; c.beginPath(); c.arc(x, y + (on ? 3 : 0), r + 6, 0, 7); c.stroke(); }
+      c.textAlign = 'center'; c.textBaseline = 'middle'; c.font = `${Math.round(r * .62)}px system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.fillText(fin ? '🏁' : stop ? '✋' : '⛏️', x, y - r * .14 + (on ? 3 : 0));
+      c.font = `900 ${Math.round(r * .26)}px Fredoka, system-ui`; c.fillStyle = '#fff'; c.fillText(fin ? 'Klaar!' : stop ? 'Stop!' : 'Graaf!', x, y + r * .48 + (on ? 3 : 0)); c.restore();
+    });
+  }
+  drawHud(c) {
+    const st = this.st, W = this.W, left = Math.max(0, st.L.time - st.t), pr = Math.round(st.mols.reduce((a, m) => a + m.prog, 0) / st.n);
+    const txt = `⛏️ ${pr}%   ${'❤️'.repeat(Math.max(0, st.lives))}${'🤍'.repeat(Math.max(0, st.L.lives - st.lives))}   ⏱️ ${Math.floor(left / 60)}:${String(Math.floor(left % 60)).padStart(2, '0')}`;
+    c.font = '700 16px Fredoka, system-ui, "Apple Color Emoji", "Segoe UI Emoji"'; const tw = c.measureText(txt).width + 26, hy = this.api.top;
+    this.api.hud(W / 2 - tw / 2, hy, tw, 28, 'hud'); box(c, W / 2 - tw / 2, hy, tw, 28, 14, 'rgba(255,255,255,.92)', 0); c.fillStyle = '#1f2a44'; c.textAlign = 'center'; c.textBaseline = 'middle'; c.fillText(txt, W / 2, hy + 15);
+    if (this.state !== 'play') return;
+    const ph = st.ph, s = { tv: '📺 Graven maar!', doze: '😴 Zachtjes graven…', warn: '❗ STOP! Laat los!', listen: '👂 Muisstil!', angry: '😠 Gehoord!' }[ph];
+    const y = this.port ? this.Y(this.FH) + 22 : this.Y(3.3);
+    c.font = `900 ${ph === 'warn' || ph === 'listen' ? 26 : 20}px Fredoka, system-ui, "Apple Color Emoji", "Segoe UI Emoji"`; c.lineWidth = 7; c.strokeStyle = '#1f2a44'; c.strokeText(s, W / 2, y); c.fillStyle = ph === 'tv' ? '#c8f08f' : ph === 'doze' ? '#ffe08a' : '#ff8a7a'; c.fillText(s, W / 2, y);
+  }
+}
+
 /* ===== minigames/grotten_logic.js ===== */
 /* =========================================================
    GROTTENJACHT – logica (zonder DOM, getest in tests/unit.js). Een doolhof in de diepe kelder:
@@ -8719,7 +9462,7 @@ window.__gb = {
   GOLF_HOLES, GOLF, golfPar, FLY_SPOTS, allFlySpots, flyCount, flyDone, nearFlySpot, flyCutscene, buildVliegbotNow, vliegHave, VLIEG_PARTS, findNear, nearLabel, lootAvail, takeItem, goalKey, nextGoal, hint,
   ECON, econCardLine, canDigNow, ECON_FULL_TXT, econDigsLeft, econEnergyLeft,
   BUUR, PRANKS, buurGateOn, buurWaiting, buurLeft, buurLevel, buurCutscene, buurSkip, openBuurPlan, renderBuurPlan, buurRequestNow, buurDigAfterWin, buurKlusDone, buurLocked, drawBrom, drawGnome, buurNews,
-  buurFinish, BOOR_PARTS, boorHave, buildBoorbeestNow, digDeepStart, buildDeepMap, buildBaseMap, roomList, roomLevel, partNotNeeded, gjBuild, GJ, GJ_LEVELS, MK, mkBuild, mkCart, mkStep, mkScore, KM, kmBuild, kmFindMove, kmSwap, RV, rvBuild, rvState, rvStep, rvScore, rvBoatY, rvCenter, rvHalf, RUIMTE_PARTS, ruimteHave, spotsOn,
+  buurFinish, BOOR_PARTS, boorHave, buildBoorbeestNow, digDeepStart, buildDeepMap, buildBaseMap, roomList, roomLevel, partNotNeeded, gjBuild, GJ, GJ_LEVELS, MK, mkBuild, mkCart, mkStep, mkScore, KM, kmBuild, kmFindMove, kmSwap, RV, rvBuild, rvState, rvStep, rvScore, rvBoatY, rvCenter, rvHalf, RUIMTE_PARTS, ruimteHave, spotsOn, WP, wpBuild, wpStep, wpTap, wpOwner, CM, cmBuild, cmStep, cmSees, cmAngle, SD, sdBuild, sdStep, sdSock, sdTol,
 };
 
 </script>
