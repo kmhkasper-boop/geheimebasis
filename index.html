@@ -2788,12 +2788,13 @@ function buildIslandMap() {
   placeSlotRooms(3, 'wolk', g, carve, objects, areas, spawns);
   // geen muurlampen en kleedjes op een eiland in de lucht
   const objs = objects.filter(o => !/^lamp_|^rug_/.test(o.id));
+  // Wolken-HQ: de tunnel naar de Planeetgolf-kamer (noord, x 20-22) komt boven binnen: daar mag niets staan (monitor links, telescoop rechts)
   if (isDug('wolk')) {
     objs.push(
-      { id: 'telescoop', kind: 'telescope', dyn: 'telescopeDyn', x: 16, y: 11, w: 2, use: { label: 'Kijk', icon: '🔭', action: 'telescoop' } },
-      { id: 'wolkmonitor', kind: 'monitor', dyn: 'monitorDyn', x: 19, y: 11, w: 4, use: { label: 'Monitor', icon: '🖥️', action: 'monitor' } },
-      { id: 'ruimtepark', kind: 'ruimtePark', x: 23, y: 11, w: 3, h: 2, use: { label: 'Naar huis', icon: '🚀', action: 'ruimtevlucht', to: 'tuin' } },
-      ...[[16, 17], [25, 17]].map(([x, y], i) => ({ id: 'deco_wolk' + i, kind: 'decoSpot', dyn: 'decoSpotDyn', x, y, solid: false, use: { label: 'Versier', icon: '🎨', action: 'deco' } })),
+      { id: 'telescoop', kind: 'telescope', dyn: 'telescopeDyn', x: 24, y: 11, w: 2, use: { label: 'Kijk', icon: '🔭', action: 'telescoop' } },
+      { id: 'wolkmonitor', kind: 'monitor', dyn: 'monitorDyn', x: 15, y: 11, w: 4, use: { label: 'Monitor', icon: '🖥️', action: 'monitor' } },
+      { id: 'ruimtepark', kind: 'ruimtePark', x: 23, y: 16, w: 3, h: 2, use: { label: 'Naar huis', icon: '🚀', action: 'ruimtevlucht', to: 'tuin' } },
+      ...[[16, 17], [25, 13]].map(([x, y], i) => ({ id: 'deco_wolk' + i, kind: 'decoSpot', dyn: 'decoSpotDyn', x, y, solid: false, use: { label: 'Versier', icon: '🎨', action: 'deco' } })),
     );
     areas.unshift({ name: '☁️ Wolken-HQ', x: 15, y: 11, w: 12, h: 8 });
     if (typeof islandBossObjects === 'function') islandBossObjects(objs);
@@ -11439,10 +11440,13 @@ function EINDE_SCENES() {
     { dur: 4.4, who: 'mol', text: 'Piep! 😉', sfx: 'beep', draw(c, W, H, t) { cineAttic(c, W, H, t, { kids: false, wink: true }); c.fillStyle = 'rgba(30,20,60,.25)'; c.fillRect(0, 0, W, H); } },
   ];
 }
-function CREDITS_SCENES() {
-  const lines = [['🎬 GEHEIME BASIS', 2], ['Tussen hemel en aarde', 1.2], ['', 1], ['Bedacht en gebouwd door', .9], ['oom Lucas', 1.5], ['', 1], ['In de hoofdrollen', .9], [`${pName()} en ${fName()}`, 1.5],
+function CREDITS_LINES() {
+  return [['🎬 GEHEIME BASIS', 2], ['Tussen hemel en aarde', 1.2], ['', 1], ['Dank aan', .9], ['mijn ome Kas en zijn robot', 1.5], ['', 1], ['In de hoofdrollen', .9], [`${pName()} en ${fName()}`, 1.5],
     ['de Supermol · de Vliegbot', 1.1], ['het Boorbeest · de Ruimtebot', 1.1], ['buurman Brom en zijn Maai-o-Matic', 1.1], ['mama en papa', 1.1], [`de mama van ${fName()}`, 1.1], ['Henk de vogelverschrikker', 1.1], ['', 1],
-    ['Speciale dank aan', .9], ['Sam, de allerbeste speler 💙', 1.4], ['', 1.5], ['Dag en tot de volgende keer! 👋', 1.8]];
+    ['Speciale dank aan', .9], ['Manu Malik', 1.4], ['', 1.5], ['Dag en tot de volgende keer! 👋', 1.8]];
+}
+function CREDITS_SCENES() {
+  const lines = CREDITS_LINES();
   return [{ dur: 24, who: '', text: '', hold: true, draw(c, W, H, t) {
     const s = Math.min(W, H); cineSky(c, W, H, '#0b1430', '#2b2f6b'); cineStars(c, W, H, 60, t, .9);
     const lh = clamp(s * .065, 18, 34), total = lines.reduce((a, l) => a + l[1] * lh, 0), y0 = H + 10 - Math.min(t / 21, 1) * (total + H * .5 - lh);
@@ -11563,7 +11567,7 @@ window.__gb = {
   ECON, econCardLine, canDigNow, ECON_FULL_TXT, econDigsLeft, econEnergyLeft,
   BUUR, PRANKS, buurGateOn, buurWaiting, buurLeft, buurLevel, buurCutscene, buurSkip, openBuurPlan, renderBuurPlan, buurRequestNow, buurDigAfterWin, buurKlusDone, buurLocked, drawBrom, drawGnome, buurNews,
   buurFinish, BOOR_PARTS, boorHave, buildBoorbeestNow, digDeepStart, buildDeepMap, buildBaseMap, roomList, roomLevel, partNotNeeded, gjBuild, GJ, GJ_LEVELS, MK, mkBuild, mkCart, mkStep, mkScore, KM, kmBuild, kmFindMove, kmSwap, RV, rvBuild, rvState, rvStep, rvScore, rvBoatY, rvCenter, rvHalf, RUIMTE_PARTS, ruimteHave, spotsOn, WP, wpBuild, wpStep, wpTap, wpOwner, CM, cmBuild, cmStep, cmSees, cmAngle, SD, sdBuild, sdStep, sdSock, sdTol,
-  BAAS, BAAS_PHASES, bsBuild, bsStep, bsBot, bsScore, bsFlee, bsOwner, BOSS_E, bossCharge, bossFull, bossDeposit, bossStoryReady, maaierAlarm, eindeStory, eindeFilm, tuinMaaier, refreshBossMaps, MAAIER_SCENES, EINDE_SCENES, CREDITS_SCENES, drawMaaier,
+  BAAS, BAAS_PHASES, bsBuild, bsStep, bsBot, bsScore, bsFlee, bsOwner, BOSS_E, bossCharge, bossFull, bossDeposit, bossStoryReady, maaierAlarm, eindeStory, eindeFilm, tuinMaaier, refreshBossMaps, MAAIER_SCENES, EINDE_SCENES, CREDITS_SCENES, CREDITS_LINES, drawMaaier,
   CINE, cinema, buildIslandMap, digIslandStart, buildRuimtebotNow, tuinRuimtePark, ruimtebotBuiltScene, FLY_SCENES, recipeHere, MT, mtBuild, mtStep, mtScore, mtLane, ZK, zkBuild, zkState, zkStep, zkPos, zkSim, zkScore, zkBot, PG, PG_HOLES, pgState, pgStep, pgSim, pgBot, pgNextHole, pgScore, pgTotal, SB, SB_SKY, sbBuild, sbStep, sbLink, sbBot, sbSky, sbKey, sbRound, RP, rpBuild, rpStep, rpPredict, rpPoints, rpPadY,
 };
 
